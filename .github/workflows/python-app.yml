@@ -35,15 +35,14 @@ jobs:
         python -m unittest
         
     - name: Tweet
+      if: matrix.os == 'windows-latest'
+      run: |
+        python tweet_plot.py
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        python tweet_plot.py
-        
     
     - name: Lint with flake8
       run: |
@@ -53,10 +52,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Generate coverage report
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'windows-latest'
       run: |
         coverage run -m unittest
     
     - name: Upload coverage to Codecov
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'windows-latest'
       uses: codecov/codecov-action@v1
