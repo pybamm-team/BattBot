@@ -29,27 +29,27 @@ def tweet_graph():
         parameter_number,
     ) = random_plot_generator()
 
-    info_string = (
+    tweet = (
         information(parameter_number, model)
         + ", at time = "
         + str(time_of_png)
         + " s"
     )
 
-    print(info_string)
+    print(tweet)
     # Uncomment to tweet
-    # media = api.media_upload("plot.png")
+    media = api.media_upload("plot.png")
 
-    # api.update_status(status=tweet, media_ids=[media.media_id])
+    api.update_status(status=tweet, media_ids=[media.media_id])
 
-    # os.remove("plot.png")
+    os.remove("plot.png")
     # plt.clf()
     print("Tweeted")
 
 # Simulate tweeting process
-while True:
-    tweet_graph()
-    time.sleep(30)
+# while True:
+#     tweet_graph()
+#     time.sleep(30)
 
 # Uncomment when running on schedule
-# tweet_graph()
+tweet_graph()
