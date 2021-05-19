@@ -42,7 +42,7 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
       if: matrix.os == 'ubuntu-latest'
       run: |
-        python twwet_plot.py
+        python tweet_plot.py
         
     
     - name: Lint with flake8
