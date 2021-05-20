@@ -35,7 +35,7 @@ jobs:
         python -m unittest
         
     - name: Tweet
-      if: matrix.os == 'windows-latest'
+      if: matrix.os == 'ubuntu-latest'
       run: |
         python tweet_plot.py
       env:
@@ -52,10 +52,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Generate coverage report
-      if: matrix.os == 'windows-latest'
+      if: matrix.os == 'ubuntu-latest'
       run: |
         coverage run -m unittest
     
     - name: Upload coverage to Codecov
-      if: matrix.os == 'windows-latest'
+      if: matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1
