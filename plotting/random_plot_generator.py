@@ -12,11 +12,12 @@ def random_plot_generator():
     while True:
 
         try:
-            # choice = random.randint(0, 1)
+            choice = random.randint(0, 1)
             choice = 0
 
             if choice == 0:
                 parameter_number = random.randint(0, 1)
+                parameter_number = 0
                 print(parameter_number)
 
                 if parameter_number == 0:
@@ -24,9 +25,9 @@ def random_plot_generator():
                         current_function,
                         upper_voltage,
                         lower_voltage,
-                        ambient_temp,
-                        initial_temp,
-                        reference_temp,
+                        # ambient_temp,
+                        # initial_temp,
+                        # reference_temp,
                     ) = chemistry_generator("Chen2020")
 
                 elif parameter_number == 1:

@@ -31,7 +31,7 @@ def chemistry_generator(chemistry_name):
         current_function,
         upper_voltage,
         lower_voltage,
-        ambient_temp,
-        initial_temp,
-        reference_temp,
+        # ambient_temp,
+        # initial_temp,
+        # reference_temp,
     )

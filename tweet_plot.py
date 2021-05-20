@@ -41,16 +41,15 @@ def tweet_graph():
     media = api.media_upload("plot.png")
 
     api.update_status(status=tweet, media_ids=[media.media_id])
-    api.update_status(status=tweet)
 
     os.remove("plot.png")
-    # plt.clf()
+    plt.clf()
     print("Tweeted")
 
-# Simulate tweeting process
+# uncomment when simulating tweeting process
 # while True:
 #     tweet_graph()
-#     time.sleep(30)
+#     time.sleep(5)
 
 # Uncomment when running on schedule
 tweet_graph()
