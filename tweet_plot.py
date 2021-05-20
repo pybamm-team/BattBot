@@ -40,7 +40,8 @@ def tweet_graph():
     # Uncomment to tweet
     media = api.media_upload("plot.png")
 
-    api.update_status(status=tweet, media_ids=[media.media_id])
+    # api.update_status(status=tweet, media_ids=[media.media_id])
+    api.update_status(status=tweet)
 
     os.remove("plot.png")
     # plt.clf()
