@@ -12,9 +12,9 @@ from utils.single_point_decimal import single_decimal_point
 def chemistry_generator(chemistry_name):
 
     if chemistry_name == "Chen2020":
-        current_function = single_decimal_point(1, 10, 0.1)
-        upper_voltage = single_decimal_point(2.5, 4.2, 0.1)
-        lower_voltage = single_decimal_point(2.5, 4.2, 0.1)
+        current_function = single_decimal_point(1, 3, 0.1)
+        upper_voltage = single_decimal_point(3.7, 4.2, 0.1)
+        lower_voltage = single_decimal_point(3.7, 4.2, 0.1)
         ambient_temp = random.uniform(273.18, 298.15)
         initial_temp = random.uniform(273.18, 298.15)
         reference_temp = random.uniform(273.18, 298.15)
@@ -31,7 +31,7 @@ def chemistry_generator(chemistry_name):
         current_function,
         upper_voltage,
         lower_voltage,
-        # ambient_temp,
-        # initial_temp,
-        # reference_temp,
+        ambient_temp,
+        initial_temp,
+        reference_temp,
     )

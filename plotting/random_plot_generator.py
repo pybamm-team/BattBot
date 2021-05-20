@@ -25,9 +25,9 @@ def random_plot_generator():
                         current_function,
                         upper_voltage,
                         lower_voltage,
-                        # ambient_temp,
-                        # initial_temp,
-                        # reference_temp,
+                        ambient_temp,
+                        initial_temp,
+                        reference_temp,
                     ) = chemistry_generator("Chen2020")
 
                 elif parameter_number == 1:
