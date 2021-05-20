@@ -9,10 +9,10 @@ from information.information import information
 
 
 # getting the Twitter API keys
-CONSUMER_KEY = str(os.environ.get("CONSUMER_KEY"))
-CONSUMER_SECRET = str(os.environ.get("CONSUMER_SECRET"))
-ACCESS_KEY = str(os.environ.get("ACCESS_KEY"))
-ACCESS_SECRET = str(os.environ.get("ACCESS_SECRET"))
+CONSUMER_KEY = os.environ["CONSUMER_KEY"]
+CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
+ACCESS_KEY = os.environ["ACCESS_KEY"]
+ACCESS_SECRET = os.environ["ACCESS_SECRET"]
 
 # setting up tweepy.API object
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
