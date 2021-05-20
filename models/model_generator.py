@@ -31,7 +31,7 @@ def model_generator(
     ]
 
     modelNum = random.randint(0, len(models))
-    model = models[modelNum]
+    model = models[0]
     print(model)
     parameter_values = pybamm.ParameterValues(chemistry=chemistry)
 
