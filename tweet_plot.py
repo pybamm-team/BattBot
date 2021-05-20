@@ -12,7 +12,7 @@ from information.information import information
 CONSUMER_KEY = os.environ.get("CONSUMER_KEY")
 CONSUMER_SECRET = os.environ.get("CONSUMER_SECRET")
 ACCESS_KEY = os.environ.get("ACCESS_KEY")
-ACCESS_SECRET = os.environ.get("ACCESS_SECRET")
+ACCESS_SECRET = ""
 
 # setting up tweepy.API object
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -38,7 +38,7 @@ def tweet_graph():
 
     print(tweet)
     # Uncomment to tweet
-    media = api.media_upload("plot.png")
+    # media = api.media_upload("plot.png")
 
     # api.update_status(status=tweet, media_ids=[media.media_id])
     api.update_status(status=tweet)
