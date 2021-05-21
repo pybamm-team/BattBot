@@ -2,9 +2,11 @@ import pybamm
 
 def experiment_solver(model, experiment, chemistry, solver):
     
-    sim = pybamm.Simulation(model=model, experiment=experiment,
-    chemistry=chemistry, solver=solver)
-    sim.solve()
-    solution = sim.solution()
+    parameter_values = pybamm.ParameterValues(chemistry=chemistry)
 
-    return sim, solution
+    sim = pybamm.Simulation(model=model, experiment=experiment,
+    parameter_values=parameter_values, solver=solver)
+    sim.solve()
+    solution = sim.solution
+
+    return sim, solution, parameter_values
