@@ -25,14 +25,18 @@ def tweet_graph():
     (   
         model,
         parameter_values,
-        time_of_png,
-        parameter_number,
+        time,
+        chemistry,
+        solver,
+        isExperiment,
+        cycle,
+        number
     ) = random_plot_generator()
 
     tweet = (
-        information(parameter_number, model)
+        information(chemistry, model, solver, isExperiment, cycle, number)
         + ", at time = "
-        + str(time_of_png)
+        + str(time)
         + " s"
     )
 

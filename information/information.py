@@ -1,11 +1,10 @@
-def information(parameter_number, model):
+import pybamm
 
-    if parameter_number == 0:
-        return "This is some basic information about Chen2020 parameters in a simple " + str(model) + " model plotted using PyBaMM"
-    elif parameter_number == 1:
-        return "This is some basic information about Marquis2019 parameters in a simple " + str(model) + " model plotted using PyBaMM"
-    elif parameter_number == 2:
-        return "This is some basic information about Ecker2015 parameters in a simple " + str(model) + " model plotted using PyBaMM"
-    elif parameter_number == 3:
-        return "This is some basic information about Mohtat2020 parameters in a simple " + str(model) + " model plotted using PyBaMM"
-  
+
+def information(chemistry, model, solver, isExperiment, cycle, number):
+
+    if isExperiment:
+        return str(cycle) + " * " + str(number) + " " + str(model) + " " + str(chemistry['citation'])
+
+    else:    
+        return str(model) + " " + str(chemistry['citation']) + " " + str(solver)
