@@ -26,11 +26,11 @@ def tweet_graph():
         model,
         parameter_values,
         time_of_png,
-        parameter_number,
+        chemistry,
     ) = random_plot_generator()
 
     tweet = (
-        information(parameter_number, model)
+        information(chemistry, model)
         + ", at time = "
         + str(time_of_png)
         + " s"
@@ -38,12 +38,12 @@ def tweet_graph():
 
     print(tweet)
     # Uncomment to tweet
-    media = api.media_upload("plot.png")
+    # media = api.media_upload("plot.png")
 
-    api.update_status(status=tweet, media_ids=[media.media_id])
+    # api.update_status(status=tweet, media_ids=[media.media_id])
 
-    os.remove("plot.png")
-    plt.clf()
+    # os.remove("plot.png")
+    # plt.clf()
     print("Tweeted")
 
 # uncomment when simulating tweeting process
