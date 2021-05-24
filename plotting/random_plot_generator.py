@@ -21,8 +21,6 @@ def random_plot_generator():
                 pybamm.lithium_ion.SPMe(),
                 pybamm.lithium_ion.NewmanTobias(),
                 pybamm.lithium_ion.Yang2017(),
-                pybamm.lithium_ion.BasicDFN(),
-                pybamm.lithium_ion.BasicSPM(),
             ]
 
             modelNum = random.randint(0, len(models) - 1)
@@ -33,12 +31,24 @@ def random_plot_generator():
             chemistries = [
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
+                pybamm.parameter_sets.Ecker2015,
+                pybamm.parameter_sets.Ramadass2004
             ]
 
             chemNum = random.randint(0, len(chemistries) - 1)
             chemistry = chemistries[chemNum]
             chemistry = chemistries[0]
             print(chemistry)
+
+            parameter_values = [
+                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020),
+                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Marquis2019),
+                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Mohtat2020),
+                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ramadass2004),
+                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ecker2015)
+            ]
+
+            random.shuffle(parameter_values)
 
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
@@ -59,8 +69,8 @@ def random_plot_generator():
                 reference_temp,
             ) = chemistry_generator(chemistry)
 
-            choice = random.randint(0, 1)
-
+            choice = random.randint(0, 2)
+            # choice = 2
             if choice == 0:
 
                 if lower_voltage < upper_voltage:
@@ -86,7 +96,8 @@ def random_plot_generator():
                         solver,
                         False,
                         None, 
-                        None
+                        None,
+                        False
                     ) 
 
             elif choice == 1:
@@ -94,7 +105,7 @@ def random_plot_generator():
                     cycleReceived,
                     number,
                 ) = experiment_generator()
-                experiment = pybamm.Experiment(cycleReceived)
+                experiment = pybamm.Experiment(cycleReceived * number)
                 (sim, solution, parameter_values) = experiment_solver(model, experiment, chemistry, solver)
                 time = plot_graph(solution, sim)
                 return (
@@ -106,7 +117,53 @@ def random_plot_generator():
                     True,
                     cycleReceived,
                     number,
+                    False
                 )
 
+            elif choice == 2:
+                
+                number_of_comp = random.randint(2, 3)
+                number_of_experiments = random.randint(0, number_of_comp)
+                models_for_comp = models[:number_of_comp]
+                random.shuffle(models_for_comp)
+                parameter_values_for_comp = parameter_values[:number_of_comp]
+                models_for_comp = dict(list(enumerate(models_for_comp)))
+                parameter_values_for_comp = dict(list(enumerate(parameter_values_for_comp)))
+                
+                # TODO: Implement Experiments
+                # cycles = []
+                # numbers = []
+                # for i in range(0, number_of_experiments):
+                #     (
+                #     cycle,
+                #     number,
+                #     ) = experiment_generator()
+                #     print(cycle)
+                #     cycles.append(pybamm.Experiment(cycle * number))
+                #     numbers.append(number)
+
+                # final_cycles = dict(list(enumerate(cycles)))
+
+                s = pybamm.BatchStudy(
+                    models=models_for_comp, 
+                    # experiments=final_cycles,
+                    parameter_values=parameter_values_for_comp,
+                    permutations=True
+                )
+                s.solve([0, 3700])
+
+                time = plot_graph(sim=s.sims)
+
+                return (   
+                    models_for_comp,
+                    parameter_values_for_comp,
+                    time,
+                    None,
+                    None,
+                    False,
+                    None,
+                    None,
+                    True
+                )
         except:
            pass
