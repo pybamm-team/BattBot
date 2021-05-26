@@ -19,26 +19,24 @@ def random_plot_generator():
                 pybamm.lithium_ion.DFN(),
                 pybamm.lithium_ion.SPM(),
                 pybamm.lithium_ion.SPMe(),
-                pybamm.lithium_ion.NewmanTobias(),
-                pybamm.lithium_ion.Yang2017(),
-                pybamm.lithium_ion.BasicDFN(),
-                pybamm.lithium_ion.BasicSPM(),
             ]
 
             modelNum = random.randint(0, len(models) - 1)
             model = models[modelNum]
             model = models[0]
-            print(model)
+            # print(model)
 
             chemistries = [
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
+                pybamm.parameter_sets.Ecker2015,
+                pybamm.parameter_sets.Ramadass2004
             ]
 
             chemNum = random.randint(0, len(chemistries) - 1)
             chemistry = chemistries[chemNum]
             chemistry = chemistries[0]
-            print(chemistry)
+            # print(chemistry)
 
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
@@ -48,7 +46,7 @@ def random_plot_generator():
             solverNum = random.randint(0, len(solvers) - 1)
             solver = solvers[solverNum]
             solver = solvers[0]
-            print(solver)
+            # print(solver)
 
             (
                 current_function,
@@ -59,8 +57,8 @@ def random_plot_generator():
                 reference_temp,
             ) = chemistry_generator(chemistry)
 
-            choice = random.randint(0, 1)
-
+            choice = random.randint(0, 2)
+            # choice = 2
             if choice == 0:
 
                 if lower_voltage < upper_voltage:
@@ -86,7 +84,8 @@ def random_plot_generator():
                         solver,
                         False,
                         None, 
-                        None
+                        None,
+                        False
                     ) 
 
             elif choice == 1:
@@ -94,7 +93,7 @@ def random_plot_generator():
                     cycleReceived,
                     number,
                 ) = experiment_generator()
-                experiment = pybamm.Experiment(cycleReceived)
+                experiment = pybamm.Experiment(cycleReceived * number)
                 (sim, solution, parameter_values) = experiment_solver(model, experiment, chemistry, solver)
                 time = plot_graph(solution, sim)
                 return (
@@ -106,7 +105,66 @@ def random_plot_generator():
                     True,
                     cycleReceived,
                     number,
+                    False
                 )
 
+            elif choice == 2:
+                
+                number_of_comp = random.randint(1, 3)
+                # number_of_experiments = random.randint(0, number_of_comp)
+                random.shuffle(models)
+                models_for_comp = models[:number_of_comp]
+                models_for_comp = dict(list(enumerate(models_for_comp)))
+                params = pybamm.ParameterValues(chemistry=chemistry)
+                parameter_values_for_comp = dict(list(enumerate([params])))       
+
+                # TODO: Implement Experiment Comparisons?
+                # cycles = []
+                # numbers = []
+                # for i in range(0, number_of_experiments):
+                #     (
+                #     cycle,
+                #     number,
+                #     ) = experiment_generator()
+                #     print(cycle)
+                #     cycles.append(pybamm.Experiment(cycle * number))
+                #     numbers.append(number)
+
+                # final_cycles = dict(list(enumerate(cycles)))
+
+                # final_cycles = {
+                #     0: experiment,
+                #     1: experiment2
+                # }
+                if number_of_comp == 1:
+                    param_list = []
+                    diff_params = random.randint(2, 3)
+                    print(diff_params)
+                    for i in range(0, diff_params):
+                        param_list.append(params.copy())
+                        param_list[i]["Current function [A]"] = random.randint(1, 5)
+                    parameter_values_for_comp = dict(list(enumerate(param_list)))
+
+                s = pybamm.BatchStudy(
+                    models=models_for_comp,
+                    parameter_values=parameter_values_for_comp,
+                    permutations=True
+                )
+
+                s.solve([0, 3700])
+
+                time = plot_graph(sim=s.sims)
+
+                return (   
+                    models_for_comp,
+                    parameter_values_for_comp,
+                    time,
+                    None,
+                    None,
+                    False,
+                    None,
+                    None,
+                    True
+                )
         except:
            pass

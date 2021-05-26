@@ -2,7 +2,7 @@ import pybamm
 import random
 
 
-def plot_graph(solution, sim):
+def plot_graph(solution=None, sim=None):
     """
     This function generates and saves a plot.
     Parameters:
@@ -13,9 +13,12 @@ def plot_graph(solution, sim):
     """
 
     # generating time to plot the simulation
-    t = solution["Time [s]"]
-    final_time = int(t.entries[len(t.entries) - 1])
-    time = random.randint(0, final_time)
+    if solution is not None:
+        t = solution["Time [s]"]
+        final_time = int(t.entries[len(t.entries) - 1])
+        time = random.randint(0, final_time)
+    else:
+        time =random.randint(0, 3700)
 
     # generating a plot
     plot = pybamm.QuickPlot(sim, time_unit="seconds")

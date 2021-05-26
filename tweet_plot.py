@@ -30,11 +30,12 @@ def tweet_graph():
         solver,
         isExperiment,
         cycle,
-        number
+        number,
+        isComparison
     ) = random_plot_generator()
 
     tweet = (
-        information(chemistry, model, solver, isExperiment, cycle, number)
+        information(chemistry, model, solver, isExperiment, cycle, number, isComparison)
         + ", at time = "
         + str(time)
         + " s"
