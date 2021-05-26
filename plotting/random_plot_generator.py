@@ -19,14 +19,12 @@ def random_plot_generator():
                 pybamm.lithium_ion.DFN(),
                 pybamm.lithium_ion.SPM(),
                 pybamm.lithium_ion.SPMe(),
-                pybamm.lithium_ion.NewmanTobias(),
-                pybamm.lithium_ion.Yang2017(),
             ]
 
             modelNum = random.randint(0, len(models) - 1)
             model = models[modelNum]
             model = models[0]
-            print(model)
+            # print(model)
 
             chemistries = [
                 pybamm.parameter_sets.Chen2020,
@@ -38,17 +36,7 @@ def random_plot_generator():
             chemNum = random.randint(0, len(chemistries) - 1)
             chemistry = chemistries[chemNum]
             chemistry = chemistries[0]
-            print(chemistry)
-
-            parameter_values = [
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020),
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Marquis2019),
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Mohtat2020),
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ramadass2004),
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ecker2015)
-            ]
-
-            random.shuffle(parameter_values)
+            # print(chemistry)
 
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
@@ -58,7 +46,7 @@ def random_plot_generator():
             solverNum = random.randint(0, len(solvers) - 1)
             solver = solvers[solverNum]
             solver = solvers[0]
-            print(solver)
+            # print(solver)
 
             (
                 current_function,
@@ -122,15 +110,15 @@ def random_plot_generator():
 
             elif choice == 2:
                 
-                number_of_comp = random.randint(2, 3)
-                number_of_experiments = random.randint(0, number_of_comp)
+                number_of_comp = random.randint(1, 3)
+                # number_of_experiments = random.randint(0, number_of_comp)
+                random.shuffle(models)
                 models_for_comp = models[:number_of_comp]
-                random.shuffle(models_for_comp)
-                parameter_values_for_comp = parameter_values[:number_of_comp]
                 models_for_comp = dict(list(enumerate(models_for_comp)))
-                parameter_values_for_comp = dict(list(enumerate(parameter_values_for_comp)))
-                
-                # TODO: Implement Experiments
+                params = pybamm.ParameterValues(chemistry=chemistry)
+                parameter_values_for_comp = dict(list(enumerate([params])))       
+
+                # TODO: Implement Experiment Comparisons?
                 # cycles = []
                 # numbers = []
                 # for i in range(0, number_of_experiments):
@@ -144,12 +132,25 @@ def random_plot_generator():
 
                 # final_cycles = dict(list(enumerate(cycles)))
 
+                # final_cycles = {
+                #     0: experiment,
+                #     1: experiment2
+                # }
+                if number_of_comp == 1:
+                    param_list = []
+                    diff_params = random.randint(2, 3)
+                    print(diff_params)
+                    for i in range(0, diff_params):
+                        param_list.append(params.copy())
+                        param_list[i]["Current function [A]"] = random.randint(1, 5)
+                    parameter_values_for_comp = dict(list(enumerate(param_list)))
+
                 s = pybamm.BatchStudy(
-                    models=models_for_comp, 
-                    # experiments=final_cycles,
+                    models=models_for_comp,
                     parameter_values=parameter_values_for_comp,
                     permutations=True
                 )
+
                 s.solve([0, 3700])
 
                 time = plot_graph(sim=s.sims)
