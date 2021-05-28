@@ -1,8 +1,6 @@
 import unittest
 import pybamm
 import os
-import importlib.util
-import pytest
 from plotting.plot_graph import plot_graph
 
 

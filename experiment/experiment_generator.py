@@ -14,39 +14,39 @@ def experiment_generator():
     ccharge = random.randint(1, 5)
     cdischarge = random.randint(1, 5)
     ccutoff = random.randint(1, 100)
-    if vmin < vmax:
-        discharge.append(
-            "Discharge at " + str(cdischarge) + " C until " + str(vmin) + " V",
-        )
+    # if vmin < vmax:
+    discharge.append(
+        "Discharge at " + str(cdischarge) + " C until " + str(vmin) + " V",
+    )
 
-        charge.append(
-            "Charge at " + str(ccharge) + " C until " + str(vmax) + " V",
-        )
+    charge.append(
+        "Charge at " + str(ccharge) + " C until " + str(vmax) + " V",
+    )
 
-        rest.append(
-            [
-                "Rest for " + str(random.randint(1, 10)) + " minutes",
-                "Rest for " + str(random.randint(1, 10)) + " minutes",
-            ]
-        )
+    rest.append(
+        [
+            "Rest for " + str(random.randint(1, 10)) + " minutes",
+            "Rest for " + str(random.randint(1, 10)) + " minutes",
+        ]
+    )
 
-        hold.append(
-            "Hold at " + str(vmax) + " V until " + str(ccutoff) + " mA",
-        )
+    hold.append(
+        "Hold at " + str(vmax) + " V until " + str(ccutoff) + " mA",
+    )
 
-        random.shuffle(rest)
+    random.shuffle(rest)
 
-        cycle = []
+    cycle = []
 
-        cycle.append(discharge[0])
-        if random.randint(0, 1) == 0:
-            cycle.append(rest[0][0])
-        cycle.append(charge[0])
-        cycle.append(hold[0])
-        if random.randint(0, 1) == 0:
-            cycle.append(rest[0][1])
+    cycle.append(discharge[0])
+    if random.randint(0, 1) == 0:
+        cycle.append(rest[0][0])
+    cycle.append(charge[0])
+    cycle.append(hold[0])
+    if random.randint(0, 1) == 0:
+        cycle.append(rest[0][1])
 
-        number = random.randint(1, 3)
-        print(cycle * number)
-        return cycle, number
+    number = random.randint(1, 3)
+    print(cycle * number)
+    return cycle, number
 

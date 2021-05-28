@@ -25,7 +25,7 @@ def model_generator(
 
 
     sim = pybamm.Simulation(model, parameter_values=parameter_values, solver=solver)
-    sim.solve([0, 3600])
+    sim.solve([0, 3700])
     solution = sim.solution
 
     return parameter_values, sim, solution
