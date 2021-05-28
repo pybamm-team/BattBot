@@ -39,15 +39,11 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     cycle = []
 
     cycle.append(discharge[0])
-    if testing["rest1"]:
-        cycle.append(rest[0][0])
-    elif random.randint(0, 1) == 0:
+    if random.randint(0, 1) == 1 or testing["rest1"]:
         cycle.append(rest[0][0])
     cycle.append(charge[0])
     cycle.append(hold[0])
-    if testing["rest2"]:
-        cycle.append(rest[0][1])
-    elif random.randint(0, 1) == 0:
+    if random.randint(0, 1) == 1 or testing["rest2"]:
         cycle.append(rest[0][1])
 
     number = random.randint(1, 3)

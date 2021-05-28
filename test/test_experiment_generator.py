@@ -18,6 +18,8 @@ class TestExperimentSolver(unittest.TestCase):
         self.assertEqual(cycle[3][:4], "Hold")
         self.assertEqual(cycle[4][:4], "Rest")
 
+        pybamm.Experiment(cycle * number)
+
     def test_experiment_generator_with_random_experiment(self):
         cycle, number = experiment_generator()
         self.assertTrue(len(cycle) == 5 or len(cycle) == 3 or len(cycle) == 4)
