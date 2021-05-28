@@ -3,7 +3,7 @@ import random
 from utils.single_point_decimal import single_decimal_point
 from plotting.plot_graph import plot_graph
 
-def experiment_generator():
+def experiment_generator(testing={"rest1": False, "rest2": False}):
     charge = []
     discharge = []
     rest = []
@@ -39,14 +39,18 @@ def experiment_generator():
     cycle = []
 
     cycle.append(discharge[0])
-    if random.randint(0, 1) == 0:
+    if testing["rest1"]:
+        cycle.append(rest[0][0])
+    elif random.randint(0, 1) == 0:
         cycle.append(rest[0][0])
     cycle.append(charge[0])
     cycle.append(hold[0])
-    if random.randint(0, 1) == 0:
+    if testing["rest2"]:
+        cycle.append(rest[0][1])
+    elif random.randint(0, 1) == 0:
         cycle.append(rest[0][1])
 
     number = random.randint(1, 3)
-    print(cycle * number)
+    # print(cycle * number)
     return cycle, number
 
