@@ -18,37 +18,37 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-def tweet_graph():
+def tweet_graph(testing=None):
 
-    print("Tweeting")
-    (   
-        model,
-        parameter_values,
-        time,
-        chemistry,
-        solver,
-        isExperiment,
-        cycle,
-        number,
-        isComparison
-    ) = random_plot_generator()
+    if not testing:
+        (   
+            model,
+            parameter_values,
+            time,
+            chemistry,
+            solver,
+            isExperiment,
+            cycle,
+            number,
+            isComparison
+        ) = random_plot_generator()
 
-    tweet = (
-        information(chemistry, model, solver, isExperiment, cycle, number, isComparison)
-        + ", at time = "
-        + str(time)
-        + " s"
-    )
+        tweet = (
+            information(chemistry, model, solver, isExperiment, cycle, number, isComparison)
+            + ", at time = "
+            + str(time)
+            + " s"
+        )
 
-    print(tweet)
+        print(tweet)
     # Uncomment to tweet
     media = api.media_upload("plot.png")
 
-    api.update_status(status=tweet, media_ids=[media.media_id])
+    if not testing:
+        api.update_status(status=tweet, media_ids=[media.media_id])
 
     os.remove("plot.png")
     plt.clf()
-    print("Tweeted")
 
 # uncomment when simulating tweeting process
 # while True:
@@ -56,4 +56,5 @@ def tweet_graph():
 #     time.sleep(5)
 
 # Uncomment when running on schedule
-tweet_graph()
+if __name__ == "__main__":
+    tweet_graph()

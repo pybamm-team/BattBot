@@ -23,8 +23,7 @@ def random_plot_generator():
 
             modelNum = random.randint(0, len(models) - 1)
             model = models[modelNum]
-            model = models[0]
-            # print(model)
+            # model = models[0]
 
             chemistries = [
                 pybamm.parameter_sets.Chen2020,
@@ -35,8 +34,7 @@ def random_plot_generator():
 
             chemNum = random.randint(0, len(chemistries) - 1)
             chemistry = chemistries[chemNum]
-            chemistry = chemistries[0]
-            # print(chemistry)
+            # chemistry = chemistries[0]
 
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
@@ -44,13 +42,10 @@ def random_plot_generator():
             ]
 
             solverNum = random.randint(0, len(solvers) - 1)
-            solver = solvers[solverNum]
+            # solver = solvers[solverNum]
             solver = solvers[0]
-            # print(solver)
 
             (
-                current_function,
-                upper_voltage,
                 lower_voltage,
                 ambient_temp,
                 initial_temp,
@@ -58,35 +53,34 @@ def random_plot_generator():
             ) = chemistry_generator(chemistry)
 
             choice = random.randint(0, 2)
-            # choice = 2
+            
             if choice == 0:
+                
+                c_rate = random.randint(0, 3)
+                (parameter_values, sim, solution) = model_generator(
+                    model=model,
+                    chemistry=chemistry,
+                    solver=solver,
+                    c_rate=c_rate,
+                    lower_voltage=lower_voltage,
+                    ambient_temp=ambient_temp,
+                    initial_temp=initial_temp,
+                    reference_temp=reference_temp,
+                )
 
-                if lower_voltage < upper_voltage:
-                    (parameter_values, sim, solution) = model_generator(
-                        model=model,
-                        solver=solver,
-                        chemistry=chemistry,
-                        current_function=current_function,
-                        upper_voltage=upper_voltage,
-                        lower_voltage=lower_voltage,
-                        ambient_temp=ambient_temp,
-                        initial_temp=initial_temp,
-                        reference_temp=reference_temp,
-                    )
+                time = plot_graph(solution, sim)
 
-                    time = plot_graph(solution, sim)
-
-                    return (
-                        model,
-                        parameter_values,
-                        time,
-                        chemistry,
-                        solver,
-                        False,
-                        None, 
-                        None,
-                        False
-                    ) 
+                return (
+                    model,
+                    parameter_values,
+                    time,
+                    chemistry,
+                    solver,
+                    False,
+                    None, 
+                    None,
+                    False
+                ) 
 
             elif choice == 1:
                 (
