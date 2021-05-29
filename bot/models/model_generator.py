@@ -1,5 +1,4 @@
 import pybamm
-import random
 
 
 def model_generator(
@@ -20,8 +19,9 @@ def model_generator(
     parameter_values["Initial temperature [K]"] = initial_temp
     parameter_values["Reference temperature [K]"] = reference_temp
 
-
-    sim = pybamm.Simulation(model, parameter_values=parameter_values, solver=solver, C_rate=c_rate)
+    sim = pybamm.Simulation(
+        model, parameter_values=parameter_values, solver=solver, C_rate=c_rate
+    )
     sim.solve([0, 3700])
     solution = sim.solution
 

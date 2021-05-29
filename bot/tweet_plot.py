@@ -1,6 +1,4 @@
-import pybamm
 import tweepy
-import time
 import matplotlib.pyplot as plt
 import os
 from plotting.random_plot_generator import random_plot_generator
@@ -21,7 +19,7 @@ def tweet_graph(testing=None):
     api = tweepy.API(auth)
 
     if not testing:
-        (   
+        (
             model,
             parameter_values,
             time,
@@ -30,11 +28,19 @@ def tweet_graph(testing=None):
             isExperiment,
             cycle,
             number,
-            isComparison
+            isComparison,
         ) = random_plot_generator()
 
         tweet = (
-            information(chemistry, model, solver, isExperiment, cycle, number, isComparison)
+            information(
+                chemistry,
+                model,
+                solver,
+                isExperiment,
+                cycle,
+                number,
+                isComparison
+            )
             + ", at time = "
             + str(time)
             + " s"
@@ -49,6 +55,7 @@ def tweet_graph(testing=None):
 
     os.remove("plot.png")
     plt.clf()
+
 
 # uncomment when simulating tweeting process
 # while True:

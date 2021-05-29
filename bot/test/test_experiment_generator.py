@@ -4,12 +4,8 @@ from experiment.experiment_generator import experiment_generator
 
 
 class TestExperimentSolver(unittest.TestCase):
-
     def test_experiment_generator_with_rest(self):
-        cycle, number = experiment_generator({
-            "rest1": True,
-            "rest2": True
-        })
+        cycle, number = experiment_generator({"rest1": True, "rest2": True})
         self.assertTrue(len(cycle) == 5)
         self.assertIsInstance(number, int)
         self.assertEqual(cycle[0][:9], "Discharge")
@@ -32,10 +28,10 @@ class TestExperimentSolver(unittest.TestCase):
         elif len(cycle) == 4:
             if cycle[1][:4] == "Rest":
                 self.assertEqual(cycle[2][:6], "Charge")
-                self.assertEqual(cycle[3][:4], "Hold")        
+                self.assertEqual(cycle[3][:4], "Hold")
             elif cycle[3][:4] == "Rest":
                 self.assertEqual(cycle[1][:6], "Charge")
-                self.assertEqual(cycle[2][:4], "Hold")        
+                self.assertEqual(cycle[2][:4], "Hold")
         elif len(cycle) == 5:
             self.assertEqual(cycle[1][:4], "Rest")
             self.assertEqual(cycle[2][:6], "Charge")
@@ -44,5 +40,6 @@ class TestExperimentSolver(unittest.TestCase):
 
         pybamm.Experiment(cycle * number)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

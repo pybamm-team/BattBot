@@ -4,7 +4,6 @@ from models.model_generator import model_generator
 
 
 class TestSolvingModel(unittest.TestCase):
-
     def setUp(self):
         self.model = pybamm.lithium_ion.DFN()
         self.chemistry = pybamm.parameter_sets.Chen2020
@@ -31,5 +30,6 @@ class TestSolvingModel(unittest.TestCase):
         self.assertEqual(parameter_values["Reference temperature [K]"], 298)
         self.assertEqual(sim.C_rate, 2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

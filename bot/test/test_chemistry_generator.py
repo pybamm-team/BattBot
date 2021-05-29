@@ -4,13 +4,12 @@ from utils.chemistry_generator import chemistry_generator
 
 
 class TestExperimentSolver(unittest.TestCase):
-
     def test_chemistry_generator_chen2020(self):
         (
-        lower_voltage,
-        ambient_temp,
-        initial_temp,
-        reference_temp,
+            lower_voltage,
+            ambient_temp,
+            initial_temp,
+            reference_temp,
         ) = chemistry_generator(pybamm.parameter_sets.Chen2020)
 
         self.assertGreaterEqual(lower_voltage, 2.5)
@@ -27,10 +26,10 @@ class TestExperimentSolver(unittest.TestCase):
 
     def test_chemistry_generator_marquis2019(self):
         (
-        lower_voltage,
-        ambient_temp,
-        initial_temp,
-        reference_temp,
+            lower_voltage,
+            ambient_temp,
+            initial_temp,
+            reference_temp,
         ) = chemistry_generator(pybamm.parameter_sets.Marquis2019)
 
         self.assertGreaterEqual(lower_voltage, 3.1)
@@ -45,5 +44,6 @@ class TestExperimentSolver(unittest.TestCase):
         self.assertGreaterEqual(reference_temp, 273.18)
         self.assertLessEqual(reference_temp, 298.15)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

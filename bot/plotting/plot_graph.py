@@ -18,7 +18,7 @@ def plot_graph(solution=None, sim=None):
         final_time = int(t.entries[len(t.entries) - 1])
         time = random.randint(0, final_time)
     else:
-        time =random.randint(0, 3700)
+        time = random.randint(0, 3700)
 
     # generating a plot
     plot = pybamm.QuickPlot(sim, time_unit="seconds")

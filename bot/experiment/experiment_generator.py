@@ -1,7 +1,6 @@
-import pybamm
 import random
 from utils.single_point_decimal import single_decimal_point
-from plotting.plot_graph import plot_graph
+
 
 def experiment_generator(testing={"rest1": False, "rest2": False}):
     charge = []
@@ -49,4 +48,3 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     number = random.randint(1, 3)
     # print(cycle * number)
     return cycle, number
-
