@@ -7,18 +7,18 @@ from plotting.random_plot_generator import random_plot_generator
 from information.information import information
 
 
-# getting the Twitter API keys
-CONSUMER_KEY = os.environ["CONSUMER_KEY"]
-CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
-ACCESS_KEY = os.environ["ACCESS_KEY"]
-ACCESS_SECRET = os.environ["ACCESS_SECRET"]
-
-# setting up tweepy.API object
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-api = tweepy.API(auth)
-
 def tweet_graph(testing=None):
+
+    # getting the Twitter API keys
+    CONSUMER_KEY = os.environ["CONSUMER_KEY"]
+    CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
+    ACCESS_KEY = os.environ["ACCESS_KEY"]
+    ACCESS_SECRET = os.environ["ACCESS_SECRET"]
+
+    # setting up tweepy.API object
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+    api = tweepy.API(auth)
 
     if not testing:
         (   
