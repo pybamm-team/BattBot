@@ -118,8 +118,8 @@ def random_plot_generator(
                 if (
                     number_of_comp == 1
                     or (
-                        testing == True
-                        and provided_number_of_comp == 1 
+                        testing
+                        and provided_number_of_comp == 1
                     )
                 ):
                     param_list = []
