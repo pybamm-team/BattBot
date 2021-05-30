@@ -7,9 +7,22 @@ def information(
     number,
     isComparison
 ):
+    """
+    Generates tweet text.
+    Parameters:
+        chemistry: dict
+        model: pybamm.BaseModel
+        solver: pybamm.BaseSolver
+        isExperiment: bool
+        cycle: list
+        number: numerical
+        isComparison: bool
+    Returns
+        tweet_text: str
+    """
 
     if isExperiment:
-        return (
+        tweet_text = (
             str(cycle)
             + " * "
             + str(number)
@@ -18,10 +31,13 @@ def information(
             + " "
             + str(chemistry["citation"])
         )
+        return tweet_text
 
     elif isComparison:
-        return str(model)
+        tweet_text = str(model)
+        return tweet_text
     else:
-        return (
+        tweet_text = (
             str(model) + " " + str(chemistry["citation"]) + " " + str(solver)
         )
+        return tweet_text

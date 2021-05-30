@@ -3,6 +3,17 @@ from utils.single_point_decimal import single_decimal_point
 
 
 def experiment_generator(testing={"rest1": False, "rest2": False}):
+    """
+    This function generates a random experiment with the template
+    ["Discharge", "Rest?", "Charge", "Hold", "Rest?"].
+    Parameters:
+        testing: dict
+            default: {"rest1": False, "rest2": False}
+        keys: rest1, rest2
+    Returns:
+        cycle: list
+        number: numerical
+    """
     charge = []
     discharge = []
     rest = []

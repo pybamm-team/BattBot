@@ -7,7 +7,9 @@ def plot_graph(solution=None, sim=None):
     This function generates and saves a plot.
     Parameters:
         solution: pybamm.Simulation.solution
+            default: None
         sim: pybamm.Simulation
+            default: None
     Returns:
         time: numerical (seconds)
     """

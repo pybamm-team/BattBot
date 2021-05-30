@@ -12,6 +12,26 @@ def random_plot_generator(
     provided_choice=None,
     provided_number_of_comp=None
 ):
+    """
+    Generates a random plot.
+    Parameters:
+        testing: bool
+            default: None
+        provided_choice: numerical
+            default: None
+        provided_number_of_comp: numerical
+            default: None
+    Returns:
+        model: pybamm.BaseModel
+        parameter_values: pybamm.ParameterValues
+        time: numerical (seconds)
+        chemistry: dict
+        solver: pybamm.BaseSolver
+        isExperiment: bool
+        cycle: list
+        number: numerical
+        isComparison: bool
+    """
 
     while True:
 

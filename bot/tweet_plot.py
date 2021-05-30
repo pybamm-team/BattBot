@@ -6,6 +6,12 @@ from information.information import information
 
 
 def tweet_graph(testing=False):
+    """
+    Function responsible for all the tweeting functionalities.
+    Parameters:
+        testing: bool
+            default: False
+    """
 
     # getting the Twitter API keys
     CONSUMER_KEY = os.environ["CONSUMER_KEY"]
