@@ -7,7 +7,11 @@ from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 
 
-def random_plot_generator():
+def random_plot_generator(
+    testing=False,
+    provided_choice=None,
+    provided_number_of_comp=None
+):
 
     while True:
 
@@ -23,6 +27,7 @@ def random_plot_generator():
             model = models[modelNum]
 
             chemistries = [
+                pybamm.parameter_sets.Ai2020,
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
                 pybamm.parameter_sets.Ecker2015,
@@ -48,6 +53,8 @@ def random_plot_generator():
             ) = chemistry_generator(chemistry)
 
             choice = random.randint(0, 2)
+            if testing is True and provided_choice is not None:
+                choice = provided_choice
 
             if choice == 0:
 
@@ -108,10 +115,15 @@ def random_plot_generator():
                 params = pybamm.ParameterValues(chemistry=chemistry)
                 parameter_values_for_comp = dict(list(enumerate([params])))
 
-                if number_of_comp == 1:
+                if (
+                    number_of_comp == 1
+                    or (
+                        testing == True
+                        and provided_number_of_comp == 1 
+                    )
+                ):
                     param_list = []
                     diff_params = random.randint(2, 3)
-                    print(diff_params)
                     for i in range(0, diff_params):
                         param_list.append(params.copy())
                         param_list[i][
@@ -133,9 +145,9 @@ def random_plot_generator():
 
                 return (
                     models_for_comp,
-                    parameter_values_for_comp,
+                    params,
                     time,
-                    None,
+                    chemistry,
                     None,
                     False,
                     None,

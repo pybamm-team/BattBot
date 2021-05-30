@@ -10,8 +10,8 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
 
     vmin = single_decimal_point(3.2, 3.7, 0.1)
     vmax = single_decimal_point(3.7, 4.2, 0.1)
-    ccharge = random.randint(1, 5)
-    cdischarge = random.randint(1, 5)
+    ccharge = random.randint(1, 3)
+    cdischarge = random.randint(1, 3)
     ccutoff = random.randint(1, 100)
     # if vmin < vmax:
     discharge.append(
