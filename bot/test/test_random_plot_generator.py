@@ -49,6 +49,33 @@ class TestTweetPlot(unittest.TestCase):
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
+        self.assertIsNone(time)
+        self.assertIsNotNone(cycle)
+        self.assertIsNotNone(number)
+        self.assertTrue(isExperiment)
+        self.assertFalse(isComparison)
+        pybamm.Experiment(cycle * number)
+
+        (
+            model,
+            parameter_values,
+            time,
+            chemistry,
+            solver,
+            isExperiment,
+            cycle,
+            number,
+            isComparison,
+        ) = random_plot_generator(
+            testing=True,
+            provided_choice=1,
+            plot_summary_variables=False
+        )
+
+        self.assertIsInstance(model, pybamm.BaseBatteryModel)
+        self.assertEqual("lithium_ion", chemistry["chemistry"])
+        self.assertIsInstance(solver, pybamm.BaseSolver)
+        self.assertIsInstance(parameter_values, pybamm.ParameterValues)
         self.assertIsInstance(time, int)
         self.assertIsNotNone(cycle)
         self.assertIsNotNone(number)

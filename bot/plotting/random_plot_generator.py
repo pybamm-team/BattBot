@@ -3,15 +3,17 @@ import random
 from plotting.plot_graph import plot_graph
 from models.model_generator import model_generator
 from utils.chemistry_generator import chemistry_generator
+from utils.single_point_decimal import single_decimal_point
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
-from experiment.summary_variables import generate_summary_variables
+from plotting.summary_variables import generate_summary_variables
 
 
 def random_plot_generator(
     testing=False,
     provided_choice=None,
-    provided_number_of_comp=None
+    provided_number_of_comp=None,
+    plot_summary_variables=True
 ):
     """
     Generates a random plot.
@@ -48,11 +50,11 @@ def random_plot_generator(
             model = models[modelNum]
 
             chemistries = [
-                pybamm.parameter_sets.Ai2020,
+                # pybamm.parameter_sets.Ai2020,
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
-                pybamm.parameter_sets.Ecker2015,
-                pybamm.parameter_sets.Ramadass2004,
+                # pybamm.parameter_sets.Ecker2015,
+                # pybamm.parameter_sets.Ramadass2004,
             ]
 
             chemNum = random.randint(0, len(chemistries) - 1)
@@ -110,7 +112,10 @@ def random_plot_generator(
                     cycleReceived,
                     number,
                 ) = experiment_generator()
-                if number > 3:
+                if testing:
+                    number = 10
+                if number > 3 and plot_summary_variables:
+
                     experiment = pybamm.Experiment(
                         cycleReceived * number, termination="80% capacity"
                     )
@@ -136,6 +141,8 @@ def random_plot_generator(
                         number,
                         False,
                     )
+                if testing:
+                    number = 1
                 experiment = pybamm.Experiment(cycleReceived * number)
                 (sim, solution, parameter_values) = experiment_solver(
                     model, experiment, chemistry, solver
@@ -171,12 +178,11 @@ def random_plot_generator(
                 ):
                     param_list = []
                     diff_params = random.randint(2, 3)
-                    curr_func = random.sample(range(3, 4), diff_params)
                     for i in range(0, diff_params):
                         param_list.append(params.copy())
                         param_list[i][
                             "Current function [A]"
-                        ] = curr_func[i]
+                        ] = single_decimal_point(2, 7, 0.1)
                     parameter_values_for_comp = dict(
                         list(enumerate(param_list))
                     )
