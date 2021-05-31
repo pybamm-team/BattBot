@@ -24,10 +24,12 @@ def random_plot_generator(
             default: None
         provided_number_of_comp: numerical
             default: None
+        plot_summary_variables: bool
+            default: True
     Returns:
         model: pybamm.BaseModel
         parameter_values: pybamm.ParameterValues
-        time: numerical (seconds)
+        time: numerical (seconds) or None
         chemistry: dict
         solver: pybamm.BaseSolver
         isExperiment: bool
