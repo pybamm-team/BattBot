@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 from plotting.random_plot_generator import random_plot_generator
 from information.information import information
+# import time
 
 
 def tweet_graph(testing=False):

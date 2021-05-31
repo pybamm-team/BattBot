@@ -5,6 +5,7 @@ from models.model_generator import model_generator
 from utils.chemistry_generator import chemistry_generator
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
+from experiment.summary_variables import generate_summary_variables
 
 
 def random_plot_generator(
@@ -109,6 +110,32 @@ def random_plot_generator(
                     cycleReceived,
                     number,
                 ) = experiment_generator()
+                if number > 3:
+                    experiment = pybamm.Experiment(
+                        cycleReceived * number, termination="80% capacity"
+                    )
+                    (
+                        sim,
+                        solution,
+                        parameter_values
+                    ) = experiment_solver(
+                        model=model,
+                        experiment=experiment,
+                        chemistry=chemistry,
+                        solver=solver
+                    )
+                    generate_summary_variables(solution)
+                    return (
+                        model,
+                        parameter_values,
+                        None,
+                        chemistry,
+                        solver,
+                        True,
+                        cycleReceived,
+                        number,
+                        False,
+                    )
                 experiment = pybamm.Experiment(cycleReceived * number)
                 (sim, solution, parameter_values) = experiment_solver(
                     model, experiment, chemistry, solver
@@ -144,11 +171,12 @@ def random_plot_generator(
                 ):
                     param_list = []
                     diff_params = random.randint(2, 3)
+                    curr_func = random.sample(range(3, 4), diff_params)
                     for i in range(0, diff_params):
                         param_list.append(params.copy())
                         param_list[i][
                             "Current function [A]"
-                        ] = random.randint(1, 5)
+                        ] = curr_func[i]
                     parameter_values_for_comp = dict(
                         list(enumerate(param_list))
                     )
@@ -174,5 +202,5 @@ def random_plot_generator(
                     None,
                     True,
                 )
-        except: # noqa
-            pass
+        except Exception as e: # noqa
+            print(e)
