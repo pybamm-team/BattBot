@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from utils.chemistry_generator import chemistry_generator
+from bot.utils.chemistry_generator import chemistry_generator
 
 
 class TestExperimentSolver(unittest.TestCase):

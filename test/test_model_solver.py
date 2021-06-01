@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from models.model_solver import model_solver
+from bot.models.model_solver import model_solver
 
 
 class TestSolvingModel(unittest.TestCase):

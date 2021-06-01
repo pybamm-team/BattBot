@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from plotting.random_plot_generator import random_plot_generator
+from bot.plotting.random_plot_generator import random_plot_generator
 
 
 class TestTweetPlot(unittest.TestCase):

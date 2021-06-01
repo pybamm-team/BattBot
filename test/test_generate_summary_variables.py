@@ -1,7 +1,7 @@
 import unittest
 import pybamm
 import os
-from plotting.summary_variables import generate_summary_variables
+from bot.plotting.summary_variables import generate_summary_variables
 
 
 class TestPlottingSummaryVariables(unittest.TestCase):

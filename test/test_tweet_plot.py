@@ -1,7 +1,7 @@
 import unittest
 import pybamm
 import os
-from tweet_plot import tweet_graph
+from bot.tweet_plot import tweet_graph
 
 
 class TestTweetPlot(unittest.TestCase):

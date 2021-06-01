@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from experiment.experiment_generator import experiment_generator
+from bot.experiment.experiment_generator import experiment_generator
 
 
 class TestExperimentSolver(unittest.TestCase):

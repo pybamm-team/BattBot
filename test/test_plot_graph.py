@@ -1,7 +1,7 @@
 import unittest
 import pybamm
 import os
-from plotting.plot_graph import plot_graph
+from bot.plotting.plot_graph import plot_graph
 
 
 class TestPlotting(unittest.TestCase):

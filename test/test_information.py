@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from information.information import information
+from bot.information.information import information
 
 
 class TestInformation(unittest.TestCase):
