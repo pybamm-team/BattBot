@@ -1,7 +1,7 @@
 import pybamm
 import random
 from plotting.plot_graph import plot_graph
-from models.model_generator import model_generator
+from models.model_solver import model_solver
 from utils.chemistry_generator import chemistry_generator
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
@@ -27,10 +27,10 @@ def random_plot_generator(
         time: numerical (seconds)
         chemistry: dict
         solver: pybamm.BaseSolver
-        isExperiment: bool
+        is_experiment: bool
         cycle: list
         number: numerical
-        isComparison: bool
+        is_comparison: bool
     """
 
     while True:
@@ -43,34 +43,29 @@ def random_plot_generator(
                 pybamm.lithium_ion.SPMe(),
             ]
 
-            modelNum = random.randint(0, len(models) - 1)
-            model = models[modelNum]
+            model_num = random.randint(0, len(models) - 1)
+            model = models[model_num]
 
             chemistries = [
-                pybamm.parameter_sets.Ai2020,
+                # pybamm.parameter_sets.Ai2020,
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
-                pybamm.parameter_sets.Ecker2015,
-                pybamm.parameter_sets.Ramadass2004,
+                # pybamm.parameter_sets.Ecker2015,
+                # pybamm.parameter_sets.Ramadass2004,
             ]
 
-            chemNum = random.randint(0, len(chemistries) - 1)
-            chemistry = chemistries[chemNum]
+            chem_num = random.randint(0, len(chemistries) - 1)
+            chemistry = chemistries[chem_num]
 
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
                 pybamm.CasadiSolver(mode="fast with events"),
             ]
 
-            solverNum = random.randint(0, len(solvers) - 1)
-            solver = solvers[solverNum]
+            solver_num = random.randint(0, len(solvers) - 1)
+            solver = solvers[solver_num]
 
-            (
-                lower_voltage,
-                ambient_temp,
-                initial_temp,
-                reference_temp,
-            ) = chemistry_generator(chemistry)
+            lower_voltage = chemistry_generator(chemistry)
 
             choice = random.randint(0, 2)
             if testing is True and provided_choice is not None:
@@ -79,15 +74,12 @@ def random_plot_generator(
             if choice == 0:
 
                 c_rate = random.randint(0, 3)
-                (parameter_values, sim, solution) = model_generator(
+                (parameter_values, sim, solution) = model_solver(
                     model=model,
                     chemistry=chemistry,
                     solver=solver,
                     c_rate=c_rate,
                     lower_voltage=lower_voltage,
-                    ambient_temp=ambient_temp,
-                    initial_temp=initial_temp,
-                    reference_temp=reference_temp,
                 )
 
                 time = plot_graph(solution, sim)
