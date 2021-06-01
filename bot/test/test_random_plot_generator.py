@@ -11,10 +11,10 @@ class TestTweetPlot(unittest.TestCase):
             time,
             chemistry,
             solver,
-            isExperiment,
+            is_experiment,
             cycle,
             number,
-            isComparison,
+            is_comparison,
         ) = random_plot_generator(
             testing=True,
             provided_choice=0
@@ -27,8 +27,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(time, int)
         self.assertIsNone(cycle)
         self.assertIsNone(number)
-        self.assertFalse(isExperiment)
-        self.assertFalse(isComparison)
+        self.assertFalse(is_experiment)
+        self.assertFalse(is_comparison)
 
         (
             model,
@@ -36,10 +36,10 @@ class TestTweetPlot(unittest.TestCase):
             time,
             chemistry,
             solver,
-            isExperiment,
+            is_experiment,
             cycle,
             number,
-            isComparison,
+            is_comparison,
         ) = random_plot_generator(
             testing=True,
             provided_choice=1
@@ -52,8 +52,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsNone(time)
         self.assertIsNotNone(cycle)
         self.assertIsNotNone(number)
-        self.assertTrue(isExperiment)
-        self.assertFalse(isComparison)
+        self.assertTrue(is_experiment)
+        self.assertFalse(is_comparison)
         pybamm.Experiment(cycle * number)
 
         (
@@ -79,8 +79,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(time, int)
         self.assertIsNotNone(cycle)
         self.assertIsNotNone(number)
-        self.assertTrue(isExperiment)
-        self.assertFalse(isComparison)
+        self.assertTrue(is_experiment)
+        self.assertFalse(is_comparison)
         pybamm.Experiment(cycle * number)
 
         (
@@ -89,10 +89,10 @@ class TestTweetPlot(unittest.TestCase):
             time,
             chemistry,
             solver,
-            isExperiment,
+            is_experiment,
             cycle,
             number,
-            isComparison,
+            is_comparison,
         ) = random_plot_generator(
             testing=True,
             provided_choice=2
@@ -106,8 +106,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(time, int)
         self.assertIsNone(cycle)
         self.assertIsNone(number)
-        self.assertFalse(isExperiment)
-        self.assertTrue(isComparison)
+        self.assertFalse(is_experiment)
+        self.assertTrue(is_comparison)
 
         (
             models,
@@ -115,10 +115,10 @@ class TestTweetPlot(unittest.TestCase):
             time,
             chemistry,
             solver,
-            isExperiment,
+            is_experiment,
             cycle,
             number,
-            isComparison,
+            is_comparison,
         ) = random_plot_generator(
             testing=True,
             provided_choice=2,
@@ -133,8 +133,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(time, int)
         self.assertIsNone(cycle)
         self.assertIsNone(number)
-        self.assertFalse(isExperiment)
-        self.assertTrue(isComparison)
+        self.assertFalse(is_experiment)
+        self.assertTrue(is_comparison)
 
 
 if __name__ == "__main__":
