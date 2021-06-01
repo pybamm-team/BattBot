@@ -27,7 +27,7 @@ def random_plot_generator(
         plot_summary_variables: bool
             default: True
     Returns:
-        model: pybamm.BaseModel
+        model: pybamm.BaseModel or dict
         parameter_values: pybamm.ParameterValues
         time: numerical (seconds) or None
         chemistry: dict
@@ -41,20 +41,12 @@ def random_plot_generator(
     while True:
 
         try:
-
-            models = [
-                pybamm.lithium_ion.DFN(),
-                pybamm.lithium_ion.SPM(),
-                pybamm.lithium_ion.SPMe(),
-            ]
-
-            model_num = random.randint(0, len(models) - 1)
-            model = models[model_num]
-
+            pybamm.set_logging_level("NOTICE")
             chemistries = [
-                # pybamm.parameter_sets.Ai2020,
+                pybamm.parameter_sets.Ai2020,
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
+                pybamm.parameter_sets.Yang2017,
                 # pybamm.parameter_sets.Ecker2015,
                 # pybamm.parameter_sets.Ramadass2004,
             ]
@@ -62,13 +54,52 @@ def random_plot_generator(
             chem_num = random.randint(0, len(chemistries) - 1)
             chemistry = chemistries[chem_num]
 
+            particle_mechanics = ["swelling and cracking", "swelling only"]
+            sei = [
+                "ec reaction limited",
+                "reaction limited",
+                "solvent-diffusion limited",
+                "electron-migration limited",
+                "interstitial-diffusion limited",
+            ]
+            options = {}
+
+            if chem_num == 0:
+                options.update({
+                    "particle mechanics": random.choice(particle_mechanics),
+                    "SEI": random.choice(sei)
+                })
+            elif chem_num == 3:
+                options.update({
+                    "lithium plating": "irreversible",
+                    "lithium plating porosity change": "true",
+                    "SEI": "ec reaction limited"
+                })
+            elif chem_num != 3:
+                options.update({
+                    "SEI": random.choice(sei),
+                })
+
+            models = [
+                pybamm.lithium_ion.DFN(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPM(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPMe(
+                    options=options
+                ),
+            ]
+
+            model = random.choice(models)
+
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
                 pybamm.CasadiSolver(mode="fast with events"),
             ]
 
-            solver_num = random.randint(0, len(solvers) - 1)
-            solver = solvers[solver_num]
+            solver = random.choice(solvers)
 
             lower_voltage = chemistry_generator(chemistry)
 
@@ -176,7 +207,7 @@ def random_plot_generator(
                         param_list.append(params.copy())
                         param_list[i][
                             "Current function [A]"
-                        ] = single_decimal_point(2, 7, 0.1)
+                        ] = single_decimal_point(4, 6, 0.1)
                     parameter_values_for_comp = dict(
                         list(enumerate(param_list))
                     )
@@ -202,5 +233,6 @@ def random_plot_generator(
                     None,
                     True,
                 )
+
         except Exception as e: # noqa
             print(e)

@@ -53,7 +53,7 @@ class TestInformation(unittest.TestCase):
             self.is_comparison,
         )
 
-        self.assertEqual(result, "Doyle-Fuller-Newman model")
+        self.assertEqual(result, "Chen2020")
         self.is_comparison = False
 
         result = information(

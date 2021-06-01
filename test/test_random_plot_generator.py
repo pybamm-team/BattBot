@@ -5,6 +5,14 @@ from bot.plotting.random_plot_generator import random_plot_generator
 
 class TestTweetPlot(unittest.TestCase):
     def test_tweet_graph(self):
+
+        key_list = [
+            "particle mechanics",
+            "lithium plating",
+            "SEI",
+            "lithium plating porosity change"
+        ]
+
         (
             model,
             parameter_values,
@@ -21,6 +29,9 @@ class TestTweetPlot(unittest.TestCase):
         )
 
         self.assertIsInstance(model, pybamm.BaseBatteryModel)
+        self.assertIsNotNone(model.options)
+        self.assertIsInstance(model.options, dict)
+        self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
@@ -46,6 +57,9 @@ class TestTweetPlot(unittest.TestCase):
         )
 
         self.assertIsInstance(model, pybamm.BaseBatteryModel)
+        self.assertIsNotNone(model.options)
+        self.assertIsInstance(model.options, dict)
+        self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
@@ -73,6 +87,9 @@ class TestTweetPlot(unittest.TestCase):
         )
 
         self.assertIsInstance(model, pybamm.BaseBatteryModel)
+        self.assertIsNotNone(model.options)
+        self.assertIsInstance(model.options, dict)
+        self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
@@ -100,6 +117,9 @@ class TestTweetPlot(unittest.TestCase):
 
         for model in models.values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
+            self.assertIsNotNone(model.options)
+            self.assertIsInstance(model.options, dict)
+            self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsNone(solver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
@@ -127,6 +147,9 @@ class TestTweetPlot(unittest.TestCase):
 
         for model in models.values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
+            self.assertIsNotNone(model.options)
+            self.assertIsInstance(model.options, dict)
+            self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsNone(solver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)

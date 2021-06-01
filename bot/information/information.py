@@ -34,7 +34,7 @@ def information(
         return tweet_text
 
     elif is_comparison:
-        tweet_text = str(model.name)
+        tweet_text = str(chemistry["citation"])
         return tweet_text
     else:
         tweet_text = (

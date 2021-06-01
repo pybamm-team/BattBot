@@ -18,4 +18,10 @@ def chemistry_generator(chemistry):
     elif chemistry == pybamm.parameter_sets.Marquis2019:
         lower_voltage = single_decimal_point(3.1, 3.9, 0.1)
 
+    elif chemistry == pybamm.parameter_sets.Ai2020:
+        lower_voltage = single_decimal_point(2.7, 3.9, 0.1)
+
+    elif chemistry == pybamm.parameter_sets.Yang2017:
+        lower_voltage = single_decimal_point(2.7, 3.9, 0.1)
+
     return lower_voltage
