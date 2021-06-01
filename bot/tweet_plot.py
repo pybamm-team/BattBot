@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 from plotting.random_plot_generator import random_plot_generator
 from information.information import information
+import multiprocessing
 # import time
 
 
@@ -72,5 +73,22 @@ def tweet_graph(testing=False):
 #     time.sleep(5)
 
 # Uncomment when running on schedule
-if __name__ == "__main__":
-    tweet_graph()
+if __name__ == "__main__":  # pragma: no cover
+
+    while True:
+
+        tweet = multiprocessing.Process(target=tweet_graph)
+        tweet.start()
+        tweet.join(240)
+
+        if tweet.is_alive():
+
+            print(
+                "The simulation is taking longer than expected, KILLING IT"
+                + " and starting a NEW ONE."
+            )
+            tweet.kill()
+            tweet.join()
+
+        else:
+            break
