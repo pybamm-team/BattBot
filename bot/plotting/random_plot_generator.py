@@ -96,7 +96,7 @@ def random_plot_generator(
 
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
-                pybamm.CasadiSolver(mode="fast with events"),
+                pybamm.CasadiSolver(mode="fast"),
             ]
 
             solver = random.choice(solvers)
@@ -190,6 +190,8 @@ def random_plot_generator(
                 number_of_comp = random.randint(1, 3)
                 random.shuffle(models)
                 models_for_comp = models[:number_of_comp]
+                if testing and provided_number_of_comp == 1:
+                    models_for_comp = [pybamm.lithium_ion.DFN()]
                 models_for_comp = dict(list(enumerate(models_for_comp)))
                 params = pybamm.ParameterValues(chemistry=chemistry)
                 parameter_values_for_comp = dict(list(enumerate([params])))
@@ -234,5 +236,5 @@ def random_plot_generator(
                     True,
                 )
 
-        except Exception as e: # noqa
+        except Exception as e:
             print(e)

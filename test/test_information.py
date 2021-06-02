@@ -42,6 +42,9 @@ class TestInformation(unittest.TestCase):
 
         self.is_comparison = True
         self.is_experiment = False
+        self.model = {
+            "DFN": pybamm.lithium_ion.DFN()
+        }
 
         result = information(
             self.chemistry,
@@ -55,6 +58,7 @@ class TestInformation(unittest.TestCase):
 
         self.assertEqual(result, "Chen2020")
         self.is_comparison = False
+        self.model = pybamm.lithium_ion.DFN()
 
         result = information(
             self.chemistry,
