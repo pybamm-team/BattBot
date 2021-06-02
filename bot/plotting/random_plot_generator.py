@@ -3,14 +3,17 @@ import random
 from plotting.plot_graph import plot_graph
 from models.model_solver import model_solver
 from utils.chemistry_generator import chemistry_generator
+from utils.single_point_decimal import single_decimal_point
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
+from plotting.summary_variables import generate_summary_variables
 
 
 def random_plot_generator(
     testing=False,
     provided_choice=None,
-    provided_number_of_comp=None
+    provided_number_of_comp=None,
+    plot_summary_variables=True
 ):
     """
     Generates a random plot.
@@ -21,10 +24,12 @@ def random_plot_generator(
             default: None
         provided_number_of_comp: numerical
             default: None
+        plot_summary_variables: bool
+            default: True
     Returns:
-        model: pybamm.BaseModel
+        model: pybamm.BaseModel or dict
         parameter_values: pybamm.ParameterValues
-        time: numerical (seconds)
+        time: numerical (seconds) or None
         chemistry: dict
         solver: pybamm.BaseSolver
         is_experiment: bool
@@ -36,20 +41,12 @@ def random_plot_generator(
     while True:
 
         try:
-
-            models = [
-                pybamm.lithium_ion.DFN(),
-                pybamm.lithium_ion.SPM(),
-                pybamm.lithium_ion.SPMe(),
-            ]
-
-            model_num = random.randint(0, len(models) - 1)
-            model = models[model_num]
-
+            pybamm.set_logging_level("NOTICE")
             chemistries = [
-                # pybamm.parameter_sets.Ai2020,
+                pybamm.parameter_sets.Ai2020,
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
+                pybamm.parameter_sets.Yang2017,
                 # pybamm.parameter_sets.Ecker2015,
                 # pybamm.parameter_sets.Ramadass2004,
             ]
@@ -57,13 +54,52 @@ def random_plot_generator(
             chem_num = random.randint(0, len(chemistries) - 1)
             chemistry = chemistries[chem_num]
 
-            solvers = [
-                pybamm.CasadiSolver(mode="safe"),
-                pybamm.CasadiSolver(mode="fast with events"),
+            particle_mechanics = ["swelling and cracking", "swelling only"]
+            sei = [
+                "ec reaction limited",
+                "reaction limited",
+                "solvent-diffusion limited",
+                "electron-migration limited",
+                "interstitial-diffusion limited",
+            ]
+            options = {}
+
+            if chem_num == 0:
+                options.update({
+                    "particle mechanics": random.choice(particle_mechanics),
+                    "SEI": random.choice(sei)
+                })
+            elif chem_num == 3:
+                options.update({
+                    "lithium plating": "irreversible",
+                    "lithium plating porosity change": "true",
+                    "SEI": "ec reaction limited"
+                })
+            elif chem_num != 3:
+                options.update({
+                    "SEI": random.choice(sei),
+                })
+
+            models = [
+                pybamm.lithium_ion.DFN(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPM(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPMe(
+                    options=options
+                ),
             ]
 
-            solver_num = random.randint(0, len(solvers) - 1)
-            solver = solvers[solver_num]
+            model = random.choice(models)
+
+            solvers = [
+                pybamm.CasadiSolver(mode="safe"),
+                pybamm.CasadiSolver(mode="fast"),
+            ]
+
+            solver = random.choice(solvers)
 
             lower_voltage = chemistry_generator(chemistry)
 
@@ -98,10 +134,41 @@ def random_plot_generator(
 
             elif choice == 1:
                 (
-                    cycleReceived,
+                    cycle_received,
                     number,
                 ) = experiment_generator()
-                experiment = pybamm.Experiment(cycleReceived * number)
+                if testing:
+                    number = 10
+                if number > 3 and plot_summary_variables:
+
+                    experiment = pybamm.Experiment(
+                        cycle_received * number, termination="80% capacity"
+                    )
+                    (
+                        sim,
+                        solution,
+                        parameter_values
+                    ) = experiment_solver(
+                        model=model,
+                        experiment=experiment,
+                        chemistry=chemistry,
+                        solver=solver
+                    )
+                    generate_summary_variables(solution)
+                    return (
+                        model,
+                        parameter_values,
+                        None,
+                        chemistry,
+                        solver,
+                        True,
+                        cycle_received,
+                        number,
+                        False,
+                    )
+                if testing:
+                    number = 1
+                experiment = pybamm.Experiment(cycle_received * number)
                 (sim, solution, parameter_values) = experiment_solver(
                     model, experiment, chemistry, solver
                 )
@@ -113,7 +180,7 @@ def random_plot_generator(
                     chemistry,
                     solver,
                     True,
-                    cycleReceived,
+                    cycle_received,
                     number,
                     False,
                 )
@@ -123,6 +190,8 @@ def random_plot_generator(
                 number_of_comp = random.randint(1, 3)
                 random.shuffle(models)
                 models_for_comp = models[:number_of_comp]
+                if testing and provided_number_of_comp == 1:
+                    models_for_comp = [pybamm.lithium_ion.DFN()]
                 models_for_comp = dict(list(enumerate(models_for_comp)))
                 params = pybamm.ParameterValues(chemistry=chemistry)
                 parameter_values_for_comp = dict(list(enumerate([params])))
@@ -140,7 +209,7 @@ def random_plot_generator(
                         param_list.append(params.copy())
                         param_list[i][
                             "Current function [A]"
-                        ] = random.randint(1, 5)
+                        ] = single_decimal_point(4, 6, 0.1)
                     parameter_values_for_comp = dict(
                         list(enumerate(param_list))
                     )
@@ -166,5 +235,6 @@ def random_plot_generator(
                     None,
                     True,
                 )
-        except: # noqa
-            pass
+
+        except Exception as e:
+            print(e)

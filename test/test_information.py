@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from information.information import information
+from bot.information.information import information
 
 
 class TestInformation(unittest.TestCase):
@@ -42,6 +42,9 @@ class TestInformation(unittest.TestCase):
 
         self.is_comparison = True
         self.is_experiment = False
+        self.model = {
+            "DFN": pybamm.lithium_ion.DFN()
+        }
 
         result = information(
             self.chemistry,
@@ -53,8 +56,9 @@ class TestInformation(unittest.TestCase):
             self.is_comparison,
         )
 
-        self.assertEqual(result, "Doyle-Fuller-Newman model")
+        self.assertEqual(result, "Chen2020")
         self.is_comparison = False
+        self.model = pybamm.lithium_ion.DFN()
 
         result = information(
             self.chemistry,
