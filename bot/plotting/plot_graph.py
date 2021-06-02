@@ -1,5 +1,10 @@
 import pybamm
 import random
+import numpy as np
+import imageio
+import os
+import PIL
+from PIL import Image, ImageSequence
 
 
 def plot_graph(solution=None, sim=None):
@@ -18,15 +23,45 @@ def plot_graph(solution=None, sim=None):
     if solution is not None:
         t = solution["Time [s]"]
         final_time = int(t.entries[len(t.entries) - 1])
-        time = random.randint(0, final_time)
+        time = random.randint(600, final_time)
+        time_array = np.linspace(time - 600, time, num=25)
     else:
-        time = random.randint(0, 3700)
+        time = random.randint(600, 3700)
+        time_array = np.linspace(time - 600, time, num=25)
 
-    # generating a plot
-    plot = pybamm.QuickPlot(sim, time_unit="seconds")
-    plot.plot(time)
+    images = []
+    image_files = []
+    for val in time_array:
+        plot = pybamm.QuickPlot(sim, time_unit="seconds")
+        plot.plot(val)
+        images.append("plot" + str(val) + ".png")
+        plot.fig.savefig("plot" + str(val) + ".png", dpi=150)
 
-    # saving the plot
-    plot.fig.savefig("plot.png", dpi=300)
+    for image in images:
+        image_files.append(imageio.imread(image))
+    imageio.mimsave('movie.gif', image_files, duration=0.1)
 
-    return time
+    for image in images:
+        os.remove(image)
+
+    size = 2048, 2048
+
+    im = Image.open("movie.gif")
+
+    frames = ImageSequence.Iterator(im)
+
+    def thumbnails(frames):
+        for frame in frames:
+            thumbnail = frame.copy()
+            thumbnail.thumbnail(size, Image.ANTIALIAS)
+            yield thumbnail
+
+    frames = thumbnails(frames)
+
+    om = next(frames)
+    om.info = im.info
+    om.save("movie.gif", save_all=True, append_images=list(frames))
+
+    return [time_array[0], time_array[-1]]
+
+
