@@ -3,7 +3,6 @@ import random
 import numpy as np
 import imageio
 import os
-import PIL
 from PIL import Image, ImageSequence
 from utils.resize_gif import resize_gif
 
@@ -55,5 +54,3 @@ def plot_graph(solution=None, sim=None):
     new_gif.save("plot.gif", save_all=True, append_images=list(frames))
 
     return [time_array[0], time_array[-1]]
-
-
