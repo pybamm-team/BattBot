@@ -58,12 +58,12 @@ def tweet_graph(testing=False):
 
     print(tweet)
     # Uncomment to tweet
-    media = api.media_upload("plot.png")
+    media = api.media_upload("plot.gif")
 
     if not testing:
         api.update_status(status=tweet, media_ids=[media.media_id])
 
-    os.remove("plot.png")
+    os.remove("plot.gif")
     plt.clf()
 
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":  # pragma: no cover
 
         tweet = multiprocessing.Process(target=tweet_graph)
         tweet.start()
-        tweet.join(240)
+        tweet.join(1000)
 
         if tweet.is_alive():
 
