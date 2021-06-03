@@ -12,7 +12,6 @@ def generate_summary_variables(solution):
     vars_to_plot = [
         "Capacity [A.h]",
         "Loss of lithium inventory [%]",
-        "Loss of capacity to negative electrode SEI [A.h]",
         "Loss of active material in negative electrode [%]",
         "Loss of active material in positive electrode [%]",
         "x_100",

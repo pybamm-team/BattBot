@@ -51,33 +51,43 @@ def random_plot_generator(
                 # pybamm.parameter_sets.Ramadass2004,
             ]
 
-            chem_num = random.randint(0, len(chemistries) - 1)
-            chemistry = chemistries[chem_num]
+            chemistry = random.choice(chemistries)
 
-            particle_mechanics = ["swelling and cracking", "swelling only"]
-            sei = [
+            particle_mechanics_list = [
+                "swelling and cracking",
+                "swelling only",
+                "none"
+            ]
+            sei_list = [
                 "ec reaction limited",
                 "reaction limited",
                 "solvent-diffusion limited",
                 "electron-migration limited",
                 "interstitial-diffusion limited",
+                "none"
             ]
             options = {}
 
-            if chem_num == 0:
+            particle_mechanics = random.choice(particle_mechanics_list)
+            sei = random.choice(sei_list)
+
+            if particle_mechanics == "none" and sei == "none":
+                continue
+
+            if chemistry == pybamm.parameter_sets.Ai2020:
                 options.update({
-                    "particle mechanics": random.choice(particle_mechanics),
-                    "SEI": random.choice(sei)
+                    "particle mechanics": particle_mechanics,
+                    "SEI": sei
                 })
-            elif chem_num == 3:
+            elif chemistry == pybamm.parameter_sets.Yang2017:
                 options.update({
                     "lithium plating": "irreversible",
                     "lithium plating porosity change": "true",
                     "SEI": "ec reaction limited"
                 })
-            elif chem_num != 3:
+            elif chemistry != pybamm.parameter_sets.Yang2017:
                 options.update({
-                    "SEI": random.choice(sei),
+                    "SEI": sei,
                 })
 
             models = [
@@ -94,18 +104,22 @@ def random_plot_generator(
 
             model = random.choice(models)
 
+            choice = random.randint(0, 2)
+            if testing is True and provided_choice is not None:
+                choice = provided_choice
+
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
                 pybamm.CasadiSolver(mode="fast"),
+                pybamm.CasadiSolver(mode="fast with events")
             ]
 
             solver = random.choice(solvers)
 
-            lower_voltage = chemistry_generator(chemistry)
+            if choice == 1:
+                solver = pybamm.CasadiSolver(mode="safe")
 
-            choice = random.randint(0, 2)
-            if testing is True and provided_choice is not None:
-                choice = provided_choice
+            lower_voltage = chemistry_generator(chemistry)
 
             if choice == 0:
 
