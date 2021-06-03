@@ -3,8 +3,8 @@ import random
 
 def single_decimal_point(start, stop, step):
     """
-    Generates a random number with only one decimal
-    digit.
+    Generates a random number with desired number
+    of decimal digits.
     Parameters:
         start: numerical
         stop: numerical
@@ -12,10 +12,5 @@ def single_decimal_point(start, stop, step):
     Returns:
         rand_num: numerical
     """
-    start = start
-    stop = stop
-    step = step
-    precision = 0.1
-    f = 1 / precision
-    rand_num = random.randrange(start * f, stop * f, step * f) / f
+    rand_num = round(random.uniform(start, stop), step)
     return rand_num

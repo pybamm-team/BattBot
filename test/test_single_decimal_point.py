@@ -4,7 +4,7 @@ from bot.utils.single_point_decimal import single_decimal_point
 
 class TestExperimentSolver(unittest.TestCase):
     def test_single_decimal_point(self):
-        num = single_decimal_point(0, 5, 0.1)
+        num = single_decimal_point(0, 5, 1)
 
         self.assertGreaterEqual(num, 0)
         self.assertLessEqual(num, 5)

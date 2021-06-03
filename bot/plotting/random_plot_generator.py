@@ -3,7 +3,6 @@ import random
 from plotting.plot_graph import plot_graph
 from models.model_solver import model_solver
 from utils.chemistry_generator import chemistry_generator
-from utils.single_point_decimal import single_decimal_point
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
@@ -101,7 +100,9 @@ def random_plot_generator(
 
             solver = random.choice(solvers)
 
-            lower_voltage = chemistry_generator(chemistry)
+            lower_voltage = chemistry_generator(
+                chemistry, "Lower voltage cut-off [V]"
+            )
 
             choice = random.randint(0, 2)
             if testing is True and provided_choice is not None:
@@ -209,7 +210,9 @@ def random_plot_generator(
                         param_list.append(params.copy())
                         param_list[i][
                             "Current function [A]"
-                        ] = single_decimal_point(4, 6, 0.1)
+                        ] = chemistry_generator(
+                            chemistry, "Current function [A]"
+                        )
                     parameter_values_for_comp = dict(
                         list(enumerate(param_list))
                     )
@@ -236,5 +239,5 @@ def random_plot_generator(
                     True,
                 )
 
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             print(e)
