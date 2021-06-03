@@ -1,9 +1,15 @@
 import unittest
 import pybamm
 from bot.plotting.random_plot_generator import random_plot_generator
+import os
 
 
 class TestTweetPlot(unittest.TestCase):
+
+    def tearDown(self):
+        os.remove("plot.png")
+        os.remove("plot.gif")
+
     def test_tweet_graph(self):
 
         key_list = [
@@ -16,7 +22,7 @@ class TestTweetPlot(unittest.TestCase):
         (
             model,
             parameter_values,
-            time,
+            time_array,
             chemistry,
             solver,
             is_experiment,
@@ -35,7 +41,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
-        self.assertIsInstance(time, int)
+        self.assertIsInstance(time_array, list)
+        self.assertTrue(len(time_array) == 2)
         self.assertIsNone(cycle)
         self.assertIsNone(number)
         self.assertFalse(is_experiment)
@@ -44,7 +51,7 @@ class TestTweetPlot(unittest.TestCase):
         (
             model,
             parameter_values,
-            time,
+            time_array,
             chemistry,
             solver,
             is_experiment,
@@ -63,7 +70,7 @@ class TestTweetPlot(unittest.TestCase):
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
-        self.assertIsNone(time)
+        self.assertIsNone(time_array)
         self.assertIsNotNone(cycle)
         self.assertIsNotNone(number)
         self.assertTrue(is_experiment)
@@ -73,7 +80,7 @@ class TestTweetPlot(unittest.TestCase):
         (
             model,
             parameter_values,
-            time,
+            time_array,
             chemistry,
             solver,
             isExperiment,
@@ -93,7 +100,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsInstance(solver, pybamm.BaseSolver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
-        self.assertIsInstance(time, int)
+        self.assertIsInstance(time_array, list)
+        self.assertTrue(len(time_array) == 2)
         self.assertIsNotNone(cycle)
         self.assertIsNotNone(number)
         self.assertTrue(is_experiment)
@@ -103,7 +111,7 @@ class TestTweetPlot(unittest.TestCase):
         (
             models,
             parameter_values,
-            time,
+            time_array,
             chemistry,
             solver,
             is_experiment,
@@ -123,7 +131,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsNone(solver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
-        self.assertIsInstance(time, int)
+        self.assertIsInstance(time_array, list)
+        self.assertTrue(len(time_array) == 2)
         self.assertIsNone(cycle)
         self.assertIsNone(number)
         self.assertFalse(is_experiment)
@@ -132,7 +141,7 @@ class TestTweetPlot(unittest.TestCase):
         (
             models,
             parameter_values,
-            time,
+            time_array,
             chemistry,
             solver,
             is_experiment,
@@ -153,7 +162,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertEqual("lithium_ion", chemistry["chemistry"])
         self.assertIsNone(solver)
         self.assertIsInstance(parameter_values, pybamm.ParameterValues)
-        self.assertIsInstance(time, int)
+        self.assertIsInstance(time_array, list)
+        self.assertTrue(len(time_array) == 2)
         self.assertIsNone(cycle)
         self.assertIsNone(number)
         self.assertFalse(is_experiment)

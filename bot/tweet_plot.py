@@ -79,7 +79,7 @@ if __name__ == "__main__":  # pragma: no cover
 
         tweet = multiprocessing.Process(target=tweet_graph)
         tweet.start()
-        tweet.join(1000)
+        tweet.join(900)
 
         if tweet.is_alive():
 

@@ -29,7 +29,7 @@ def random_plot_generator(
     Returns:
         model: pybamm.BaseModel or dict
         parameter_values: pybamm.ParameterValues
-        time: numerical (seconds) or None
+        time: list or None
         chemistry: dict
         solver: pybamm.BaseSolver
         is_experiment: bool
@@ -118,12 +118,12 @@ def random_plot_generator(
                     lower_voltage=lower_voltage,
                 )
 
-                time = plot_graph(solution, sim)
+                time_array = plot_graph(solution, sim)
 
                 return (
                     model,
                     parameter_values,
-                    time,
+                    time_array,
                     chemistry,
                     solver,
                     False,
@@ -172,11 +172,11 @@ def random_plot_generator(
                 (sim, solution, parameter_values) = experiment_solver(
                     model, experiment, chemistry, solver
                 )
-                time = plot_graph(solution, sim)
+                time_array = plot_graph(solution, sim)
                 return (
                     model,
                     parameter_values,
-                    time,
+                    time_array,
                     chemistry,
                     solver,
                     True,
@@ -222,12 +222,12 @@ def random_plot_generator(
 
                 s.solve([0, 3700])
 
-                time = plot_graph(sim=s.sims)
+                time_array = plot_graph(sim=s.sims)
 
                 return (
                     models_for_comp,
                     params,
-                    time,
+                    time_array,
                     chemistry,
                     None,
                     False,
