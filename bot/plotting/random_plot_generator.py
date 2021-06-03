@@ -12,7 +12,8 @@ def random_plot_generator(
     testing=False,
     provided_choice=None,
     provided_number_of_comp=None,
-    plot_summary_variables=True
+    plot_summary_variables=True,
+    provided_degradation=True
 ):
     """
     Generates a random plot.
@@ -24,6 +25,8 @@ def random_plot_generator(
         provided_number_of_comp: numerical
             default: None
         plot_summary_variables: bool
+            default: True
+        provided_degradation: bool
             default: True
     Returns:
         model: pybamm.BaseModel or dict
@@ -50,33 +53,53 @@ def random_plot_generator(
                 # pybamm.parameter_sets.Ramadass2004,
             ]
 
-            chem_num = random.randint(0, len(chemistries) - 1)
-            chemistry = chemistries[chem_num]
+            chemistry = random.choice(chemistries)
 
-            particle_mechanics = ["swelling and cracking", "swelling only"]
-            sei = [
+            particle_mechanics_list = [
+                "swelling and cracking",
+                "swelling only",
+                "none"
+            ]
+            sei_list = [
                 "ec reaction limited",
                 "reaction limited",
                 "solvent-diffusion limited",
                 "electron-migration limited",
                 "interstitial-diffusion limited",
+                "none"
             ]
             options = {}
 
-            if chem_num == 0:
+            particle_mechanics = random.choice(particle_mechanics_list)
+            sei = random.choice(sei_list)
+
+            if (
+                (
+                    particle_mechanics == "none"
+                    and sei == "none"
+                )
+                or (
+                    testing
+                    and provided_degradation
+                )
+            ):
+                provided_degradation = False
+                continue
+
+            if chemistry == pybamm.parameter_sets.Ai2020:
                 options.update({
-                    "particle mechanics": random.choice(particle_mechanics),
-                    "SEI": random.choice(sei)
+                    "particle mechanics": particle_mechanics,
+                    "SEI": sei
                 })
-            elif chem_num == 3:
+            elif chemistry == pybamm.parameter_sets.Yang2017:
                 options.update({
                     "lithium plating": "irreversible",
                     "lithium plating porosity change": "true",
                     "SEI": "ec reaction limited"
                 })
-            elif chem_num != 3:
+            elif chemistry != pybamm.parameter_sets.Yang2017:
                 options.update({
-                    "SEI": random.choice(sei),
+                    "SEI": sei,
                 })
 
             models = [
@@ -93,9 +116,14 @@ def random_plot_generator(
 
             model = random.choice(models)
 
+            choice = random.randint(0, 2)
+            if testing is True and provided_choice is not None:
+                choice = provided_choice
+
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
                 pybamm.CasadiSolver(mode="fast"),
+                pybamm.CasadiSolver(mode="fast with events")
             ]
 
             solver = random.choice(solvers)
@@ -103,10 +131,8 @@ def random_plot_generator(
             lower_voltage = chemistry_generator(
                 chemistry, "Lower voltage cut-off [V]"
             )
-
-            choice = random.randint(0, 2)
-            if testing is True and provided_choice is not None:
-                choice = provided_choice
+            if choice == 1:
+                solver = pybamm.CasadiSolver(mode="safe")
 
             if choice == 0:
 
