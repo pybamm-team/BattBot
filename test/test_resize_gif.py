@@ -5,7 +5,7 @@ from bot.utils.resize_gif import resize_gif
 import numpy as np
 import random
 import imageio
-from PIL import Image, ImageSequence
+from PIL import Image
 import matplotlib.pyplot as plt
 import gc
 
@@ -47,18 +47,7 @@ class TestResizeGif(unittest.TestCase):
         os.remove("plot.gif")
 
     def test_resize_gif(self):
-        orig_gif = Image.open("plot.gif")
-        frames = ImageSequence.Iterator(orig_gif)
-        frames = resize_gif(frames)
-
-        new_gif = next(frames)
-        new_gif.info = orig_gif.info
-        new_gif.save("plot.gif", save_all=True, append_images=list(frames))
-        orig_gif.close()
-
-        del orig_gif
-        del new_gif
-        gc.collect()
+        resize_gif("plot.gif", (1440, 1440))
 
         self.assertTrue(os.path.exists("plot.gif"))
 
@@ -71,7 +60,7 @@ class TestResizeGif(unittest.TestCase):
 
         self.assertTrue(width == 1440)
         self.assertTrue(height <= 1440)
-        self.assertTrue(os.stat("plot.gif").st_size <= 5000000)
+        self.assertTrue(os.stat("plot.gif").st_size <= 15000000)
 
 
 if __name__ == "__main__":

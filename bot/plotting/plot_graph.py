@@ -1,12 +1,9 @@
 import pybamm
-import random
 import numpy as np
 import imageio
 import os
-from PIL import Image, ImageSequence
 from utils.resize_gif import resize_gif
 import matplotlib.pyplot as plt
-import gc
 
 
 def plot_graph(solution=None, sim=None):
@@ -29,7 +26,7 @@ def plot_graph(solution=None, sim=None):
         final_time = int(t.entries[len(t.entries) - 1])
         time_array = np.linspace(int(t.entries[0]), final_time, num=80)
     else:
-        time_array = np.linspace(int(t.entries[0]), 3700, num=80)
+        time_array = np.linspace(0, 3700, num=80)
 
     images = []
     image_files = []
@@ -38,7 +35,7 @@ def plot_graph(solution=None, sim=None):
         plot = pybamm.QuickPlot(sim, time_unit="seconds")
         plot.plot(val)
         images.append("plot" + str(val) + ".png")
-        plot.fig.savefig("plot" + str(val) + ".png", dpi=200)
+        plot.fig.savefig("plot" + str(val) + ".png", dpi=300)
         plt.close()
 
     for image in images:
@@ -48,17 +45,6 @@ def plot_graph(solution=None, sim=None):
     for image in images:
         os.remove(image)
 
-    # orig_gif = Image.open("plot.gif")
-    # frames = ImageSequence.Iterator(orig_gif)
-    # frames = resize_gif(frames)
-
-    # new_gif = next(frames)
-    # new_gif.info = orig_gif.info
-    # new_gif.save("plot.gif", save_all=True, append_images=list(frames))
-    # orig_gif.close()
-
-    # del orig_gif
-    # del new_gif
-    # gc.collect()
+    resize_gif("plot.gif", resize_to=(1440, 1440))
 
     return [time_array[0], time_array[-1]]

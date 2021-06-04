@@ -116,7 +116,7 @@ def random_plot_generator(
 
             model = random.choice(models)
 
-            choice = 1
+            choice = random.randint(0, 2)
             if testing is True and provided_choice is not None:
                 choice = provided_choice
 
