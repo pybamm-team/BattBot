@@ -58,4 +58,4 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
 
     number = random.randint(1, 50)
     # print(cycle, number)
-    return cycle, number
+    return [tuple(cycle)], number
