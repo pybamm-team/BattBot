@@ -24,7 +24,7 @@ oauth = OAuth1(
 )
 
 
-# Official Twitter API example by twitterdev:
+# Official Twitter API example by Twitter Developer Relations:
 # https://github.com/twitterdev/large-video-upload-python
 class Tweet(object):
 
@@ -69,12 +69,20 @@ class Tweet(object):
         """
         print('INIT')
 
-        request_data = {
-            'command': 'INIT',
-            'media_type': 'image/gif',
-            'total_bytes': self.total_bytes,
-            'media_category': 'tweet_gif'
-        }
+        if os.path.exists("plot.gif"):
+            request_data = {
+                'command': 'INIT',
+                'media_type': 'image/gif',
+                'total_bytes': self.total_bytes,
+                'media_category': 'tweet_gif'
+            }
+        else:
+            request_data = {
+                'command': 'INIT',
+                'media_type': 'image/png',
+                'total_bytes': self.total_bytes,
+                'media_category': 'tweet_image'
+            }
 
         req = requests.post(
             url=media_endpoint_url, data=request_data, auth=oauth
@@ -215,7 +223,10 @@ class Tweet(object):
 
         req = requests.post(url=post_tweet_url, data=request_data, auth=oauth)
         print(req.json())
-        os.remove("plot.gif")
+        if os.path.exists("plot.gif"):
+            os.remove("plot.gif")
+        else:
+            os.remove("plot.png")
         plt.close()
 
 
