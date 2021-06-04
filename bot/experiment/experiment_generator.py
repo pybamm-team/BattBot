@@ -57,5 +57,5 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
         cycle.append(rest[0][1])
 
     number = random.randint(1, 50)
-    # print(cycle, number)
+    print([tuple(cycle)], number)
     return [tuple(cycle)], number
