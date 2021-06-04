@@ -18,7 +18,9 @@ class TestExperimentSolver(unittest.TestCase):
 
     def test_experiment_generator_with_random_experiment(self):
         cycle, number = experiment_generator()
-        self.assertTrue(len(cycle[0]) == 5 or len(cycle[0]) == 3 or len(cycle[0]) == 4)
+        self.assertTrue(
+            len(cycle[0]) == 5 or len(cycle[0]) == 3 or len(cycle[0]) == 4
+        )
         self.assertIsInstance(number, int)
         self.assertEqual(cycle[0][0][:9], "Discharge")
 
