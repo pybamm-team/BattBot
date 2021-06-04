@@ -5,6 +5,7 @@ import imageio
 import os
 from PIL import Image, ImageSequence
 from utils.resize_gif import resize_gif
+import matplotlib.pyplot as plt
 
 
 def plot_graph(solution=None, sim=None):
@@ -39,6 +40,7 @@ def plot_graph(solution=None, sim=None):
         plot.plot(val)
         images.append("plot" + str(val) + ".png")
         plot.fig.savefig("plot" + str(val) + ".png", dpi=200)
+        plt.close()
 
     for image in images:
         image_files.append(imageio.imread(image))

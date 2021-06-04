@@ -6,6 +6,7 @@ import numpy as np
 import random
 import imageio
 from PIL import Image, ImageSequence
+import matplotlib.pyplot as plt
 
 
 class TestResizeGif(unittest.TestCase):
@@ -32,6 +33,7 @@ class TestResizeGif(unittest.TestCase):
             self.plot.plot(val)
             self.images.append("plot" + str(val) + ".png")
             self.plot.fig.savefig("plot" + str(val) + ".png", dpi=200)
+            plt.close()
 
         for image in self.images:
             self.image_files.append(imageio.imread(image))

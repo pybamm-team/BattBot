@@ -64,7 +64,7 @@ def tweet_graph(testing=False):
         api.update_status(status=tweet, media_ids=[media.media_id])
 
     os.remove("plot.gif")
-    plt.clf()
+    plt.close()
 
 
 # uncomment when simulating tweeting process
