@@ -48,9 +48,8 @@ def analyseImage(path):
 
     except EOFError as e:
         print(e)
-    
-    im.close()
 
+    im.close()
 
     return results
 
