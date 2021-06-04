@@ -23,7 +23,7 @@ def generate_summary_variables(solution):
     n = int(length // np.sqrt(length))
     m = int(np.ceil(length / n))
 
-    fig, axes = plt.subplots(n, m, figsize=(10, 10))
+    fig, axes = plt.subplots(n, m, figsize=(15, 8))
     for var, ax in zip(vars_to_plot, axes.flat):
         ax.plot(
             solution.summary_variables["Cycle number"],
