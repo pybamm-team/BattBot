@@ -11,7 +11,7 @@ import gc
 
 def plot_graph(solution=None, sim=None):
     """
-    This function generates 25 plots over a time
+    This function generates 20 plots over a time
     span of 800 seconds and then compiles them to
     create a GIF.
     Parameters:
@@ -28,10 +28,10 @@ def plot_graph(solution=None, sim=None):
         t = solution["Time [s]"]
         final_time = int(t.entries[len(t.entries) - 1])
         time = random.randint(800, final_time)
-        time_array = np.linspace(time - 800, time, num=25)
+        time_array = np.linspace(time - 800, time, num=20)
     else:
         time = random.randint(800, 3700)
-        time_array = np.linspace(time - 800, time, num=25)
+        time_array = np.linspace(time - 800, time, num=20)
 
     images = []
     image_files = []
