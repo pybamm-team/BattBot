@@ -27,11 +27,9 @@ def plot_graph(solution=None, sim=None):
     if solution is not None:
         t = solution["Time [s]"]
         final_time = int(t.entries[len(t.entries) - 1])
-        time = random.randint(800, final_time)
-        time_array = np.linspace(time - 800, time, num=20)
+        time_array = np.linspace(int(t.entries[0]), final_time, num=80)
     else:
-        time = random.randint(800, 3700)
-        time_array = np.linspace(time - 800, time, num=20)
+        time_array = np.linspace(int(t.entries[0]), 3700, num=80)
 
     images = []
     image_files = []
@@ -50,17 +48,17 @@ def plot_graph(solution=None, sim=None):
     for image in images:
         os.remove(image)
 
-    orig_gif = Image.open("plot.gif")
-    frames = ImageSequence.Iterator(orig_gif)
-    frames = resize_gif(frames)
+    # orig_gif = Image.open("plot.gif")
+    # frames = ImageSequence.Iterator(orig_gif)
+    # frames = resize_gif(frames)
 
-    new_gif = next(frames)
-    new_gif.info = orig_gif.info
-    new_gif.save("plot.gif", save_all=True, append_images=list(frames))
-    orig_gif.close()
+    # new_gif = next(frames)
+    # new_gif.info = orig_gif.info
+    # new_gif.save("plot.gif", save_all=True, append_images=list(frames))
+    # orig_gif.close()
 
-    del orig_gif
-    del new_gif
-    gc.collect()
+    # del orig_gif
+    # del new_gif
+    # gc.collect()
 
     return [time_array[0], time_array[-1]]

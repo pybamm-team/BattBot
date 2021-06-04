@@ -58,13 +58,13 @@ def tweet_graph(testing=False):
 
     print(tweet)
     # Uncomment to tweet
-    media = api.media_upload("plot.gif")
+    # media = api.media_upload("plot.gif")
 
-    if not testing:
-        api.update_status(status=tweet, media_ids=[media.media_id])
+    # if not testing:
+    #     api.update_status(status=tweet, media_ids=[media.media_id])
 
-    os.remove("plot.gif")
-    plt.close()
+    # os.remove("plot.gif")
+    # plt.close()
 
 
 # uncomment when simulating tweeting process
