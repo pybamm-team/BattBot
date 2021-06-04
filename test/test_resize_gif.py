@@ -7,6 +7,7 @@ import random
 import imageio
 from PIL import Image, ImageSequence
 import matplotlib.pyplot as plt
+import gc
 
 
 class TestResizeGif(unittest.TestCase):
@@ -55,11 +56,18 @@ class TestResizeGif(unittest.TestCase):
         new_gif.save("plot.gif", save_all=True, append_images=list(frames))
         orig_gif.close()
 
+        del orig_gif
+        del new_gif
+        gc.collect()
+
         self.assertTrue(os.path.exists("plot.gif"))
 
         gif = Image.open("plot.gif")
         width, height = gif.size
         gif.close()
+
+        del gif
+        gc.collect()
 
         self.assertTrue(width == 1440)
         self.assertTrue(height <= 1440)

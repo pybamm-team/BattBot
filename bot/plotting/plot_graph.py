@@ -6,11 +6,12 @@ import os
 from PIL import Image, ImageSequence
 from utils.resize_gif import resize_gif
 import matplotlib.pyplot as plt
+import gc
 
 
 def plot_graph(solution=None, sim=None):
     """
-    This function generates 30 plots over a time
+    This function generates 25 plots over a time
     span of 800 seconds and then compiles them to
     create a GIF.
     Parameters:
@@ -57,5 +58,9 @@ def plot_graph(solution=None, sim=None):
     new_gif.info = orig_gif.info
     new_gif.save("plot.gif", save_all=True, append_images=list(frames))
     orig_gif.close()
+
+    del orig_gif
+    del new_gif
+    gc.collect()
 
     return [time_array[0], time_array[-1]]
