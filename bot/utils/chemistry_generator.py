@@ -31,7 +31,7 @@ def chemistry_generator(chemistry, parameter):
             param_value = single_decimal_point(3, 5, 2)
 
         elif chemistry == pybamm.parameter_sets.Marquis2019:
-            param_value = single_decimal_point(0.1, 0.7, 2)
+            param_value = single_decimal_point(0.1, 0.65, 2)
 
         elif chemistry == pybamm.parameter_sets.Ai2020:
             param_value = single_decimal_point(0.5, 2.25, 2)
