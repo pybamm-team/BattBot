@@ -62,6 +62,7 @@ class Tweet(object):
         self.cycle = cycle
         self.number = number
         self.is_comparison = is_comparison
+        self.testing = testing
 
     def upload_init(self):
         """
@@ -140,6 +141,7 @@ class Tweet(object):
             )
 
         print('Upload chunks complete.')
+        file.close()
 
     def upload_finalize(self):
         """
@@ -221,8 +223,11 @@ class Tweet(object):
             'media_ids': self.media_id
         }
 
-        req = requests.post(url=post_tweet_url, data=request_data, auth=oauth)
-        print(req.json())
+        if not self.testing:
+            req = requests.post(
+                url=post_tweet_url, data=request_data, auth=oauth
+            )
+            print(req.json())
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
         else:

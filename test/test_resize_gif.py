@@ -3,7 +3,6 @@ import pybamm
 import os
 from bot.utils.resize_gif import resize_gif
 import numpy as np
-import random
 import imageio
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -24,8 +23,7 @@ class TestResizeGif(unittest.TestCase):
 
         self.t = self.solution["Time [s]"]
         self.final_time = int(self.t.entries[len(self.t.entries) - 1])
-        self.time = random.randint(800, self.final_time)
-        self.time_array = np.linspace(self.time - 800, self.time, num=25)
+        self.time_array = np.linspace(0, self.final_time, num=80)
 
         self.images = []
         self.image_files = []
