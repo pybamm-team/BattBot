@@ -41,7 +41,7 @@ def analyseImage(path):
                 tile = im.tile[0]
                 update_region = tile[1]
                 update_region_dimensions = update_region[2:]
-                if update_region_dimensions != im.size:
+                if update_region_dimensions != im.size:    # pragma: no cover
                     results['mode'] = 'partial'
                     break
             im.seek(im.tell() + 1)
@@ -79,7 +79,7 @@ def extract_and_resize_frames(path, resize_to):
             palette. If not, we need to apply the global palette to the new
             frame.
             """
-            if not im.getpalette():
+            if not im.getpalette():    # pragma: no cover
                 im.putpalette(p)
 
             new_frame = Image.new('RGBA', im.size)
@@ -89,7 +89,7 @@ def extract_and_resize_frames(path, resize_to):
             a different size to the entire image? If so, we need to construct
             the new frame by pasting it on top of the preceding frames.
             """
-            if mode == 'partial':
+            if mode == 'partial':     # pragma: no cover
                 new_frame.paste(last_frame)
 
             new_frame.paste(im, (0, 0), im.convert('RGBA'))

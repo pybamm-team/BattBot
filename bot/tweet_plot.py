@@ -28,7 +28,7 @@ oauth = OAuth1(
 # https://github.com/twitterdev/large-video-upload-python
 class Tweet(object):
 
-    def __init__(self, testing=False):
+    def __init__(self, testing=False, provided_choice=None):
         """
         Defines video tweet properties
         """
@@ -44,7 +44,7 @@ class Tweet(object):
             is_comparison,
         ) = random_plot_generator(
             testing=testing,
-            provided_choice=0
+            provided_choice=provided_choice
         )
         if os.path.exists("plot.gif"):
             self.plot = "plot.gif"
@@ -125,7 +125,7 @@ class Tweet(object):
                 auth=oauth
             )
 
-            if req.status_code < 200 or req.status_code > 299:
+            if req.status_code < 200 or req.status_code > 299:  # pragma: no cover
                 print(req.status_code)
                 print(req.text)
                 sys.exit(0)
@@ -166,7 +166,7 @@ class Tweet(object):
         """
         Checks video processing status
         """
-        if self.processing_info is None:
+        if self.processing_info is None:    # pragma: no cover
             return
 
         state = self.processing_info['state']
@@ -176,7 +176,7 @@ class Tweet(object):
         if state == u'succeeded':
             return
 
-        if state == u'failed':
+        if state == u'failed':  # pragma: no cover
             sys.exit(0)
 
         check_after_secs = self.processing_info['check_after_secs']
@@ -223,7 +223,7 @@ class Tweet(object):
             'media_ids': self.media_id
         }
 
-        if not self.testing:
+        if not self.testing:    # pragma: no cover
             req = requests.post(
                 url=post_tweet_url, data=request_data, auth=oauth
             )
@@ -235,7 +235,7 @@ class Tweet(object):
         plt.close()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     tweet = Tweet()
     tweet.upload_init()
     tweet.upload_append()
