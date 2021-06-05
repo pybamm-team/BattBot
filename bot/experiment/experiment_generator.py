@@ -58,7 +58,10 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
         cycle.append(rest[0][1])
 
     number = random.randint(1, 50)
+
     logging.basicConfig(level=logging.INFO)
-    logging.info(str([tuple(cycle)]) + str(number))
-    print([tuple(cycle)], number)
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    logger.info(str([tuple(cycle)]) + " * " + str(number))
+
     return [tuple(cycle)], number
