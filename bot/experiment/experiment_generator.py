@@ -1,5 +1,6 @@
 import random
 from utils.single_point_decimal import single_decimal_point
+import logging
 
 
 def experiment_generator(testing={"rest1": False, "rest2": False}):
@@ -57,5 +58,7 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
         cycle.append(rest[0][1])
 
     number = random.randint(1, 50)
+    logging.basicConfig(level=logging.INFO)
+    logging.info(str([tuple(cycle)]) + str(number))
     print([tuple(cycle)], number)
     return [tuple(cycle)], number
