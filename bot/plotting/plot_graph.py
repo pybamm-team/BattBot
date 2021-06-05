@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 def plot_graph(solution=None, sim=None):
     """
-    This function generates 20 plots over a time
-    span of 800 seconds and then compiles them to
+    This function generates 80 plots over a time
+    span of t_eval seconds and then compiles them to
     create a GIF.
     Parameters:
         solution: pybamm.Simulation.solution
