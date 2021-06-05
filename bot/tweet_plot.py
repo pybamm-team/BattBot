@@ -125,7 +125,9 @@ class Tweet(object):
                 auth=oauth
             )
 
-            if req.status_code < 200 or req.status_code > 299:  # pragma: no cover
+            if (
+                req.status_code < 200 or req.status_code > 299
+            ):  # pragma: no cover
                 print(req.status_code)
                 print(req.text)
                 sys.exit(0)
