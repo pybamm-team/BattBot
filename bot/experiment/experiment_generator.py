@@ -1,5 +1,7 @@
 import random
-from utils.single_point_decimal import single_decimal_point
+from utils.desired_decimal_point_generator import (
+    desired_decimal_point_generator
+)
 import logging
 
 
@@ -20,8 +22,8 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     rest = []
     hold = []
 
-    vmin = single_decimal_point(3.2, 3.7, 1)
-    vmax = single_decimal_point(3.7, 4.2, 1)
+    vmin = desired_decimal_point_generator(3.2, 3.7, 1)
+    vmax = desired_decimal_point_generator(3.7, 4.2, 1)
     ccharge = random.randint(1, 3)
     cdischarge = random.randint(1, 3)
     ccutoff = random.randint(1, 100)

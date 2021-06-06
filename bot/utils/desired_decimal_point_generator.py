@@ -1,7 +1,7 @@
 import random
 
 
-def single_decimal_point(start, stop, step):
+def desired_decimal_point_generator(start, stop, step):
     """
     Generates a random number with desired number
     of decimal digits.
