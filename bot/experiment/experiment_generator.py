@@ -24,7 +24,7 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     ccharge = random.randint(1, 3)
     cdischarge = random.randint(1, 3)
     ccutoff = random.randint(1, 100)
-    # if vmin < vmax:
+
     discharge.append(
         "Discharge at " + str(cdischarge) + " C until " + str(vmin) + " V",
     )
@@ -56,6 +56,6 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     if random.randint(0, 1) == 1 or testing["rest2"]:
         cycle.append(rest[0][1])
 
-    number = random.randint(1, 3)
-    # print(cycle * number)
-    return cycle, number
+    number = random.randint(1, 50)
+    print([tuple(cycle)], number)
+    return [tuple(cycle)], number

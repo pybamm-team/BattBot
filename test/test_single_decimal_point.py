@@ -1,5 +1,5 @@
 import unittest
-from utils.single_point_decimal import single_decimal_point
+from bot.utils.single_point_decimal import single_decimal_point
 
 
 class TestExperimentSolver(unittest.TestCase):
