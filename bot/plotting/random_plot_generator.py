@@ -139,7 +139,15 @@ def random_plot_generator(
             logging.basicConfig(level=logging.INFO)
             logger = logging.getLogger()
             logger.setLevel(logging.INFO)
-            logger.info(str(model.name) + " " + str(solver.name) + " " + str(model.options) + " " + str(chemistry["citation"]))
+            logger.info(
+                str(model.name)
+                + " "
+                + str(solver.name)
+                + " "
+                + str(model.options)
+                + " "
+                + str(chemistry["citation"])
+            )
 
             if choice == 0:
 
@@ -258,7 +266,6 @@ def random_plot_generator(
                 s.solve([0, 3700])
 
                 time_array = plot_graph(sim=s.sims)
-
 
                 return_dict["models"] = models_for_comp
                 return_dict["parameter_values"] = params

@@ -22,14 +22,19 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
-        
+
         while True:
-            p = multiprocessing.Process(target=random_plot_generator, args=(return_dict, True, 0))
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(return_dict, True, 0)
+            )
             p.start()
             p.join(600)
 
             if p.is_alive():
-                print("Simulation is taking too long, KILLING IT and starting a NEW ONE.")
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
                 p.kill()
                 p.join()
             else:
@@ -38,12 +43,20 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
+        self.assertTrue(
+            key in key_list for key in return_dict["model"].options.keys()
+        )
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertTrue(return_dict["solver"] == "CasADi solver with 'safe' mode"
-        or return_dict["solver"] == "CasADi solver with 'fast' mode"
-        or return_dict["solver"] == "CasADi solver with 'fast with events' mode")
-        self.assertIsInstance(return_dict["parameter_values"], pybamm.ParameterValues)
+        self.assertTrue(
+            return_dict["solver"] == "CasADi solver with 'safe' mode"
+            or return_dict["solver"] == "CasADi solver with 'fast' mode"
+            or return_dict["solver"] == (
+                "CasADi solver with 'fast with events' mode"
+            )
+        )
+        self.assertIsInstance(
+            return_dict["parameter_values"], pybamm.ParameterValues
+        )
         self.assertIsInstance(return_dict["time_array"], list)
         self.assertTrue(len(return_dict["time_array"]) == 2)
         self.assertIsNone(return_dict["cycle"])
@@ -53,14 +66,19 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
-        
+
         while True:
-            p = multiprocessing.Process(target=random_plot_generator, args=(return_dict, True, 1))
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(return_dict, True, 1)
+            )
             p.start()
             p.join(600)
 
             if p.is_alive():
-                print("Simulation is taking too long, KILLING IT and starting a NEW ONE.")
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
                 p.kill()
                 p.join()
             else:
@@ -69,12 +87,20 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
+        self.assertTrue(
+            key in key_list for key in return_dict["model"].options.keys()
+        )
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertTrue(return_dict["solver"] == "CasADi solver with 'safe' mode"
-        or return_dict["solver"] == "CasADi solver with 'fast' mode"
-        or return_dict["solver"] == "CasADi solver with 'fast with events' mode")
-        self.assertIsInstance(return_dict["parameter_values"], pybamm.ParameterValues)
+        self.assertTrue(
+            return_dict["solver"] == "CasADi solver with 'safe' mode"
+            or return_dict["solver"] == "CasADi solver with 'fast' mode"
+            or return_dict["solver"] == (
+                "CasADi solver with 'fast with events' mode"
+            )
+        )
+        self.assertIsInstance(
+            return_dict["parameter_values"], pybamm.ParameterValues
+        )
         self.assertIsNone(return_dict["time_array"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
@@ -84,14 +110,21 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
-        
+
         while True:
-            p = multiprocessing.Process(target=random_plot_generator, args=(return_dict, True, 1, None, False))
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(
+                    return_dict, True, 1, None, False
+                )
+            )
             p.start()
             p.join(600)
 
             if p.is_alive():
-                print("Simulation is taking too long, KILLING IT and starting a NEW ONE.")
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
                 p.kill()
                 p.join()
             else:
@@ -100,12 +133,20 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
+        self.assertTrue(
+            key in key_list for key in return_dict["model"].options.keys()
+        )
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertTrue(return_dict["solver"] == "CasADi solver with 'safe' mode"
-        or return_dict["solver"] == "CasADi solver with 'fast' mode"
-        or return_dict["solver"] == "CasADi solver with 'fast with events' mode")
-        self.assertIsInstance(return_dict["parameter_values"], pybamm.ParameterValues)
+        self.assertTrue(
+            return_dict["solver"] == "CasADi solver with 'safe' mode"
+            or return_dict["solver"] == "CasADi solver with 'fast' mode"
+            or return_dict["solver"] == (
+                "CasADi solver with 'fast with events' mode"
+            )
+        )
+        self.assertIsInstance(
+            return_dict["parameter_values"], pybamm.ParameterValues
+        )
         self.assertIsNone(return_dict["time_array"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
@@ -115,14 +156,19 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
-        
+
         while True:
-            p = multiprocessing.Process(target=random_plot_generator, args=(return_dict, True, 2))
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(return_dict, True, 2)
+            )
             p.start()
             p.join(600)
 
             if p.is_alive():
-                print("Simulation is taking too long, KILLING IT and starting a NEW ONE.")
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
                 p.kill()
                 p.join()
             else:
@@ -135,7 +181,9 @@ class TestRandomPlotGenerator(unittest.TestCase):
             self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsNone(return_dict["solver"])
-        self.assertIsInstance(return_dict["parameter_values"], pybamm.ParameterValues)
+        self.assertIsInstance(
+            return_dict["parameter_values"], pybamm.ParameterValues
+        )
         self.assertIsInstance(return_dict["time_array"], list)
         self.assertTrue(len(return_dict["time_array"]) == 2)
         self.assertIsNone(return_dict["cycle"])
@@ -145,14 +193,19 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
-        
+
         while True:
-            p = multiprocessing.Process(target=random_plot_generator, args=(return_dict, True, 2, 1))
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(return_dict, True, 2, 1)
+            )
             p.start()
             p.join(600)
 
             if p.is_alive():
-                print("Simulation is taking too long, KILLING IT and starting a NEW ONE.")
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
                 p.kill()
                 p.join()
             else:
@@ -165,7 +218,9 @@ class TestRandomPlotGenerator(unittest.TestCase):
             self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsNone(return_dict["solver"])
-        self.assertIsInstance(return_dict["parameter_values"], pybamm.ParameterValues)
+        self.assertIsInstance(
+            return_dict["parameter_values"], pybamm.ParameterValues
+        )
         self.assertIsInstance(return_dict["time_array"], list)
         self.assertTrue(len(return_dict["time_array"]) == 2)
         self.assertIsNone(return_dict["cycle"])
