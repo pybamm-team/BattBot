@@ -225,15 +225,15 @@ class Tweet(object):
             'media_ids': self.media_id
         }
 
-        if not self.testing:    # pragma: no cover
-            req = requests.post(
-                url=post_tweet_url, data=request_data, auth=oauth
-            )
-            print(req.json())
-        if os.path.exists("plot.gif"):
-            os.remove("plot.gif")
-        else:
-            os.remove("plot.png")
+        # if not self.testing:    # pragma: no cover
+        #     req = requests.post(
+        #         url=post_tweet_url, data=request_data, auth=oauth
+        #     )
+        #     print(req.json())
+        # if os.path.exists("plot.gif"):
+        #     os.remove("plot.gif")
+        # else:
+        #     os.remove("plot.png")
         plt.close()
 
 

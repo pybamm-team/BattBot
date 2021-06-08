@@ -1,5 +1,6 @@
 import pybamm
 import random
+import logging
 from plotting.plot_graph import plot_graph
 from models.model_solver import model_solver
 from utils.chemistry_generator import chemistry_generator
@@ -9,11 +10,12 @@ from plotting.summary_variables import generate_summary_variables
 
 
 def random_plot_generator(
+    return_dict,
     testing=False,
     provided_choice=None,
     provided_number_of_comp=None,
     plot_summary_variables=True,
-    provided_degradation=True
+    provided_degradation=True,
 ):
     """
     Generates a random plot.
@@ -134,6 +136,11 @@ def random_plot_generator(
             if choice == 1:
                 solver = pybamm.CasadiSolver(mode="safe")
 
+            logging.basicConfig(level=logging.INFO)
+            logger = logging.getLogger()
+            logger.setLevel(logging.INFO)
+            logger.info(str(model.name) + " " + str(solver.name) + " " + str(model.options) + " " + str(chemistry["citation"]))
+
             if choice == 0:
 
                 c_rate = random.randint(0, 3)
@@ -147,17 +154,17 @@ def random_plot_generator(
 
                 time_array = plot_graph(solution, sim)
 
-                return (
-                    model,
-                    parameter_values,
-                    time_array,
-                    chemistry,
-                    solver,
-                    False,
-                    None,
-                    None,
-                    False,
-                )
+                return_dict["model"] = model
+                return_dict["parameter_values"] = parameter_values
+                return_dict["time_array"] = time_array
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = solver.name
+                return_dict["is_experiment"] = False
+                return_dict["cycle"] = None
+                return_dict["number"] = None
+                return_dict["is_comparison"] = False
+
+                return
 
             elif choice == 1:
                 (
@@ -167,7 +174,6 @@ def random_plot_generator(
                 if testing:
                     number = 10
                 if number > 3 and plot_summary_variables:
-
                     experiment = pybamm.Experiment(
                         cycle_received * number, termination="80% capacity"
                     )
@@ -182,17 +188,17 @@ def random_plot_generator(
                         solver=solver
                     )
                     generate_summary_variables(solution)
-                    return (
-                        model,
-                        parameter_values,
-                        None,
-                        chemistry,
-                        solver,
-                        True,
-                        cycle_received,
-                        number,
-                        False,
-                    )
+                    return_dict["model"] = model
+                    return_dict["parameter_values"] = parameter_values
+                    return_dict["time_array"] = None
+                    return_dict["chemistry"] = chemistry
+                    return_dict["solver"] = solver.name
+                    return_dict["is_experiment"] = True
+                    return_dict["cycle"] = cycle_received
+                    return_dict["number"] = number
+                    return_dict["is_comparison"] = False
+
+                    return
                 if testing:
                     number = 1
                 experiment = pybamm.Experiment(cycle_received * number)
@@ -200,17 +206,17 @@ def random_plot_generator(
                     model, experiment, chemistry, solver
                 )
                 time_array = plot_graph(solution, sim)
-                return (
-                    model,
-                    parameter_values,
-                    time_array,
-                    chemistry,
-                    solver,
-                    True,
-                    cycle_received,
-                    number,
-                    False,
-                )
+                return_dict["model"] = model
+                return_dict["parameter_values"] = parameter_values
+                return_dict["time_array"] = None
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = solver.name
+                return_dict["is_experiment"] = True
+                return_dict["cycle"] = cycle_received
+                return_dict["number"] = number
+                return_dict["is_comparison"] = False
+
+                return
 
             elif choice == 2:
 
@@ -253,17 +259,18 @@ def random_plot_generator(
 
                 time_array = plot_graph(sim=s.sims)
 
-                return (
-                    models_for_comp,
-                    params,
-                    time_array,
-                    chemistry,
-                    None,
-                    False,
-                    None,
-                    None,
-                    True,
-                )
+
+                return_dict["models"] = models_for_comp
+                return_dict["parameter_values"] = params
+                return_dict["time_array"] = time_array
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = None
+                return_dict["is_experiment"] = False
+                return_dict["cycle"] = None
+                return_dict["number"] = None
+                return_dict["is_comparison"] = True
+
+                return
 
         except Exception as e:  # pragma: no cover
             print(e)
