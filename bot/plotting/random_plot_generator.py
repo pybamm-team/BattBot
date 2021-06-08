@@ -20,6 +20,7 @@ def random_plot_generator(
     """
     Generates a random plot.
     Parameters:
+        return_dict: dict
         testing: bool
             default: None
         provided_choice: numerical
@@ -30,16 +31,6 @@ def random_plot_generator(
             default: True
         provided_degradation: bool
             default: True
-    Returns:
-        model: pybamm.BaseModel or dict
-        parameter_values: pybamm.ParameterValues
-        time: list or None
-        chemistry: dict
-        solver: pybamm.BaseSolver
-        is_experiment: bool
-        cycle: list
-        number: numerical
-        is_comparison: bool
     """
 
     while True:
@@ -267,7 +258,7 @@ def random_plot_generator(
 
                 time_array = plot_graph(sim=s.sims)
 
-                return_dict["models"] = models_for_comp
+                return_dict["model"] = models_for_comp
                 return_dict["parameter_values"] = params
                 return_dict["time_array"] = time_array
                 return_dict["chemistry"] = chemistry

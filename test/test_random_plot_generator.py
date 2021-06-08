@@ -174,7 +174,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             else:
                 break
 
-        for model in return_dict["models"].values():
+        for model in return_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
             self.assertIsNotNone(model.options)
             self.assertIsInstance(model.options, dict)
@@ -211,7 +211,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             else:
                 break
 
-        for model in return_dict["models"].values():
+        for model in return_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
             self.assertIsNotNone(model.options)
             self.assertIsInstance(model.options, dict)

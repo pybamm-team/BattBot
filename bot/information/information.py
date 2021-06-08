@@ -42,6 +42,6 @@ def information(
             + " "
             + str(chemistry["citation"])
             + " "
-            + str(solver.name)
+            + str(solver)
         )
         return tweet_text

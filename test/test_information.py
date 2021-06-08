@@ -63,7 +63,7 @@ class TestInformation(unittest.TestCase):
         result = information(
             self.chemistry,
             self.model,
-            self.solver,
+            self.solver.name,
             self.is_experiment,
             self.cycle,
             self.number,
