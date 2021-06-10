@@ -3,6 +3,7 @@ import pybamm
 import multiprocessing
 from bot.plotting.random_plot_generator import random_plot_generator
 import os
+import coverage
 
 
 class TestRandomPlotGenerator(unittest.TestCase):
@@ -24,6 +25,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         return_dict = manager.dict()
 
         while True:
+            coverage.process_startup()
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(return_dict, True, 0)
             )
@@ -68,6 +70,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         return_dict = manager.dict()
 
         while True:
+            coverage.process_startup()
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(return_dict, True, 1)
             )
@@ -112,6 +115,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         return_dict = manager.dict()
 
         while True:
+            coverage.process_startup()
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
                     return_dict, True, 1, None, False
@@ -158,6 +162,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         return_dict = manager.dict()
 
         while True:
+            coverage.process_startup()
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(return_dict, True, 2)
             )
@@ -195,6 +200,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         return_dict = manager.dict()
 
         while True:
+            coverage.process_startup()
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(return_dict, True, 2, 1)
             )
