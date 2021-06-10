@@ -7,6 +7,7 @@ from utils.chemistry_generator import chemistry_generator
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
+from plotting.comparison_generator import comparison_generator
 
 
 def random_plot_generator(
@@ -77,7 +78,7 @@ def random_plot_generator(
                 )
             ):
                 provided_degradation = False
-                continue
+                # continue
 
             if chemistry == pybamm.parameter_sets.Ai2020:
                 options.update({
@@ -95,37 +96,42 @@ def random_plot_generator(
                     "SEI": sei,
                 })
 
-            models = [
-                pybamm.lithium_ion.DFN(
-                    options=options
-                ),
-                pybamm.lithium_ion.SPM(
-                    options=options
-                ),
-                pybamm.lithium_ion.SPMe(
-                    options=options
-                ),
-            ]
-
-            model = random.choice(models)
-
-            choice = random.randint(0, 2)
-            if testing is True and provided_choice is not None:
-                choice = provided_choice
-
             solvers = [
                 pybamm.CasadiSolver(mode="safe"),
-                pybamm.CasadiSolver(mode="fast"),
                 pybamm.CasadiSolver(mode="fast with events")
             ]
 
             solver = random.choice(solvers)
 
+            choice = random.randint(0, 3)
+            
+            if testing is True and provided_choice is not None:
+                choice = provided_choice
+
+            if choice == 1:
+                models = [
+                    pybamm.lithium_ion.DFN(
+                        options=options
+                    ),
+                    pybamm.lithium_ion.SPM(
+                        options=options
+                    ),
+                    pybamm.lithium_ion.SPMe(
+                        options=options
+                    ),
+                ]
+            else:
+                models = [
+                    pybamm.lithium_ion.DFN(),
+                    pybamm.lithium_ion.SPM(),
+                    pybamm.lithium_ion.SPMe()
+                ]
+
+            model = random.choice(models)
+
             lower_voltage = chemistry_generator(
                 chemistry, "Lower voltage cut-off [V]"
             )
-            if choice == 1:
-                solver = pybamm.CasadiSolver(mode="safe")
 
             logging.basicConfig(level=logging.INFO)
             logger = logging.getLogger()
@@ -166,45 +172,25 @@ def random_plot_generator(
                 return
 
             elif choice == 1:
-                (
-                    cycle_received,
-                    number,
-                ) = experiment_generator()
-                if testing:
-                    number = 10
-                if number > 3 and plot_summary_variables:
-                    experiment = pybamm.Experiment(
-                        cycle_received * number, termination="80% capacity"
-                    )
-                    (
-                        sim,
-                        solution,
-                        parameter_values
-                    ) = experiment_solver(
-                        model=model,
-                        experiment=experiment,
-                        chemistry=chemistry,
-                        solver=solver
-                    )
-                    generate_summary_variables(solution)
-                    return_dict["model"] = model
-                    return_dict["parameter_values"] = parameter_values
-                    return_dict["time_array"] = None
-                    return_dict["chemistry"] = chemistry
-                    return_dict["solver"] = solver.name
-                    return_dict["is_experiment"] = True
-                    return_dict["cycle"] = cycle_received
-                    return_dict["number"] = number
-                    return_dict["is_comparison"] = False
+                cycle_received = experiment_generator()
+                number = random.randint(4, 100)
 
-                    return
-                if testing:
-                    number = 1
-                experiment = pybamm.Experiment(cycle_received * number)
-                (sim, solution, parameter_values) = experiment_solver(
-                    model, experiment, chemistry, solver
+                experiment = pybamm.Experiment(
+                    cycle_received * number, termination="80% capacity"
                 )
-                time_array = plot_graph(solution, sim)
+                (
+                    sim,
+                    solution,
+                    parameter_values
+                ) = experiment_solver(
+                    model=model,
+                    experiment=experiment,
+                    chemistry=chemistry,
+                    solver=solver
+                )
+
+                generate_summary_variables(solution)
+
                 return_dict["model"] = model
                 return_dict["parameter_values"] = parameter_values
                 return_dict["time_array"] = None
@@ -219,49 +205,49 @@ def random_plot_generator(
 
             elif choice == 2:
 
-                number_of_comp = random.randint(1, 3)
+                cycle_received = experiment_generator()
+                number = random.randint(1, 3)
+
+                experiment = pybamm.Experiment(cycle_received * number)
+                (sim, solution, parameter_values) = experiment_solver(
+                    model, experiment, chemistry, solver
+                )
+
+                time_array = plot_graph(solution, sim)
+
+                return_dict["model"] = model
+                return_dict["parameter_values"] = parameter_values
+                return_dict["time_array"] = None
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = solver.name
+                return_dict["is_experiment"] = True
+                return_dict["cycle"] = cycle_received
+                return_dict["number"] = number
+                return_dict["is_comparison"] = False
+
+                return
+
+            elif choice == 3:
+
+                number_of_comp = 3
                 random.shuffle(models)
                 models_for_comp = models[:number_of_comp]
                 if testing and provided_number_of_comp == 1:
                     models_for_comp = [pybamm.lithium_ion.DFN()]
                 models_for_comp = dict(list(enumerate(models_for_comp)))
-                params = pybamm.ParameterValues(chemistry=chemistry)
-                parameter_values_for_comp = dict(list(enumerate([params])))
 
-                if (
-                    number_of_comp == 1
-                    or (
-                        testing
-                        and provided_number_of_comp == 1
-                    )
-                ):
-                    param_list = []
-                    diff_params = random.randint(2, 3)
-                    for i in range(0, diff_params):
-                        param_list.append(params.copy())
-                        param_list[i][
-                            "Current function [A]"
-                        ] = chemistry_generator(
-                            chemistry, "Current function [A]"
-                        )
-                    parameter_values_for_comp = dict(
-                        list(enumerate(param_list))
-                    )
-
-                s = pybamm.BatchStudy(
-                    models=models_for_comp,
-                    parameter_values=parameter_values_for_comp,
-                    permutations=True,
+                comparison_dict = comparison_generator(
+                    number_of_comp,
+                    models_for_comp,
+                    chemistry,
+                    provided_number_of_comp=provided_number_of_comp,
+                    testing=testing,
                 )
 
-                s.solve([0, 3700])
-
-                time_array = plot_graph(sim=s.sims)
-
-                return_dict["model"] = models_for_comp
-                return_dict["parameter_values"] = params
-                return_dict["time_array"] = time_array
-                return_dict["chemistry"] = chemistry
+                return_dict["model"] = comparison_dict["model"]
+                return_dict["parameter_values"] = comparison_dict["parameter_values"]
+                return_dict["time_array"] = comparison_dict["time_array"]
+                return_dict["chemistry"] = comparison_dict["chemistry"]
                 return_dict["solver"] = None
                 return_dict["is_experiment"] = False
                 return_dict["cycle"] = None

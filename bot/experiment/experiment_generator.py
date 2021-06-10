@@ -15,7 +15,6 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
         keys: rest1, rest2
     Returns:
         cycle: list
-        number: numerical
     """
     charge = []
     discharge = []
@@ -59,11 +58,9 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     if random.randint(0, 1) == 1 or testing["rest2"]:
         cycle.append(rest[0][1])
 
-    number = random.randint(1, 50)
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    logger.info(str([tuple(cycle)]) + " * " + str(number))
+    logger.info(str([tuple(cycle)]))
 
-    return [tuple(cycle)], number
+    return [tuple(cycle)]
