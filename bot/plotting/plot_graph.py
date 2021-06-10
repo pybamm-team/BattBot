@@ -1,32 +1,50 @@
 import pybamm
-import random
+import numpy as np
+import imageio
+import os
+from utils.resize_gif import resize_gif
+import matplotlib.pyplot as plt
 
 
 def plot_graph(solution=None, sim=None):
     """
-    This function generates and saves a plot.
+    This function generates 80 plots over a time
+    span of t_eval seconds and then compiles them to
+    create a GIF.
     Parameters:
         solution: pybamm.Simulation.solution
             default: None
         sim: pybamm.Simulation
             default: None
     Returns:
-        time: numerical (seconds)
+        time: list
     """
 
     # generating time to plot the simulation
     if solution is not None:
         t = solution["Time [s]"]
         final_time = int(t.entries[len(t.entries) - 1])
-        time = random.randint(0, final_time)
+        time_array = np.linspace(int(t.entries[0]), final_time, num=80)
     else:
-        time = random.randint(0, 3700)
+        time_array = np.linspace(0, 3700, num=80)
 
-    # generating a plot
-    plot = pybamm.QuickPlot(sim, time_unit="seconds")
-    plot.plot(time)
+    images = []
+    image_files = []
 
-    # saving the plot
-    plot.fig.savefig("plot.png", dpi=300)
+    for val in time_array:
+        plot = pybamm.QuickPlot(sim, time_unit="seconds")
+        plot.plot(val)
+        images.append("plot" + str(val) + ".png")
+        plot.fig.savefig("plot" + str(val) + ".png", dpi=300)
+        plt.close()
 
-    return time
+    for image in images:
+        image_files.append(imageio.imread(image))
+    imageio.mimsave('plot.gif', image_files, duration=0.1)
+
+    for image in images:
+        os.remove(image)
+
+    resize_gif("plot.gif", resize_to=(1440, 1440))
+
+    return [time_array[0], time_array[-1]]

@@ -1,94 +1,254 @@
-import tweepy
-import matplotlib.pyplot as plt
 import os
+import sys
+import time
+import requests
+import multiprocessing
+import matplotlib.pyplot as plt
+from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
 from information.information import information
-import multiprocessing
-# import time
 
 
-def tweet_graph(testing=False):
-    """
-    Function responsible for all the tweeting functionalities.
-    Parameters:
-        testing: bool
-            default: False
-    """
+media_endpoint_url = 'https://upload.twitter.com/1.1/media/upload.json'
+post_tweet_url = 'https://api.twitter.com/1.1/statuses/update.json'
 
-    # getting the Twitter API keys
-    CONSUMER_KEY = os.environ["CONSUMER_KEY"]
-    CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
-    ACCESS_KEY = os.environ["ACCESS_KEY"]
-    ACCESS_SECRET = os.environ["ACCESS_SECRET"]
+CONSUMER_KEY = os.environ["CONSUMER_KEY"]
+CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
+ACCESS_TOKEN = os.environ["ACCESS_KEY"]
+ACCESS_TOKEN_SECRET = os.environ["ACCESS_SECRET"]
 
-    # setting up tweepy.API object
-    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-    api = tweepy.API(auth)
+oauth = OAuth1(
+    CONSUMER_KEY,
+    client_secret=CONSUMER_SECRET,
+    resource_owner_key=ACCESS_TOKEN,
+    resource_owner_secret=ACCESS_TOKEN_SECRET
+)
 
-    (
-        model,
-        parameter_values,
-        time,
-        chemistry,
-        solver,
-        is_experiment,
-        cycle,
-        number,
-        is_comparison,
-    ) = random_plot_generator(
-        testing=testing,
-        provided_choice=0
-    )
 
-    tweet = (
-        information(
-            chemistry,
-            model,
-            solver,
-            is_experiment,
-            cycle,
-            number,
-            is_comparison
+# Official Twitter API example by Twitter Developer Relations:
+# https://github.com/twitterdev/large-video-upload-python
+class Tweet(object):
+
+    def __init__(self, testing=False, provided_choice=None):
+        """
+        Defines video tweet properties
+        """
+        while True:
+            manager = multiprocessing.Manager()
+            return_dict = manager.dict()
+
+            p = multiprocessing.Process(target=random_plot_generator, args=(
+                return_dict, testing, provided_choice
+            )
+            )
+
+            p.start()
+            p.join(600)
+
+            if p.is_alive():
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
+                p.kill()
+                p.join()
+            else:
+                break
+
+        if os.path.exists("plot.gif"):
+            self.plot = "plot.gif"
+        else:
+            self.plot = "plot.png"
+        self.total_bytes = os.path.getsize(self.plot)
+        self.media_id = None
+        self.processing_info = None
+        self.model = return_dict["model"]
+        self.parameter_values = return_dict["parameter_values"]
+        self.time = return_dict["time_array"]
+        self.chemistry = return_dict["chemistry"]
+        self.solver = return_dict["solver"]
+        self.is_experiment = return_dict["is_experiment"]
+        self.cycle = return_dict["cycle"]
+        self.number = return_dict["number"]
+        self.is_comparison = return_dict["is_comparison"]
+        self.testing = testing
+
+    def upload_init(self):
+        """
+        Initializes Upload
+        """
+        print('INIT')
+
+        if os.path.exists("plot.gif"):
+            request_data = {
+                'command': 'INIT',
+                'media_type': 'image/gif',
+                'total_bytes': self.total_bytes,
+                'media_category': 'tweet_gif'
+            }
+        else:
+            request_data = {
+                'command': 'INIT',
+                'media_type': 'image/png',
+                'total_bytes': self.total_bytes,
+                'media_category': 'tweet_image'
+            }
+
+        req = requests.post(
+            url=media_endpoint_url, data=request_data, auth=oauth
         )
-        + ", at time = "
-        + str(time)
-        + " s"
-    )
+        print(req.json())
+        media_id = req.json()['media_id']
 
-    print(tweet)
-    # Uncomment to tweet
-    media = api.media_upload("plot.png")
+        self.media_id = media_id
 
-    if not testing:
-        api.update_status(status=tweet, media_ids=[media.media_id])
+        print('Media ID: %s' % str(media_id))
 
-    os.remove("plot.png")
-    plt.clf()
+    def upload_append(self):
+        """
+        Uploads media in chunks and appends to chunks uploaded
+        """
+        segment_id = 0
+        bytes_sent = 0
+        file = open(self.plot, 'rb')
 
+        while bytes_sent < self.total_bytes:
+            chunk = file.read(4*1024*1024)
 
-# uncomment when simulating tweeting process
-# while True:
-#     tweet_graph()
-#     time.sleep(5)
+            print('APPEND')
 
-# Uncomment when running on schedule
-if __name__ == "__main__":  # pragma: no cover
+            request_data = {
+                'command': 'APPEND',
+                'media_id': self.media_id,
+                'segment_index': segment_id
+            }
 
-    while True:
+            files = {
+                'media': chunk
+            }
 
-        tweet = multiprocessing.Process(target=tweet_graph)
-        tweet.start()
-        tweet.join(240)
+            req = requests.post(
+                url=media_endpoint_url,
+                data=request_data,
+                files=files,
+                auth=oauth
+            )
 
-        if tweet.is_alive():
+            if (
+                req.status_code < 200 or req.status_code > 299
+            ):  # pragma: no cover
+                print(req.status_code)
+                print(req.text)
+                sys.exit(0)
+
+            segment_id = segment_id + 1
+            bytes_sent = file.tell()
 
             print(
-                "The simulation is taking longer than expected, KILLING IT"
-                + " and starting a NEW ONE."
+                '%s of %s bytes uploaded' % (
+                    str(bytes_sent),
+                    str(self.total_bytes)
+                )
             )
-            tweet.kill()
-            tweet.join()
 
+        print('Upload chunks complete.')
+        file.close()
+
+    def upload_finalize(self):
+        """
+        Finalizes uploads and starts video processing
+        """
+        print('FINALIZE')
+
+        request_data = {
+            'command': 'FINALIZE',
+            'media_id': self.media_id
+        }
+
+        req = requests.post(
+            url=media_endpoint_url, data=request_data, auth=oauth
+        )
+        print(req.json())
+
+        self.processing_info = req.json().get('processing_info', None)
+        self.check_status()
+
+    def check_status(self):
+        """
+        Checks video processing status
+        """
+        if self.processing_info is None:    # pragma: no cover
+            return
+
+        state = self.processing_info['state']
+
+        print('Media processing status is %s ' % state)
+
+        if state == u'succeeded':
+            return
+
+        if state == u'failed':  # pragma: no cover
+            sys.exit(0)
+
+        check_after_secs = self.processing_info['check_after_secs']
+
+        print('Checking after %s seconds' % str(check_after_secs))
+        time.sleep(check_after_secs)
+
+        print('STATUS')
+
+        request_params = {
+            'command': 'STATUS',
+            'media_id': self.media_id
+        }
+
+        req = requests.get(
+            url=media_endpoint_url, params=request_params, auth=oauth
+        )
+
+        self.processing_info = req.json().get('processing_info', None)
+        self.check_status()
+
+    def tweet(self):
+        """
+        Publishes Tweet with attached plot
+        """
+        tweet_status = (
+            information(
+                self.chemistry,
+                self.model,
+                self.solver,
+                self.is_experiment,
+                self.cycle,
+                self.number,
+                self.is_comparison
+            )
+            + ", at time = "
+            + str(self.time)
+            + " s"
+
+        )
+
+        request_data = {
+            'status': tweet_status,
+            'media_ids': self.media_id
+        }
+
+        if not self.testing:    # pragma: no cover
+            req = requests.post(
+                url=post_tweet_url, data=request_data, auth=oauth
+            )
+            print(req.json())
+        if os.path.exists("plot.gif"):
+            os.remove("plot.gif")
         else:
-            break
+            os.remove("plot.png")
+        plt.close()
+
+
+if __name__ == '__main__':  # pragma: no cover
+    tweet = Tweet()
+    tweet.upload_init()
+    tweet.upload_append()
+    tweet.upload_finalize()
+    tweet.tweet()

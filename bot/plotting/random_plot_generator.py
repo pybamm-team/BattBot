@@ -1,24 +1,26 @@
 import pybamm
 import random
+import logging
 from plotting.plot_graph import plot_graph
 from models.model_solver import model_solver
 from utils.chemistry_generator import chemistry_generator
-from utils.single_point_decimal import single_decimal_point
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
 
 
 def random_plot_generator(
+    return_dict,
     testing=False,
     provided_choice=None,
     provided_number_of_comp=None,
     plot_summary_variables=True,
-    provided_degradation=True
+    provided_degradation=True,
 ):
     """
     Generates a random plot.
     Parameters:
+        return_dict: dict
         testing: bool
             default: None
         provided_choice: numerical
@@ -29,16 +31,6 @@ def random_plot_generator(
             default: True
         provided_degradation: bool
             default: True
-    Returns:
-        model: pybamm.BaseModel or dict
-        parameter_values: pybamm.ParameterValues
-        time: numerical (seconds) or None
-        chemistry: dict
-        solver: pybamm.BaseSolver
-        is_experiment: bool
-        cycle: list
-        number: numerical
-        is_comparison: bool
     """
 
     while True:
@@ -129,10 +121,24 @@ def random_plot_generator(
 
             solver = random.choice(solvers)
 
+            lower_voltage = chemistry_generator(
+                chemistry, "Lower voltage cut-off [V]"
+            )
             if choice == 1:
                 solver = pybamm.CasadiSolver(mode="safe")
 
-            lower_voltage = chemistry_generator(chemistry)
+            logging.basicConfig(level=logging.INFO)
+            logger = logging.getLogger()
+            logger.setLevel(logging.INFO)
+            logger.info(
+                str(model.name)
+                + " "
+                + str(solver.name)
+                + " "
+                + str(model.options)
+                + " "
+                + str(chemistry["citation"])
+            )
 
             if choice == 0:
 
@@ -145,19 +151,19 @@ def random_plot_generator(
                     lower_voltage=lower_voltage,
                 )
 
-                time = plot_graph(solution, sim)
+                time_array = plot_graph(solution, sim)
 
-                return (
-                    model,
-                    parameter_values,
-                    time,
-                    chemistry,
-                    solver,
-                    False,
-                    None,
-                    None,
-                    False,
-                )
+                return_dict["model"] = model
+                return_dict["parameter_values"] = parameter_values
+                return_dict["time_array"] = time_array
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = solver.name
+                return_dict["is_experiment"] = False
+                return_dict["cycle"] = None
+                return_dict["number"] = None
+                return_dict["is_comparison"] = False
+
+                return
 
             elif choice == 1:
                 (
@@ -167,7 +173,6 @@ def random_plot_generator(
                 if testing:
                     number = 10
                 if number > 3 and plot_summary_variables:
-
                     experiment = pybamm.Experiment(
                         cycle_received * number, termination="80% capacity"
                     )
@@ -182,35 +187,35 @@ def random_plot_generator(
                         solver=solver
                     )
                     generate_summary_variables(solution)
-                    return (
-                        model,
-                        parameter_values,
-                        None,
-                        chemistry,
-                        solver,
-                        True,
-                        cycle_received,
-                        number,
-                        False,
-                    )
+                    return_dict["model"] = model
+                    return_dict["parameter_values"] = parameter_values
+                    return_dict["time_array"] = None
+                    return_dict["chemistry"] = chemistry
+                    return_dict["solver"] = solver.name
+                    return_dict["is_experiment"] = True
+                    return_dict["cycle"] = cycle_received
+                    return_dict["number"] = number
+                    return_dict["is_comparison"] = False
+
+                    return
                 if testing:
                     number = 1
                 experiment = pybamm.Experiment(cycle_received * number)
                 (sim, solution, parameter_values) = experiment_solver(
                     model, experiment, chemistry, solver
                 )
-                time = plot_graph(solution, sim)
-                return (
-                    model,
-                    parameter_values,
-                    time,
-                    chemistry,
-                    solver,
-                    True,
-                    cycle_received,
-                    number,
-                    False,
-                )
+                time_array = plot_graph(solution, sim)
+                return_dict["model"] = model
+                return_dict["parameter_values"] = parameter_values
+                return_dict["time_array"] = None
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = solver.name
+                return_dict["is_experiment"] = True
+                return_dict["cycle"] = cycle_received
+                return_dict["number"] = number
+                return_dict["is_comparison"] = False
+
+                return
 
             elif choice == 2:
 
@@ -236,7 +241,9 @@ def random_plot_generator(
                         param_list.append(params.copy())
                         param_list[i][
                             "Current function [A]"
-                        ] = single_decimal_point(4, 6, 0.1)
+                        ] = chemistry_generator(
+                            chemistry, "Current function [A]"
+                        )
                     parameter_values_for_comp = dict(
                         list(enumerate(param_list))
                     )
@@ -249,19 +256,19 @@ def random_plot_generator(
 
                 s.solve([0, 3700])
 
-                time = plot_graph(sim=s.sims)
+                time_array = plot_graph(sim=s.sims)
 
-                return (
-                    models_for_comp,
-                    params,
-                    time,
-                    chemistry,
-                    None,
-                    False,
-                    None,
-                    None,
-                    True,
-                )
+                return_dict["model"] = models_for_comp
+                return_dict["parameter_values"] = params
+                return_dict["time_array"] = time_array
+                return_dict["chemistry"] = chemistry
+                return_dict["solver"] = None
+                return_dict["is_experiment"] = False
+                return_dict["cycle"] = None
+                return_dict["number"] = None
+                return_dict["is_comparison"] = True
 
-        except Exception as e:
+                return
+
+        except Exception as e:  # pragma: no cover
             print(e)
