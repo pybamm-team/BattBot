@@ -14,8 +14,6 @@ def random_plot_generator(
     return_dict,
     testing=False,
     provided_choice=None,
-    provided_number_of_comp=None,
-    plot_summary_variables=True,
     provided_degradation=True,
 ):
     """
@@ -26,10 +24,6 @@ def random_plot_generator(
             default: None
         provided_choice: numerical
             default: None
-        provided_number_of_comp: numerical
-            default: None
-        plot_summary_variables: bool
-            default: True
         provided_degradation: bool
             default: True
     """
@@ -78,7 +72,7 @@ def random_plot_generator(
                 )
             ):
                 provided_degradation = False
-                # continue
+                continue
 
             if chemistry == pybamm.parameter_sets.Ai2020:
                 options.update({
@@ -229,18 +223,17 @@ def random_plot_generator(
 
             elif choice == 3:
 
-                number_of_comp = 3
+                number_of_comp = random.randint(1, 3)
+                if testing:
+                    number_of_comp = 1
                 random.shuffle(models)
                 models_for_comp = models[:number_of_comp]
-                if testing and provided_number_of_comp == 1:
-                    models_for_comp = [pybamm.lithium_ion.DFN()]
                 models_for_comp = dict(list(enumerate(models_for_comp)))
 
                 comparison_dict = comparison_generator(
                     number_of_comp,
                     models_for_comp,
                     chemistry,
-                    provided_number_of_comp=provided_number_of_comp,
                     testing=testing,
                 )
 

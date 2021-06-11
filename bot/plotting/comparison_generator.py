@@ -8,7 +8,6 @@ def comparison_generator(
     number_of_comp,
     models_for_comp,
     chemistry,
-    provided_number_of_comp=None,
     testing=False,
 ):
     params = pybamm.ParameterValues(chemistry=chemistry)
@@ -17,10 +16,9 @@ def comparison_generator(
 
     if (
         number_of_comp == 1
-        or (
-            testing
-            and provided_number_of_comp == 1
-        )
+        # or (
+        #     testing
+        # )
     ):
         param_list = []
         diff_params = random.randint(2, 3)

@@ -117,9 +117,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         while True:
             coverage.process_startup()
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(
-                    return_dict, True, 1, None, False
-                )
+                target=random_plot_generator, args=(return_dict, True, 2)
             )
             p.start()
             p.join(600)
@@ -164,45 +162,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         while True:
             coverage.process_startup()
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, True, 2)
-            )
-            p.start()
-            p.join(600)
-
-            if p.is_alive():
-                print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
-                )
-                p.kill()
-                p.join()
-            else:
-                break
-
-        for model in return_dict["model"].values():
-            self.assertIsInstance(model, pybamm.BaseBatteryModel)
-            self.assertIsNotNone(model.options)
-            self.assertIsInstance(model.options, dict)
-            self.assertTrue(key in key_list for key in model.options.keys())
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertIsNone(return_dict["solver"])
-        self.assertIsInstance(
-            return_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(return_dict["time_array"], list)
-        self.assertTrue(len(return_dict["time_array"]) == 2)
-        self.assertIsNone(return_dict["cycle"])
-        self.assertIsNone(return_dict["number"])
-        self.assertFalse(return_dict["is_experiment"])
-        self.assertTrue(return_dict["is_comparison"])
-
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
-
-        while True:
-            coverage.process_startup()
-            p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, True, 2, 1)
+                target=random_plot_generator, args=(return_dict, True, 3)
             )
             p.start()
             p.join(600)
