@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import requests
+import multiprocessing
 import matplotlib.pyplot as plt
 from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
@@ -32,20 +33,28 @@ class Tweet(object):
         """
         Defines video tweet properties
         """
-        (
-            model,
-            parameter_values,
-            time,
-            chemistry,
-            solver,
-            is_experiment,
-            cycle,
-            number,
-            is_comparison,
-        ) = random_plot_generator(
-            testing=testing,
-            provided_choice=provided_choice
-        )
+        while True:
+            manager = multiprocessing.Manager()
+            return_dict = manager.dict()
+
+            p = multiprocessing.Process(target=random_plot_generator, args=(
+                return_dict, testing, provided_choice
+            )
+            )
+
+            p.start()
+            p.join(600)
+
+            if p.is_alive():
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
+                p.kill()
+                p.join()
+            else:
+                break
+
         if os.path.exists("plot.gif"):
             self.plot = "plot.gif"
         else:
@@ -53,15 +62,15 @@ class Tweet(object):
         self.total_bytes = os.path.getsize(self.plot)
         self.media_id = None
         self.processing_info = None
-        self.model = model
-        self.parameter_values = parameter_values
-        self.time = time
-        self.chemistry = chemistry
-        self.solver = solver
-        self.is_experiment = is_experiment
-        self.cycle = cycle
-        self.number = number
-        self.is_comparison = is_comparison
+        self.model = return_dict["model"]
+        self.parameter_values = return_dict["parameter_values"]
+        self.time = return_dict["time_array"]
+        self.chemistry = return_dict["chemistry"]
+        self.solver = return_dict["solver"]
+        self.is_experiment = return_dict["is_experiment"]
+        self.cycle = return_dict["cycle"]
+        self.number = return_dict["number"]
+        self.is_comparison = return_dict["is_comparison"]
         self.testing = testing
 
     def upload_init(self):

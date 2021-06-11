@@ -16,7 +16,13 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
         self.assertIsInstance(tweet.time, list)
         self.assertIsInstance(tweet.chemistry, dict)
-        self.assertIsInstance(tweet.solver, pybamm.BaseSolver)
+        self.assertTrue(
+            tweet.solver == "CasADi solver with 'safe' mode"
+            or tweet.solver == "CasADi solver with 'fast' mode"
+            or tweet.solver == (
+                "CasADi solver with 'fast with events' mode"
+            )
+        )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertIsNone(tweet.cycle)
         self.assertIsNone(tweet.number)
@@ -47,7 +53,13 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
         self.assertIsNone(tweet.time)
         self.assertIsInstance(tweet.chemistry, dict)
-        self.assertIsInstance(tweet.solver, pybamm.BaseSolver)
+        self.assertTrue(
+            tweet.solver == "CasADi solver with 'safe' mode"
+            or tweet.solver == "CasADi solver with 'fast' mode"
+            or tweet.solver == (
+                "CasADi solver with 'fast with events' mode"
+            )
+        )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertTrue(tweet.is_experiment)
         self.assertIsInstance(tweet.cycle, list)
