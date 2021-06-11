@@ -33,7 +33,7 @@ class Tweet(object):
         """
         Defines video tweet properties
         """
-        while True:
+        while True:    # pragma: no cover
             manager = multiprocessing.Manager()
             return_dict = manager.dict()
 

@@ -98,7 +98,7 @@ def random_plot_generator(
             solver = random.choice(solvers)
 
             choice = random.randint(0, 3)
-            
+
             if testing is True and provided_choice is not None:
                 choice = provided_choice
 
@@ -234,11 +234,12 @@ def random_plot_generator(
                     number_of_comp,
                     models_for_comp,
                     chemistry,
-                    testing=testing,
                 )
 
                 return_dict["model"] = comparison_dict["model"]
-                return_dict["parameter_values"] = comparison_dict["parameter_values"]
+                return_dict["parameter_values"] = (
+                    comparison_dict["parameter_values"]
+                )
                 return_dict["time_array"] = comparison_dict["time_array"]
                 return_dict["chemistry"] = comparison_dict["chemistry"]
                 return_dict["solver"] = None

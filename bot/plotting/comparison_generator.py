@@ -4,22 +4,18 @@ from utils.chemistry_generator import chemistry_generator
 from plotting.plot_graph import plot_graph
 from experiment.experiment_generator import experiment_generator
 
+
 def comparison_generator(
     number_of_comp,
     models_for_comp,
     chemistry,
-    testing=False,
+    provided_choice=None,
 ):
     params = pybamm.ParameterValues(chemistry=chemistry)
     parameter_values_for_comp = dict(list(enumerate([params])))
     comparison_dict = {}
 
-    if (
-        number_of_comp == 1
-        # or (
-        #     testing
-        # )
-    ):
+    if number_of_comp == 1:
         param_list = []
         diff_params = random.randint(2, 3)
         for i in range(0, diff_params):
@@ -50,7 +46,9 @@ def comparison_generator(
 
     else:
 
-        choice = random.randint(0, 1)
+        choice = 1
+        if provided_choice is not None:
+            choice = provided_choice
 
         if choice == 0:
             s = pybamm.BatchStudy(
@@ -70,34 +68,65 @@ def comparison_generator(
 
         elif choice == 1:
 
-            cycle = experiment_generator()
-            number = random.randint(1, 3)
-            experiment = dict(
-                list(
-                    enumerate(
-                        [
-                            pybamm.Experiment(
-                                cycle * number
+            while True:
+                try:
+                    cycle = experiment_generator()
+                    number = random.randint(1, 3)
+
+                    if provided_choice is not None:
+                        experiment = [
+                            (
+                                "Discharge at C/10 for 10 hours "
+                                + "or until 3.3 V",
+                                "Rest for 1 hour",
+                                "Charge at 1 A until 4.1 V",
+                                "Hold at 4.1 V until 50 mA",
+                                "Rest for 1 hour"
                             )
                         ]
+                        number = 1
+
+                    experiment = dict(
+                        list(
+                            enumerate(
+                                [
+                                    pybamm.Experiment(
+                                        cycle * number
+                                    )
+                                ]
+                            )
+                        )
                     )
-                )
-            )
 
-            s = pybamm.BatchStudy(
-                models=models_for_comp,
-                parameter_values=parameter_values_for_comp,
-                experiments=experiment,
-                permutations=True,
-            )
+                    s = pybamm.BatchStudy(
+                        models=models_for_comp,
+                        parameter_values=parameter_values_for_comp,
+                        experiments=experiment,
+                        permutations=True,
+                    )
 
-            s.solve()
+                    s.solve()
 
-            time_array = plot_graph(sim=s.sims)
+                    max_time = 0
+                    solution = s.sims[0].solution
+                    for sim in s.sims:
+                        if sim.solution["Time [s]"].entries[-1] > max_time:
+                            max_time = sim.solution["Time [s]"].entries[-1]
+                            solution = sim.solution
 
-            comparison_dict["model"] = models_for_comp
-            comparison_dict["parameter_values"] = params
-            comparison_dict["time_array"] = time_array
-            comparison_dict["chemistry"] = chemistry
+                    time_array = plot_graph(
+                        solution=solution,
+                        sim=s.sims
+                    )
+
+                    comparison_dict["model"] = models_for_comp
+                    comparison_dict["parameter_values"] = params
+                    comparison_dict["time_array"] = time_array
+                    comparison_dict["chemistry"] = chemistry
+
+                    return comparison_dict
+
+                except Exception as e:
+                    print(e)
 
     return comparison_dict
