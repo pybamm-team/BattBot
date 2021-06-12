@@ -71,6 +71,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         export COVERAGE_PROCESS_START=$PWD/.coveragerc
+        export PYTHONHOME=$PWD
         coverage run --concurrency=multiprocessing -m unittest
         coverage combine
       env:
