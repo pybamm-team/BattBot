@@ -45,7 +45,7 @@ class Tweet(object):
             p.start()
             p.join(600)
 
-            if p.is_alive():
+            if p.is_alive():    # pragma: no cover
                 print(
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."

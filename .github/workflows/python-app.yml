@@ -71,7 +71,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         export COVERAGE_PROCESS_START=$PWD/.coveragerc
-        coverage run -m --omit=*/test* unittest
+        coverage run --concurrency=multiprocessing -m unittest
         coverage combine
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
