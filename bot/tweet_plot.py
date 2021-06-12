@@ -52,7 +52,7 @@ class Tweet(object):
                 )
                 p.kill()
                 p.join()
-            else:
+            else:   # pragma: no cover
                 break
 
         if os.path.exists("plot.gif"):
