@@ -25,7 +25,9 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, True, 0)
+                target=random_plot_generator, args=(
+                    return_dict, True, 0, pybamm.parameter_sets.Ai2020
+                )
             )
             p.start()
             p.join(600)
@@ -69,7 +71,9 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, True, 1)
+                target=random_plot_generator, args=(
+                    return_dict, True, 1, pybamm.parameter_sets.Chen2020
+                )
             )
             p.start()
             p.join(600)
@@ -113,7 +117,9 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, True, 2)
+                target=random_plot_generator, args=(
+                    return_dict, True, 2, pybamm.parameter_sets.Yang2017
+                )
             )
             p.start()
             p.join(600)

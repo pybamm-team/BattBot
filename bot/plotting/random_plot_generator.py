@@ -14,6 +14,7 @@ def random_plot_generator(
     return_dict,
     testing=False,
     provided_choice=None,
+    provided_chemistry=None,
     provided_degradation=True,
 ):
     """
@@ -26,6 +27,8 @@ def random_plot_generator(
             default: None
         provided_degradation: bool
             default: True
+        provided_chemistry: dict
+            default: None
     """
 
     while True:
@@ -42,6 +45,9 @@ def random_plot_generator(
             ]
 
             chemistry = random.choice(chemistries)
+
+            if provided_chemistry is not None:
+                chemistry = provided_chemistry
 
             particle_mechanics_list = [
                 "swelling and cracking",
