@@ -126,7 +126,7 @@ def comparison_generator(
 
                     return comparison_dict
 
-                except Exception as e:
+                except Exception as e:  # pragma: no cover
                     print(e)
 
     return comparison_dict

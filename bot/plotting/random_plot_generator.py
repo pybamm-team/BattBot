@@ -140,6 +140,19 @@ def random_plot_generator(
                 + str(chemistry["citation"])
             )
 
+            logging.basicConfig(level=logging.INFO)
+            logger = logging.getLogger()
+            logger.setLevel(logging.INFO)
+            logger.info(
+                str(model.name)
+                + " "
+                + str(solver.name)
+                + " "
+                + str(model.options)
+                + " "
+                + str(chemistry["citation"])
+            )
+
             if choice == 0:
 
                 c_rate = random.randint(0, 3)

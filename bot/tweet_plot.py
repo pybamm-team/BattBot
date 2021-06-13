@@ -33,7 +33,7 @@ class Tweet(object):
         """
         Defines video tweet properties
         """
-        while True:    # pragma: no cover
+        while True:
             manager = multiprocessing.Manager()
             return_dict = manager.dict()
 
@@ -45,14 +45,14 @@ class Tweet(object):
             p.start()
             p.join(600)
 
-            if p.is_alive():
+            if p.is_alive():    # pragma: no cover
                 print(
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
                 p.kill()
                 p.join()
-            else:
+            else:   # pragma: no cover
                 break
 
         if os.path.exists("plot.gif"):
