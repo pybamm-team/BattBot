@@ -29,15 +29,72 @@ def comparison_generator(
             list(enumerate(param_list))
         )
 
-        s = pybamm.BatchStudy(
-            models=models_for_comp,
-            parameter_values=parameter_values_for_comp,
-            permutations=True,
-        )
+        choice = random.randint(0, 1)
+        if provided_choice is not None:
+            choice = provided_choice
 
-        s.solve([0, 3700])
+        if choice == 0:
+            s = pybamm.BatchStudy(
+                models=models_for_comp,
+                parameter_values=parameter_values_for_comp,
+                permutations=True,
+            )
 
-        time_array = plot_graph(sim=s.sims)
+            s.solve([0, 3700])
+
+            time_array = plot_graph(sim=s.sims)
+
+        elif choice == 1:
+
+            cycle = experiment_generator()
+            number = random.randint(1, 3)
+
+            if provided_choice is not None:
+                experiment = [
+                    (
+                        "Discharge at C/10 for 10 hours "
+                        + "or until 3.3 V",
+                        "Rest for 1 hour",
+                        "Charge at 1 A until 4.1 V",
+                        "Hold at 4.1 V until 50 mA",
+                        "Rest for 1 hour"
+                    )
+                ]
+                number = 1
+
+            experiment = dict(
+                list(
+                    enumerate(
+                        [
+                            pybamm.Experiment(
+                                cycle * number
+                            )
+                        ]
+                    )
+                )
+            )
+
+            s = pybamm.BatchStudy(
+                models=models_for_comp,
+                parameter_values=parameter_values_for_comp,
+                experiments=experiment,
+                permutations=True,
+            )
+
+            s.solve()
+
+            max_time = 0
+            solution = s.sims[0].solution
+            for sim in s.sims:
+                if sim.solution["Time [s]"].entries[-1] > max_time:
+                    max_time = sim.solution["Time [s]"].entries[-1]
+                    solution = sim.solution
+
+            time_array = plot_graph(
+                solution=solution,
+                sim=s.sims
+            )
+
 
         comparison_dict["model"] = models_for_comp
         comparison_dict["parameter_values"] = params
@@ -46,7 +103,7 @@ def comparison_generator(
 
     else:
 
-        choice = 1
+        choice = random.randint(0, 1)
         if provided_choice is not None:
             choice = provided_choice
 
