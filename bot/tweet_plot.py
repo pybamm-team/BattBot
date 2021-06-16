@@ -94,9 +94,25 @@ class Tweet(object):
                 'media_category': 'tweet_image'
             }
 
-        req = requests.post(
-            url=media_endpoint_url, data=request_data, auth=oauth
-        )
+        while True:
+            req = requests.post(
+                url=media_endpoint_url,
+                data=request_data,
+                auth=oauth
+            )
+            if (
+                req.status_code >= 200 and req.status_code <= 299
+            ):
+                break
+            else:  # pragma: no cover
+                print(req.status_code)
+                print(req.text)
+                print(
+                    "Twitter API internal error"
+                    + " Trying again in 5 minutes"
+                )
+                time.sleep(300)
+
         print(req.json())
         media_id = req.json()['media_id']
 
@@ -127,19 +143,25 @@ class Tweet(object):
                 'media': chunk
             }
 
-            req = requests.post(
-                url=media_endpoint_url,
-                data=request_data,
-                files=files,
-                auth=oauth
-            )
-
-            if (
-                req.status_code < 200 or req.status_code > 299
-            ):  # pragma: no cover
-                print(req.status_code)
-                print(req.text)
-                sys.exit(0)
+            while True:
+                req = requests.post(
+                    url=media_endpoint_url,
+                    data=request_data,
+                    files=files,
+                    auth=oauth
+                )
+                if (
+                    req.status_code >= 200 and req.status_code <= 299
+                ):
+                    break
+                else:  # pragma: no cover
+                    print(req.status_code)
+                    print(req.text)
+                    print(
+                        "Twitter API internal error"
+                        + " Trying again in 5 minutes"
+                    )
+                    time.sleep(300)
 
             segment_id = segment_id + 1
             bytes_sent = file.tell()
@@ -165,10 +187,26 @@ class Tweet(object):
             'media_id': self.media_id
         }
 
-        req = requests.post(
-            url=media_endpoint_url, data=request_data, auth=oauth
-        )
-        print(req.json())
+        while True:
+            req = requests.post(
+                url=media_endpoint_url,
+                data=request_data,
+                auth=oauth
+            )
+            if (
+                req.status_code >= 200 and req.status_code <= 299
+            ):
+                break
+            else:  # pragma: no cover
+                print(req.status_code)
+                print(req.text)
+                print(
+                    "Twitter API internal error"
+                    + " Trying again in 5 minutes"
+                )
+                time.sleep(300)
+
+            print(req.json())
 
         self.processing_info = req.json().get('processing_info', None)
         self.check_status()
@@ -235,9 +273,25 @@ class Tweet(object):
         }
 
         if not self.testing:    # pragma: no cover
-            req = requests.post(
-                url=post_tweet_url, data=request_data, auth=oauth
-            )
+            while True:
+                req = requests.post(
+                    url=post_tweet_url,
+                    data=request_data,
+                    auth=oauth
+                )
+                if (
+                    req.status_code >= 200 and req.status_code <= 299
+                ):
+                    break
+                else:  # pragma: no cover
+                    print(req.status_code)
+                    print(req.text)
+                    print(
+                        "Twitter API internal error"
+                        + " Trying again in 5 minutes"
+                    )
+                    time.sleep(300)
+
             print(req.json())
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
