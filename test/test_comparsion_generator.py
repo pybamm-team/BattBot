@@ -86,7 +86,7 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
-        self.assertEqual(comparison_dict["model"], self.models_for_comp)
+        self.assertEqual(comparison_dict["model"], self.model_for_comp)
         self.assertIsInstance(
             comparison_dict["parameter_values"], pybamm.ParameterValues
         )
