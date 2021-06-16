@@ -95,7 +95,6 @@ def comparison_generator(
                 sim=s.sims
             )
 
-
         comparison_dict["model"] = models_for_comp
         comparison_dict["parameter_values"] = params
         comparison_dict["time_array"] = time_array
