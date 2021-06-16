@@ -206,7 +206,7 @@ class Tweet(object):
                 )
                 time.sleep(300)
 
-            print(req.json())
+        print(req.json())
 
         self.processing_info = req.json().get('processing_info', None)
         self.check_status()
