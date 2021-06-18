@@ -94,26 +94,8 @@ class Tweet(object):
                 'media_category': 'tweet_image'
             }
 
-        while True:
-            req = requests.post(
-                url=media_endpoint_url,
-                data=request_data,
-                auth=oauth
-            )
-            if (
-                req.status_code >= 200 and req.status_code <= 299
-            ):
-                break
-            else:  # pragma: no cover
-                print(req.status_code)
-                print(req.text)
-                print(
-                    "Twitter API internal error"
-                    + " Trying again in 5 minutes"
-                )
-                time.sleep(300)
+        req = self.post_request(media_endpoint_url, request_data, oauth)
 
-        print(req.json())
         media_id = req.json()['media_id']
 
         self.media_id = media_id
@@ -143,25 +125,7 @@ class Tweet(object):
                 'media': chunk
             }
 
-            while True:
-                req = requests.post(
-                    url=media_endpoint_url,
-                    data=request_data,
-                    files=files,
-                    auth=oauth
-                )
-                if (
-                    req.status_code >= 200 and req.status_code <= 299
-                ):
-                    break
-                else:  # pragma: no cover
-                    print(req.status_code)
-                    print(req.text)
-                    print(
-                        "Twitter API internal error"
-                        + " Trying again in 5 minutes"
-                    )
-                    time.sleep(300)
+            self.post_request(media_endpoint_url, request_data, oauth, files)
 
             segment_id = segment_id + 1
             bytes_sent = file.tell()
@@ -187,24 +151,7 @@ class Tweet(object):
             'media_id': self.media_id
         }
 
-        while True:
-            req = requests.post(
-                url=media_endpoint_url,
-                data=request_data,
-                auth=oauth
-            )
-            if (
-                req.status_code >= 200 and req.status_code <= 299
-            ):
-                break
-            else:  # pragma: no cover
-                print(req.status_code)
-                print(req.text)
-                print(
-                    "Twitter API internal error"
-                    + " Trying again in 5 minutes"
-                )
-                time.sleep(300)
+        req = self.post_request(media_endpoint_url, request_data, oauth)
 
         print(req.json())
 
@@ -247,6 +194,40 @@ class Tweet(object):
         self.processing_info = req.json().get('processing_info', None)
         self.check_status()
 
+    def post_request(self, url, data, auth, files=None):
+        """
+        Posts a request on the Twitter API and makes
+        sure that the given post request succeeds
+        """
+        while True:
+            if files is None:
+                req = requests.post(
+                    url=url,
+                    data=data,
+                    auth=auth
+                )
+            else:
+                req = requests.post(
+                    url=url,
+                    data=data,
+                    files=files,
+                    auth=auth
+                )
+            if (
+                req.status_code >= 200 and req.status_code <= 299
+            ):
+                break
+            else:  # pragma: no cover
+                print(req.status_code)
+                print(req.text)
+                print(
+                    "Twitter API internal error"
+                    + " Trying again in 5 minutes"
+                )
+                time.sleep(300)
+
+        return req
+
     def tweet(self):
         """
         Publishes Tweet with attached plot
@@ -273,26 +254,7 @@ class Tweet(object):
         }
 
         if not self.testing:    # pragma: no cover
-            while True:
-                req = requests.post(
-                    url=post_tweet_url,
-                    data=request_data,
-                    auth=oauth
-                )
-                if (
-                    req.status_code >= 200 and req.status_code <= 299
-                ):
-                    break
-                else:  # pragma: no cover
-                    print(req.status_code)
-                    print(req.text)
-                    print(
-                        "Twitter API internal error"
-                        + " Trying again in 5 minutes"
-                    )
-                    time.sleep(300)
-
-            print(req.json())
+            self.post_request(post_tweet_url, request_data, oauth)
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
         else:
