@@ -125,7 +125,7 @@ class Tweet(object):
                 'media': chunk
             }
 
-            req = self.post_request(media_endpoint_url, request_data, oauth, files)
+            self.post_request(media_endpoint_url, request_data, oauth, files)
 
             segment_id = segment_id + 1
             bytes_sent = file.tell()
@@ -254,7 +254,7 @@ class Tweet(object):
         }
 
         if not self.testing:    # pragma: no cover
-            req = self.post_request(post_tweet_url, request_data, oauth)
+            self.post_request(post_tweet_url, request_data, oauth)
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
         else:
