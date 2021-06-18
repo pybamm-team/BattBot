@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def generate_summary_variables(solution):
+def generate_summary_variables(solutions):
     """
     Plots summary variables.
     Parameters:
-        solution: pybamm.Simulation.solution
+        solutions: list
     """
 
     vars_to_plot = [
@@ -25,10 +25,11 @@ def generate_summary_variables(solution):
 
     fig, axes = plt.subplots(n, m, figsize=(15, 8))
     for var, ax in zip(vars_to_plot, axes.flat):
-        ax.plot(
-            solution.summary_variables["Cycle number"],
-            solution.summary_variables[var]
-        )
+        for solution in solutions:
+            ax.plot(
+                solution.summary_variables["Cycle number"],
+                solution.summary_variables[var]
+            )
         ax.set_xlabel("Cycle number")
         ax.set_ylabel(var)
         ax.set_xlim([1, solution.summary_variables["Cycle number"][-1]])

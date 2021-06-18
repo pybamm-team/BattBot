@@ -32,7 +32,7 @@ class TestPlottingSummaryVariables(unittest.TestCase):
         os.remove("plot.png")
 
     def test_generate_summary_variables(self):
-        generate_summary_variables(solution=self.solution)
+        generate_summary_variables(solutions=[self.solution])
         path = "plot.png"
 
         assert os.path.exists(path)

@@ -202,7 +202,7 @@ def random_plot_generator(
                     solver=solver
                 )
 
-                generate_summary_variables(solution)
+                generate_summary_variables([solution])
 
                 return_dict["model"] = model
                 return_dict["parameter_values"] = parameter_values
