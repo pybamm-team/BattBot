@@ -28,6 +28,9 @@ def chemistry_generator(chemistry, parameter):
         elif chemistry == pybamm.parameter_sets.Yang2017:
             param_value = desired_decimal_point_generator(2.7, 3.9, 1)
 
+        elif chemistry == pybamm.parameter_sets.Chen2020_plating:
+            param_value = desired_decimal_point_generator(2.7, 3.9, 1)
+
     elif parameter == "Current function [A]":
         if chemistry == pybamm.parameter_sets.Chen2020:
             param_value = desired_decimal_point_generator(3, 5, 2)
@@ -40,5 +43,8 @@ def chemistry_generator(chemistry, parameter):
 
         elif chemistry == pybamm.parameter_sets.Yang2017:
             param_value = desired_decimal_point_generator(0.5, 2.25, 2)
+
+        elif chemistry == pybamm.parameter_sets.Chen2020_plating:
+            param_value = desired_decimal_point_generator(3, 5, 2)
 
     return param_value

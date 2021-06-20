@@ -40,6 +40,7 @@ def random_plot_generator(
                 pybamm.parameter_sets.Chen2020,
                 pybamm.parameter_sets.Marquis2019,
                 pybamm.parameter_sets.Yang2017,
+                pybamm.parameter_sets.Chen2020_plating,
                 # pybamm.parameter_sets.Ecker2015,
                 # pybamm.parameter_sets.Ramadass2004,
             ]
@@ -51,8 +52,7 @@ def random_plot_generator(
 
             particle_mechanics_list = [
                 "swelling and cracking",
-                "swelling only",
-                "none"
+                # "none"
             ]
             sei_list = [
                 "ec reaction limited",
@@ -60,12 +60,16 @@ def random_plot_generator(
                 "solvent-diffusion limited",
                 "electron-migration limited",
                 "interstitial-diffusion limited",
-                "none"
+                # "none"
             ]
+            sei_porosity_change_list = ["true", "false"]
+            lithium_plating_list = ["reversible", "irreversible"]
             options = {}
 
             particle_mechanics = random.choice(particle_mechanics_list)
             sei = random.choice(sei_list)
+            sei_porosity_change = random.choice(sei_porosity_change_list)
+            lithium_plating = random.choice(lithium_plating_list)
 
             if (
                 (
@@ -83,17 +87,20 @@ def random_plot_generator(
             if chemistry == pybamm.parameter_sets.Ai2020:
                 options.update({
                     "particle mechanics": particle_mechanics,
-                    "SEI": sei
                 })
             elif chemistry == pybamm.parameter_sets.Yang2017:
                 options.update({
                     "lithium plating": "irreversible",
-                    "lithium plating porosity change": "true",
-                    "SEI": "ec reaction limited"
                 })
-            elif chemistry != pybamm.parameter_sets.Yang2017:
+            elif chemistry == pybamm.parameter_sets.Chen2020_plating:
+                options.update({
+                    "lithium plating": lithium_plating,
+                    "SEI porosity change": sei_porosity_change
+                })
+            else:
                 options.update({
                     "SEI": sei,
+                    "SEI porosity change": sei_porosity_change
                 })
 
             solvers = [
@@ -103,7 +110,7 @@ def random_plot_generator(
 
             solver = random.choice(solvers)
 
-            choice = random.randint(0, 3)
+            choice = 1
 
             if testing is True and provided_choice is not None:
                 choice = provided_choice
