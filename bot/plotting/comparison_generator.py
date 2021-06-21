@@ -33,23 +33,39 @@ def comparison_generator(
 
     # generate a list of parameter values by varying a single parameter
     # if only 1 model is selected
+
+    param_to_vary = "Current function [A]"
+
     if number_of_comp == 1:
         param_list = []
         diff_params = random.randint(2, 3)
+        min_param_value = 100
         for i in range(0, diff_params):
+            # copy the original values and append them in the list
             param_list.append(params.copy())
+
+            # generate a random value
+            param_value = parameter_value_generator(
+                chemistry, param_to_vary
+            )
+
+            # change a parameter value
             param_list[i][
                 "Current function [A]"
-            ] = parameter_value_generator(
-                chemistry, "Current function [A]"
-            )
+            ] = param_value
+
+            # find the minimum value if "Current function [A]" is varied
+            if param_value == "Current function [A]":
+                if param_value < min_param_value:
+                    min_param_value = param_value
+
         parameter_values_for_comp = dict(
             list(enumerate(param_list))
         )
 
     # 0: no experiment
     # 1: experiment
-    choice = random.randint(0, 1)
+    choice = 0
 
     # if testing, don't select simulations randomly
     if provided_choice is not None:
@@ -62,10 +78,19 @@ def comparison_generator(
             permutations=True,
         )
 
-        s.solve([0, 3700])
+        # default t_end
+        t_end = 3700
+
+        # if "Current function [A]" is varied, change the t_end
+        if param_to_vary == "Current function [A]":
+            factor = min_param_value/params[param_to_vary]
+            t_end = (1 / factor * 1.1) * 3600
+
+        s.solve([0, t_end])
 
         # create the GIF
-        time_array = plot_graph(sim=s.sims)
+        solution = s.sims[0].solution
+        time_array = plot_graph(solution=solution, sim=s.sims)
 
         comparison_dict["model"] = models_for_comp
         comparison_dict["parameter_values"] = params
