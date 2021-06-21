@@ -39,7 +39,7 @@ def random_plot_generator(
         provided_degradation: bool
             default: True
             Using this one can test and cover some probabilistic lines where
-            no degradation option of a model is selected. 
+            no degradation option of a model is selected.
     """
 
     while True:
