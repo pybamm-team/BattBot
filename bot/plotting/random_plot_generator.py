@@ -134,7 +134,7 @@ def random_plot_generator(
             # Add degradation only if we are plotting summary variables
             if choice != 1:
                 options = None
-                
+
             models = [
                 pybamm.lithium_ion.DFN(
                     options=options
