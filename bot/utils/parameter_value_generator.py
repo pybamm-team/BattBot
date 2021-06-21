@@ -4,9 +4,9 @@ from utils.desired_decimal_point_generator import (
 )
 
 
-def chemistry_generator(chemistry, parameter):
+def parameter_value_generator(chemistry, parameter):
     """
-    Generates random values for "Lower voltage cut-off [V]"
+    Generates random values for a given parameter and
     for a given chemistry.
     Parameters:
         chemistry: dict
@@ -15,23 +15,7 @@ def chemistry_generator(chemistry, parameter):
         param_value: numerical
     """
 
-    if parameter == "Lower voltage cut-off [V]":
-        if chemistry == pybamm.parameter_sets.Chen2020:
-            param_value = desired_decimal_point_generator(2.5, 4.0, 1)
-
-        elif chemistry == pybamm.parameter_sets.Marquis2019:
-            param_value = desired_decimal_point_generator(3.1, 3.9, 1)
-
-        elif chemistry == pybamm.parameter_sets.Ai2020:
-            param_value = desired_decimal_point_generator(2.7, 3.9, 1)
-
-        elif chemistry == pybamm.parameter_sets.Yang2017:
-            param_value = desired_decimal_point_generator(2.7, 3.9, 1)
-
-        elif chemistry == pybamm.parameter_sets.Chen2020_plating:
-            param_value = desired_decimal_point_generator(2.7, 3.9, 1)
-
-    elif parameter == "Current function [A]":
+    if parameter == "Current function [A]":
         if chemistry == pybamm.parameter_sets.Chen2020:
             param_value = desired_decimal_point_generator(3, 5, 2)
 
@@ -46,5 +30,11 @@ def chemistry_generator(chemistry, parameter):
 
         elif chemistry == pybamm.parameter_sets.Chen2020_plating:
             param_value = desired_decimal_point_generator(3, 5, 2)
+
+    else:
+        params = pybamm.ParameterValues(chemistry=chemistry)
+        param_value = desired_decimal_point_generator(
+            params[parameter]*0.9, params[parameter]*1.1, 2
+        )
 
     return param_value

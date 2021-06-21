@@ -1,6 +1,6 @@
 import pybamm
 import random
-from utils.chemistry_generator import chemistry_generator
+from utils.parameter_value_generator import parameter_value_generator
 from plotting.plot_graph import plot_graph
 from experiment.experiment_generator import experiment_generator
 
@@ -22,7 +22,7 @@ def comparison_generator(
             param_list.append(params.copy())
             param_list[i][
                 "Current function [A]"
-            ] = chemistry_generator(
+            ] = parameter_value_generator(
                 chemistry, "Current function [A]"
             )
         parameter_values_for_comp = dict(
@@ -59,6 +59,11 @@ def comparison_generator(
                 number = random.randint(1, 3)
 
                 if provided_choice is not None:
+                    parameter_values_for_comp = {
+                        "Chen2020": pybamm.ParameterValues(
+                            chemistry=pybamm.parameter_sets.Chen2020
+                        )
+                    }
                     experiment = [
                         (
                             "Discharge at C/10 for 10 hours "
