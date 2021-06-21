@@ -3,7 +3,7 @@ import random
 import logging
 from plotting.plot_graph import plot_graph
 from models.model_solver import model_solver
-from utils.chemistry_generator import chemistry_generator
+from utils.parameter_value_generator import parameter_value_generator
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
@@ -129,7 +129,7 @@ def random_plot_generator(
 
             model = random.choice(models)
 
-            lower_voltage = chemistry_generator(
+            lower_voltage = parameter_value_generator(
                 chemistry, "Lower voltage cut-off [V]"
             )
 

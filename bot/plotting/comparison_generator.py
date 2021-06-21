@@ -1,6 +1,6 @@
 import pybamm
 import random
-from utils.chemistry_generator import chemistry_generator
+from utils.parameter_value_generator import parameter_value_generator
 from plotting.plot_graph import plot_graph
 from experiment.experiment_generator import experiment_generator
 
@@ -11,10 +11,28 @@ def comparison_generator(
     chemistry,
     provided_choice=None,
 ):
+    """
+    Generates a random comparison plot.
+    Parameters:
+        number_of_comp: numerical
+            Number of models be used in the comparison plot.
+        models_for_comp: dict
+            Different models that are to be used in the comparison plot.
+        chemistry: dict
+            A single chemistry value which will be used in the comparison
+            plot.
+        provided_choice: numerical
+            default: None
+            Should be used only during testing, using this one can test
+            different parts of this function deterministically without relying
+            on the random functions to execute that part.
+    """
     params = pybamm.ParameterValues(chemistry=chemistry)
     parameter_values_for_comp = dict(list(enumerate([params])))
     comparison_dict = {}
 
+    # generate a list of parameter values by varying a single parameter
+    # if only 1 model is selected
     if number_of_comp == 1:
         param_list = []
         diff_params = random.randint(2, 3)
@@ -22,14 +40,18 @@ def comparison_generator(
             param_list.append(params.copy())
             param_list[i][
                 "Current function [A]"
-            ] = chemistry_generator(
+            ] = parameter_value_generator(
                 chemistry, "Current function [A]"
             )
         parameter_values_for_comp = dict(
             list(enumerate(param_list))
         )
 
+    # 0: no experiment
+    # 1: experiment
     choice = random.randint(0, 1)
+
+    # if testing, don't select simulations randomly
     if provided_choice is not None:
         choice = provided_choice
 
@@ -42,6 +64,7 @@ def comparison_generator(
 
         s.solve([0, 3700])
 
+        # create the GIF
         time_array = plot_graph(sim=s.sims)
 
         comparison_dict["model"] = models_for_comp
@@ -55,11 +78,13 @@ def comparison_generator(
 
         while True:
             try:
+                # generate a random cycle and a number for experiment
                 cycle = experiment_generator()
                 number = random.randint(1, 3)
 
+                # if testing, use the following cycle and the number
                 if provided_choice is not None:
-                    experiment = [
+                    cycle = [
                         (
                             "Discharge at C/10 for 10 hours "
                             + "or until 3.3 V",
@@ -92,6 +117,7 @@ def comparison_generator(
 
                 s.solve()
 
+                # find the max "Time [s]" from all the solutions for the GIF
                 max_time = 0
                 solution = s.sims[0].solution
                 for sim in s.sims:
@@ -99,6 +125,7 @@ def comparison_generator(
                         max_time = sim.solution["Time [s]"].entries[-1]
                         solution = sim.solution
 
+                # create the GIF
                 time_array = plot_graph(
                     solution=solution,
                     sim=s.sims
