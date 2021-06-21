@@ -33,10 +33,11 @@ def comparison_generator(
 
     # generate a list of parameter values by varying a single parameter
     # if only 1 model is selected
-
-    param_to_vary = "Current function [A]"
-
+    param_to_vary = ""
     if number_of_comp == 1:
+
+        param_to_vary = "Current function [A]"
+
         param_list = []
         diff_params = random.randint(2, 3)
         min_param_value = 100
@@ -65,7 +66,7 @@ def comparison_generator(
 
     # 0: no experiment
     # 1: experiment
-    choice = 0
+    choice = random.randint(0, 1)
 
     # if testing, don't select simulations randomly
     if provided_choice is not None:
@@ -107,8 +108,13 @@ def comparison_generator(
                 cycle = experiment_generator()
                 number = random.randint(1, 3)
 
-                # if testing, use the following cycle and the number
+                # if testing, use the following configuration
                 if provided_choice is not None:
+                    parameter_values_for_comp = {
+                        "Chen2020": pybamm.ParameterValues(
+                            chemistry=pybamm.parameter_sets.Chen2020
+                        )
+                    }
                     cycle = [
                         (
                             "Discharge at C/10 for 10 hours "
