@@ -131,25 +131,21 @@ def random_plot_generator(
             if testing is True and provided_choice is not None:
                 choice = provided_choice
 
-            # Add degradation if we are plotting summary variables
-            if choice == 1:
-                models = [
-                    pybamm.lithium_ion.DFN(
-                        options=options
-                    ),
-                    pybamm.lithium_ion.SPM(
-                        options=options
-                    ),
-                    pybamm.lithium_ion.SPMe(
-                        options=options
-                    ),
-                ]
-            else:
-                models = [
-                    pybamm.lithium_ion.DFN(),
-                    pybamm.lithium_ion.SPM(),
-                    pybamm.lithium_ion.SPMe()
-                ]
+            # Add degradation only if we are plotting summary variables
+            if choice != 1:
+                options = None
+                
+            models = [
+                pybamm.lithium_ion.DFN(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPM(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPMe(
+                    options=options
+                ),
+            ]
 
             # choose a random model
             model = random.choice(models)
