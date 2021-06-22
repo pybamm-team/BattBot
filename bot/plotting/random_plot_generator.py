@@ -129,9 +129,9 @@ def random_plot_generator(
             solver = random.choice(solvers)
 
             # 0: pre-defined model with a pre-defined chemistry
-            # 1: experiment with summary variable
+            # 1: experiment or comparison with summary variable
             # 2: experiment without summary variables
-            # 3: comparison plots
+            # 3: no degradation comparison plots
             choice = random.randint(0, 3)
 
             # if testing, don't randomly choose stuff
@@ -208,6 +208,9 @@ def random_plot_generator(
 
             elif choice == 1:
 
+                # generating number of comparisons
+                number_of_comp = random.randint(1, 3)
+
                 # generating a random experiment
                 cycle_received = experiment_generator()
                 number = random.randint(4, 100)
@@ -219,16 +222,18 @@ def random_plot_generator(
                 # solving
                 (
                     sim,
-                    solution,
+                    solutions,
                     parameter_values
                 ) = experiment_solver(
                     model=model,
                     experiment=experiment,
                     chemistry=chemistry,
-                    solver=solver
+                    solver=solver,
+                    number_of_comp=number_of_comp
                 )
 
-                generate_summary_variables([solution])
+                # plotting summary variables
+                generate_summary_variables(solutions)
 
                 return_dict["model"] = model
                 return_dict["parameter_values"] = parameter_values
