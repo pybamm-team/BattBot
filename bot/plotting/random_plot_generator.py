@@ -21,20 +21,32 @@ def random_plot_generator(
     Generates a random plot.
     Parameters:
         return_dict: dict
+            A shared dictionary in which all the return values are stored.
         testing: bool
-            default: None
+            default: False
+            Should be set to True when testing, this helps the tests to
+            execute small chunks of this function deterministically.
         provided_choice: numerical
             default: None
-        provided_degradation: bool
-            default: True
+            Should be used only during testing, using this one can test
+            different parts of this function deterministically without relying
+            on the random functions to execute that part.
         provided_chemistry: dict
             default: None
+            Should be used only during testing, using this one can test
+            different parts of this function deterministically without relying
+            on the random functions to execute that part.
+        provided_degradation: bool
+            default: True
+            Using this one can test and cover some probabilistic lines where
+            no degradation option of a model is selected.
     """
 
     while True:
 
         try:
             pybamm.set_logging_level("NOTICE")
+
             chemistries = [
                 pybamm.parameter_sets.Ai2020,
                 pybamm.parameter_sets.Chen2020,
@@ -45,8 +57,10 @@ def random_plot_generator(
                 # pybamm.parameter_sets.Ramadass2004,
             ]
 
+            # choosing a random chemistry
             chemistry = random.choice(chemistries)
 
+            # don't randomly select a chemistry if testing
             if provided_chemistry is not None:
                 chemistry = provided_chemistry
 
@@ -66,11 +80,13 @@ def random_plot_generator(
             lithium_plating_list = ["reversible", "irreversible"]
             options = {}
 
+            # choosing random degradation
             particle_mechanics = random.choice(particle_mechanics_list)
             sei = random.choice(sei_list)
             sei_porosity_change = random.choice(sei_porosity_change_list)
             lithium_plating = random.choice(lithium_plating_list)
 
+            # if no degradation or if testing, continue
             if (
                 (
                     particle_mechanics == "none"
@@ -84,6 +100,7 @@ def random_plot_generator(
                 provided_degradation = False
                 continue
 
+            # update model options
             if chemistry == pybamm.parameter_sets.Ai2020:
                 options.update({
                     "particle mechanics": particle_mechanics,
@@ -108,51 +125,44 @@ def random_plot_generator(
                 pybamm.CasadiSolver(mode="fast with events")
             ]
 
+            # choose a random solver
             solver = random.choice(solvers)
 
-            choice = 1
+            # 0: pre-defined model with a pre-defined chemistry
+            # 1: experiment with summary variable
+            # 2: experiment without summary variables
+            # 3: comparison plots
+            choice = random.randint(0, 3)
 
+            # if testing, don't randomly choose stuff
             if testing is True and provided_choice is not None:
                 choice = provided_choice
 
-            if choice == 1:
-                models = [
-                    pybamm.lithium_ion.DFN(
-                        options=options
-                    ),
-                    pybamm.lithium_ion.SPM(
-                        options=options
-                    ),
-                    pybamm.lithium_ion.SPMe(
-                        options=options
-                    ),
-                ]
-            else:
-                models = [
-                    pybamm.lithium_ion.DFN(),
-                    pybamm.lithium_ion.SPM(),
-                    pybamm.lithium_ion.SPMe()
-                ]
+            # Add degradation only if we are plotting summary variables
+            if choice != 1:
+                options = None
 
+            models = [
+                pybamm.lithium_ion.DFN(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPM(
+                    options=options
+                ),
+                pybamm.lithium_ion.SPMe(
+                    options=options
+                ),
+            ]
+
+            # choose a random model
             model = random.choice(models)
 
+            # vary the lower voltage
             lower_voltage = parameter_value_generator(
                 chemistry, "Lower voltage cut-off [V]"
             )
 
-            logging.basicConfig(level=logging.INFO)
-            logger = logging.getLogger()
-            logger.setLevel(logging.INFO)
-            logger.info(
-                str(model.name)
-                + " "
-                + str(solver.name)
-                + " "
-                + str(model.options)
-                + " "
-                + str(chemistry["citation"])
-            )
-
+            # logging the configuration
             logging.basicConfig(level=logging.INFO)
             logger = logging.getLogger()
             logger.setLevel(logging.INFO)
@@ -168,7 +178,11 @@ def random_plot_generator(
 
             if choice == 0:
 
+                # taking a random Crate and all the random configurations
+                # selected above
                 c_rate = random.randint(0, 3)
+
+                # solving
                 (parameter_values, sim, solution) = model_solver(
                     model=model,
                     chemistry=chemistry,
@@ -177,6 +191,7 @@ def random_plot_generator(
                     lower_voltage=lower_voltage,
                 )
 
+                # creating the GIF
                 time_array = plot_graph(solution, sim)
 
                 return_dict["model"] = model
@@ -192,12 +207,16 @@ def random_plot_generator(
                 return
 
             elif choice == 1:
+
+                # generating a random experiment
                 cycle_received = experiment_generator()
                 number = random.randint(4, 100)
 
                 experiment = pybamm.Experiment(
                     cycle_received * number, termination="80% capacity"
                 )
+
+                # solving
                 (
                     sim,
                     solution,
@@ -225,14 +244,18 @@ def random_plot_generator(
 
             elif choice == 2:
 
+                # generating a random experiment
                 cycle_received = experiment_generator()
                 number = random.randint(1, 3)
 
                 experiment = pybamm.Experiment(cycle_received * number)
+
+                # solving
                 (sim, solution, parameter_values) = experiment_solver(
                     model, experiment, chemistry, solver
                 )
 
+                # creating a GIF
                 time_array = plot_graph(solution, sim)
 
                 return_dict["model"] = model
@@ -249,13 +272,19 @@ def random_plot_generator(
 
             elif choice == 3:
 
+                # generating number of models to be compared
                 number_of_comp = random.randint(1, 3)
+
+                # don't select randomly if testing
                 if testing:
                     number_of_comp = 1
+
+                # selecting the models for comparison
                 random.shuffle(models)
                 models_for_comp = models[:number_of_comp]
                 models_for_comp = dict(list(enumerate(models_for_comp)))
 
+                # generating a comparison GIF
                 comparison_dict = comparison_generator(
                     number_of_comp,
                     models_for_comp,
