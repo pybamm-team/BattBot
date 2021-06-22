@@ -93,10 +93,12 @@ def comparison_generator(
         solution = s.sims[0].solution
         time_array = plot_graph(solution=solution, sim=s.sims)
 
-        comparison_dict["model"] = models_for_comp
-        comparison_dict["parameter_values"] = params
-        comparison_dict["time_array"] = time_array
-        comparison_dict["chemistry"] = chemistry
+        comparison_dict.update({
+            "model": models_for_comp,
+            "parameter_values": params,
+            "time_array": time_array,
+            "chemistry": chemistry
+        })
 
         return comparison_dict
 
@@ -162,10 +164,12 @@ def comparison_generator(
                     sim=s.sims
                 )
 
-                comparison_dict["model"] = models_for_comp
-                comparison_dict["parameter_values"] = params
-                comparison_dict["time_array"] = time_array
-                comparison_dict["chemistry"] = chemistry
+                comparison_dict.update({
+                    "model": models_for_comp,
+                    "parameter_values": params,
+                    "time_array": time_array,
+                    "chemistry": chemistry
+                })
 
                 return comparison_dict
 
