@@ -36,13 +36,6 @@ sei_list = [
     "none"
 ]
 
-# models for the bot
-models = [
-    pybamm.lithium_ion.DFN,
-    pybamm.lithium_ion.SPM,
-    pybamm.lithium_ion.SPMe,
-]
-
 solver = pybamm.CasadiSolver(mode="safe")
 
 

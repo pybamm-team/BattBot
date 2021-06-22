@@ -26,7 +26,13 @@ class TestRandomPlotGenerator(unittest.TestCase):
         while True:
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
-                    return_dict, True, 0, pybamm.parameter_sets.Ai2020
+                    return_dict,
+                    {
+                        "testing": True,
+                        "choice": 0,
+                        "chemistry": pybamm.parameter_sets.Ai2020,
+                        "provided_degradation": True
+                    }
                 )
             )
             p.start()
@@ -72,7 +78,13 @@ class TestRandomPlotGenerator(unittest.TestCase):
         while True:
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
-                    return_dict, True, 1, pybamm.parameter_sets.Chen2020
+                    return_dict,
+                    {
+                        "testing": True,
+                        "choice": 1,
+                        "chemistry": pybamm.parameter_sets.Chen2020,
+                        "provided_degradation": True
+                    }
                 )
             )
             p.start()
@@ -118,7 +130,13 @@ class TestRandomPlotGenerator(unittest.TestCase):
         while True:
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
-                    return_dict, True, 2, pybamm.parameter_sets.Yang2017
+                    return_dict,
+                    {
+                        "testing": True,
+                        "choice": 2,
+                        "chemistry": pybamm.parameter_sets.Yang2017,
+                        "provided_degradation": True
+                    }
                 )
             )
             p.start()
@@ -163,7 +181,15 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, True, 3)
+                target=random_plot_generator, args=(
+                    return_dict,
+                    {
+                        "testing": True,
+                        "choice": 3,
+                        "chemistry": None,
+                        "provided_degradation": True
+                    }
+                )
             )
             p.start()
             p.join(600)

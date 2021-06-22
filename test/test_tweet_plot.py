@@ -6,7 +6,7 @@ from bot.tweet_plot import Tweet
 
 class TestTweetPlot(unittest.TestCase):
     def test_tweet_graph(self):
-        tweet = Tweet(testing=True, provided_choice=0)
+        tweet = Tweet(testing=True, choice=0)
 
         self.assertIsNone(tweet.media_id)
         self.assertIsInstance(tweet.plot, str)
@@ -43,7 +43,7 @@ class TestTweetPlot(unittest.TestCase):
         assert not os.path.exists("plot.gif")
         assert not os.path.exists("plot.png")
 
-        tweet = Tweet(testing=True, provided_choice=1)
+        tweet = Tweet(testing=True, choice=1)
 
         self.assertIsNone(tweet.media_id)
         self.assertIsInstance(tweet.plot, str)
