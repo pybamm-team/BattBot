@@ -56,7 +56,7 @@ def comparison_generator(
             ] = param_value
 
             # find the minimum value if "Current function [A]" is varied
-            if param_value == "Current function [A]":
+            if param_to_vary == "Current function [A]":
                 if param_value < min_param_value:
                     min_param_value = param_value
 
