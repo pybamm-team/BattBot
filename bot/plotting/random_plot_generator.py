@@ -128,9 +128,7 @@ def random_plot_generator(
                         "lithium plating porosity change": "true",
                         "SEI": "ec reaction limited"
                     })
-                elif options["chemistry"] != (
-                    pybamm.parameter_sets.Yang2017
-                ):
+                else:
                     model_options.update({
                         "SEI": sei,
                     })
@@ -209,9 +207,14 @@ def random_plot_generator(
                 cycle_received = experiment_generator()
                 number = random.randint(4, 100)
 
-                experiment = pybamm.Experiment(
-                    cycle_received * number, termination="80% capacity"
-                )
+                if options["chemistry"] == pybamm.parameter_sets.Ai2020:
+                    experiment = pybamm.Experiment(
+                        cycle_received * number
+                    )
+                else:
+                    experiment = pybamm.Experiment(
+                        cycle_received * number, termination="80% capacity"
+                    )
 
                 # solving
                 (
@@ -226,7 +229,7 @@ def random_plot_generator(
                 )
 
                 # plotting summary variables
-                generate_summary_variables(solution)
+                generate_summary_variables(solution, options["chemistry"])
 
                 return_dict.update({
                     "model": model,
@@ -274,12 +277,8 @@ def random_plot_generator(
 
             elif options["choice"] == 3:
 
-                # don't select randomly if testing
-                if options["testing"]:
-                    number_of_comp = 1
                 # generating number of models to be compared
-                else:
-                    number_of_comp = random.randint(1, 3)
+                number_of_comp = random.randint(1, 3)
 
                 # selecting the models for comparison
                 random.shuffle(models)

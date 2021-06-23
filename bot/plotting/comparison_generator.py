@@ -148,7 +148,10 @@ def comparison_generator(
                     permutations=True,
                 )
 
-                s.solve()
+                if chemistry == pybamm.parameter_sets.Ai2020:
+                    s.solve(calc_esoh=False)
+                else:
+                    s.solve()
 
                 # find the max "Time [s]" from all the solutions for the GIF
                 max_time = 0

@@ -18,10 +18,6 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertTrue(
             tweet.solver == "CasADi solver with 'safe' mode"
-            or tweet.solver == "CasADi solver with 'fast' mode"
-            or tweet.solver == (
-                "CasADi solver with 'fast with events' mode"
-            )
         )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertIsNone(tweet.cycle)
@@ -55,10 +51,6 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertTrue(
             tweet.solver == "CasADi solver with 'safe' mode"
-            or tweet.solver == "CasADi solver with 'fast' mode"
-            or tweet.solver == (
-                "CasADi solver with 'fast with events' mode"
-            )
         )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertTrue(tweet.is_experiment)

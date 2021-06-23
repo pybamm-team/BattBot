@@ -7,6 +7,8 @@ from bot.plotting.summary_variables import generate_summary_variables
 class TestPlottingSummaryVariables(unittest.TestCase):
     def setUp(self):
         self.model = pybamm.lithium_ion.DFN()
+        self.chemistry_Ai2020 = pybamm.parameter_sets.Ai2020
+        self.chemistry_Chen2020 = pybamm.parameter_sets.Chen2020
         self.experiment = pybamm.Experiment(
             [
                 (
@@ -18,22 +20,38 @@ class TestPlottingSummaryVariables(unittest.TestCase):
                 )
             ]
             * 10,
-            termination="80% capacity"
         )
-        self.sim = pybamm.Simulation(
+        self.sim_Chen = pybamm.Simulation(
             self.model,
             experiment=self.experiment,
+            parameter_values=pybamm.ParameterValues(
+                chemistry=self.chemistry_Chen2020
+            ),
             solver=pybamm.CasadiSolver()
         )
-        self.sim.solve()
-        self.solution = self.sim.solution
+        self.sim_Chen.solve()
+        self.solution_Chen = self.sim_Chen.solution
+        self.sim_Ai = pybamm.Simulation(
+            self.model,
+            experiment=self.experiment,
+            parameter_values=pybamm.ParameterValues(
+                chemistry=self.chemistry_Ai2020
+            ),
+            solver=pybamm.CasadiSolver()
+        )
+        self.sim_Ai.solve(calc_esoh=False)
+        self.solution_Ai = self.sim_Ai.solution
 
     def tearDown(self):
         os.remove("plot.png")
 
     def test_generate_summary_variables(self):
-        generate_summary_variables(solution=self.solution)
+        generate_summary_variables(self.solution_Chen, self.chemistry_Chen2020)
         path = "plot.png"
+
+        assert os.path.exists(path)
+
+        generate_summary_variables(self.solution_Ai, self.chemistry_Ai2020)
 
         assert os.path.exists(path)
 
