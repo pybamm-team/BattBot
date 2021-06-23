@@ -72,7 +72,6 @@ def comparison_generator(
         # 1: experiment
         choice = random.randint(0, 1)
 
-
     if choice == 0:
         s = pybamm.BatchStudy(
             models=models_for_comp,
