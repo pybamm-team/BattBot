@@ -96,6 +96,41 @@ class TestComparisonGenerator(unittest.TestCase):
 
         assert os.path.exists("plot.gif")
 
+        comparison_dict = comparison_generator(
+            2,
+            models_for_comp=self.models_for_comp,
+            chemistry=pybamm.parameter_sets.Ai2020,
+            provided_choice=1
+        )
+
+        self.assertIsInstance(comparison_dict, dict)
+        self.assertIsInstance(comparison_dict["model"], dict)
+        self.assertEqual(comparison_dict["model"], self.models_for_comp)
+        self.assertIsInstance(
+            comparison_dict["parameter_values"], pybamm.ParameterValues
+        )
+        self.assertIsInstance(comparison_dict["time_array"], list)
+        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertEqual(
+            comparison_dict["chemistry"], pybamm.parameter_sets.Ai2020
+        )
+
+        comparison_dict = comparison_generator(
+            2,
+            models_for_comp=self.models_for_comp,
+            chemistry=self.chemistry,
+        )
+
+        self.assertIsInstance(comparison_dict, dict)
+        self.assertIsInstance(comparison_dict["model"], dict)
+        self.assertEqual(comparison_dict["model"], self.models_for_comp)
+        self.assertIsInstance(
+            comparison_dict["parameter_values"], pybamm.ParameterValues
+        )
+        self.assertIsInstance(comparison_dict["time_array"], list)
+        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -64,13 +64,14 @@ def comparison_generator(
             list(enumerate(param_list))
         )
 
-    # 0: no experiment
-    # 1: experiment
-    choice = random.randint(0, 1)
-
     # if testing, don't select simulations randomly
     if provided_choice is not None:
         choice = provided_choice
+    else:
+        # 0: no experiment
+        # 1: experiment
+        choice = random.randint(0, 1)
+
 
     if choice == 0:
         s = pybamm.BatchStudy(
