@@ -3,130 +3,159 @@ import random
 import logging
 from plotting.plot_graph import plot_graph
 from models.model_solver import model_solver
-from utils.chemistry_generator import chemistry_generator
+from utils.parameter_value_generator import parameter_value_generator
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
+from plotting.comparison_generator import comparison_generator
+
+
+# possible chemistries for the bot
+chemistries = [
+    pybamm.parameter_sets.Ai2020,
+    pybamm.parameter_sets.Chen2020,
+    pybamm.parameter_sets.Marquis2019,
+    pybamm.parameter_sets.Yang2017,
+    # pybamm.parameter_sets.Ecker2015,
+    # pybamm.parameter_sets.Ramadass2004,
+]
+
+# possible "particle mechanics" for the bot, to be used with Ai2020 parameters
+particle_mechanics_list = [
+    "swelling and cracking",
+    "none"
+]
+
+# possible "SEI" for the bot
+sei_list = [
+    "ec reaction limited",
+    "reaction limited",
+    "solvent-diffusion limited",
+    "electron-migration limited",
+    "interstitial-diffusion limited",
+    "none"
+]
+
+solver = pybamm.CasadiSolver(mode="safe")
 
 
 def random_plot_generator(
     return_dict,
-    testing=False,
-    provided_choice=None,
-    provided_number_of_comp=None,
-    plot_summary_variables=True,
-    provided_degradation=True,
+    options={
+        "testing": False,
+        "choice": None,
+        "chemistry": None,
+        "provided_degradation": True,
+    },
 ):
     """
     Generates a random plot.
     Parameters:
         return_dict: dict
-        testing: bool
-            default: None
-        provided_choice: numerical
-            default: None
-        provided_number_of_comp: numerical
-            default: None
-        plot_summary_variables: bool
-            default: True
-        provided_degradation: bool
-            default: True
+            A shared dictionary in which all the return values are stored.
+        options: dict
+            testing: bool
+                default: False
+                Should be set to True when testing, this helps the tests to
+                execute small chunks of this function deterministically.
+            choice: numerical
+                default: None
+                Should be used only during testing, using this one can test
+                different parts of this function deterministically without
+                relying on the random functions to execute that part.
+            chemistry: dict
+                default: None
+                Should be used only during testing, using this one can test
+                different parts of this function deterministically without
+                relying on the random functions to execute that part.
+            provided_degradation: bool
+                default: True
+                Using this one can test and cover some probabilistic lines
+                where no degradation option of a model is selected.
     """
 
     while True:
 
         try:
             pybamm.set_logging_level("NOTICE")
-            chemistries = [
-                pybamm.parameter_sets.Ai2020,
-                pybamm.parameter_sets.Chen2020,
-                pybamm.parameter_sets.Marquis2019,
-                pybamm.parameter_sets.Yang2017,
-                # pybamm.parameter_sets.Ecker2015,
-                # pybamm.parameter_sets.Ramadass2004,
-            ]
 
-            chemistry = random.choice(chemistries)
+            # randomly select a chemistry if not testing
+            if options["chemistry"] is None:
+                options["chemistry"] = random.choice(chemistries)
 
-            particle_mechanics_list = [
-                "swelling and cracking",
-                "swelling only",
-                "none"
-            ]
-            sei_list = [
-                "ec reaction limited",
-                "reaction limited",
-                "solvent-diffusion limited",
-                "electron-migration limited",
-                "interstitial-diffusion limited",
-                "none"
-            ]
-            options = {}
-
+            # choosing random degradation
             particle_mechanics = random.choice(particle_mechanics_list)
             sei = random.choice(sei_list)
 
+            # if no degradation or if testing, continue
             if (
                 (
                     particle_mechanics == "none"
                     and sei == "none"
                 )
                 or (
-                    testing
-                    and provided_degradation
+                    options["testing"]
+                    and options["provided_degradation"]
                 )
             ):
-                provided_degradation = False
+                options["provided_degradation"] = False
                 continue
 
-            if chemistry == pybamm.parameter_sets.Ai2020:
-                options.update({
-                    "particle mechanics": particle_mechanics,
-                    "SEI": sei
-                })
-            elif chemistry == pybamm.parameter_sets.Yang2017:
-                options.update({
-                    "lithium plating": "irreversible",
-                    "lithium plating porosity change": "true",
-                    "SEI": "ec reaction limited"
-                })
-            elif chemistry != pybamm.parameter_sets.Yang2017:
-                options.update({
-                    "SEI": sei,
-                })
+            # randomly choose a plot if not testing
+            # 0: pre-defined model with a pre-defined chemistry
+            # 1: experiment with summary variable
+            # 2: experiment without summary variables
+            # 3: comparison plots
+            if options["choice"] is None:
+                options["choice"] = random.randint(0, 3)
+
+            # Add degradation only if we are plotting summary variables
+            if options["choice"] == 1:
+                # update model options
+                model_options = {}
+                if options["chemistry"] == (
+                    pybamm.parameter_sets.Ai2020
+                ):
+                    model_options.update({
+                        "particle mechanics": particle_mechanics,
+                        "SEI": sei
+                    })
+                elif options["chemistry"] == (
+                    pybamm.parameter_sets.Yang2017
+                ):
+                    model_options.update({
+                        "lithium plating": "irreversible",
+                        "lithium plating porosity change": "true",
+                        "SEI": "ec reaction limited"
+                    })
+                else:
+                    model_options.update({
+                        "SEI": sei,
+                    })
+            else:
+                model_options = None
 
             models = [
                 pybamm.lithium_ion.DFN(
-                    options=options
+                    options=model_options
                 ),
                 pybamm.lithium_ion.SPM(
-                    options=options
+                    options=model_options
                 ),
                 pybamm.lithium_ion.SPMe(
-                    options=options
+                    options=model_options
                 ),
             ]
 
+            # choose a random model
             model = random.choice(models)
 
-            choice = random.randint(0, 2)
-            if testing is True and provided_choice is not None:
-                choice = provided_choice
-
-            solvers = [
-                pybamm.CasadiSolver(mode="safe"),
-                pybamm.CasadiSolver(mode="fast"),
-                pybamm.CasadiSolver(mode="fast with events")
-            ]
-
-            solver = random.choice(solvers)
-
-            lower_voltage = chemistry_generator(
-                chemistry, "Lower voltage cut-off [V]"
+            # vary the lower voltage
+            lower_voltage = parameter_value_generator(
+                options["chemistry"], "Lower voltage cut-off [V]"
             )
-            if choice == 1:
-                solver = pybamm.CasadiSolver(mode="safe")
 
+            # logging the configuration
             logging.basicConfig(level=logging.INFO)
             logger = logging.getLogger()
             logger.setLevel(logging.INFO)
@@ -137,136 +166,143 @@ def random_plot_generator(
                 + " "
                 + str(model.options)
                 + " "
-                + str(chemistry["citation"])
+                + str(options["chemistry"]["citation"])
             )
 
-            if choice == 0:
+            if options["choice"] == 0:
 
+                # taking a random Crate and all the random configurations
+                # selected above
                 c_rate = random.randint(0, 3)
+
+                # solving
                 (parameter_values, sim, solution) = model_solver(
                     model=model,
-                    chemistry=chemistry,
+                    chemistry=options["chemistry"],
                     solver=solver,
                     c_rate=c_rate,
                     lower_voltage=lower_voltage,
                 )
 
+                # creating the GIF
                 time_array = plot_graph(solution, sim)
 
-                return_dict["model"] = model
-                return_dict["parameter_values"] = parameter_values
-                return_dict["time_array"] = time_array
-                return_dict["chemistry"] = chemistry
-                return_dict["solver"] = solver.name
-                return_dict["is_experiment"] = False
-                return_dict["cycle"] = None
-                return_dict["number"] = None
-                return_dict["is_comparison"] = False
+                return_dict.update({
+                    "model": model,
+                    "parameter_values": parameter_values,
+                    "time_array": time_array,
+                    "chemistry": options["chemistry"],
+                    "solver": solver.name,
+                    "is_experiment": False,
+                    "cycle": None,
+                    "number": None,
+                    "is_comparison": False
+                })
 
                 return
 
-            elif choice == 1:
-                (
-                    cycle_received,
-                    number,
-                ) = experiment_generator()
-                if testing:
-                    number = 10
-                if number > 3 and plot_summary_variables:
+            elif options["choice"] == 1:
+
+                # generating a random experiment
+                cycle_received = experiment_generator()
+                number = random.randint(4, 100)
+
+                if options["chemistry"] == pybamm.parameter_sets.Ai2020:
+                    experiment = pybamm.Experiment(
+                        cycle_received * number
+                    )
+                else:
                     experiment = pybamm.Experiment(
                         cycle_received * number, termination="80% capacity"
                     )
-                    (
-                        sim,
-                        solution,
-                        parameter_values
-                    ) = experiment_solver(
-                        model=model,
-                        experiment=experiment,
-                        chemistry=chemistry,
-                        solver=solver
-                    )
-                    generate_summary_variables(solution)
-                    return_dict["model"] = model
-                    return_dict["parameter_values"] = parameter_values
-                    return_dict["time_array"] = None
-                    return_dict["chemistry"] = chemistry
-                    return_dict["solver"] = solver.name
-                    return_dict["is_experiment"] = True
-                    return_dict["cycle"] = cycle_received
-                    return_dict["number"] = number
-                    return_dict["is_comparison"] = False
 
-                    return
-                if testing:
-                    number = 1
-                experiment = pybamm.Experiment(cycle_received * number)
-                (sim, solution, parameter_values) = experiment_solver(
-                    model, experiment, chemistry, solver
+                # solving
+                (
+                    sim,
+                    solution,
+                    parameter_values
+                ) = experiment_solver(
+                    model=model,
+                    experiment=experiment,
+                    chemistry=options["chemistry"],
+                    solver=solver
                 )
-                time_array = plot_graph(solution, sim)
-                return_dict["model"] = model
-                return_dict["parameter_values"] = parameter_values
-                return_dict["time_array"] = None
-                return_dict["chemistry"] = chemistry
-                return_dict["solver"] = solver.name
-                return_dict["is_experiment"] = True
-                return_dict["cycle"] = cycle_received
-                return_dict["number"] = number
-                return_dict["is_comparison"] = False
+
+                # plotting summary variables
+                generate_summary_variables(solution, options["chemistry"])
+
+                return_dict.update({
+                    "model": model,
+                    "parameter_values": parameter_values,
+                    "time_array": None,
+                    "chemistry": options["chemistry"],
+                    "solver": solver.name,
+                    "is_experiment": True,
+                    "cycle": cycle_received,
+                    "number": number,
+                    "is_comparison": False
+                })
 
                 return
 
-            elif choice == 2:
+            elif options["choice"] == 2:
 
-                number_of_comp = random.randint(1, 3)
-                random.shuffle(models)
-                models_for_comp = models[:number_of_comp]
-                if testing and provided_number_of_comp == 1:
-                    models_for_comp = [pybamm.lithium_ion.DFN()]
-                models_for_comp = dict(list(enumerate(models_for_comp)))
-                params = pybamm.ParameterValues(chemistry=chemistry)
-                parameter_values_for_comp = dict(list(enumerate([params])))
+                # generating a random experiment
+                cycle_received = experiment_generator()
+                number = random.randint(1, 3)
 
-                if (
-                    number_of_comp == 1
-                    or (
-                        testing
-                        and provided_number_of_comp == 1
-                    )
-                ):
-                    param_list = []
-                    diff_params = random.randint(2, 3)
-                    for i in range(0, diff_params):
-                        param_list.append(params.copy())
-                        param_list[i][
-                            "Current function [A]"
-                        ] = chemistry_generator(
-                            chemistry, "Current function [A]"
-                        )
-                    parameter_values_for_comp = dict(
-                        list(enumerate(param_list))
-                    )
+                experiment = pybamm.Experiment(cycle_received * number)
 
-                s = pybamm.BatchStudy(
-                    models=models_for_comp,
-                    parameter_values=parameter_values_for_comp,
-                    permutations=True,
+                # solving
+                (sim, solution, parameter_values) = experiment_solver(
+                    model, experiment, options["chemistry"], solver
                 )
 
-                s.solve([0, 3700])
+                # creating a GIF
+                time_array = plot_graph(solution, sim)
 
-                time_array = plot_graph(sim=s.sims)
+                return_dict.update({
+                    "model": model,
+                    "parameter_values": parameter_values,
+                    "time_array": None,
+                    "chemistry": options["chemistry"],
+                    "solver": solver.name,
+                    "is_experiment": True,
+                    "cycle": cycle_received,
+                    "number": number,
+                    "is_comparison": False
+                })
 
-                return_dict["model"] = models_for_comp
-                return_dict["parameter_values"] = params
-                return_dict["time_array"] = time_array
-                return_dict["chemistry"] = chemistry
-                return_dict["solver"] = None
-                return_dict["is_experiment"] = False
-                return_dict["cycle"] = None
-                return_dict["number"] = None
-                return_dict["is_comparison"] = True
+                return
+
+            elif options["choice"] == 3:
+
+                # generating number of models to be compared
+                number_of_comp = random.randint(1, 3)
+
+                # selecting the models for comparison
+                random.shuffle(models)
+                models_for_comp = models[:number_of_comp]
+                models_for_comp = dict(list(enumerate(models_for_comp)))
+
+                # generating a comparison GIF
+                comparison_dict = comparison_generator(
+                    number_of_comp,
+                    models_for_comp,
+                    options["chemistry"],
+                )
+
+                return_dict.update({
+                    "model": comparison_dict["model"],
+                    "parameter_values": comparison_dict["parameter_values"],
+                    "time_array": comparison_dict["time_array"],
+                    "chemistry": comparison_dict["chemistry"],
+                    "solver": None,
+                    "is_experiment": False,
+                    "cycle": None,
+                    "number": None,
+                    "is_comparison": True
+                })
 
                 return
 

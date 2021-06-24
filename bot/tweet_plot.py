@@ -29,7 +29,7 @@ oauth = OAuth1(
 # https://github.com/twitterdev/large-video-upload-python
 class Tweet(object):
 
-    def __init__(self, testing=False, provided_choice=None):
+    def __init__(self, testing=False, choice=None):
         """
         Defines video tweet properties
         """
@@ -38,7 +38,13 @@ class Tweet(object):
             return_dict = manager.dict()
 
             p = multiprocessing.Process(target=random_plot_generator, args=(
-                return_dict, testing, provided_choice
+                return_dict,
+                {
+                    "testing": testing,
+                    "choice": choice,
+                    "chemistry": None,
+                    "provided_degradation": True
+                }
             )
             )
 
@@ -221,7 +227,7 @@ class Tweet(object):
                 print(req.status_code)
                 print(req.text)
                 print(
-                    "Twitter API internal error"
+                    "Twitter API internal error."
                     + " Trying again in 5 minutes"
                 )
                 time.sleep(300)
