@@ -17,8 +17,8 @@ class TextParameterValueGenerator(unittest.TestCase):
             parameter
         )
 
-        self.assertGreaterEqual(lower_voltage, params[parameter]*0.9)
-        self.assertLessEqual(lower_voltage, params[parameter]*1.1)
+        self.assertGreaterEqual(lower_voltage, (params[parameter] - 0.1)*0.9)
+        self.assertLessEqual(lower_voltage, (params[parameter] + 0.1)*1.1)
 
         chemistry = pybamm.parameter_sets.Marquis2019
         params = params = pybamm.ParameterValues(
@@ -29,8 +29,8 @@ class TextParameterValueGenerator(unittest.TestCase):
             parameter
         )
 
-        self.assertGreaterEqual(lower_voltage, params[parameter]*0.9)
-        self.assertLessEqual(lower_voltage, params[parameter]*1.1)
+        self.assertGreaterEqual(lower_voltage, (params[parameter] - 0.1)*0.9)
+        self.assertLessEqual(lower_voltage, (params[parameter] + 0.1)*1.1)
 
         chemistry = pybamm.parameter_sets.Ai2020
         params = params = pybamm.ParameterValues(
@@ -41,8 +41,8 @@ class TextParameterValueGenerator(unittest.TestCase):
             parameter
         )
 
-        self.assertGreaterEqual(lower_voltage, params[parameter]*0.9)
-        self.assertLessEqual(lower_voltage, params[parameter]*1.1)
+        self.assertGreaterEqual(lower_voltage, (params[parameter] - 0.1)*0.9)
+        self.assertLessEqual(lower_voltage, (params[parameter] + 0.1)*1.1)
 
         chemistry = pybamm.parameter_sets.Yang2017
         params = params = pybamm.ParameterValues(
@@ -53,8 +53,8 @@ class TextParameterValueGenerator(unittest.TestCase):
             parameter
         )
 
-        self.assertGreaterEqual(lower_voltage, params[parameter]*0.9)
-        self.assertLessEqual(lower_voltage, params[parameter]*1.1)
+        self.assertGreaterEqual(lower_voltage, (params[parameter] - 0.1)*0.9)
+        self.assertLessEqual(lower_voltage, (params[parameter] + 0.1)*1.1)
 
         chemistry = pybamm.parameter_sets.Chen2020_plating
         params = params = pybamm.ParameterValues(
@@ -65,8 +65,8 @@ class TextParameterValueGenerator(unittest.TestCase):
             parameter
         )
 
-        self.assertGreaterEqual(lower_voltage, params[parameter]*0.9)
-        self.assertLessEqual(lower_voltage, params[parameter]*1.1)
+        self.assertGreaterEqual(lower_voltage, (params[parameter] - 0.1)*0.9)
+        self.assertLessEqual(lower_voltage, (params[parameter] + 0.1)*1.1)
 
         current = parameter_value_generator(
             pybamm.parameter_sets.Chen2020,
