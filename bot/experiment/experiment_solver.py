@@ -30,7 +30,7 @@ def experiment_solver(
 
     solutions = []
     param_list = []
-    param_to_vary = "Initial plated lithium concentration [mol.m-3]"
+    param_to_vary = "Current function [A]"
     for i in range(0, number_of_comp):
         # copy the original values and append them in the list
         param_list.append(parameter_values.copy())
@@ -53,7 +53,10 @@ def experiment_solver(
             parameter_values=param_list[i],
             solver=solver,
         )
-        sim.solve()
+        if chemistry == pybamm.parameter_sets.Ai2020:
+            sim.solve(calc_esoh=False)
+        else:
+            sim.solve()
         solution = sim.solution
         solutions.append(solution)
 

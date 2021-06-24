@@ -64,13 +64,13 @@ def comparison_generator(
             list(enumerate(param_list))
         )
 
-    # 0: no experiment
-    # 1: experiment
-    choice = random.randint(0, 1)
-
     # if testing, don't select simulations randomly
     if provided_choice is not None:
         choice = provided_choice
+    else:
+        # 0: no experiment
+        # 1: experiment
+        choice = random.randint(0, 1)
 
     if choice == 0:
         s = pybamm.BatchStudy(
@@ -93,10 +93,12 @@ def comparison_generator(
         solution = s.sims[0].solution
         time_array = plot_graph(solution=solution, sim=s.sims)
 
-        comparison_dict["model"] = models_for_comp
-        comparison_dict["parameter_values"] = params
-        comparison_dict["time_array"] = time_array
-        comparison_dict["chemistry"] = chemistry
+        comparison_dict.update({
+            "model": models_for_comp,
+            "parameter_values": params,
+            "time_array": time_array,
+            "chemistry": chemistry
+        })
 
         return comparison_dict
 
@@ -146,7 +148,10 @@ def comparison_generator(
                     permutations=True,
                 )
 
-                s.solve()
+                if chemistry == pybamm.parameter_sets.Ai2020:
+                    s.solve(calc_esoh=False)
+                else:
+                    s.solve()
 
                 # find the max "Time [s]" from all the solutions for the GIF
                 max_time = 0
@@ -162,10 +167,12 @@ def comparison_generator(
                     sim=s.sims
                 )
 
-                comparison_dict["model"] = models_for_comp
-                comparison_dict["parameter_values"] = params
-                comparison_dict["time_array"] = time_array
-                comparison_dict["chemistry"] = chemistry
+                comparison_dict.update({
+                    "model": models_for_comp,
+                    "parameter_values": params,
+                    "time_array": time_array,
+                    "chemistry": chemistry
+                })
 
                 return comparison_dict
 

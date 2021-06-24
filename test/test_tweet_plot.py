@@ -6,7 +6,7 @@ from bot.tweet_plot import Tweet
 
 class TestTweetPlot(unittest.TestCase):
     def test_tweet_graph(self):
-        tweet = Tweet(testing=True, provided_choice=0)
+        tweet = Tweet(testing=True, choice=0)
 
         self.assertIsNone(tweet.media_id)
         self.assertIsInstance(tweet.plot, str)
@@ -18,10 +18,6 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertTrue(
             tweet.solver == "CasADi solver with 'safe' mode"
-            or tweet.solver == "CasADi solver with 'fast' mode"
-            or tweet.solver == (
-                "CasADi solver with 'fast with events' mode"
-            )
         )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertIsNone(tweet.cycle)
@@ -43,7 +39,7 @@ class TestTweetPlot(unittest.TestCase):
         assert not os.path.exists("plot.gif")
         assert not os.path.exists("plot.png")
 
-        tweet = Tweet(testing=True, provided_choice=1)
+        tweet = Tweet(testing=True, choice=1)
 
         self.assertIsNone(tweet.media_id)
         self.assertIsInstance(tweet.plot, str)
@@ -55,10 +51,6 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertTrue(
             tweet.solver == "CasADi solver with 'safe' mode"
-            or tweet.solver == "CasADi solver with 'fast' mode"
-            or tweet.solver == (
-                "CasADi solver with 'fast with events' mode"
-            )
         )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertTrue(tweet.is_experiment)
