@@ -41,7 +41,9 @@ class TestExperimentSolver(unittest.TestCase):
         self.assertEqual(self.model.__class__, sim._model_class)
         self.assertFalse(sim._solution is None)
         self.assertEqual(sim.experiment, self.experiment)
-        self.assertIsInstance(solution[0].all_models[0], pybamm.lithium_ion.DFN)
+        self.assertIsInstance(
+            solution[0].all_models[0], pybamm.lithium_ion.DFN
+        )
         self.assertEqual(
             sim._experiment_inputs[0]["Current input [A]"],
             1 / 10 * parameter_values["Nominal cell capacity [A.h]"],

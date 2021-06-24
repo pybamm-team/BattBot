@@ -46,7 +46,9 @@ class TestPlottingSummaryVariables(unittest.TestCase):
         os.remove("plot.png")
 
     def test_generate_summary_variables(self):
-        generate_summary_variables([self.solution_Chen], self.chemistry_Chen2020)
+        generate_summary_variables(
+            [self.solution_Chen], self.chemistry_Chen2020
+        )
         path = "plot.png"
 
         assert os.path.exists(path)
