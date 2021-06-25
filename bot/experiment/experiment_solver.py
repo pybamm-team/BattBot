@@ -24,7 +24,10 @@ def experiment_solver(model, experiment, chemistry, solver):
         parameter_values=parameter_values,
         solver=solver,
     )
-    sim.solve()
+    if chemistry == pybamm.parameter_sets.Ai2020:
+        sim.solve(calc_esoh=False)
+    else:
+        sim.solve()
     solution = sim.solution
 
     return sim, solution, parameter_values
