@@ -276,7 +276,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 )
             )
             p.start()
-            p.join(600)
+            p.join(1200)
 
             if p.is_alive():
                 print(
