@@ -58,11 +58,11 @@ class Tweet(object):
 
             p.start()
             if choice == 0:
-                p.join(300)
+                p.join(600)
             elif choice == 1:
                 p.join(1200)
             elif choice == 2:
-                p.join(450)
+                p.join(600)
             elif choice == 3:
                 p.join(1200)
 
