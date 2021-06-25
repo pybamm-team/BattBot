@@ -16,6 +16,7 @@ def model_solver(
         chemistry: dict
         solver: pybamm.BaseSolver
         c_rate: numerical
+        lower_voltage: numerical
     Returns:
         parameter_values: pybamm.ParameterValues
         sim: pybamm.Simulation

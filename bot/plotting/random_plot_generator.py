@@ -101,14 +101,6 @@ def random_plot_generator(
                 options["provided_degradation"] = False
                 continue
 
-            # randomly choose a plot if not testing
-            # 0: pre-defined model with a pre-defined chemistry
-            # 1: experiment with summary variable
-            # 2: experiment without summary variables
-            # 3: comparison plots
-            if options["choice"] is None:
-                options["choice"] = random.randint(0, 3)
-
             # Add degradation only if we are plotting summary variables
             if options["choice"] == 1:
                 # update model options
@@ -169,6 +161,10 @@ def random_plot_generator(
                 + str(options["chemistry"]["citation"])
             )
 
+            # 0: pre-defined model with a pre-defined chemistry
+            # 1: experiment with summary variable
+            # 2: experiment without summary variables
+            # 3: comparison plots
             if options["choice"] == 0:
 
                 # taking a random Crate and all the random configurations

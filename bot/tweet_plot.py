@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import random
 import requests
 import multiprocessing
 import matplotlib.pyplot as plt
@@ -37,6 +38,13 @@ class Tweet(object):
             manager = multiprocessing.Manager()
             return_dict = manager.dict()
 
+            # 0: pre-defined model with a pre-defined chemistry
+            # 1: experiment with summary variable
+            # 2: experiment without summary variables
+            # 3: comparison plots
+            if choice is None:
+                choice = random.randint(0, 3)
+
             p = multiprocessing.Process(target=random_plot_generator, args=(
                 return_dict,
                 {
@@ -49,7 +57,14 @@ class Tweet(object):
             )
 
             p.start()
-            p.join(600)
+            if choice == 0:
+                p.join(300)
+            elif choice == 1:
+                p.join(1200)
+            elif choice == 2:
+                p.join(450)
+            elif choice == 3:
+                p.join(1200)
 
             if p.is_alive():    # pragma: no cover
                 print(

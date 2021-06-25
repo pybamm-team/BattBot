@@ -12,7 +12,8 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     Parameters:
         testing: dict
             default: {"rest1": False, "rest2": False}
-        keys: rest1, rest2
+            This should only be used while testing, to generate some
+            not so random experiments.
     Returns:
         cycle: list
     """
