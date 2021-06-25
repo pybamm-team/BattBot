@@ -1,7 +1,9 @@
 import os
 import sys
 import time
+import random
 import requests
+import multiprocessing
 import matplotlib.pyplot as plt
 from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
@@ -28,24 +30,52 @@ oauth = OAuth1(
 # https://github.com/twitterdev/large-video-upload-python
 class Tweet(object):
 
-    def __init__(self, testing=False, provided_choice=None):
+    def __init__(self, testing=False, choice=None):
         """
         Defines video tweet properties
         """
-        (
-            model,
-            parameter_values,
-            time,
-            chemistry,
-            solver,
-            is_experiment,
-            cycle,
-            number,
-            is_comparison,
-        ) = random_plot_generator(
-            testing=testing,
-            provided_choice=provided_choice
-        )
+        while True:
+            manager = multiprocessing.Manager()
+            return_dict = manager.dict()
+
+            # 0: pre-defined model with a pre-defined chemistry
+            # 1: experiment with summary variable
+            # 2: experiment without summary variables
+            # 3: comparison plots
+            if choice is None:
+                choice = random.randint(0, 3)
+
+            p = multiprocessing.Process(target=random_plot_generator, args=(
+                return_dict,
+                {
+                    "testing": testing,
+                    "choice": choice,
+                    "chemistry": None,
+                    "provided_degradation": True
+                }
+            )
+            )
+
+            p.start()
+            if choice == 0:
+                p.join(300)
+            elif choice == 1:
+                p.join(1200)
+            elif choice == 2:
+                p.join(450)
+            elif choice == 3:
+                p.join(1200)
+
+            if p.is_alive():    # pragma: no cover
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
+                p.kill()
+                p.join()
+            else:   # pragma: no cover
+                break
+
         if os.path.exists("plot.gif"):
             self.plot = "plot.gif"
         else:
@@ -53,15 +83,15 @@ class Tweet(object):
         self.total_bytes = os.path.getsize(self.plot)
         self.media_id = None
         self.processing_info = None
-        self.model = model
-        self.parameter_values = parameter_values
-        self.time = time
-        self.chemistry = chemistry
-        self.solver = solver
-        self.is_experiment = is_experiment
-        self.cycle = cycle
-        self.number = number
-        self.is_comparison = is_comparison
+        self.model = return_dict["model"]
+        self.parameter_values = return_dict["parameter_values"]
+        self.time = return_dict["time_array"]
+        self.chemistry = return_dict["chemistry"]
+        self.solver = return_dict["solver"]
+        self.is_experiment = return_dict["is_experiment"]
+        self.cycle = return_dict["cycle"]
+        self.number = return_dict["number"]
+        self.is_comparison = return_dict["is_comparison"]
         self.testing = testing
 
     def upload_init(self):
@@ -85,10 +115,8 @@ class Tweet(object):
                 'media_category': 'tweet_image'
             }
 
-        req = requests.post(
-            url=media_endpoint_url, data=request_data, auth=oauth
-        )
-        print(req.json())
+        req = self.post_request(media_endpoint_url, request_data, oauth)
+
         media_id = req.json()['media_id']
 
         self.media_id = media_id
@@ -118,19 +146,7 @@ class Tweet(object):
                 'media': chunk
             }
 
-            req = requests.post(
-                url=media_endpoint_url,
-                data=request_data,
-                files=files,
-                auth=oauth
-            )
-
-            if (
-                req.status_code < 200 or req.status_code > 299
-            ):  # pragma: no cover
-                print(req.status_code)
-                print(req.text)
-                sys.exit(0)
+            self.post_request(media_endpoint_url, request_data, oauth, files)
 
             segment_id = segment_id + 1
             bytes_sent = file.tell()
@@ -156,9 +172,8 @@ class Tweet(object):
             'media_id': self.media_id
         }
 
-        req = requests.post(
-            url=media_endpoint_url, data=request_data, auth=oauth
-        )
+        req = self.post_request(media_endpoint_url, request_data, oauth)
+
         print(req.json())
 
         self.processing_info = req.json().get('processing_info', None)
@@ -200,6 +215,40 @@ class Tweet(object):
         self.processing_info = req.json().get('processing_info', None)
         self.check_status()
 
+    def post_request(self, url, data, auth, files=None):
+        """
+        Posts a request on the Twitter API and makes
+        sure that the given post request succeeds
+        """
+        while True:
+            if files is None:
+                req = requests.post(
+                    url=url,
+                    data=data,
+                    auth=auth
+                )
+            else:
+                req = requests.post(
+                    url=url,
+                    data=data,
+                    files=files,
+                    auth=auth
+                )
+            if (
+                req.status_code >= 200 and req.status_code <= 299
+            ):
+                break
+            else:  # pragma: no cover
+                print(req.status_code)
+                print(req.text)
+                print(
+                    "Twitter API internal error."
+                    + " Trying again in 5 minutes"
+                )
+                time.sleep(300)
+
+        return req
+
     def tweet(self):
         """
         Publishes Tweet with attached plot
@@ -226,10 +275,7 @@ class Tweet(object):
         }
 
         if not self.testing:    # pragma: no cover
-            req = requests.post(
-                url=post_tweet_url, data=request_data, auth=oauth
-            )
-            print(req.json())
+            self.post_request(post_tweet_url, request_data, oauth)
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
         else:
