@@ -82,7 +82,12 @@ class TestTweetPlot(unittest.TestCase):
         )
         self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
         self.assertIsInstance(tweet.chemistry, dict)
-        self.assertIsNone(tweet.solver)
+        self.assertTrue(
+            tweet.solver is None
+            or tweet.solver == (
+                "CasADi solver with 'safe' mode"
+            )
+        )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertIsInstance(tweet.is_comparison, bool)
         self.assertIsInstance(tweet.testing, bool)
