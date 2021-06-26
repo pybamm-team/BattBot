@@ -43,6 +43,64 @@ class TestTweetPlot(unittest.TestCase):
         assert not os.path.exists("plot.gif")
         assert not os.path.exists("plot.png")
 
+        tweet = Tweet(testing=True, choice="non-degradation comparisons")
+
+        self.assertIsNone(tweet.media_id)
+        self.assertIsInstance(tweet.plot, str)
+        assert os.path.exists(tweet.plot)
+        self.assertIsNone(tweet.processing_info)
+        self.assertIsInstance(tweet.model, dict)
+        self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
+        self.assertIsInstance(tweet.time, list)
+        self.assertIsInstance(tweet.chemistry, dict)
+        self.assertIsNone(tweet.solver)
+        self.assertIsInstance(tweet.is_experiment, bool)
+        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertTrue(tweet.is_comparison)
+        self.assertIsInstance(tweet.testing, bool)
+
+        tweet.upload_init()
+
+        self.assertIsNotNone(tweet.media_id)
+
+        tweet.upload_append()
+        tweet.upload_finalize()
+
+        self.assertIsNotNone(tweet.processing_info)
+
+        tweet.tweet()
+
+        assert not os.path.exists("plot.gif")
+        assert not os.path.exists("plot.png")
+
+        tweet = Tweet(testing=True)
+
+        self.assertIsNone(tweet.media_id)
+        self.assertIsInstance(tweet.plot, str)
+        assert os.path.exists(tweet.plot)
+        self.assertIsNone(tweet.processing_info)
+        self.assertTrue(
+            isinstance(tweet.model, dict)
+            or isinstance(tweet.model, pybamm.BaseModel)
+        )
+        self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
+        self.assertIsInstance(tweet.chemistry, dict)
+        self.assertIsNone(tweet.solver)
+        self.assertIsInstance(tweet.is_experiment, bool)
+        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertIsInstance(tweet.testing, bool)
+
+        tweet.upload_init()
+
+        self.assertIsNotNone(tweet.processing_info)
+
+        tweet.upload_append()
+        tweet.upload_finalize()
+        tweet.tweet()
+
+        assert not os.path.exists("plot.gif")
+        assert not os.path.exists("plot.png")
+
 
 if __name__ == "__main__":
     unittest.main()

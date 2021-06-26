@@ -97,7 +97,9 @@ def random_plot_generator(
                 continue
 
             # Add degradation only if we are plotting summary variables
-            if options["choice"] == 1:
+            if options["choice"] == (
+                "degradation comparison (summary variables)"
+            ):
                 # update model options
                 model_options = {}
                 if options["chemistry"] == (
