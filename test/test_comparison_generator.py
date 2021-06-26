@@ -81,7 +81,7 @@ class TestComparisonGenerator(unittest.TestCase):
             1,
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
-            provided_choice= "experiment"
+            provided_choice="experiment"
         )
 
         self.assertIsInstance(comparison_dict, dict)
