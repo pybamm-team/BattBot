@@ -35,9 +35,6 @@ class TestTweetPlot(unittest.TestCase):
 
         tweet.upload_append()
         tweet.upload_finalize()
-
-        self.assertIsNone(tweet.processing_info)
-
         tweet.tweet()
 
         assert not os.path.exists("plot.gif")
@@ -92,7 +89,7 @@ class TestTweetPlot(unittest.TestCase):
 
         tweet.upload_init()
 
-        self.assertIsNotNone(tweet.processing_info)
+        self.assertIsNone(tweet.processing_info)
 
         tweet.upload_append()
         tweet.upload_finalize()
