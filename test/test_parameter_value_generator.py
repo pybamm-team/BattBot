@@ -1,6 +1,7 @@
 import unittest
 import pybamm
 from bot.utils.parameter_value_generator import parameter_value_generator
+from bot.utils.parameter_value_generator import FunctionLike
 
 
 class TextParameterValueGenerator(unittest.TestCase):
@@ -68,45 +69,74 @@ class TextParameterValueGenerator(unittest.TestCase):
         self.assertGreaterEqual(lower_voltage, (params[parameter] - 0.1)*0.9)
         self.assertLessEqual(lower_voltage, (params[parameter] + 0.1)*1.1)
 
+        parameter = "Negative electrode exchange-current density [A.m-2]"
+        base_value = {}
+        base_value[parameter] = 1.0
+
+        chemistry = pybamm.parameter_sets.Chen2020
+        params = params = pybamm.ParameterValues(
+            chemistry=chemistry
+        )
         current = parameter_value_generator(
-            pybamm.parameter_sets.Chen2020,
-            "Current function [A]"
+            chemistry,
+            parameter
         )
 
-        self.assertGreaterEqual(current, 3)
-        self.assertLessEqual(current, 5)
+        params[parameter] = FunctionLike(params[parameter], parameter)
+        self.assertGreaterEqual(current, (base_value[parameter] - 0.1)*0.9)
+        self.assertLessEqual(current, (base_value[parameter] + 0.1)*1.1)
 
+        chemistry = pybamm.parameter_sets.Marquis2019
+        params = params = pybamm.ParameterValues(
+            chemistry=chemistry
+        )
         current = parameter_value_generator(
-            pybamm.parameter_sets.Marquis2019,
-            "Current function [A]"
+            chemistry,
+            parameter
         )
 
-        self.assertGreaterEqual(current, 0.1)
-        self.assertLessEqual(current, 0.65)
+        params[parameter] = FunctionLike(params[parameter], parameter)
+        self.assertGreaterEqual(current, (base_value[parameter] - 0.1)*0.9)
+        self.assertLessEqual(current, (base_value[parameter] + 0.1)*1.1)
 
+        chemistry = pybamm.parameter_sets.Ai2020
+        params = params = pybamm.ParameterValues(
+            chemistry=chemistry
+        )
         current = parameter_value_generator(
-            pybamm.parameter_sets.Ai2020,
-            "Current function [A]"
+            chemistry,
+            parameter
         )
 
-        self.assertGreaterEqual(current, 0.5)
-        self.assertLessEqual(current, 2.25)
+        params[parameter] = FunctionLike(params[parameter], parameter)
+        self.assertGreaterEqual(current, (base_value[parameter] - 0.1)*0.9)
+        self.assertLessEqual(current, (base_value[parameter] + 0.1)*1.1)
 
+        chemistry = pybamm.parameter_sets.Yang2017
+        params = params = pybamm.ParameterValues(
+            chemistry=chemistry
+        )
         current = parameter_value_generator(
-            pybamm.parameter_sets.Yang2017,
-            "Current function [A]"
+            chemistry,
+            parameter
         )
 
-        self.assertGreaterEqual(current, 0.5)
-        self.assertLessEqual(current, 2.25)
+        params[parameter] = FunctionLike(params[parameter], parameter)
+        self.assertGreaterEqual(current, (base_value[parameter] - 0.1)*0.9)
+        self.assertLessEqual(current, (base_value[parameter] + 0.1)*1.1)
 
+        chemistry = pybamm.parameter_sets.Chen2020_plating
+        params = params = pybamm.ParameterValues(
+            chemistry=chemistry
+        )
         current = parameter_value_generator(
-            pybamm.parameter_sets.Chen2020_plating,
-            "Current function [A]"
+            chemistry,
+            parameter
         )
 
-        self.assertGreaterEqual(current, 3)
-        self.assertLessEqual(current, 5)
+        params[parameter] = FunctionLike(params[parameter], parameter)
+        self.assertGreaterEqual(current, (base_value[parameter] - 0.1)*0.9)
+        self.assertLessEqual(current, (base_value[parameter] + 0.1)*1.1)
 
 
 if __name__ == "__main__":

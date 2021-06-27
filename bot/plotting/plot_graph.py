@@ -6,16 +6,19 @@ from utils.resize_gif import resize_gif
 import matplotlib.pyplot as plt
 
 
-def plot_graph(solution=None, sim=None):
+def plot_graph(solution=None, sim=None, labels=None):
     """
     This function generates 80 plots over a time
     span of t_eval seconds and then compiles them to
     create a GIF.
     Parameters:
-        solution: pybamm.Simulation.solution
+        solution: pybamm.Simulation.solution or list
             default: None
         sim: pybamm.Simulation
             default: None
+        labels: list
+            default: None
+            A list of labels for the GIF.
     Returns:
         time: list
     """
@@ -31,8 +34,24 @@ def plot_graph(solution=None, sim=None):
     images = []
     image_files = []
 
+    output_variables = [
+        "Negative particle surface concentration [mol.m-3]",
+        "Electrolyte concentration [mol.m-3]",
+        "Positive particle surface concentration [mol.m-3]",
+        "Current [A]",
+        "Negative electrode potential [V]",
+        "Electrolyte potential [V]",
+        "Positive electrode potential [V]",
+        "Terminal voltage [V]",
+    ]
+
     for val in time_array:
-        plot = pybamm.QuickPlot(sim, time_unit="seconds")
+        plot = pybamm.QuickPlot(
+            sim,
+            time_unit="seconds",
+            labels=labels,
+            output_variables=output_variables,
+        )
         plot.plot(val)
         images.append("plot" + str(val) + ".png")
         plot.fig.savefig("plot" + str(val) + ".png", dpi=300)

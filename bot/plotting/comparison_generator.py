@@ -34,9 +34,26 @@ def comparison_generator(
     # generate a list of parameter values by varying a single parameter
     # if only 1 model is selected
     param_to_vary = ""
+    labels = []
     if number_of_comp == 1:
 
-        param_to_vary = "Current function [A]"
+        param_to_vary_list = [
+            "Electrode height [m]",
+            "Electrode width [m]",
+            "Negative electrode conductivity [S.m-1]",
+            "Negative electrode porosity",
+            "Negative particle radius [m]",
+            "Negative electrode active material volume fraction",
+            "Negative electrode Bruggeman coefficient (electrolyte)",
+            "Negative electrode exchange-current density [A.m-2]",
+            "Positive electrode porosity",
+            "Positive particle radius [m]",
+            "Positive electrode active material volume fraction",
+            "Positive electrode exchange-current density [A.m-2]",
+            "Positive electrode Bruggeman coefficient (electrolyte)",
+            "Ambient temperature [K]"
+        ]
+        param_to_vary = random.choice(param_to_vary_list)
 
         param_list = []
         diff_params = random.randint(2, 3)
@@ -52,8 +69,11 @@ def comparison_generator(
 
             # change a parameter value
             param_list[i][
-                "Current function [A]"
+                param_to_vary
             ] = param_value
+
+            print(param_to_vary + ": " + str(param_value))
+            labels.append(param_to_vary + ": " + str(param_value))
 
             # find the minimum value if "Current function [A]" is varied
             if param_to_vary == "Current function [A]":
@@ -90,7 +110,14 @@ def comparison_generator(
 
         # create the GIF
         solution = s.sims[0].solution
-        time_array = plot_graph(solution=solution, sim=s.sims)
+        if len(labels) == 0:
+            time_array = plot_graph(
+                solution=solution, sim=s.sims
+            )
+        else:
+            time_array = plot_graph(
+                solution=solution, sim=s.sims, labels=labels
+            )
 
         comparison_dict.update({
             "model": models_for_comp,
@@ -111,11 +138,6 @@ def comparison_generator(
 
                 # if testing, use the following configuration
                 if provided_choice is not None:
-                    parameter_values_for_comp = {
-                        "Chen2020": pybamm.ParameterValues(
-                            chemistry=pybamm.parameter_sets.Chen2020
-                        )
-                    }
                     cycle = [
                         (
                             "Discharge at C/10 for 10 hours "
@@ -161,10 +183,14 @@ def comparison_generator(
                         solution = sim.solution
 
                 # create the GIF
-                time_array = plot_graph(
-                    solution=solution,
-                    sim=s.sims
-                )
+                if len(labels) == 0:
+                    time_array = plot_graph(
+                        solution=solution, sim=s.sims
+                    )
+                else:
+                    time_array = plot_graph(
+                        solution=solution, sim=s.sims, labels=labels
+                    )
 
                 comparison_dict.update({
                     "model": models_for_comp,
