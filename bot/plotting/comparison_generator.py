@@ -11,6 +11,7 @@ def comparison_generator(
     models_for_comp,
     chemistry,
     provided_choice=None,
+    provided_param_to_vary=None
 ):
     """
     Generates a random comparison plot.
@@ -27,6 +28,12 @@ def comparison_generator(
             Should be used only during testing, using this one can test
             different parts of this function deterministically without relying
             on the random functions to execute that part.
+        provided_param_to_vary: str
+            default: None
+            Should be used only during testing, using this one can test
+            different parts of this function deterministically without relying
+            on the random functions to execute that part.
+
     """
     params = pybamm.ParameterValues(chemistry=chemistry)
     parameter_values_for_comp = dict(list(enumerate([params])))
@@ -44,6 +51,7 @@ def comparison_generator(
     if number_of_comp == 1:
 
         param_to_vary_list = [
+            "Current function [A]"
             "Electrode height [m]",
             "Electrode width [m]",
             "Negative electrode conductivity [S.m-1]",
@@ -57,7 +65,11 @@ def comparison_generator(
             "Positive electrode Bruggeman coefficient (electrolyte)",
             "Ambient temperature [K]"
         ]
-        param_to_vary = random.choice(param_to_vary_list)
+
+        if provided_param_to_vary is not None:
+            param_to_vary = provided_param_to_vary
+        else:
+            param_to_vary = random.choice(param_to_vary_list)
 
         param_list = []
         diff_params = random.randint(2, 3)

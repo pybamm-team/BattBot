@@ -131,6 +131,27 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertEqual(len(comparison_dict["time_array"]), 2)
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
+        comparison_dict = comparison_generator(
+            1,
+            models_for_comp=self.model_for_comp,
+            chemistry=self.chemistry,
+            provided_choice="no experiment",
+            provided_param_to_vary="Current function [A]"
+        )
+
+        self.assertIsInstance(comparison_dict, dict)
+        self.assertIsInstance(comparison_dict["model"], dict)
+        self.assertEqual(comparison_dict["model"], self.model_for_comp)
+        self.assertIsInstance(
+            comparison_dict["parameter_values"], pybamm.ParameterValues
+        )
+        self.assertIsInstance(comparison_dict["time_array"], list)
+        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+
+        assert os.path.exists("plot.gif")
+
+
 
 if __name__ == "__main__":
     unittest.main()
