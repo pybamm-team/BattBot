@@ -1,5 +1,6 @@
 import pybamm
 import random
+import logging
 from utils.parameter_value_generator import parameter_value_generator
 from plotting.plot_graph import plot_graph
 from experiment.experiment_generator import experiment_generator
@@ -30,6 +31,11 @@ def comparison_generator(
     params = pybamm.ParameterValues(chemistry=chemistry)
     parameter_values_for_comp = dict(list(enumerate([params])))
     comparison_dict = {}
+
+    # logging the configuration
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
 
     # generate a list of parameter values by varying a single parameter
     # if only 1 model is selected
@@ -72,7 +78,10 @@ def comparison_generator(
                 param_to_vary
             ] = param_value
 
-            print(param_to_vary + ": " + str(param_value))
+            logger.info(
+                param_to_vary + ": " + str(param_value)
+            )
+
             labels.append(param_to_vary + ": " + str(param_value))
 
             # find the minimum value if "Current function [A]" is varied
