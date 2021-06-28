@@ -152,6 +152,5 @@ class TestComparisonGenerator(unittest.TestCase):
         assert os.path.exists("plot.gif")
 
 
-
 if __name__ == "__main__":
     unittest.main()
