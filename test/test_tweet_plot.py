@@ -15,12 +15,7 @@ class TestTweetPlot(unittest.TestCase):
         assert os.path.exists(tweet.plot)
         self.assertIsNone(tweet.processing_info)
         self.assertIsInstance(tweet.model, pybamm.BaseModel)
-        self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
-        self.assertIsNone(tweet.time)
         self.assertIsInstance(tweet.chemistry, dict)
-        self.assertTrue(
-            tweet.solver == "CasADi solver with 'safe' mode"
-        )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertTrue(tweet.is_experiment)
         self.assertIsInstance(tweet.cycle, list)
@@ -47,10 +42,7 @@ class TestTweetPlot(unittest.TestCase):
         assert os.path.exists(tweet.plot)
         self.assertIsNone(tweet.processing_info)
         self.assertIsInstance(tweet.model, dict)
-        self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
-        self.assertIsInstance(tweet.time, list)
         self.assertIsInstance(tweet.chemistry, dict)
-        self.assertIsNone(tweet.solver)
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertIsInstance(tweet.is_comparison, bool)
         self.assertTrue(tweet.is_comparison)
@@ -80,14 +72,7 @@ class TestTweetPlot(unittest.TestCase):
             isinstance(tweet.model, dict)
             or isinstance(tweet.model, pybamm.BaseModel)
         )
-        self.assertIsInstance(tweet.parameter_values, pybamm.ParameterValues)
         self.assertIsInstance(tweet.chemistry, dict)
-        self.assertTrue(
-            tweet.solver is None
-            or tweet.solver == (
-                "CasADi solver with 'safe' mode"
-            )
-        )
         self.assertIsInstance(tweet.is_experiment, bool)
         self.assertIsInstance(tweet.is_comparison, bool)
         self.assertIsInstance(tweet.testing, bool)

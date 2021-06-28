@@ -29,12 +29,12 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertIsNone(comparison_dict["cycle"])
+        self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
         assert os.path.exists("plot.gif")
@@ -48,12 +48,12 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertIsNone(comparison_dict["cycle"])
+        self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
         assert os.path.exists("plot.gif")
@@ -67,12 +67,12 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertIsNone(comparison_dict["cycle"])
+        self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
         assert os.path.exists("plot.gif")
@@ -86,12 +86,24 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertEqual(comparison_dict["number"], 1)
+        self.assertEqual(
+            comparison_dict["cycle"],
+            [
+                (
+                    "Discharge at C/10 for 10 hours "
+                    + "or until 3.3 V",
+                    "Rest for 1 hour",
+                    "Charge at 1 A until 4.1 V",
+                    "Hold at 4.1 V until 50 mA",
+                    "Rest for 1 hour"
+                )
+            ]
         )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
         assert os.path.exists("plot.gif")
@@ -105,12 +117,24 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertEqual(comparison_dict["number"], 1)
+        self.assertEqual(
+            comparison_dict["cycle"],
+            [
+                (
+                    "Discharge at C/10 for 10 hours "
+                    + "or until 3.3 V",
+                    "Rest for 1 hour",
+                    "Charge at 1 A until 4.1 V",
+                    "Hold at 4.1 V until 50 mA",
+                    "Rest for 1 hour"
+                )
+            ]
         )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
         self.assertEqual(
             comparison_dict["chemistry"], pybamm.parameter_sets.Ai2020
         )
@@ -123,12 +147,10 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertTrue(comparison_dict["is_comparison"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
         comparison_dict = comparison_generator(
@@ -141,12 +163,12 @@ class TestComparisonGenerator(unittest.TestCase):
 
         self.assertIsInstance(comparison_dict, dict)
         self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertIsInstance(
-            comparison_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(comparison_dict["time_array"], list)
-        self.assertEqual(len(comparison_dict["time_array"]), 2)
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertIsNone(comparison_dict["cycle"])
+        self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
 
         assert os.path.exists("plot.gif")

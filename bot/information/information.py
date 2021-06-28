@@ -1,7 +1,6 @@
 def information(
     chemistry,
     model,
-    solver,
     is_experiment,
     cycle,
     number,
@@ -11,11 +10,10 @@ def information(
     Generates tweet text.
     Parameters:
         chemistry: dict
-        model: pybamm.BaseModel
-        solver: pybamm.BaseSolver
+        model: pybamm.BaseModel or dict
         is_experiment: bool
-        cycle: list
-        number: numerical
+        cycle: list or None
+        number: numerical or None
         is_comparison: bool
     Returns
         tweet_text: str
@@ -41,7 +39,5 @@ def information(
             str(model.name)
             + " "
             + str(chemistry["citation"])
-            + " "
-            + str(solver)
         )
         return tweet_text

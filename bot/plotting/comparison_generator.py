@@ -117,32 +117,34 @@ def comparison_generator(
             permutations=True,
         )
 
-        # default t_end
-        t_end = 3700
-
         # if "Current function [A]" is varied, change the t_end
         if param_to_vary == "Current function [A]":
-            factor = min_param_value/params[param_to_vary]
+            factor = min_param_value / params[param_to_vary]
             t_end = (1 / factor * 1.1) * 3600
+        else:
+            # default t_end
+            t_end = 3700
 
         s.solve([0, t_end])
 
         # create the GIF
         solution = s.sims[0].solution
         if len(labels) == 0:
-            time_array = plot_graph(
+            plot_graph(
                 solution=solution, sim=s.sims
             )
         else:
-            time_array = plot_graph(
+            plot_graph(
                 solution=solution, sim=s.sims, labels=labels
             )
 
         comparison_dict.update({
             "model": models_for_comp,
-            "parameter_values": params,
-            "time_array": time_array,
-            "chemistry": chemistry
+            "chemistry": chemistry,
+            "is_experiment": False,
+            "cycle": None,
+            "number": None,
+            "is_comparison": True
         })
 
         return comparison_dict
@@ -203,19 +205,21 @@ def comparison_generator(
 
                 # create the GIF
                 if len(labels) == 0:
-                    time_array = plot_graph(
+                    plot_graph(
                         solution=solution, sim=s.sims
                     )
                 else:
-                    time_array = plot_graph(
+                    plot_graph(
                         solution=solution, sim=s.sims, labels=labels
                     )
 
                 comparison_dict.update({
                     "model": models_for_comp,
-                    "parameter_values": params,
-                    "time_array": time_array,
-                    "chemistry": chemistry
+                    "chemistry": chemistry,
+                    "is_experiment": True,
+                    "cycle": cycle,
+                    "number": number,
+                    "is_comparison": True
                 })
 
                 return comparison_dict

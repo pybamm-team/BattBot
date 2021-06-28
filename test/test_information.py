@@ -7,7 +7,6 @@ class TestInformation(unittest.TestCase):
     def setUp(self):
         self.chemistry = pybamm.parameter_sets.Chen2020
         self.model = pybamm.lithium_ion.DFN()
-        self.solver = pybamm.CasadiSolver(mode="fast with events")
         self.is_experiment = True
         self.cycle = [
             (
@@ -25,7 +24,6 @@ class TestInformation(unittest.TestCase):
         result = information(
             self.chemistry,
             self.model,
-            self.solver,
             self.is_experiment,
             self.cycle,
             self.number,
@@ -49,7 +47,6 @@ class TestInformation(unittest.TestCase):
         result = information(
             self.chemistry,
             self.model,
-            self.solver,
             self.is_experiment,
             self.cycle,
             self.number,
@@ -63,7 +60,6 @@ class TestInformation(unittest.TestCase):
         result = information(
             self.chemistry,
             self.model,
-            self.solver.name,
             self.is_experiment,
             self.cycle,
             self.number,
@@ -72,8 +68,7 @@ class TestInformation(unittest.TestCase):
 
         self.assertEqual(
             result,
-            "Doyle-Fuller-Newman model Chen2020 "
-            + "CasADi solver with 'fast with events' mode"
+            "Doyle-Fuller-Newman model Chen2020"
         )
 
 

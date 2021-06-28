@@ -77,10 +77,7 @@ class Tweet(object):
         self.media_id = None
         self.processing_info = None
         self.model = return_dict["model"]
-        self.parameter_values = return_dict["parameter_values"]
-        self.time = return_dict["time_array"]
         self.chemistry = return_dict["chemistry"]
-        self.solver = return_dict["solver"]
         self.is_experiment = return_dict["is_experiment"]
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
@@ -250,16 +247,11 @@ class Tweet(object):
             information(
                 self.chemistry,
                 self.model,
-                self.solver,
                 self.is_experiment,
                 self.cycle,
                 self.number,
                 self.is_comparison
             )
-            + ", at time = "
-            + str(self.time)
-            + " s"
-
         )
 
         request_data = {

@@ -218,14 +218,11 @@ def random_plot_generator(
 
                 return_dict.update({
                     "model": comparison_dict["model"],
-                    "parameter_values": comparison_dict["parameter_values"],
-                    "time_array": comparison_dict["time_array"],
                     "chemistry": comparison_dict["chemistry"],
-                    "solver": None,
-                    "is_experiment": False,
-                    "cycle": None,
-                    "number": None,
-                    "is_comparison": True
+                    "is_experiment": comparison_dict["is_experiment"],
+                    "cycle": comparison_dict["cycle"],
+                    "number": comparison_dict["number"],
+                    "is_comparison": comparison_dict["is_comparison"]
                 })
 
                 return
