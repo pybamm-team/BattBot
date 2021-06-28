@@ -39,7 +39,7 @@ def comparison_generator(
     parameter_values_for_comp = dict(list(enumerate([params])))
     comparison_dict = {}
 
-    # logging the configuration
+    # logging configuration
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -117,13 +117,13 @@ def comparison_generator(
             permutations=True,
         )
 
-        # default t_end
-        t_end = 3700
-
         # if "Current function [A]" is varied, change the t_end
         if param_to_vary == "Current function [A]":
-            factor = min_param_value/params[param_to_vary]
+            factor = min_param_value / params[param_to_vary]
             t_end = (1 / factor * 1.1) * 3600
+        else:
+            # default t_end
+            t_end = 3700
 
         s.solve([0, t_end])
 
