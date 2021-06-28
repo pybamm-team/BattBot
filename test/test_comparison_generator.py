@@ -24,7 +24,7 @@ class TestComparisonGenerator(unittest.TestCase):
             1,
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
-            provided_choice=0
+            provided_choice="no experiment"
         )
 
         self.assertIsInstance(comparison_dict, dict)
@@ -43,7 +43,7 @@ class TestComparisonGenerator(unittest.TestCase):
             2,
             models_for_comp=self.models_for_comp,
             chemistry=self.chemistry,
-            provided_choice=0
+            provided_choice="no experiment"
         )
 
         self.assertIsInstance(comparison_dict, dict)
@@ -62,7 +62,7 @@ class TestComparisonGenerator(unittest.TestCase):
             2,
             models_for_comp=self.models_for_comp,
             chemistry=self.chemistry,
-            provided_choice=1
+            provided_choice="no experiment"
         )
 
         self.assertIsInstance(comparison_dict, dict)
@@ -81,7 +81,7 @@ class TestComparisonGenerator(unittest.TestCase):
             1,
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
-            provided_choice=1
+            provided_choice="experiment"
         )
 
         self.assertIsInstance(comparison_dict, dict)
@@ -100,7 +100,7 @@ class TestComparisonGenerator(unittest.TestCase):
             2,
             models_for_comp=self.models_for_comp,
             chemistry=pybamm.parameter_sets.Ai2020,
-            provided_choice=1
+            provided_choice="experiment"
         )
 
         self.assertIsInstance(comparison_dict, dict)

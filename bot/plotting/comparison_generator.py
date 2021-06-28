@@ -21,7 +21,7 @@ def comparison_generator(
         chemistry: dict
             A single chemistry value which will be used in the comparison
             plot.
-        provided_choice: numerical
+        provided_choice: str
             default: None
             Should be used only during testing, using this one can test
             different parts of this function deterministically without relying
@@ -68,11 +68,10 @@ def comparison_generator(
     if provided_choice is not None:
         choice = provided_choice
     else:
-        # 0: no experiment
-        # 1: experiment
-        choice = random.randint(0, 1)
+        choice_list = ["experiment", "no experiment"]
+        choice = random.choice(choice_list)
 
-    if choice == 0:
+    if choice == "no experiment":
         s = pybamm.BatchStudy(
             models=models_for_comp,
             parameter_values=parameter_values_for_comp,
@@ -102,7 +101,7 @@ def comparison_generator(
 
         return comparison_dict
 
-    elif choice == 1:
+    elif choice == "experiment":
 
         while True:
             try:
