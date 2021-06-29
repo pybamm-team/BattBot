@@ -127,8 +127,14 @@ def comparison_generator(
 
         s.solve([0, t_end])
 
-        # create the GIF
+        # find the max "Time [s]" from all the solutions for the GIF
+        max_time = 0
         solution = s.sims[0].solution
+        for sim in s.sims:
+            if sim.solution["Time [s]"].entries[-1] > max_time:
+                max_time = sim.solution["Time [s]"].entries[-1]
+                solution = sim.solution
+
         if len(labels) == 0:
             plot_graph(
                 solution=solution, sim=s.sims

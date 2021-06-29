@@ -82,6 +82,10 @@ class Tweet(object):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
+        if choice == "non-degradation comparisons":
+            self.param_to_vary = return_dict["param_to_vary"]
+        else:
+            self.param_to_vary = None
         self.testing = testing
 
     def upload_init(self):
@@ -250,9 +254,11 @@ class Tweet(object):
                 self.is_experiment,
                 self.cycle,
                 self.number,
-                self.is_comparison
+                self.is_comparison,
+                self.param_to_vary
             )
         )
+        print(tweet_status)
 
         request_data = {
             'status': tweet_status,

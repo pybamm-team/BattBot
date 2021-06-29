@@ -187,10 +187,7 @@ def random_plot_generator(
 
                 return_dict.update({
                     "model": model,
-                    "parameter_values": parameter_values,
-                    "time_array": None,
                     "chemistry": options["chemistry"],
-                    "solver": solver.name,
                     "is_experiment": True,
                     "cycle": cycle_received,
                     "number": number,
