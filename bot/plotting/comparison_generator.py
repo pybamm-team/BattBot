@@ -51,7 +51,7 @@ def comparison_generator(
     if number_of_comp == 1:
 
         param_to_vary_list = [
-            "Current function [A]"
+            "Current function [A]",
             "Electrode height [m]",
             "Electrode width [m]",
             "Negative electrode conductivity [S.m-1]",
