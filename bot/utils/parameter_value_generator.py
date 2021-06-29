@@ -34,7 +34,7 @@ def parameter_value_generator(chemistry, parameter):
         params[parameter] = pybamm.InputParameter(parameter)
 
     param_value = desired_decimal_point_generator(
-        (base_value[parameter] - 0.1)*0.9, (base_value[parameter] + 0.1)*1.1, 2
+        (base_value[parameter] - 0.1)*0.5, (base_value[parameter] + 0.1)*2, 2
     )
 
     return param_value

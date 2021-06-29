@@ -39,7 +39,7 @@ def comparison_generator(
     parameter_values_for_comp = dict(list(enumerate([params])))
     comparison_dict = {}
 
-    # logging the configuration
+    # logging configuration
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -51,7 +51,7 @@ def comparison_generator(
     if number_of_comp == 1:
 
         param_to_vary_list = [
-            "Current function [A]"
+            "Current function [A]",
             "Electrode height [m]",
             "Electrode width [m]",
             "Negative electrode conductivity [S.m-1]",
