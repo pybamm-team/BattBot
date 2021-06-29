@@ -46,7 +46,7 @@ def comparison_generator(
 
     # generate a list of parameter values by varying a single parameter
     # if only 1 model is selected
-    param_to_vary = ""
+    param_to_vary = None
     labels = []
     if number_of_comp == 1:
 
@@ -144,7 +144,8 @@ def comparison_generator(
             "is_experiment": False,
             "cycle": None,
             "number": None,
-            "is_comparison": True
+            "is_comparison": True,
+            "param_to_vary": param_to_vary
         })
 
         return comparison_dict
@@ -219,7 +220,8 @@ def comparison_generator(
                     "is_experiment": True,
                     "cycle": cycle,
                     "number": number,
-                    "is_comparison": True
+                    "is_comparison": True,
+                    "param_to_vary": param_to_vary
                 })
 
                 return comparison_dict

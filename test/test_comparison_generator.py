@@ -36,6 +36,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNotNone(comparison_dict["param_to_vary"])
 
         assert os.path.exists("plot.gif")
 
@@ -55,6 +56,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNone(comparison_dict["param_to_vary"])
 
         assert os.path.exists("plot.gif")
 
@@ -74,6 +76,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNone(comparison_dict["param_to_vary"])
 
         assert os.path.exists("plot.gif")
 
@@ -105,6 +108,7 @@ class TestComparisonGenerator(unittest.TestCase):
             ]
         )
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNotNone(comparison_dict["param_to_vary"])
 
         assert os.path.exists("plot.gif")
 
@@ -138,6 +142,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertEqual(
             comparison_dict["chemistry"], pybamm.parameter_sets.Ai2020
         )
+        self.assertIsNone(comparison_dict["param_to_vary"])
 
         comparison_dict = comparison_generator(
             2,
@@ -152,6 +157,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
         self.assertTrue(comparison_dict["is_comparison"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNone(comparison_dict["param_to_vary"])
 
         comparison_dict = comparison_generator(
             1,
@@ -170,6 +176,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNotNone(comparison_dict["param_to_vary"])
 
         assert os.path.exists("plot.gif")
 
