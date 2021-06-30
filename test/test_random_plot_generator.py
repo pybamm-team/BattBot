@@ -43,6 +43,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
@@ -84,6 +88,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
@@ -125,6 +133,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
@@ -166,6 +178,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
