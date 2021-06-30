@@ -8,8 +8,8 @@ class TestInformation(unittest.TestCase):
         self.chemistry = pybamm.parameter_sets.Chen2020
         self.params = pybamm.ParameterValues(chemistry=self.chemistry)
         self.c_rate = (
-            self.params["Nominal cell capacity [A.h]"] /
-            self.params["Current function [A]"]
+            self.params["Current function [A]"] /
+            self.params["Nominal cell capacity [A.h]"]
         )
         self.temp = self.params["Ambient temperature [K]"] - 273.15
         self.model = pybamm.lithium_ion.DFN()

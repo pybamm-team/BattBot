@@ -26,7 +26,7 @@ def information(
 
     params = pybamm.ParameterValues(chemistry=chemistry)
     c_rate = (
-        params["Nominal cell capacity [A.h]"] / params["Current function [A]"]
+        params["Current function [A]"] / params["Nominal cell capacity [A.h]"]
     )
     temp = params["Ambient temperature [K]"] - 273.15
 
