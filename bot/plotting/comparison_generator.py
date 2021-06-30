@@ -79,9 +79,23 @@ def comparison_generator(
             param_list.append(params.copy())
 
             # generate a random value
-            param_value = parameter_value_generator(
-                chemistry, param_to_vary
-            )
+            while True:
+                param_value = parameter_value_generator(
+                    chemistry, param_to_vary
+                )
+                if (
+                    param_to_vary == "Electrode height [m]"
+                    or param_to_vary == "Electrode width [m]"
+                ):
+                    if (
+                        param_value == 0
+                        or param_value < 0
+                    ):     # pragma: no cover
+                        continue
+                    else:    # pragma: no cover
+                        break
+                else:
+                    break
 
             # change a parameter value
             param_list[i][
