@@ -76,6 +76,7 @@ class Tweet(object):
         self.total_bytes = os.path.getsize(self.plot)
         self.media_id = None
         self.processing_info = None
+        self.config = None
         self.model = return_dict["model"]
         self.chemistry = return_dict["chemistry"]
         self.is_experiment = return_dict["is_experiment"]
@@ -243,6 +244,23 @@ class Tweet(object):
 
         return req
 
+    def write_config(self):
+        self.config = {
+            "model": str(self.model),
+            "model options": self.model.options
+            if not isinstance(self.model, dict)
+            else None,
+            "chemistry": self.chemistry,
+            "is_experiment": self.is_experiment,
+            "cycle": self.cycle,
+            "number": self.number,
+            "is_comparison": self.is_comparison,
+            "param_to_vary": self.param_to_vary
+        }
+        f = open("config.txt", "w")
+        f.write(str(self.config))
+        f.close()
+
     def tweet(self):
         """
         Publishes Tweet with attached plot
@@ -271,6 +289,7 @@ class Tweet(object):
             os.remove("plot.gif")
         else:
             os.remove("plot.png")
+        self.write_config()
         plt.close()
 
 
