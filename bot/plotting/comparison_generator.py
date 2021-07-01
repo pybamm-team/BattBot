@@ -147,7 +147,6 @@ def comparison_generator(
             except Exception as e:  # pragma
                 print(e)
 
-
         # find the max "Time [s]" from all the solutions for the GIF
         max_time = 0
         solution = s.sims[0].solution
