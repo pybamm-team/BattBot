@@ -125,21 +125,28 @@ def comparison_generator(
         choice = random.choice(choice_list)
 
     if choice == "no experiment":
-        s = pybamm.BatchStudy(
-            models=models_for_comp,
-            parameter_values=parameter_values_for_comp,
-            permutations=True,
-        )
 
-        # if "Current function [A]" is varied, change the t_end
-        if param_to_vary == "Current function [A]":
-            factor = min_param_value / params[param_to_vary]
-            t_end = (1 / factor * 1.1) * 3600
-        else:
-            # default t_end
-            t_end = 3700
+        while True:
+            try:
+                s = pybamm.BatchStudy(
+                    models=models_for_comp,
+                    parameter_values=parameter_values_for_comp,
+                    permutations=True,
+                )
 
-        s.solve([0, t_end])
+                # if "Current function [A]" is varied, change the t_end
+                if param_to_vary == "Current function [A]":
+                    factor = min_param_value / params[param_to_vary]
+                    t_end = (1 / factor * 1.1) * 3600
+                else:
+                    # default t_end
+                    t_end = 3700
+
+                s.solve([0, t_end])
+                break
+            except Exception as e:  # pragma
+                print(e)
+
 
         # find the max "Time [s]" from all the solutions for the GIF
         max_time = 0
