@@ -4,6 +4,15 @@ from utils.desired_decimal_point_generator import (
 )
 
 
+# implementation by @tinosulzer
+class FunctionLike:
+    "Behaves like a function but saves fun and parameter"
+
+    def __init__(self, fun, parameter):
+        self.fun = fun
+        self.parameter = parameter
+
+
 def parameter_value_generator(chemistry, parameter):
     """
     Generates random values for a given parameter and
@@ -14,27 +23,18 @@ def parameter_value_generator(chemistry, parameter):
     Returns:
         param_value: numerical
     """
+    params = pybamm.ParameterValues(chemistry=chemistry)
+    base_value = {}
 
-    if parameter == "Current function [A]":
-        if chemistry == pybamm.parameter_sets.Chen2020:
-            param_value = desired_decimal_point_generator(3, 5, 2)
-
-        elif chemistry == pybamm.parameter_sets.Marquis2019:
-            param_value = desired_decimal_point_generator(0.1, 0.65, 2)
-
-        elif chemistry == pybamm.parameter_sets.Ai2020:
-            param_value = desired_decimal_point_generator(0.5, 2.25, 2)
-
-        elif chemistry == pybamm.parameter_sets.Yang2017:
-            param_value = desired_decimal_point_generator(0.5, 2.25, 2)
-
-        elif chemistry == pybamm.parameter_sets.Chen2020_plating:
-            param_value = desired_decimal_point_generator(3, 5, 2)
-
+    if callable(params[parameter]):
+        base_value[parameter] = 1.0
+        params[parameter] = FunctionLike(params[parameter], parameter)
     else:
-        params = pybamm.ParameterValues(chemistry=chemistry)
-        param_value = desired_decimal_point_generator(
-            params[parameter]*0.9, params[parameter]*1.1, 2
-        )
+        base_value[parameter] = params[parameter]
+        params[parameter] = pybamm.InputParameter(parameter)
+
+    param_value = desired_decimal_point_generator(
+        (base_value[parameter] - 0.1)*0.5, (base_value[parameter] + 0.1)*2, 2
+    )
 
     return param_value

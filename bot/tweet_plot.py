@@ -77,14 +77,15 @@ class Tweet(object):
         self.media_id = None
         self.processing_info = None
         self.model = return_dict["model"]
-        self.parameter_values = return_dict["parameter_values"]
-        self.time = return_dict["time_array"]
         self.chemistry = return_dict["chemistry"]
-        self.solver = return_dict["solver"]
         self.is_experiment = return_dict["is_experiment"]
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
+        if choice == "non-degradation comparisons":
+            self.param_to_vary = return_dict["param_to_vary"]
+        else:
+            self.param_to_vary = None
         self.testing = testing
 
     def upload_init(self):
@@ -250,17 +251,14 @@ class Tweet(object):
             information(
                 self.chemistry,
                 self.model,
-                self.solver,
                 self.is_experiment,
                 self.cycle,
                 self.number,
-                self.is_comparison
+                self.is_comparison,
+                self.param_to_vary
             )
-            + ", at time = "
-            + str(self.time)
-            + " s"
-
         )
+        print(tweet_status)
 
         request_data = {
             'status': tweet_status,
