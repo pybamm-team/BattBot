@@ -144,7 +144,7 @@ def comparison_generator(
 
                 s.solve([0, t_end])
                 break
-            except Exception as e:  # pragma
+            except Exception as e:  # pragma: no cover
                 print(e)
 
         # find the max "Time [s]" from all the solutions for the GIF
