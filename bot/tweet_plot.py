@@ -3,6 +3,7 @@ import sys
 import time
 import random
 import requests
+import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
 from requests_oauthlib import OAuth1
@@ -247,6 +248,10 @@ class Tweet(object):
         return req
 
     def write_config(self, filename, append=False):
+        """
+        Writes the random config to config.txt and appends the same to
+        data.txt with date and time.
+        """
         self.config = {
             "model": str(self.model),
             "model options": self.model.options
@@ -262,9 +267,10 @@ class Tweet(object):
         }
         if not append:
             f = open(filename, "w")
+            f.write(str(self.config))
         elif append:
             f = open(filename, "a")
-        f.write(str(self.config) + "\n")
+            f.write(str(datetime.datetime.now()) + " " + str(self.config) + "\n")
         f.close()
 
     def tweet(self):
