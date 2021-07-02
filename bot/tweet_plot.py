@@ -270,7 +270,9 @@ class Tweet(object):
             f.write(str(self.config))
         elif append:
             f = open(filename, "a")
-            f.write(str(datetime.datetime.now()) + " " + str(self.config) + "\n")
+            f.write(
+                str(datetime.datetime.now()) + " " + str(self.config) + "\n"
+            )
         f.close()
 
     def tweet(self):
