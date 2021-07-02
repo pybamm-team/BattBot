@@ -8,8 +8,10 @@ import os
 class TestRandomPlotGenerator(unittest.TestCase):
 
     def tearDown(self):
-        os.remove("plot.png")
-        os.remove("plot.gif")
+        if os.path.exists("plot.png"):
+            os.remove("plot.png")
+        elif os.path.exists("plot.gif"):
+            os.remove("plot.gif")
 
     def test_random_plot_generator(self):
 
