@@ -55,13 +55,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             key in key_list for key in return_dict["model"].options.keys()
         )
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertTrue(
-            return_dict["solver"] == "CasADi solver with 'safe' mode"
-        )
-        self.assertIsInstance(
-            return_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsNone(return_dict["time_array"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
@@ -103,13 +96,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             key in key_list for key in return_dict["model"].options.keys()
         )
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertTrue(
-            return_dict["solver"] == "CasADi solver with 'safe' mode"
-        )
-        self.assertIsInstance(
-            return_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsNone(return_dict["time_array"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
@@ -151,13 +137,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             key in key_list for key in return_dict["model"].options.keys()
         )
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertTrue(
-            return_dict["solver"] == "CasADi solver with 'safe' mode"
-        )
-        self.assertIsInstance(
-            return_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsNone(return_dict["time_array"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
@@ -198,16 +177,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
             self.assertIsInstance(model.options, dict)
             self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertIsNone(return_dict["solver"])
-        self.assertIsInstance(
-            return_dict["parameter_values"], pybamm.ParameterValues
-        )
-        self.assertIsInstance(return_dict["time_array"], list)
-        self.assertTrue(len(return_dict["time_array"]) == 2)
-        self.assertIsNone(return_dict["cycle"])
-        self.assertIsNone(return_dict["number"])
-        self.assertFalse(return_dict["is_experiment"])
-        self.assertTrue(return_dict["is_comparison"])
+        self.assertIsInstance(return_dict["is_experiment"], bool)
+        self.assertIsInstance(return_dict["is_comparison"], bool)
 
 
 if __name__ == "__main__":

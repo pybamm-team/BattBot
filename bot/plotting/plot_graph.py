@@ -19,8 +19,6 @@ def plot_graph(solution=None, sim=None, labels=None):
         labels: list
             default: None
             A list of labels for the GIF.
-    Returns:
-        time: list
     """
 
     # generating time to plot the simulation
@@ -65,5 +63,3 @@ def plot_graph(solution=None, sim=None, labels=None):
         os.remove(image)
 
     resize_gif("plot.gif", resize_to=(1440, 1440))
-
-    return [time_array[0], time_array[-1]]

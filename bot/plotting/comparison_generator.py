@@ -46,7 +46,7 @@ def comparison_generator(
 
     # generate a list of parameter values by varying a single parameter
     # if only 1 model is selected
-    param_to_vary = ""
+    param_to_vary = None
     labels = []
     if number_of_comp == 1:
 
@@ -127,22 +127,31 @@ def comparison_generator(
 
         s.solve([0, t_end])
 
-        # create the GIF
+        # find the max "Time [s]" from all the solutions for the GIF
+        max_time = 0
         solution = s.sims[0].solution
+        for sim in s.sims:
+            if sim.solution["Time [s]"].entries[-1] > max_time:
+                max_time = sim.solution["Time [s]"].entries[-1]
+                solution = sim.solution
+
         if len(labels) == 0:
-            time_array = plot_graph(
+            plot_graph(
                 solution=solution, sim=s.sims
             )
         else:
-            time_array = plot_graph(
+            plot_graph(
                 solution=solution, sim=s.sims, labels=labels
             )
 
         comparison_dict.update({
             "model": models_for_comp,
-            "parameter_values": params,
-            "time_array": time_array,
-            "chemistry": chemistry
+            "chemistry": chemistry,
+            "is_experiment": False,
+            "cycle": None,
+            "number": None,
+            "is_comparison": True,
+            "param_to_vary": param_to_vary
         })
 
         return comparison_dict
@@ -203,19 +212,22 @@ def comparison_generator(
 
                 # create the GIF
                 if len(labels) == 0:
-                    time_array = plot_graph(
+                    plot_graph(
                         solution=solution, sim=s.sims
                     )
                 else:
-                    time_array = plot_graph(
+                    plot_graph(
                         solution=solution, sim=s.sims, labels=labels
                     )
 
                 comparison_dict.update({
                     "model": models_for_comp,
-                    "parameter_values": params,
-                    "time_array": time_array,
-                    "chemistry": chemistry
+                    "chemistry": chemistry,
+                    "is_experiment": True,
+                    "cycle": cycle,
+                    "number": number,
+                    "is_comparison": True,
+                    "param_to_vary": param_to_vary
                 })
 
                 return comparison_dict
