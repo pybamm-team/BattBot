@@ -246,7 +246,7 @@ class Tweet(object):
 
         return req
 
-    def write_config(self):
+    def write_config(self, filename, append=False):
         self.config = {
             "model": str(self.model),
             "model options": self.model.options
@@ -260,8 +260,11 @@ class Tweet(object):
             "param_to_vary": self.param_to_vary,
             "varied_values": self.varied_values
         }
-        f = open("config.txt", "w")
-        f.write(str(self.config))
+        if not append:
+            f = open(filename, "w")
+        elif append:
+            f = open(filename, "a")
+        f.write(str(self.config) + "\n")
         f.close()
 
     def tweet(self):
@@ -292,7 +295,8 @@ class Tweet(object):
             os.remove("plot.gif")
         else:
             os.remove("plot.png")
-        self.write_config()
+        self.write_config("config.txt")
+        self.write_config("data.txt", append=True)
         plt.close()
 
 
