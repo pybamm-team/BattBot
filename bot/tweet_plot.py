@@ -39,7 +39,7 @@ class Tweet(object):
             return_dict = manager.dict()
 
             choice_list = [
-                "degradation comparison (summary variables)",
+                # "degradation comparison (summary variables)",
                 "non-degradation comparisons"
             ]
             if choice is None:
@@ -85,8 +85,10 @@ class Tweet(object):
         self.is_comparison = return_dict["is_comparison"]
         if choice == "non-degradation comparisons":
             self.param_to_vary = return_dict["param_to_vary"]
+            self.varied_values = return_dict["varied_values"]
         else:
             self.param_to_vary = None
+            self.varied_values = None
         self.testing = testing
 
     def upload_init(self):
@@ -255,7 +257,8 @@ class Tweet(object):
             "cycle": self.cycle,
             "number": self.number,
             "is_comparison": self.is_comparison,
-            "param_to_vary": self.param_to_vary
+            "param_to_vary": self.param_to_vary,
+            "varied_values": self.varied_values
         }
         f = open("config.txt", "w")
         f.write(str(self.config))
@@ -283,12 +286,12 @@ class Tweet(object):
             'media_ids': self.media_id
         }
 
-        if not self.testing:    # pragma: no cover
-            self.post_request(post_tweet_url, request_data, oauth)
-        if os.path.exists("plot.gif"):
-            os.remove("plot.gif")
-        else:
-            os.remove("plot.png")
+        # if not self.testing:    # pragma: no cover
+        #     self.post_request(post_tweet_url, request_data, oauth)
+        # if os.path.exists("plot.gif"):
+        #     os.remove("plot.gif")
+        # else:
+        #     os.remove("plot.png")
         self.write_config()
         plt.close()
 
