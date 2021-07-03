@@ -1,6 +1,6 @@
 # Contributing to PyBaMM-Twitter-Bot
 
-All contributions in this repository are welcome, please have a look at the guidelines below for smoother contributions.
+All contributions to this repository are welcomed, please have a look at the guidelines below for smoother contributions.
 Some of the guidelines (which are common) have been picked up from the [PyBaMM](https://github.com/pybamm-team/PyBaMM/blob/develop/CONTRIBUTING.md) repository.
 
 ## Pre-installation
