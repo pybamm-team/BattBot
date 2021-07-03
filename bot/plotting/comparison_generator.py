@@ -89,11 +89,7 @@ def comparison_generator(
                     param_to_vary == "Electrode height [m]"
                     or param_to_vary == "Electrode width [m]"
                 ):     # pragma: no cover
-                    if (
-                        param_value == 0
-                        or param_value < 0
-                    ):
-                        varied_values.pop()
+                    if param_value <= 0:
                         continue
                     else:
                         break
