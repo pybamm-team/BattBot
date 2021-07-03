@@ -8,8 +8,10 @@ import os
 class TestRandomPlotGenerator(unittest.TestCase):
 
     def tearDown(self):
-        os.remove("plot.png")
-        os.remove("plot.gif")
+        if os.path.exists("plot.png"):
+            os.remove("plot.png")
+        elif os.path.exists("plot.gif"):
+            os.remove("plot.gif")
 
     def test_random_plot_generator(self):
 
@@ -43,6 +45,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
@@ -84,6 +90,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
@@ -125,6 +135,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
@@ -166,6 +180,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     "Simulation is taking too long, "
                     + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
                 p.kill()
                 p.join()
             else:
