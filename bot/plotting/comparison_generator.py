@@ -61,7 +61,6 @@ def comparison_generator(
             "Negative electrode Bruggeman coefficient (electrolyte)",
             "Negative electrode exchange-current density [A.m-2]",
             "Positive electrode porosity",
-            "Positive electrode active material volume fraction",
             "Positive electrode exchange-current density [A.m-2]",
             "Positive electrode Bruggeman coefficient (electrolyte)",
             "Ambient temperature [K]"
@@ -120,7 +119,7 @@ def comparison_generator(
     if provided_choice is not None:
         choice = provided_choice
     else:
-        choice_list = ["experiment", "no experiment"]
+        choice_list = [ "no experiment"]
         choice = random.choice(choice_list)
 
     if choice == "no experiment":
