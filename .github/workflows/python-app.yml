@@ -41,7 +41,7 @@ jobs:
       with:
         python-version: 3.9
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-        fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+        fetch-depth: 0 # otherwise, it will fail to push refs to dest repo
 
     - name: Install dependencies
       run: |
