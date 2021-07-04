@@ -6,8 +6,8 @@ on:
 
   pull_request:
 
+  # runs every day twice, randomly between 1 AM and 1 PM, then randomly between 1 PM and 1 AM
   schedule:
-    # runs every day twice, randomly between 1 AM and 1 PM, then randomly between 1 PM and 1 AM
     - cron:  '00 01,13 * * *' perl -le 'sleep rand 43200'
 
 jobs:
