@@ -3,6 +3,7 @@ import sys
 import time
 import random
 import requests
+import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
 from requests_oauthlib import OAuth1
@@ -39,7 +40,7 @@ class Tweet(object):
             return_dict = manager.dict()
 
             choice_list = [
-                "degradation comparison (summary variables)",
+                # "degradation comparison (summary variables)",
                 "non-degradation comparisons"
             ]
             if choice is None:
@@ -76,6 +77,7 @@ class Tweet(object):
         self.total_bytes = os.path.getsize(self.plot)
         self.media_id = None
         self.processing_info = None
+        self.config = None
         self.model = return_dict["model"]
         self.chemistry = return_dict["chemistry"]
         self.is_experiment = return_dict["is_experiment"]
@@ -84,8 +86,10 @@ class Tweet(object):
         self.is_comparison = return_dict["is_comparison"]
         if choice == "non-degradation comparisons":
             self.param_to_vary = return_dict["param_to_vary"]
+            self.varied_values = return_dict["varied_values"]
         else:
             self.param_to_vary = None
+            self.varied_values = None
         self.testing = testing
 
     def upload_init(self):
@@ -243,6 +247,36 @@ class Tweet(object):
 
         return req
 
+    def write_config(self, filename, append=False):
+        """
+        Writes the random config to config.txt and appends the same to
+        data.txt with date and time.
+        """
+        self.config = {
+            "model": str(self.model),
+            "model options": self.model.options
+            if not isinstance(self.model, dict)
+            else None,
+            "chemistry": self.chemistry,
+            "is_experiment": self.is_experiment,
+            "cycle": self.cycle,
+            "number": self.number,
+            "is_comparison": self.is_comparison,
+            "param_to_vary": self.param_to_vary,
+            "varied_values": self.varied_values
+        }
+        if not append:
+            f = open(filename, "w")
+            f.write(str(self.config))
+        elif append:
+            f = open(filename, "a")
+            f.write(
+                str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                + " " + str(self.config)
+                + "\n"
+            )
+        f.close()
+
     def tweet(self):
         """
         Publishes Tweet with attached plot
@@ -271,6 +305,8 @@ class Tweet(object):
             os.remove("plot.gif")
         else:
             os.remove("plot.png")
+        self.write_config("config.txt")
+        self.write_config("data.txt", append=True)
         plt.close()
 
 

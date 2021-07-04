@@ -48,6 +48,7 @@ def comparison_generator(
     # if only 1 model is selected
     param_to_vary = None
     labels = []
+    varied_values = []
     if number_of_comp == 1:
 
         param_to_vary_list = [
@@ -83,6 +84,7 @@ def comparison_generator(
                 param_value = parameter_value_generator(
                     chemistry, param_to_vary
                 )
+                varied_values.append(param_value)
                 if (
                     param_to_vary == "Electrode height [m]"
                     or param_to_vary == "Electrode width [m]"
@@ -168,7 +170,8 @@ def comparison_generator(
             "cycle": None,
             "number": None,
             "is_comparison": True,
-            "param_to_vary": param_to_vary
+            "param_to_vary": param_to_vary,
+            "varied_values": varied_values
         })
 
         return comparison_dict
@@ -244,7 +247,8 @@ def comparison_generator(
                     "cycle": cycle,
                     "number": number,
                     "is_comparison": True,
-                    "param_to_vary": param_to_vary
+                    "param_to_vary": param_to_vary,
+                    "varied_values": varied_values
                 })
 
                 return comparison_dict

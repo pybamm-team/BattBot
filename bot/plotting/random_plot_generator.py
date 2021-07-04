@@ -220,7 +220,8 @@ def random_plot_generator(
                     "cycle": comparison_dict["cycle"],
                     "number": comparison_dict["number"],
                     "is_comparison": comparison_dict["is_comparison"],
-                    "param_to_vary": comparison_dict["param_to_vary"]
+                    "param_to_vary": comparison_dict["param_to_vary"],
+                    "varied_values": comparison_dict["varied_values"]
                 })
 
                 return
