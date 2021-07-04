@@ -1,5 +1,3 @@
-'randomSleepTime="RANDOM % 7"'
-
 name: PyBaMM Twitter bot
 
 on:
@@ -8,7 +6,9 @@ on:
   pull_request:
 
   schedule:
-    - cron: '* */8 * * * r=$(($randomSleepTime)) ; sleep ${r}hr'
+    - cron: |
+      'randomSleepTime="RANDOM % 7"'
+      '* */8 * * * r=$(($randomSleepTime)) ; sleep ${r}hr'
 
 jobs:
 
