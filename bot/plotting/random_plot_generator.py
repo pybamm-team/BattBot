@@ -199,7 +199,7 @@ def random_plot_generator(
             elif options["choice"] == "non-degradation comparisons":
 
                 # generating number of models to be compared
-                number_of_comp = 1
+                number_of_comp = random.randint(1, 3)
 
                 # selecting the models for comparison
                 random.shuffle(models)

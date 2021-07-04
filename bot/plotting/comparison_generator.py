@@ -119,7 +119,7 @@ def comparison_generator(
     if provided_choice is not None:
         choice = provided_choice
     else:
-        choice_list = [ "no experiment"]
+        choice_list = ["experiment", "no experiment"]
         choice = random.choice(choice_list)
 
     if choice == "no experiment":
