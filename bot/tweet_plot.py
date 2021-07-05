@@ -316,5 +316,5 @@ if __name__ == '__main__':  # pragma: no cover
     tweet.upload_append()
     tweet.upload_finalize()
     if not tweet.testing:
-        time.sleep(random.randint(3600))
+        time.sleep(random.randint(0, 3600))
     tweet.tweet()
