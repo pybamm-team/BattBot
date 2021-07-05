@@ -92,7 +92,14 @@ def comparison_generator(
                         continue
                     else:
                         break
-                else:    # pragma: no cover
+                elif (
+                    param_to_vary == "Ambient temperature [K]"
+                ):    # pragma: no cover
+                    if param_value < 265 or param_value > 355:
+                        continue
+                    else:
+                        break
+                else:   # pragma: no cover
                     break
 
             # change a parameter value
