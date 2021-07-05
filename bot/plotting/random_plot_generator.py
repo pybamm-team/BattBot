@@ -1,9 +1,6 @@
 import pybamm
 import random
 import logging
-from plotting.plot_graph import plot_graph
-from models.model_solver import model_solver
-from utils.parameter_value_generator import parameter_value_generator
 from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
@@ -64,11 +61,9 @@ def random_plot_generator(
                 default: False
                 Should be set to True when testing, this helps the tests to
                 execute small chunks of this function deterministically.
-            choice: numerical
+            choice: str
                 default: None
-                Should be used only during testing, using this one can test
-                different parts of this function deterministically without
-                relying on the random functions to execute that part.
+                Type of comparison that should be plotted.
             chemistry: dict
                 default: None
                 Should be used only during testing, using this one can test
@@ -109,16 +104,10 @@ def random_plot_generator(
                 options["provided_degradation"] = False
                 continue
 
-            # randomly choose a plot if not testing
-            # 0: pre-defined model with a pre-defined chemistry
-            # 1: experiment or comparison with summary variable
-            # 2: experiment without summary variables
-            # 3: comparison plots
-            if options["choice"] is None:
-                options["choice"] = random.randint(0, 3)
-
             # Add degradation only if we are plotting summary variables
-            if options["choice"] == 1:
+            if options["choice"] == (
+                "degradation comparison (summary variables)"
+            ):
                 # update model options
                 model_options = {}
                 if options["chemistry"] == (
@@ -162,11 +151,6 @@ def random_plot_generator(
             # choose a random model
             model = random.choice(models)
 
-            # vary the lower voltage
-            lower_voltage = parameter_value_generator(
-                options["chemistry"], "Lower voltage cut-off [V]"
-            )
-
             # logging the configuration
             logging.basicConfig(level=logging.INFO)
             logger = logging.getLogger()
@@ -181,46 +165,28 @@ def random_plot_generator(
                 + str(options["chemistry"]["citation"])
             )
 
-            if options["choice"] == 0:
-
-                # taking a random Crate and all the random configurations
-                # selected above
-                c_rate = random.randint(0, 3)
-
-                # solving
-                (parameter_values, sim, solution) = model_solver(
-                    model=model,
-                    chemistry=options["chemistry"],
-                    solver=solver,
-                    c_rate=c_rate,
-                    lower_voltage=lower_voltage,
-                )
-
-                # creating the GIF
-                time_array = plot_graph(solution, sim)
-
-                return_dict.update({
-                    "model": model,
-                    "parameter_values": parameter_values,
-                    "time_array": time_array,
-                    "chemistry": options["chemistry"],
-                    "solver": solver.name,
-                    "is_experiment": False,
-                    "cycle": None,
-                    "number": None,
-                    "is_comparison": False
-                })
-
-                return
-
-            elif options["choice"] == 1:
+            if options["choice"] == (
+                "degradation comparison (summary variables)"
+            ):
 
                 # generating number of comparisons
                 number_of_comp = random.randint(1, 3)
 
-                # generating a random experiment
-                cycle_received = experiment_generator()
-                number = random.randint(4, 100)
+                # generating a random experiment if not testing
+                if options["testing"]:
+                    cycle_received = [
+                        (
+                            "Discharge at C/10 for 10 hours or until 3.3 V",
+                            "Rest for 1 hour",
+                            "Charge at 1 A until 4.1 V",
+                            "Hold at 4.1 V until 50 mA",
+                            "Rest for 1 hour"
+                        )
+                    ]
+                    number = 3
+                else:   # pragma: no cover
+                    cycle_received = experiment_generator()
+                    number = random.randint(4, 100)
 
                 if options["chemistry"] == pybamm.parameter_sets.Ai2020:
                     experiment = pybamm.Experiment(
@@ -241,7 +207,7 @@ def random_plot_generator(
                     experiment=experiment,
                     chemistry=options["chemistry"],
                     solver=solver,
-                    number_of_comp=1
+                    number_of_comp=number_of_comp
                 )
 
                 # plotting summary variables
@@ -249,10 +215,7 @@ def random_plot_generator(
 
                 return_dict.update({
                     "model": model,
-                    "parameter_values": parameter_values,
-                    "time_array": None,
                     "chemistry": options["chemistry"],
-                    "solver": solver.name,
                     "is_experiment": True,
                     "cycle": cycle_received,
                     "number": number,
@@ -261,37 +224,7 @@ def random_plot_generator(
 
                 return
 
-            elif options["choice"] == 2:
-
-                # generating a random experiment
-                cycle_received = experiment_generator()
-                number = random.randint(1, 3)
-
-                experiment = pybamm.Experiment(cycle_received * number)
-
-                # solving
-                (sim, solutions, parameter_values) = experiment_solver(
-                    model, experiment, options["chemistry"], solver, 1
-                )
-
-                # creating a GIF
-                time_array = plot_graph(solutions[0], sim)
-
-                return_dict.update({
-                    "model": model,
-                    "parameter_values": parameter_values,
-                    "time_array": None,
-                    "chemistry": options["chemistry"],
-                    "solver": solver.name,
-                    "is_experiment": True,
-                    "cycle": cycle_received,
-                    "number": number,
-                    "is_comparison": False
-                })
-
-                return
-
-            elif options["choice"] == 3:
+            elif options["choice"] == "non-degradation comparisons":
 
                 # generating number of models to be compared
                 number_of_comp = random.randint(1, 3)
@@ -310,14 +243,13 @@ def random_plot_generator(
 
                 return_dict.update({
                     "model": comparison_dict["model"],
-                    "parameter_values": comparison_dict["parameter_values"],
-                    "time_array": comparison_dict["time_array"],
                     "chemistry": comparison_dict["chemistry"],
-                    "solver": None,
-                    "is_experiment": False,
-                    "cycle": None,
-                    "number": None,
-                    "is_comparison": True
+                    "is_experiment": comparison_dict["is_experiment"],
+                    "cycle": comparison_dict["cycle"],
+                    "number": comparison_dict["number"],
+                    "is_comparison": comparison_dict["is_comparison"],
+                    "param_to_vary": comparison_dict["param_to_vary"],
+                    "varied_values": comparison_dict["varied_values"]
                 })
 
                 return

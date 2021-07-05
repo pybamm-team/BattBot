@@ -3,7 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def generate_summary_variables(solutions, chemistry):
+# Reference - PyBaMM example notebook -
+# https://github.com/pybamm-team/PyBaMM/blob/develop/examples/notebooks/simulating-long-experiments.ipynb
+def generate_summary_variables(solution, chemistry):
     """
     Plots summary variables.
     Parameters:

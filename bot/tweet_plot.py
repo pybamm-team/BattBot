@@ -1,7 +1,9 @@
 import os
 import sys
 import time
+import random
 import requests
+import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
 from requests_oauthlib import OAuth1
@@ -37,6 +39,13 @@ class Tweet(object):
             manager = multiprocessing.Manager()
             return_dict = manager.dict()
 
+            choice_list = [
+                # "degradation comparison (summary variables)",
+                "non-degradation comparisons"
+            ]
+            if choice is None:
+                choice = random.choice(choice_list)
+
             p = multiprocessing.Process(target=random_plot_generator, args=(
                 return_dict,
                 {
@@ -49,7 +58,7 @@ class Tweet(object):
             )
 
             p.start()
-            p.join(600)
+            p.join(1200)
 
             if p.is_alive():    # pragma: no cover
                 print(
@@ -68,15 +77,19 @@ class Tweet(object):
         self.total_bytes = os.path.getsize(self.plot)
         self.media_id = None
         self.processing_info = None
+        self.config = None
         self.model = return_dict["model"]
-        self.parameter_values = return_dict["parameter_values"]
-        self.time = return_dict["time_array"]
         self.chemistry = return_dict["chemistry"]
-        self.solver = return_dict["solver"]
         self.is_experiment = return_dict["is_experiment"]
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
+        if choice == "non-degradation comparisons":
+            self.param_to_vary = return_dict["param_to_vary"]
+            self.varied_values = return_dict["varied_values"]
+        else:
+            self.param_to_vary = None
+            self.varied_values = None
         self.testing = testing
 
     def upload_init(self):
@@ -234,6 +247,36 @@ class Tweet(object):
 
         return req
 
+    def write_config(self, filename, append=False):
+        """
+        Writes the random config to config.txt and appends the same to
+        data.txt with date and time.
+        """
+        self.config = {
+            "model": str(self.model),
+            "model options": self.model.options
+            if not isinstance(self.model, dict)
+            else None,
+            "chemistry": self.chemistry,
+            "is_experiment": self.is_experiment,
+            "cycle": self.cycle,
+            "number": self.number,
+            "is_comparison": self.is_comparison,
+            "param_to_vary": self.param_to_vary,
+            "varied_values": self.varied_values
+        }
+        if not append:
+            f = open(filename, "w")
+            f.write(str(self.config))
+        elif append:
+            f = open(filename, "a")
+            f.write(
+                str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                + " " + str(self.config)
+                + "\n"
+            )
+        f.close()
+
     def tweet(self):
         """
         Publishes Tweet with attached plot
@@ -242,17 +285,14 @@ class Tweet(object):
             information(
                 self.chemistry,
                 self.model,
-                self.solver,
                 self.is_experiment,
                 self.cycle,
                 self.number,
-                self.is_comparison
+                self.is_comparison,
+                self.param_to_vary
             )
-            + ", at time = "
-            + str(self.time)
-            + " s"
-
         )
+        print(tweet_status)
 
         request_data = {
             'status': tweet_status,
@@ -261,9 +301,11 @@ class Tweet(object):
 
         if not self.testing:    # pragma: no cover
             self.post_request(post_tweet_url, request_data, oauth)
+            self.write_config("config.txt")
+            self.write_config("data.txt", append=True)
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
-        else:
+        if os.path.exists("plot.png"):
             os.remove("plot.png")
         plt.close()
 
@@ -273,4 +315,6 @@ if __name__ == '__main__':  # pragma: no cover
     tweet.upload_init()
     tweet.upload_append()
     tweet.upload_finalize()
+    if not tweet.testing:
+        time.sleep(random.randint(3600))
     tweet.tweet()
