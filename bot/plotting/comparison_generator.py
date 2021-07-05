@@ -99,7 +99,7 @@ def comparison_generator(
                         continue
                     else:
                         break
-                else:
+                else:   # pragma: no cover
                     break
 
             # change a parameter value
