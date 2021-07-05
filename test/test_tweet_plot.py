@@ -32,7 +32,6 @@ class TestTweetPlot(unittest.TestCase):
         tweet.upload_finalize()
         tweet.tweet()
 
-        self.assertIsNotNone(tweet.config)
         f = open("config.txt")
         text = f.read()
         self.assertIsInstance(text, str)
@@ -65,7 +64,6 @@ class TestTweetPlot(unittest.TestCase):
 
         tweet.tweet()
 
-        self.assertIsNotNone(tweet.config)
         f = open("config.txt")
         text = f.read()
         self.assertIsInstance(text, str)
@@ -97,7 +95,6 @@ class TestTweetPlot(unittest.TestCase):
         tweet.upload_finalize()
         tweet.tweet()
 
-        self.assertIsNotNone(tweet.config)
         f = open("config.txt")
         text = f.read()
         self.assertIsInstance(text, str)
