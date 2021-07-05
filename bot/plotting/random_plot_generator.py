@@ -13,6 +13,7 @@ chemistries = [
     pybamm.parameter_sets.Chen2020,
     pybamm.parameter_sets.Marquis2019,
     pybamm.parameter_sets.Yang2017,
+    pybamm.parameter_sets.Chen2020_plating
     # pybamm.parameter_sets.Ecker2015,
     # pybamm.parameter_sets.Ramadass2004,
 ]
@@ -106,7 +107,7 @@ def random_plot_generator(
 
             # Add degradation only if we are plotting summary variables
             if options["choice"] == (
-                "degradation comparison (summary variables)"
+                "degradation comparisons"
             ):
                 # update model options
                 model_options = {}
@@ -166,7 +167,7 @@ def random_plot_generator(
             )
 
             if options["choice"] == (
-                "degradation comparison (summary variables)"
+                "degradation comparisons"
             ):
 
                 # generating number of comparisons
