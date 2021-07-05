@@ -157,9 +157,21 @@ def random_plot_generator(
                 "degradation comparison (summary variables)"
             ):
 
-                # generating a random experiment
-                cycle_received = experiment_generator()
-                number = random.randint(4, 100)
+                # generating a random experiment if not testing
+                if options["testing"]:
+                    cycle_received = [
+                        (
+                            "Discharge at C/10 for 10 hours or until 3.3 V",
+                            "Rest for 1 hour",
+                            "Charge at 1 A until 4.1 V",
+                            "Hold at 4.1 V until 50 mA",
+                            "Rest for 1 hour"
+                        )
+                    ]
+                    number = 3
+                else:   # pragma: no cover
+                    cycle_received = experiment_generator()
+                    number = random.randint(4, 100)
 
                 if options["chemistry"] == pybamm.parameter_sets.Ai2020:
                     experiment = pybamm.Experiment(

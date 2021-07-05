@@ -301,12 +301,12 @@ class Tweet(object):
 
         if not self.testing:    # pragma: no cover
             self.post_request(post_tweet_url, request_data, oauth)
+            self.write_config("config.txt")
+            self.write_config("data.txt", append=True)
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
-        else:
+        if os.path.exists("plot.png"):
             os.remove("plot.png")
-        self.write_config("config.txt")
-        self.write_config("data.txt", append=True)
         plt.close()
 
 
@@ -315,4 +315,6 @@ if __name__ == '__main__':  # pragma: no cover
     tweet.upload_init()
     tweet.upload_append()
     tweet.upload_finalize()
+    if not tweet.testing:
+        time.sleep(random.randint(3600))
     tweet.tweet()

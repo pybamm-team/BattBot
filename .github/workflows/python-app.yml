@@ -6,7 +6,7 @@ on:
   pull_request:
 
   schedule:
-    - cron: '* */8 * * * r=$(($((RANDOM % 7)))) ; sleep ${r}s'
+    - cron: '0 7,19 * * *'
 
 jobs:
 
