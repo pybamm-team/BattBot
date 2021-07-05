@@ -7,7 +7,7 @@ from bot.tweet_plot import Tweet
 class TestTweetPlot(unittest.TestCase):
     def test_tweet_graph(self):
         tweet = Tweet(
-            testing=True, choice="degradation comparison (summary variables)"
+            testing=True, choice="degradation comparisons"
         )
 
         self.assertIsNone(tweet.media_id)

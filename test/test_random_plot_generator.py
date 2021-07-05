@@ -31,7 +31,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     return_dict,
                     {
                         "testing": True,
-                        "choice": "degradation comparison (summary variables)",
+                        "choice": "degradation comparisons",
                         "chemistry": pybamm.parameter_sets.Chen2020,
                         "provided_degradation": True
                     }
@@ -76,7 +76,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     return_dict,
                     {
                         "testing": True,
-                        "choice": "degradation comparison (summary variables)",
+                        "choice": "degradation comparisons",
                         "chemistry": pybamm.parameter_sets.Ai2020,
                         "provided_degradation": True
                     }
@@ -121,7 +121,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
                     return_dict,
                     {
                         "testing": True,
-                        "choice": "degradation comparison (summary variables)",
+                        "choice": "degradation comparisons",
                         "chemistry": pybamm.parameter_sets.Yang2017,
                         "provided_degradation": True
                     }
