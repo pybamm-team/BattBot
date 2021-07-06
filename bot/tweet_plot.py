@@ -247,7 +247,7 @@ class Tweet(object):
 
         return req
 
-    def write_config(self, filename, append=False):
+    def write_config(self, filename, append=False):    # pragma: no cover
         """
         Writes the random config to config.txt and appends the same to
         data.txt with date and time.
