@@ -9,10 +9,10 @@ from plotting.comparison_generator import comparison_generator
 
 # possible chemistries for the bot
 chemistries = [
-    pybamm.parameter_sets.Ai2020,
-    pybamm.parameter_sets.Chen2020,
-    pybamm.parameter_sets.Marquis2019,
-    pybamm.parameter_sets.Yang2017,
+    # pybamm.parameter_sets.Ai2020,
+    # pybamm.parameter_sets.Chen2020,
+    # pybamm.parameter_sets.Marquis2019,
+    # pybamm.parameter_sets.Yang2017,
     pybamm.parameter_sets.Chen2020_plating
     # pybamm.parameter_sets.Ecker2015,
     # pybamm.parameter_sets.Ramadass2004,
@@ -171,7 +171,7 @@ def random_plot_generator(
             ):
 
                 # generating number of comparisons
-                number_of_comp = random.randint(1, 3)
+                number_of_comp = 2
 
                 # generating a random experiment if not testing
                 if options["testing"]:

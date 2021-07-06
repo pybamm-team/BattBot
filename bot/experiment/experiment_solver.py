@@ -11,7 +11,7 @@ def experiment_solver(
 ):
     """
     This function simulates and solves an experiment with a given model,
-    chemistry and solver.
+    chemistry and solver with different parameter values.
     Parameters:
         model: pybamm.BaseModel
         experiment: pybamm.Experiment
@@ -30,7 +30,7 @@ def experiment_solver(
 
     solutions = []
     param_list = []
-    param_to_vary = "Current function [A]"
+    param_to_vary = 'Lithium plating kinetic rate constant [m.s-1]'
     for i in range(0, number_of_comp):
         # copy the original values and append them in the list
         param_list.append(parameter_values.copy())
