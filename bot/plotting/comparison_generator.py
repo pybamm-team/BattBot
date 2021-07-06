@@ -61,7 +61,6 @@ def comparison_generator(
             "Negative electrode Bruggeman coefficient (electrolyte)",
             "Negative electrode exchange-current density [A.m-2]",
             "Positive electrode porosity",
-            "Positive electrode active material volume fraction",
             "Positive electrode exchange-current density [A.m-2]",
             "Positive electrode Bruggeman coefficient (electrolyte)",
             "Ambient temperature [K]"
@@ -93,7 +92,14 @@ def comparison_generator(
                         continue
                     else:
                         break
-                else:    # pragma: no cover
+                elif (
+                    param_to_vary == "Ambient temperature [K]"
+                ):    # pragma: no cover
+                    if param_value < 265 or param_value > 355:
+                        continue
+                    else:
+                        break
+                else:   # pragma: no cover
                     break
 
             # change a parameter value
