@@ -1,4 +1,3 @@
-
 name: PyBaMM Twitter bot
 
 on:
@@ -7,7 +6,7 @@ on:
   pull_request:
 
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 7,19 * * *'
 
 jobs:
 
