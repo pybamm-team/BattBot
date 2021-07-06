@@ -41,4 +41,4 @@ to the end of your script. This will print bibtex information to the terminal; p
 
 ## Contributing to PyBaMM-Twitter-Bot
 
-All contributions to this repository are welcome. You can go through out [Contribution guidelines](https://github.com/pybamm-team/PyBaMM/blob/develop/CONTRIBUTING.md) to make the whole process smoother.
+All contributions to this repository are welcome. You can go through our [Contribution guidelines](https://github.com/pybamm-team/PyBaMM/blob/develop/CONTRIBUTING.md) to make the whole process smoother.
