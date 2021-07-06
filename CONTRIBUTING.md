@@ -1,4 +1,4 @@
-# Contributing to PyBaMM-Twitter-Bot
+# Contributing to BattBot
 
 All contributions to this repository are welcomed, please have a look at the guidelines below for smoother contributions.
 Some of the guidelines (which are common) have been picked up from the [PyBaMM](https://github.com/pybamm-team/PyBaMM/blob/develop/CONTRIBUTING.md) repository.
@@ -13,7 +13,7 @@ If you do have one, or have applied for one, you can follow the step below to se
 
 ## Local installation
 Follow the steps below to locally install the bot for development -
-1. Fork [this](https://github.com/Saransh-cpp/PyBaMM-Twitter-Bot) repository.
+1. Fork [this](https://github.com/Saransh-cpp/BattBot) repository.
 2. Clone the forked repository.
 3. Run the following commands - 
 ```bash
@@ -29,7 +29,7 @@ python -m unittest
 **Note: The tests written in `test_tweet_plot.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
 
 ## Workflow
-1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/Saransh-cpp/PyBaMM-Twitter-Bot/issues) for discussing the topic with others.
+1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/Saransh-cpp/BattBot/issues) for discussing the topic with others.
 2. Once you take up the issue (or a pre-existing issue), you can proceed with creating a branch on your fork.
 3. Once you are done with the changes, you can test your code and the coverage by running -
 ```bash
@@ -39,7 +39,7 @@ coverage report  # for a better visualisation, you can run coverage html
 ```
 Once this executes, you will be able to see if any tests are failing or if the coverage dropped. You can always create a PR to get even better test/coverage suggestions and reviews.
 
-4. Once everything passes, you can go ahead and create a [Pull Request](https://github.com/Saransh-cpp/PyBaMM-Twitter-Bot/pulls) for the constructive review process.
+4. Once everything passes, you can go ahead and create a [Pull Request](https://github.com/Saransh-cpp/BattBot/pulls) for the constructive review process.
 
 ## GitHub Actions
 All the tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file. This also means that the failing `test_tweet_plot.py` tests will pass (if everything is working) on a PR as it will pull the `Twitter API Keys` from repository secrets, this however does not mean that a plot will be tweeted everytime a PR is made or a commit is added to a PR, the tweet worklow is triggered only when something is pushed on the main branch.
@@ -62,7 +62,7 @@ Next, add some simple (and speedy!) tests of your main features. If these run wi
 Most of the documentation in this repository is of the form of docstrings and comments. Every class and function should have a docstring and the codebase should be well commented. Other than this, there is some documentation in markdown as well, which can be updated whenever required.
 
 ## Google Colab
-Editable notebook, to run the random tweeted configurations is made available using Google Colab [here](https://colab.research.google.com/github/Saransh-cpp/PyBaMM-Twitter-Bot/blob/main/).
+Editable notebook, to run the random tweeted configurations is made available using Google Colab [here](https://colab.research.google.com/github/Saransh-cpp/BattBot/blob/main/).
 
 ## Codecov
 Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot.
