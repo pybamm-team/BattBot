@@ -227,8 +227,6 @@ def random_plot_generator(
                     "is_comparison": False,
                     "param_to_vary": degradation_parameter,
                     "varied_values": param_values,
-                    "degradation_mode": degradation_mode,
-                    "degradation_value": degradation_value,
                 })
 
                 return
@@ -259,9 +257,6 @@ def random_plot_generator(
                     "is_comparison": comparison_dict["is_comparison"],
                     "param_to_vary": comparison_dict["param_to_vary"],
                     "varied_values": comparison_dict["varied_values"],
-                    "degradation_mode": None,
-                    "degradation_value": None,
-                    "degradation_parameter": None
                 })
 
                 return
