@@ -39,7 +39,7 @@ sei_list = [
 sei_porosity_change_list = ["true", "false"]
 
 # possible "lithium plating" for the bot
-lithium_plating_list = ["irreversible"]
+# lithium_plating_list = ["irreversible"]
 
 solver = pybamm.CasadiSolver(mode="safe")
 
@@ -90,7 +90,7 @@ def random_plot_generator(
             particle_mechanics = random.choice(particle_mechanics_list)
             sei = random.choice(sei_list)
             sei_porosity_change = random.choice(sei_porosity_change_list)
-            lithium_plating = random.choice(lithium_plating_list)
+            # lithium_plating = random.choice(lithium_plating_list)
 
             # Add degradation only if we are plotting summary variables
             if options["choice"] == (
@@ -181,10 +181,8 @@ def random_plot_generator(
                     cycle_received = [
                         (
                             "Discharge at C/10 for 10 hours or until 3.3 V",
-                            # "Rest for 1 hour",
                             "Charge at 1 A until 4.1 V",
                             "Hold at 4.1 V until 50 mA",
-                            # "Rest for 1 hour"
                         )
                     ]
                     number = 3

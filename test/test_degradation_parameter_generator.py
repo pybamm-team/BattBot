@@ -1,6 +1,9 @@
 import pybamm
 import unittest
-from bot.utils.degradation_parameter_generator import degradation_parameter_generator
+from bot.utils.degradation_parameter_generator import (
+    degradation_parameter_generator
+)
+
 
 class TestDegradationParameterGenerator(unittest.TestCase):
     def test_degradation_parameter_generator(self):
