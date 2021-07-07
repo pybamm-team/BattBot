@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 
 # Reference - PyBaMM example notebook -
 # https://github.com/pybamm-team/PyBaMM/blob/develop/examples/notebooks/simulating-long-experiments.ipynb
-def generate_summary_variables(solutions, chemistry):
+def generate_summary_variables(solutions, chemistry, labels):
     """
-    Plots summary variables.
+    Plots summary variable comparisons.
     Parameters:
         solutions: list
         chemistry: dict
+        labels: list
     """
 
     if chemistry == pybamm.parameter_sets.Ai2020:
@@ -36,21 +37,17 @@ def generate_summary_variables(solutions, chemistry):
     n = int(length // np.sqrt(length))
     m = int(np.ceil(length / n))
 
-    # fig = plt.figure(figsize=(15, 8))
     fig, axes = plt.subplots(n, m, figsize=(15, 8))
-    plt.subplots_adjust(left=0.0, bottom=0.1, right=0.45)
     for var, ax in zip(vars_to_plot, axes.flat):
         for solution in solutions:
             ax.plot(
                 solution.summary_variables["Cycle number"],
                 solution.summary_variables[var],
-                # label = 'x'
             )
         ax.set_xlabel("Cycle number")
         ax.set_ylabel(var)
         ax.set_xlim([1, solution.summary_variables["Cycle number"][-1]])
 
-    plt.subplots_adjust(top=0.00001)
     fig.tight_layout()
-    fig.legend(['This is plot 1', 'This is plot 2'],loc='lower right', bbox_to_anchor=(1,0), bbox_transform=plt.gcf().transFigure)
-    plt.savefig("plot.png", dpi=300)
+    fig.legend(labels, loc="lower left", bbox_to_anchor=(0.77, -0.08))
+    plt.savefig("plot.png", dpi=300, bbox_inches='tight')

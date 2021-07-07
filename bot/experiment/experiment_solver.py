@@ -1,5 +1,4 @@
 import pybamm
-from utils.parameter_value_generator import parameter_value_generator
 
 
 def experiment_solver(
@@ -7,7 +6,8 @@ def experiment_solver(
     experiment,
     chemistry,
     solver,
-    number_of_comp
+    param_values,
+    degradation_parameter
 ):
     """
     This function simulates and solves an experiment with a given model,
@@ -17,35 +17,31 @@ def experiment_solver(
         experiment: pybamm.Experiment
         chemistry: dict
         solver: pybamm.BaseSolver
-        number_of_comp: numerical
-            Set it 1 if there are no comparisons to be made, 2 if there are 2
-            parameter values you want to compare and so on.
+        param_values: list
+            Varied values of degradation_parameter
+        degradation_parameter: str
+            Parameter to be varied
     Returns:
         sim: pybamm.Simulation
         solutions: list
-        parameter_values: pybamm.ParameterValues
+        labels: list
     """
 
     parameter_values = pybamm.ParameterValues(chemistry=chemistry)
 
     solutions = []
     param_list = []
-    param_to_vary = 'Lithium plating kinetic rate constant [m.s-1]'
-    for i in range(0, number_of_comp):
+    labels = []
+    for i in range(0, len(param_values)):
         # copy the original values and append them in the list
         param_list.append(parameter_values.copy())
 
-        # generate a random value
-        param_value = parameter_value_generator(
-            chemistry, param_to_vary
-        )
-
-        print(param_to_vary + " " + str(param_value))
+        labels.append(degradation_parameter + ": " + str(param_values[i]))
 
         # change a parameter value
         param_list[i][
-            param_to_vary
-        ] = param_value
+            degradation_parameter
+        ] = param_values[i]
 
         sim = pybamm.Simulation(
             model=model,
@@ -60,4 +56,5 @@ def experiment_solver(
         solution = sim.solution
         solutions.append(solution)
 
-    return sim, solutions, parameter_values
+    print(solutions)
+    return sim, solutions, labels

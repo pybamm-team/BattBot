@@ -5,15 +5,18 @@ from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
 from plotting.comparison_generator import comparison_generator
+from utils.degradation_parameter_generator import (
+    degradation_parameter_generator
+)
 
 
 # possible chemistries for the bot
 chemistries = [
-    # pybamm.parameter_sets.Ai2020,
-    # pybamm.parameter_sets.Chen2020,
-    # pybamm.parameter_sets.Marquis2019,
+    pybamm.parameter_sets.Ai2020,
+    pybamm.parameter_sets.Chen2020,
+    pybamm.parameter_sets.Marquis2019,
     # pybamm.parameter_sets.Yang2017,
-    pybamm.parameter_sets.Chen2020_plating
+    # pybamm.parameter_sets.Chen2020_plating
     # pybamm.parameter_sets.Ecker2015,
     # pybamm.parameter_sets.Ramadass2004,
 ]
@@ -21,7 +24,6 @@ chemistries = [
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters
 particle_mechanics_list = [
     "swelling and cracking",
-    "none"
 ]
 
 # possible "SEI" for the bot
@@ -31,14 +33,13 @@ sei_list = [
     "solvent-diffusion limited",
     "electron-migration limited",
     "interstitial-diffusion limited",
-    "none"
 ]
 
 # possible "SEI porosity change" for the bot
 sei_porosity_change_list = ["true", "false"]
 
 # possible "lithium plating" for the bot
-lithium_plating_list = ["reversible", "irreversible"]
+lithium_plating_list = ["irreversible"]
 
 solver = pybamm.CasadiSolver(mode="safe")
 
@@ -91,20 +92,6 @@ def random_plot_generator(
             sei_porosity_change = random.choice(sei_porosity_change_list)
             lithium_plating = random.choice(lithium_plating_list)
 
-            # if no degradation or if testing, continue
-            if (
-                (
-                    particle_mechanics == "none"
-                    and sei == "none"
-                )
-                or (
-                    options["testing"]
-                    and options["provided_degradation"]
-                )
-            ):
-                options["provided_degradation"] = False
-                continue
-
             # Add degradation only if we are plotting summary variables
             if options["choice"] == (
                 "degradation comparisons"
@@ -114,6 +101,8 @@ def random_plot_generator(
                 if options["chemistry"] == (
                     pybamm.parameter_sets.Ai2020
                 ):
+                    degradation_mode = "particle mechanics"
+                    degradation_value = particle_mechanics
                     model_options.update({
                         "particle mechanics": particle_mechanics,
                     })
@@ -126,13 +115,16 @@ def random_plot_generator(
                 elif options["chemistry"] == (
                     pybamm.parameter_sets.Chen2020_plating
                 ):
-                    options.update({
+                    model_options.update({
                         "lithium plating": lithium_plating,
                         "SEI porosity change": sei_porosity_change
                     })
                 else:
+                    degradation_mode = "SEI"
+                    degradation_value = sei
                     model_options.update({
                         "SEI": sei,
+                        "SEI porosity change": sei_porosity_change
                     })
             else:
                 model_options = None
@@ -171,7 +163,18 @@ def random_plot_generator(
             ):
 
                 # generating number of comparisons
-                number_of_comp = 2
+                number_of_comp = 3
+
+                # generating a random degradation parameter to vary
+                (
+                    param_values,
+                    degradation_parameter
+                ) = degradation_parameter_generator(
+                    options["chemistry"],
+                    number_of_comp,
+                    degradation_mode=degradation_mode,
+                    degradation_value=degradation_value
+                )
 
                 # generating a random experiment if not testing
                 if options["testing"]:
@@ -202,17 +205,21 @@ def random_plot_generator(
                 (
                     sim,
                     solutions,
-                    parameter_values
+                    labels
                 ) = experiment_solver(
                     model=model,
                     experiment=experiment,
                     chemistry=options["chemistry"],
                     solver=solver,
-                    number_of_comp=number_of_comp
+                    param_values=param_values,
+                    degradation_parameter=degradation_parameter
                 )
 
                 # plotting summary variables
-                generate_summary_variables(solutions, options["chemistry"])
+                print(solutions)
+                generate_summary_variables(
+                    solutions, options["chemistry"], labels
+                )
 
                 return_dict.update({
                     "model": model,
