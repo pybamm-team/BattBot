@@ -4,7 +4,7 @@ from bot.utils.parameter_value_generator import parameter_value_generator
 from bot.utils.parameter_value_generator import FunctionLike
 
 
-class TextParameterValueGenerator(unittest.TestCase):
+class TestParameterValueGenerator(unittest.TestCase):
     def test_parameter_value_generator(self):
 
         parameter = "Lower voltage cut-off [V]"
