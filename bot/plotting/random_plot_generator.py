@@ -225,9 +225,10 @@ def random_plot_generator(
                     "cycle": cycle_received,
                     "number": number,
                     "is_comparison": False,
+                    "param_to_vary": degradation_parameter,
+                    "varied_values": param_values,
                     "degradation_mode": degradation_mode,
                     "degradation_value": degradation_value,
-                    "degradation_parameter": degradation_parameter
                 })
 
                 return
@@ -257,7 +258,10 @@ def random_plot_generator(
                     "number": comparison_dict["number"],
                     "is_comparison": comparison_dict["is_comparison"],
                     "param_to_vary": comparison_dict["param_to_vary"],
-                    "varied_values": comparison_dict["varied_values"]
+                    "varied_values": comparison_dict["varied_values"],
+                    "degradation_mode": None,
+                    "degradation_value": None,
+                    "degradation_parameter": None
                 })
 
                 return

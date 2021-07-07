@@ -87,6 +87,9 @@ class Tweet(object):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
+        self.degradation_mode = return_dict["degradation_mode"]
+        self.degradation_value = return_dict["degradation_value"]
+
         if choice == "non-degradation comparisons":
             self.param_to_vary = return_dict["param_to_vary"]
             self.varied_values = return_dict["varied_values"]
@@ -266,7 +269,9 @@ class Tweet(object):
             "number": self.number,
             "is_comparison": self.is_comparison,
             "param_to_vary": self.param_to_vary,
-            "varied_values": self.varied_values
+            "varied_values": self.varied_values,
+            "degradation_mode": self.degradation_mode,
+            "degradation_value": self.degradation_value
         }
         if not append:
             f = open(filename, "w")
