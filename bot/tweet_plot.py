@@ -41,7 +41,7 @@ class Tweet(object):
 
             choice_list = [
                 "degradation comparisons",
-                # "non-degradation comparisons"
+                "non-degradation comparisons"
             ]
             if choice is None:
                 choice = random.choice(choice_list)
@@ -58,7 +58,10 @@ class Tweet(object):
             )
 
             p.start()
-            p.join(1200)
+            if choice == "non-degradation comparisons":
+                p.join(1200)
+            elif choice == "degradation comparisons":
+                p.join(1800)
 
             if p.is_alive():    # pragma: no cover
                 print(

@@ -23,33 +23,34 @@ class TestExperimentSolver(unittest.TestCase):
         self.parameter_values = pybamm.ParameterValues(
             chemistry=self.chemistry
         )
-        self.number_of_comp = 1
+        self.param_values = [298, 300, 328]
+        self.degradation_parameter = "Ambient temperature [K]"
 
     def test_experiment_solver(self):
-        sim, solution, parameter_values = experiment_solver(
+        sim, solutions, labels = experiment_solver(
             self.model,
             self.experiment,
             self.chemistry,
             self.solver,
-            self.number_of_comp
+            self.param_values,
+            self.degradation_parameter
         )
 
-        self.assertEqual(
-            parameter_values["Current function [A]"],
-            self.parameter_values["Current function [A]"],
-        )
         self.assertEqual(self.model.__class__, sim._model_class)
         self.assertFalse(sim._solution is None)
         self.assertEqual(sim.experiment, self.experiment)
         self.assertIsInstance(
-            solution[0].all_models[0], pybamm.lithium_ion.DFN
+            solutions[0].all_models[0], pybamm.lithium_ion.DFN
         )
         self.assertEqual(
             sim._experiment_inputs[0]["Current input [A]"],
-            1 / 10 * parameter_values["Nominal cell capacity [A.h]"],
+            1 / 10 * self.parameter_values["Nominal cell capacity [A.h]"],
         )
-        self.assertEqual(solution[0].termination, "final time")
-        self.assertEqual(len(solution[0].cycles), 3)
+        self.assertEqual(solutions[0].termination, "final time")
+        self.assertEqual(len(solutions[0].cycles), 3)
+        self.assertIsInstance(labels, list)
+        self.assertEqual(len(labels), 3)
+        self.assertEqual(len(solutions), 3)
 
 
 if __name__ == "__main__":

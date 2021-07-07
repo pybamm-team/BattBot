@@ -10,8 +10,8 @@ def experiment_solver(
     degradation_parameter
 ):
     """
-    This function simulates and solves an experiment with a given model,
-    chemistry and solver with different parameter values.
+    This function simulates and solves experiments with a given model,
+    chemistry.
     Parameters:
         model: pybamm.BaseModel
         experiment: pybamm.Experiment
@@ -56,5 +56,4 @@ def experiment_solver(
         solution = sim.solution
         solutions.append(solution)
 
-    print(solutions)
     return sim, solutions, labels

@@ -19,7 +19,7 @@ class TestPlottingSummaryVariables(unittest.TestCase):
                     "Rest for 1 hour"
                 )
             ]
-            * 10,
+            * 5,
         )
         self.sim_Chen = pybamm.Simulation(
             self.model,
@@ -41,19 +41,22 @@ class TestPlottingSummaryVariables(unittest.TestCase):
         )
         self.sim_Ai.solve(calc_esoh=False)
         self.solution_Ai = self.sim_Ai.solution
+        self.labels = ["This is some label"]
 
     def tearDown(self):
         os.remove("plot.png")
 
     def test_generate_summary_variables(self):
         generate_summary_variables(
-            [self.solution_Chen], self.chemistry_Chen2020
+            [self.solution_Chen], self.chemistry_Chen2020, self.labels
         )
         path = "plot.png"
 
         assert os.path.exists(path)
 
-        generate_summary_variables([self.solution_Ai], self.chemistry_Ai2020)
+        generate_summary_variables(
+            [self.solution_Ai], self.chemistry_Ai2020, self.labels
+        )
 
         assert os.path.exists(path)
 

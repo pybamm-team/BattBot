@@ -106,19 +106,19 @@ def random_plot_generator(
                     model_options.update({
                         "particle mechanics": particle_mechanics,
                     })
-                elif options["chemistry"] == (
-                    pybamm.parameter_sets.Yang2017
-                ):
-                    model_options.update({
-                        "lithium plating": "irreversible",
-                    })
-                elif options["chemistry"] == (
-                    pybamm.parameter_sets.Chen2020_plating
-                ):
-                    model_options.update({
-                        "lithium plating": lithium_plating,
-                        "SEI porosity change": sei_porosity_change
-                    })
+                # elif options["chemistry"] == (
+                #     pybamm.parameter_sets.Yang2017
+                # ):
+                #     model_options.update({
+                #         "lithium plating": "irreversible",
+                #     })
+                # elif options["chemistry"] == (
+                #     pybamm.parameter_sets.Chen2020_plating
+                # ):
+                #     model_options.update({
+                #         "lithium plating": lithium_plating,
+                #         "SEI porosity change": sei_porosity_change
+                #     })
                 else:
                     degradation_mode = "SEI"
                     degradation_value = sei
@@ -163,7 +163,7 @@ def random_plot_generator(
             ):
 
                 # generating number of comparisons
-                number_of_comp = 3
+                number_of_comp = random.randint(2, 3)
 
                 # generating a random degradation parameter to vary
                 (
@@ -181,10 +181,10 @@ def random_plot_generator(
                     cycle_received = [
                         (
                             "Discharge at C/10 for 10 hours or until 3.3 V",
-                            "Rest for 1 hour",
+                            # "Rest for 1 hour",
                             "Charge at 1 A until 4.1 V",
                             "Hold at 4.1 V until 50 mA",
-                            "Rest for 1 hour"
+                            # "Rest for 1 hour"
                         )
                     ]
                     number = 3
@@ -216,7 +216,6 @@ def random_plot_generator(
                 )
 
                 # plotting summary variables
-                print(solutions)
                 generate_summary_variables(
                     solutions, options["chemistry"], labels
                 )
@@ -227,7 +226,10 @@ def random_plot_generator(
                     "is_experiment": True,
                     "cycle": cycle_received,
                     "number": number,
-                    "is_comparison": False
+                    "is_comparison": False,
+                    "degradation_mode": degradation_mode,
+                    "degradation_value": degradation_value,
+                    "degradation_parameter": degradation_parameter
                 })
 
                 return
