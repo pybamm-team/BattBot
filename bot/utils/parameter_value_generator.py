@@ -42,7 +42,6 @@ def parameter_value_generator(
             upper_bound if upper_bound is not None else base_value*2,
             2
         )
-        varied_value = new_parameter_value
         params[parameter] = FunctionLike(
             params[parameter], new_parameter_value
         )
@@ -53,7 +52,6 @@ def parameter_value_generator(
             upper_bound if upper_bound is not None else base_value*2,
             2
         )
-        varied_value = new_parameter_value
         params[parameter] = new_parameter_value
 
-    return params, varied_value
+    return params

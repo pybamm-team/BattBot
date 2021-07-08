@@ -74,17 +74,17 @@ def degradation_parameter_generator(
     param_values = []
     for i in range(0, number_of_values):
         if degradation_parameter == "Ambient temperature [K]":
-            params, varied_value = parameter_value_generator(
+            params = parameter_value_generator(
                 chemistry,
                 degradation_parameter,
                 lower_bound=265,
                 upper_bound=355
             )
-            param_values.append([params, varied_value])
+            param_values.append([params, params[degradation_parameter]])
         else:
-            params, varied_value = parameter_value_generator(
+            params = parameter_value_generator(
                 chemistry, degradation_parameter
             )
-            param_values.append([params, varied_value])
+            param_values.append([params, params[degradation_parameter]])
 
     return param_values, degradation_parameter

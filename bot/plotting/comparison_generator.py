@@ -81,31 +81,31 @@ def comparison_generator(
                 param_to_vary == "Electrode height [m]"
                 or param_to_vary == "Electrode width [m]"
             ):
-                params, varied_value = parameter_value_generator(
+                params = parameter_value_generator(
                     chemistry, param_to_vary, lower_bound=0
                 )
             elif param_to_vary == "Ambient temperature [K]":
-                params, varied_value = parameter_value_generator(
+                params = parameter_value_generator(
                     chemistry, param_to_vary, lower_bound=265, upper_bound=355
                 )
             else:
-                params, varied_value = parameter_value_generator(
+                params = parameter_value_generator(
                     chemistry, param_to_vary
                 )
-            varied_values.append(varied_value)
+            varied_values.append(params[param_to_vary])
 
             logger.info(
-                param_to_vary + ": " + str(varied_value)
+                param_to_vary + ": " + str(params[param_to_vary])
             )
 
-            labels.append(param_to_vary + ": " + str(varied_value))
+            labels.append(param_to_vary + ": " + str(params[param_to_vary]))
 
             param_list.append(params)
 
             # find the minimum value if "Current function [A]" is varied
             if param_to_vary == "Current function [A]":
-                if varied_value < min_param_value:
-                    min_param_value = varied_value
+                if params[param_to_vary] < min_param_value:
+                    min_param_value = params[param_to_vary]
 
         parameter_values_for_comp = dict(
             list(enumerate(param_list))
