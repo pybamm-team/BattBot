@@ -23,20 +23,16 @@ def experiment_solver(
             Parameter to be varied
     Returns:
         sim: pybamm.Simulation
-        solutions: list
-        labels: list
+        solutions_and_labels: list
     """
 
     parameter_values = pybamm.ParameterValues(chemistry=chemistry)
 
-    solutions = []
+    solutions_and_labels = []
     param_list = []
-    labels = []
     for i in range(0, len(param_values)):
         # copy the original values and append them in the list
         param_list.append(parameter_values.copy())
-
-        labels.append(degradation_parameter + ": " + str(param_values[i]))
 
         # change a parameter value
         param_list[i][
@@ -54,6 +50,7 @@ def experiment_solver(
         else:
             sim.solve()
         solution = sim.solution
-        solutions.append(solution)
-
-    return sim, solutions, labels
+        solutions_and_labels.append([
+            solution, degradation_parameter + ": " + str(param_values[i])
+        ])
+    return sim, solutions_and_labels

@@ -27,7 +27,7 @@ class TestExperimentSolver(unittest.TestCase):
         self.degradation_parameter = "Ambient temperature [K]"
 
     def test_experiment_solver(self):
-        sim, solutions, labels = experiment_solver(
+        sim, solutions_and_labels = experiment_solver(
             self.model,
             self.experiment,
             self.chemistry,
@@ -40,17 +40,15 @@ class TestExperimentSolver(unittest.TestCase):
         self.assertFalse(sim._solution is None)
         self.assertEqual(sim.experiment, self.experiment)
         self.assertIsInstance(
-            solutions[0].all_models[0], pybamm.lithium_ion.DFN
+            solutions_and_labels[0][0].all_models[0], pybamm.lithium_ion.DFN
         )
         self.assertEqual(
             sim._experiment_inputs[0]["Current input [A]"],
             1 / 10 * self.parameter_values["Nominal cell capacity [A.h]"],
         )
-        self.assertEqual(solutions[0].termination, "final time")
-        self.assertEqual(len(solutions[0].cycles), 3)
-        self.assertIsInstance(labels, list)
-        self.assertEqual(len(labels), 3)
-        self.assertEqual(len(solutions), 3)
+        self.assertEqual(solutions_and_labels[0][0].termination, "final time")
+        self.assertEqual(len(solutions_and_labels[0][0].cycles), 3)
+        self.assertEqual(len(solutions_and_labels), 3)
 
 
 if __name__ == "__main__":
