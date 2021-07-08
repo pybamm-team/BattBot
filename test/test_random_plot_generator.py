@@ -64,7 +64,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
-        self.assertFalse(return_dict["is_comparison"])
+        self.assertTrue(return_dict["is_summary_variable"])
         self.assertEqual(return_dict["degradation_mode"], "SEI")
         self.assertTrue(
             return_dict["degradation_value"] == "ec reaction limited"
@@ -119,7 +119,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
-        self.assertFalse(return_dict["is_comparison"])
+        self.assertTrue(return_dict["is_summary_variable"])
         self.assertEqual(
             return_dict["degradation_mode"], "particle mechanics"
         )
@@ -169,7 +169,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsInstance(return_dict["is_experiment"], bool)
-        self.assertIsInstance(return_dict["is_comparison"], bool)
+        self.assertIsInstance(return_dict["is_summary_variable"], bool)
 
 
 if __name__ == "__main__":

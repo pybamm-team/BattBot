@@ -213,6 +213,8 @@ def random_plot_generator(
                     degradation_parameter=degradation_parameter
                 )
 
+                logger.info(labels)
+
                 # plotting summary variables
                 generate_summary_variables(
                     solutions, options["chemistry"], labels
@@ -224,7 +226,7 @@ def random_plot_generator(
                     "is_experiment": True,
                     "cycle": cycle_received,
                     "number": number,
-                    "is_comparison": False,
+                    "is_summary_variable": True,
                     "param_to_vary": degradation_parameter,
                     "varied_values": param_values,
                     "degradation_mode": degradation_mode,
@@ -256,7 +258,7 @@ def random_plot_generator(
                     "is_experiment": comparison_dict["is_experiment"],
                     "cycle": comparison_dict["cycle"],
                     "number": comparison_dict["number"],
-                    "is_comparison": comparison_dict["is_comparison"],
+                    "is_summary_variable": False,
                     "param_to_vary": comparison_dict["param_to_vary"],
                     "varied_values": comparison_dict["varied_values"],
                     "degradation_mode": None,

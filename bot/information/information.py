@@ -7,10 +7,10 @@ def information(
     is_experiment,
     cycle,
     number,
-    is_comparison,
+    is_summary_variable,
     param_to_vary,
-    degradation_mode,
-    degradation_value
+    degradation_mode=None,
+    degradation_value=None
 ):
     """
     Generates tweet text.
@@ -34,17 +34,16 @@ def information(
     )
     temp = params["Ambient temperature [K]"] - 273.15
 
-    if is_experiment and not is_comparison:
+    if is_experiment and is_summary_variable:
         tweet_text = (
-            f"Summary varaibles for {model.name} with "
+            f"Plotting {model.name} with "
             f"{chemistry['citation']} parameters and "
-            f"{degradation_value} {degradation_mode} varying {param_to_vary} "
-            "for the following experiment: "
-            f"{cycle} * {number}"
+            f"{degradation_value} {degradation_mode}, "
+            f"for experiment: {cycle}"
         )
 
     elif is_experiment:
-        if param_to_vary is None and is_comparison:
+        if param_to_vary is None:
             if len(model) == 2:
                 tweet_text = (
                     f"Comparing {model[0].name} and {model[1].name} "
@@ -58,14 +57,14 @@ def information(
                     "parameters for the following experiment: "
                     f"{cycle} * {number}"
                 )
-        elif param_to_vary is not None and is_comparison:
+        elif param_to_vary is not None:
             tweet_text = (
                 f"{model[0].name} with {chemistry['citation']} parameters "
                 f"varying {param_to_vary} for the following experiment: "
                 f"{cycle} * {number}"
             )
     elif not is_experiment:
-        if param_to_vary is None and is_comparison:
+        if param_to_vary is None:
             if len(model) == 2:
                 tweet_text = (
                     f"Comparing {model[0].name} and {model[1].name} with "
@@ -78,7 +77,7 @@ def information(
                     f"{model[2].name} with {chemistry['citation']} "
                     f"parameters for a {c_rate} C discharge at {temp}°C"
                 )
-        elif param_to_vary is not None and is_comparison:
+        elif param_to_vary is not None:
             tweet_text = (
                 f"{model[0].name} with {chemistry['citation']} parameters "
                 f"varying {param_to_vary} for a {c_rate} C discharge at "

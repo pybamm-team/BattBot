@@ -32,7 +32,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
@@ -52,7 +51,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
@@ -72,7 +70,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
@@ -92,7 +89,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertEqual(comparison_dict["number"], 1)
         self.assertEqual(
             comparison_dict["cycle"],
@@ -124,7 +120,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertEqual(comparison_dict["number"], 1)
         self.assertEqual(
             comparison_dict["cycle"],
@@ -155,7 +150,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.models_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNone(comparison_dict["param_to_vary"])
 
@@ -172,7 +166,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
@@ -193,7 +186,6 @@ class TestComparisonGenerator(unittest.TestCase):
         for model in comparison_dict["model"].values():
             self.assertIsInstance(model, pybamm.BaseModel)
         self.assertEqual(comparison_dict["model"], self.model_for_comp)
-        self.assertTrue(comparison_dict["is_comparison"])
         self.assertIsNone(comparison_dict["cycle"])
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)

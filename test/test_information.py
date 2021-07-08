@@ -26,6 +26,8 @@ class TestInformation(unittest.TestCase):
         self.number = 3
         self.is_comparison = False
         self.param_to_vary = None
+        self.degradation_mode = "SEI",
+        self.degradation_value = "reaction limited"
 
     def test_information(self):
         result = information(
@@ -35,14 +37,17 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.degradation_mode,
+            self.degradation_value
         )
 
         self.assertEqual(
             result,
-            f"Summary varaibles for {self.model.name} with "
-            f"{self.chemistry['citation']} parameters for the following "
-            f"experiment: {str(self.cycle)} * {self.number}"
+            f"Plotting {self.model.name} with "
+            f"{self.chemistry['citation']} parameters and "
+            f"{self.degradation_value} {self.degradation_mode}, "
+            f"for experiment: {self.cycle}"
         )
 
         self.is_comparison = True

@@ -77,6 +77,7 @@ class Tweet(object):
             self.plot = "plot.gif"
         else:
             self.plot = "plot.png"
+        self.choice = choice
         self.total_bytes = os.path.getsize(self.plot)
         self.media_id = None
         self.processing_info = None
@@ -86,7 +87,7 @@ class Tweet(object):
         self.is_experiment = return_dict["is_experiment"]
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
-        self.is_comparison = return_dict["is_comparison"]
+        self.is_summary_variable = return_dict["is_summary_variable"]
         self.param_to_vary = return_dict["param_to_vary"]
         self.varied_values = return_dict["varied_values"]
         self.degradation_mode = return_dict["degradation_mode"]
@@ -262,7 +263,7 @@ class Tweet(object):
             "is_experiment": self.is_experiment,
             "cycle": self.cycle,
             "number": self.number,
-            "is_comparison": self.is_comparison,
+            "is_summary_variable": self.is_summary_variable,
             "param_to_vary": self.param_to_vary,
             "varied_values": self.varied_values,
         }
@@ -289,7 +290,7 @@ class Tweet(object):
                 self.is_experiment,
                 self.cycle,
                 self.number,
-                self.is_comparison,
+                self.is_summary_variable,
                 self.param_to_vary,
                 self.degradation_mode,
                 self.degradation_value
@@ -318,6 +319,6 @@ if __name__ == '__main__':  # pragma: no cover
     tweet.upload_init()
     tweet.upload_append()
     tweet.upload_finalize()
-    if not tweet.testing:
+    if not tweet.testing and tweet.choice != "degradation comparisons":
         time.sleep(random.randint(0, 3600))
     tweet.tweet()

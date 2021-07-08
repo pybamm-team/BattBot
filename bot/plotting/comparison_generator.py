@@ -79,28 +79,22 @@ def comparison_generator(
             param_list.append(params.copy())
 
             # generate a random value
-            while True:
+            if (
+                param_to_vary == "Electrode height [m]"
+                or param_to_vary == "Electrode width [m]"
+            ):
+                param_value = parameter_value_generator(
+                    chemistry, param_to_vary, lower_bound=0
+                )
+            elif param_to_vary == "Ambient temperature [K]":
+                param_value = parameter_value_generator(
+                    chemistry, param_to_vary, lower_bound=265, upper_bound=355
+                )
+            else:
                 param_value = parameter_value_generator(
                     chemistry, param_to_vary
                 )
-                varied_values.append(param_value)
-                if (
-                    param_to_vary == "Electrode height [m]"
-                    or param_to_vary == "Electrode width [m]"
-                ):     # pragma: no cover
-                    if param_value <= 0:
-                        continue
-                    else:
-                        break
-                elif (
-                    param_to_vary == "Ambient temperature [K]"
-                ):    # pragma: no cover
-                    if param_value < 265 or param_value > 355:
-                        continue
-                    else:
-                        break
-                else:   # pragma: no cover
-                    break
+            varied_values.append(param_value)
 
             # change a parameter value
             param_list[i][
@@ -175,7 +169,6 @@ def comparison_generator(
             "is_experiment": False,
             "cycle": None,
             "number": None,
-            "is_comparison": True,
             "param_to_vary": param_to_vary,
             "varied_values": varied_values
         })
@@ -252,7 +245,6 @@ def comparison_generator(
                     "is_experiment": True,
                     "cycle": cycle,
                     "number": number,
-                    "is_comparison": True,
                     "param_to_vary": param_to_vary,
                     "varied_values": varied_values
                 })
