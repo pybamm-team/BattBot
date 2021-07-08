@@ -13,7 +13,6 @@ class TestInformation(unittest.TestCase):
         )
         self.temp = self.params["Ambient temperature [K]"] - 273.15
         self.model = pybamm.lithium_ion.DFN()
-        self.is_experiment = True
         self.cycle = [
             (
                 "Discharge at C/10 for 10 hours or until 3.3 V",
@@ -24,10 +23,11 @@ class TestInformation(unittest.TestCase):
             )
         ]
         self.number = 3
-        self.is_comparison = False
+        self.is_experiment = True
         self.param_to_vary = None
         self.degradation_mode = "SEI",
         self.degradation_value = "reaction limited"
+        self.is_summary_variable = True
 
     def test_information(self):
         result = information(
@@ -36,7 +36,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary,
             self.degradation_mode,
             self.degradation_value
@@ -50,7 +50,7 @@ class TestInformation(unittest.TestCase):
             f"for experiment: {self.cycle}"
         )
 
-        self.is_comparison = True
+        self.is_summary_variable = False
         self.model = {
             0: pybamm.lithium_ion.DFN(),
             1: pybamm.lithium_ion.SPM()
@@ -62,7 +62,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary
         )
 
@@ -85,7 +85,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary
         )
 
@@ -105,7 +105,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary
         )
 
@@ -130,7 +130,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary
         )
 
@@ -153,7 +153,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary
         )
 
@@ -172,7 +172,7 @@ class TestInformation(unittest.TestCase):
             self.is_experiment,
             self.cycle,
             self.number,
-            self.is_comparison,
+            self.is_summary_variable,
             self.param_to_vary
         )
 

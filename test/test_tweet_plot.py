@@ -21,7 +21,7 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.cycle, list)
         self.assertIsInstance(tweet.cycle[0], tuple)
         self.assertIsInstance(tweet.number, int)
-        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertIsInstance(tweet.is_summary_variable, bool)
         self.assertIsInstance(tweet.testing, bool)
         self.assertIsInstance(tweet.param_to_vary, str)
         self.assertIsInstance(tweet.varied_values, list)
@@ -46,11 +46,9 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.model, dict)
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_comparison, bool)
-        self.assertTrue(tweet.is_comparison)
+        self.assertIsInstance(tweet.is_summary_variable, bool)
+        self.assertFalse(tweet.is_summary_variable)
         self.assertIsInstance(tweet.testing, bool)
-        self.assertIsInstance(tweet.param_to_vary, str)
-        self.assertIsInstance(tweet.varied_values, list)
 
         tweet.upload_init()
 
@@ -78,7 +76,7 @@ class TestTweetPlot(unittest.TestCase):
         )
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertIsInstance(tweet.is_summary_variable, bool)
         self.assertIsInstance(tweet.testing, bool)
 
         tweet.upload_init()

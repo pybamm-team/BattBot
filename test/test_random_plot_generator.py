@@ -74,7 +74,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             or return_dict["degradation_value"] ==
             "interstitial-diffusion limited"
         )
-        self.assertIsInstance(return_dict["degradation_parameter"], str)
+        self.assertIsInstance(return_dict["param_to_vary"], str)
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
         manager = multiprocessing.Manager()
@@ -126,7 +126,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertTrue(
             return_dict["degradation_value"] == "swelling and cracking"
         )
-        self.assertIsInstance(return_dict["degradation_parameter"], str)
+        self.assertIsInstance(return_dict["param_to_vary"], str)
 
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
