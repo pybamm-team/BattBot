@@ -118,10 +118,13 @@ def comparison_generator(
         choice_list = ["experiment", "no experiment"]
         choice = random.choice(choice_list)
 
-    if choice == "no experiment":
+    while True:
+        try:
 
-        while True:
-            try:
+            if choice == "no experiment":
+
+                is_experiment = False
+
                 s = pybamm.BatchStudy(
                     models=models_for_comp,
                     parameter_values=parameter_values_for_comp,
@@ -137,43 +140,11 @@ def comparison_generator(
                     t_end = 3700
 
                 s.solve([0, t_end])
-                break
-            except Exception as e:  # pragma: no cover
-                print(e)
 
-        # find the max "Time [s]" from all the solutions for the GIF
-        max_time = 0
-        solution = s.sims[0].solution
-        for sim in s.sims:
-            if sim.solution["Time [s]"].entries[-1] > max_time:
-                max_time = sim.solution["Time [s]"].entries[-1]
-                solution = sim.solution
+            elif choice == "experiment":
 
-        if len(labels) == 0:
-            plot_graph(
-                solution=solution, sim=s.sims
-            )
-        else:
-            plot_graph(
-                solution=solution, sim=s.sims, labels=labels
-            )
+                is_experiment = True
 
-        comparison_dict.update({
-            "model": models_for_comp,
-            "chemistry": chemistry,
-            "is_experiment": False,
-            "cycle": None,
-            "number": None,
-            "param_to_vary": param_to_vary,
-            "varied_values": varied_values
-        })
-
-        return comparison_dict
-
-    elif choice == "experiment":
-
-        while True:
-            try:
                 # generate a random cycle and a number for experiment
                 cycle = experiment_generator()
                 number = random.randint(1, 3)
@@ -216,35 +187,36 @@ def comparison_generator(
                 else:
                     s.solve()
 
-                # find the max "Time [s]" from all the solutions for the GIF
-                max_time = 0
-                solution = s.sims[0].solution
-                for sim in s.sims:
-                    if sim.solution["Time [s]"].entries[-1] > max_time:
-                        max_time = sim.solution["Time [s]"].entries[-1]
-                        solution = sim.solution
+            # find the max "Time [s]" from all the solutions for the GIF
+            max_time = 0
+            solution = s.sims[0].solution
+            for sim in s.sims:
+                if sim.solution["Time [s]"].entries[-1] > max_time:
+                    max_time = sim.solution["Time [s]"].entries[-1]
+                    solution = sim.solution
 
-                # create the GIF
-                if len(labels) == 0:
-                    plot_graph(
-                        solution=solution, sim=s.sims
-                    )
-                else:
-                    plot_graph(
-                        solution=solution, sim=s.sims, labels=labels
-                    )
+            # create the GIF
+            if len(labels) == 0:
+                plot_graph(
+                    solution=solution, sim=s.sims
+                )
+            else:
+                plot_graph(
+                    solution=solution, sim=s.sims, labels=labels
+                )
 
-                comparison_dict.update({
-                    "model": models_for_comp,
-                    "chemistry": chemistry,
-                    "is_experiment": True,
-                    "cycle": cycle,
-                    "number": number,
-                    "param_to_vary": param_to_vary,
-                    "varied_values": varied_values
-                })
+            comparison_dict.update({
+                "model": models_for_comp,
+                "chemistry": chemistry,
+                "is_experiment": is_experiment,
+                "cycle": cycle if is_experiment else None,
+                "number": number if is_experiment else None,
+                "param_to_vary": param_to_vary,
+                "varied_values": varied_values
+            })
 
-                return comparison_dict
+            return comparison_dict
 
-            except Exception as e:  # pragma: no cover
-                print(e)
+        except Exception as e:  # pragma: no cover
+            print(e)
+
