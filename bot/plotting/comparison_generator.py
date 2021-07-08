@@ -75,42 +75,37 @@ def comparison_generator(
         diff_params = random.randint(2, 3)
         min_param_value = 100
         for i in range(0, diff_params):
-            # copy the original values and append them in the list
-            param_list.append(params.copy())
 
-            # generate a random value
+            # generate parameter values
             if (
                 param_to_vary == "Electrode height [m]"
                 or param_to_vary == "Electrode width [m]"
             ):
-                param_value = parameter_value_generator(
+                params, varied_value = parameter_value_generator(
                     chemistry, param_to_vary, lower_bound=0
                 )
             elif param_to_vary == "Ambient temperature [K]":
-                param_value = parameter_value_generator(
+                params, varied_value = parameter_value_generator(
                     chemistry, param_to_vary, lower_bound=265, upper_bound=355
                 )
             else:
-                param_value = parameter_value_generator(
+                params, varied_value = parameter_value_generator(
                     chemistry, param_to_vary
                 )
-            varied_values.append(param_value)
-
-            # change a parameter value
-            param_list[i][
-                param_to_vary
-            ] = param_value
+            varied_values.append(varied_value)
 
             logger.info(
-                param_to_vary + ": " + str(param_value)
+                param_to_vary + ": " + str(varied_value)
             )
 
-            labels.append(param_to_vary + ": " + str(param_value))
+            labels.append(param_to_vary + ": " + str(varied_value))
+
+            param_list.append(params)
 
             # find the minimum value if "Current function [A]" is varied
             if param_to_vary == "Current function [A]":
-                if param_value < min_param_value:
-                    min_param_value = param_value
+                if varied_value < min_param_value:
+                    min_param_value = varied_value
 
         parameter_values_for_comp = dict(
             list(enumerate(param_list))
