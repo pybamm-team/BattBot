@@ -89,6 +89,8 @@ class Tweet(object):
         self.is_comparison = return_dict["is_comparison"]
         self.param_to_vary = return_dict["param_to_vary"]
         self.varied_values = return_dict["varied_values"]
+        self.degradation_mode = return_dict["degradation_mode"]
+        self.degradation_value = return_dict["degradation_value"]
         self.testing = testing
 
     def upload_init(self):
@@ -288,7 +290,9 @@ class Tweet(object):
                 self.cycle,
                 self.number,
                 self.is_comparison,
-                self.param_to_vary
+                self.param_to_vary,
+                self.degradation_mode,
+                self.degradation_value
             )
         )
         print(tweet_status)

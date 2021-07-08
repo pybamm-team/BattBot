@@ -8,7 +8,9 @@ def information(
     cycle,
     number,
     is_comparison,
-    param_to_vary
+    param_to_vary,
+    degradation_mode,
+    degradation_value
 ):
     """
     Generates tweet text.
@@ -20,6 +22,8 @@ def information(
         number: numerical or None
         is_comparison: bool
         param_to_vary: str or None
+        degradation_mode: str or None
+        degradation_values: str or None
     Returns
         tweet_text: str
     """
@@ -33,8 +37,10 @@ def information(
     if is_experiment and not is_comparison:
         tweet_text = (
             f"Summary varaibles for {model.name} with "
-            f"{chemistry['citation']} parameters for the following "
-            f"experiment: {cycle} * {number}"
+            f"{chemistry['citation']} parameters and "
+            f"{degradation_value} {degradation_mode} varying {param_to_vary} "
+            "for the following experiment: "
+            f"{cycle} * {number}"
         )
 
     elif is_experiment:
