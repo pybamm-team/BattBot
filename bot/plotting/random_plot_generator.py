@@ -213,6 +213,7 @@ def random_plot_generator(
                     degradation_parameter=degradation_parameter
                 )
 
+                labels = sorted(labels, key=lambda x: float(x.split(':')[1]))
                 logger.info(labels)
 
                 # plotting summary variables
