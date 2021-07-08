@@ -219,4 +219,3 @@ def comparison_generator(
 
         except Exception as e:  # pragma: no cover
             print(e)
-
