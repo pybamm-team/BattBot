@@ -23,11 +23,11 @@ class TestExperimentSolver(unittest.TestCase):
         self.parameter_values = pybamm.ParameterValues(
             chemistry=self.chemistry
         )
-        self.param_values = [[self.parameter_values, 298]]
+        self.param_values = [self.parameter_values]
         self.degradation_parameter = "Ambient temperature [K]"
 
     def test_experiment_solver(self):
-        sim, solutions, labels = experiment_solver(
+        sim, solutions, labels, varied_values = experiment_solver(
             self.model,
             self.experiment,
             self.chemistry,
@@ -51,6 +51,7 @@ class TestExperimentSolver(unittest.TestCase):
         self.assertIsInstance(labels, list)
         self.assertEqual(len(labels), 1)
         self.assertEqual(len(solutions), 1)
+        self.assertIsInstance(varied_values, list)
 
 
 if __name__ == "__main__":

@@ -18,26 +18,36 @@ def experiment_solver(
         chemistry: dict
         solver: pybamm.BaseSolver
         param_values: list
-            First element should be the parameter values with a varied
-            parmeter and the second element should be the varied value.
+            A list of ParameterValues with each element having a varied
+            value for degradation_parameter.
         degradation_parameter: str
             Parameter that has been varied in param_values.
     Returns:
         sim: pybamm.Simulation
         solutions: list
         labels: list
+        varied_values: list
     """
 
     solutions = []
     labels = []
+    varied_values = []
     for i in range(0, len(param_values)):
 
-        labels.append(degradation_parameter + ": " + str(param_values[i][1]))
+        # create labels for the plot
+        labels.append(
+            degradation_parameter
+            + ": "
+            + str(param_values[i][degradation_parameter])
+        )
+
+        # store all the varied values for notebook
+        varied_values.append(param_values[i][degradation_parameter])
 
         sim = pybamm.Simulation(
             model=model,
             experiment=experiment,
-            parameter_values=param_values[i][0],
+            parameter_values=param_values[i],
             solver=solver,
         )
         if chemistry == pybamm.parameter_sets.Ai2020:
@@ -47,4 +57,4 @@ def experiment_solver(
         solution = sim.solution
         solutions.append(solution)
 
-    return sim, solutions, labels
+    return sim, solutions, labels, varied_values

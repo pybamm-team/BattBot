@@ -80,11 +80,11 @@ def degradation_parameter_generator(
                 lower_bound=265,
                 upper_bound=355
             )
-            param_values.append([params, params[degradation_parameter]])
+            param_values.append(params)
         else:
             params = parameter_value_generator(
                 chemistry, degradation_parameter
             )
-            param_values.append([params, params[degradation_parameter]])
+            param_values.append(params)
 
     return param_values, degradation_parameter

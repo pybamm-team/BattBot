@@ -203,7 +203,8 @@ def random_plot_generator(
                 (
                     sim,
                     solutions,
-                    labels
+                    labels,
+                    varied_values
                 ) = experiment_solver(
                     model=model,
                     experiment=experiment,
@@ -228,7 +229,7 @@ def random_plot_generator(
                     "number": number,
                     "is_summary_variable": True,
                     "param_to_vary": degradation_parameter,
-                    "varied_values": param_values,
+                    "varied_values": varied_values,
                     "degradation_mode": degradation_mode,
                     "degradation_value": degradation_value
                 })
