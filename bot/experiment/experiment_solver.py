@@ -49,7 +49,7 @@ def experiment_solver(
 
         # storing solution with the corresponding label
         solutions_and_labels.append([
-            solution, 
+            solution,
             degradation_parameter
             + ": "
             + str(param_values[i][degradation_parameter])
