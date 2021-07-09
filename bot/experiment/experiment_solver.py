@@ -24,22 +24,13 @@ def experiment_solver(
             Parameter that has been varied in param_values.
     Returns:
         sim: pybamm.Simulation
-        solutions: list
-        labels: list
+        solutions_and_labels: list
         varied_values: list
     """
 
-    solutions = []
-    labels = []
+    solutions_and_labels = []
     varied_values = []
     for i in range(0, len(param_values)):
-
-        # create labels for the plot
-        labels.append(
-            degradation_parameter
-            + ": "
-            + str(param_values[i][degradation_parameter])
-        )
 
         # store all the varied values for notebook
         varied_values.append(param_values[i][degradation_parameter])
@@ -55,6 +46,12 @@ def experiment_solver(
         else:
             sim.solve()
         solution = sim.solution
-        solutions.append(solution)
 
-    return sim, solutions, labels, varied_values
+        # storing solution with the corresponding label
+        solutions_and_labels.append([
+            solution, 
+            degradation_parameter
+            + ": "
+            + str(param_values[i][degradation_parameter])
+        ])
+    return sim, solutions_and_labels, varied_values

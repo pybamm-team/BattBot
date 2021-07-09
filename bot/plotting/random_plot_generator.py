@@ -202,8 +202,7 @@ def random_plot_generator(
                 # solving
                 (
                     sim,
-                    solutions,
-                    labels,
+                    solutions_and_labels,
                     varied_values
                 ) = experiment_solver(
                     model=model,
@@ -214,11 +213,18 @@ def random_plot_generator(
                     degradation_parameter=degradation_parameter
                 )
 
-                logger.info(labels)
+                solutions_and_labels_sorted = sorted(
+                    solutions_and_labels,
+                    key=lambda x: float(x[1].split(':')[1])
+                )
+                varied_values.sort()
+                logger.info(solutions_and_labels_sorted)
 
                 # plotting summary variables
                 generate_summary_variables(
-                    solutions, options["chemistry"], labels
+                    [x[0] for x in solutions_and_labels_sorted],
+                    options["chemistry"],
+                    [x[1] for x in solutions_and_labels_sorted]
                 )
 
                 return_dict.update({
