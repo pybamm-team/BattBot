@@ -35,10 +35,6 @@ def degradation_parameter_generator(
                 "Positive electrode Poisson's ratio",
                 "Negative electrode Young's modulus [Pa]",
                 "Positive electrode Young's modulus [Pa]",
-                "Negative electrode initial crack length [m]",
-                "Positive electrode initial crack length [m]",
-                "Negative electrode initial crack width [m]",
-                "Positive electrode initial crack width [m]",
                 "Negative electrode reference concentration for free of deformation [mol.m-3]", # noqa
                 "Positive electrode reference concentration for free of deformation [mol.m-3]"  # noqa
             ]
