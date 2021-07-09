@@ -32,6 +32,7 @@ def parameter_value_generator(
         upper_bound: numerical
     Returns:
         params: pybamm.ParameterValues
+        new_parameter_value: numerical
     """
     params = pybamm.ParameterValues(chemistry=chemistry)
 
@@ -54,4 +55,4 @@ def parameter_value_generator(
         )
         params[parameter] = new_parameter_value
 
-    return params
+    return params, new_parameter_value

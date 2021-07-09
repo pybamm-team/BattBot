@@ -12,65 +12,65 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
 
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
 
-        self.assertGreaterEqual(new_params[parameter], params[parameter]*0.5)
-        self.assertLessEqual(new_params[parameter], params[parameter]*2)
+        self.assertGreaterEqual(varied_value, params[parameter]*0.5)
+        self.assertLessEqual(varied_value, params[parameter]*2)
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Marquis2019
         params = params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
 
-        self.assertGreaterEqual(new_params[parameter], params[parameter]*0.5)
-        self.assertLessEqual(new_params[parameter], params[parameter]*2)
+        self.assertGreaterEqual(varied_value, params[parameter]*0.5)
+        self.assertLessEqual(varied_value, params[parameter]*2)
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Ai2020
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
 
-        self.assertGreaterEqual(new_params[parameter], params[parameter]*0.5)
-        self.assertLessEqual(new_params[parameter], params[parameter]*2)
+        self.assertGreaterEqual(varied_value, params[parameter]*0.5)
+        self.assertLessEqual(varied_value, params[parameter]*2)
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Yang2017
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
 
-        self.assertGreaterEqual(new_params[parameter], params[parameter]*0.5)
-        self.assertLessEqual(new_params[parameter], params[parameter]*2)
+        self.assertGreaterEqual(varied_value, params[parameter]*0.5)
+        self.assertLessEqual(varied_value, params[parameter]*2)
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Chen2020_plating
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
 
-        self.assertGreaterEqual(new_params[parameter], params[parameter]*0.5)
-        self.assertLessEqual(new_params[parameter], params[parameter]*2)
+        self.assertGreaterEqual(varied_value, params[parameter]*0.5)
+        self.assertLessEqual(varied_value, params[parameter]*2)
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         parameter = "Negative electrode exchange-current density [A.m-2]"
@@ -78,10 +78,10 @@ class TestParameterValueGenerator(unittest.TestCase):
         base_value[parameter] = 1.0
 
         chemistry = pybamm.parameter_sets.Chen2020
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
@@ -89,10 +89,10 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Marquis2019
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
@@ -100,10 +100,10 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Ai2020
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
@@ -111,10 +111,10 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Yang2017
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )
@@ -122,10 +122,10 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Chen2020_plating
-        params = params = pybamm.ParameterValues(
+        params = pybamm.ParameterValues(
             chemistry=chemistry
         )
-        new_params = parameter_value_generator(
+        new_params, varied_value = parameter_value_generator(
             chemistry,
             parameter
         )

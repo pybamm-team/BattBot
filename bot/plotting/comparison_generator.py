@@ -80,31 +80,31 @@ def comparison_generator(
                 param_to_vary == "Electrode height [m]"
                 or param_to_vary == "Electrode width [m]"
             ):
-                params = parameter_value_generator(
+                params, varied_value = parameter_value_generator(
                     chemistry, param_to_vary, lower_bound=0
                 )
             elif param_to_vary == "Ambient temperature [K]":
-                params = parameter_value_generator(
+                params, varied_value = parameter_value_generator(
                     chemistry, param_to_vary, lower_bound=265, upper_bound=355
                 )
             else:
-                params = parameter_value_generator(
+                params, varied_value = parameter_value_generator(
                     chemistry, param_to_vary
                 )
-            varied_values.append(params[param_to_vary])
+            varied_values.append(varied_value)
 
             logger.info(
-                param_to_vary + ": " + str(params[param_to_vary])
+                param_to_vary + ": " + str(varied_value)
             )
 
-            labels.append(param_to_vary + ": " + str(params[param_to_vary]))
+            labels.append(param_to_vary + ": " + str(varied_value))
 
             param_list.append(params)
 
             # find the minimum value if "Current function [A]" is varied
             if param_to_vary == "Current function [A]":
-                if params[param_to_vary] < min_param_value:
-                    min_param_value = params[param_to_vary]
+                if varied_value < min_param_value:
+                    min_param_value = varied_value
 
         parameter_values_for_comp = dict(
             list(enumerate(param_list))
@@ -132,7 +132,7 @@ def comparison_generator(
 
                 # if "Current function [A]" is varied, change the t_end
                 if param_to_vary == "Current function [A]":
-                    factor = min_param_value / params[param_to_vary]
+                    factor = min_param_value / varied_value
                     t_end = (1 / factor * 1.1) * 3600
                 else:
                     # default t_end
