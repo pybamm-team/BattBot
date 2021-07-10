@@ -27,11 +27,6 @@ def information(
         tweet_text: str
     """
 
-    c_rate = (
-        params[0]["Current function [A]"] / params[0]["Nominal cell capacity [A.h]"]
-    )
-    temp = params[0]["Ambient temperature [K]"] - 273.15
-
     if is_experiment and not is_comparison:
         tweet_text = (
             f"Summary varaibles for {model.name} with "
@@ -61,6 +56,14 @@ def information(
                 f"{cycle} * {number}"
             )
     elif not is_experiment:
+
+        c_rate = round(
+            params[0]["Current function [A]"]
+            / params[0]["Nominal cell capacity [A.h]"],
+            2
+        )
+        temp = round(params[0]["Ambient temperature [K]"] - 273.15, 2)
+
         if param_to_vary is None and is_comparison:
             if len(model) == 2:
                 tweet_text = (

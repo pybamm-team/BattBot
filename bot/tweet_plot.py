@@ -84,13 +84,14 @@ class Tweet(object):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
-        self.params = return_dict["params"]
         if choice == "non-degradation comparisons":
             self.param_to_vary = return_dict["param_to_vary"]
             self.varied_values = return_dict["varied_values"]
+            self.params = return_dict["params"]
         else:
             self.param_to_vary = None
             self.varied_values = None
+            self.params = None
         self.testing = testing
 
     def upload_init(self):

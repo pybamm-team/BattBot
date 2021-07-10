@@ -37,6 +37,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNotNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
@@ -57,6 +58,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
@@ -77,6 +79,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
@@ -109,6 +112,7 @@ class TestComparisonGenerator(unittest.TestCase):
         )
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNotNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
@@ -158,6 +162,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertTrue(comparison_dict["is_comparison"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         comparison_dict = comparison_generator(
             1,
@@ -177,6 +182,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNotNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
@@ -198,6 +204,7 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertIsNone(comparison_dict["number"])
         self.assertEqual(comparison_dict["chemistry"], self.chemistry)
         self.assertIsNotNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 

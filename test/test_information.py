@@ -26,6 +26,7 @@ class TestInformation(unittest.TestCase):
         self.number = 3
         self.is_comparison = False
         self.param_to_vary = None
+        self.params = dict(list(enumerate([self.params])))
 
     def test_information(self):
         result = information(
@@ -35,7 +36,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -58,7 +60,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -81,7 +84,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -101,7 +105,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -126,7 +131,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -149,7 +155,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -168,7 +175,8 @@ class TestInformation(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(

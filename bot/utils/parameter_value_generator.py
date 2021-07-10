@@ -17,7 +17,7 @@ class FunctionLike:
 
 
 def parameter_value_generator(
-    chemistry,
+    params,
     parameter,
     lower_bound=None,
     upper_bound=None,
@@ -26,7 +26,7 @@ def parameter_value_generator(
     Generates random values for a given parameter and
     for a given chemistry.
     Parameters:
-        chemistry: dict
+        params: pybamm.ParameterValues
         parameter: str
         lower_bound: numerical
         upper_bound: numerical
@@ -34,7 +34,6 @@ def parameter_value_generator(
         params: pybamm.ParameterValues
         new_parameter_value: numerical
     """
-    params = pybamm.ParameterValues(chemistry=chemistry)
 
     if callable(params[parameter]):
         base_value = 1

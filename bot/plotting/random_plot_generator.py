@@ -69,175 +69,175 @@ def random_plot_generator(
                 where no degradation option of a model is selected.
     """
 
-    # while True:
+    while True:
 
-    #     try:
-    pybamm.set_logging_level("NOTICE")
+        try:
+            pybamm.set_logging_level("NOTICE")
 
-    # randomly select a chemistry if not testing
-    if options["chemistry"] is None:
-        options["chemistry"] = random.choice(chemistries)
+            # randomly select a chemistry if not testing
+            if options["chemistry"] is None:
+                options["chemistry"] = random.choice(chemistries)
 
-    # choosing random degradation
-    particle_mechanics = random.choice(particle_mechanics_list)
-    sei = random.choice(sei_list)
+            # choosing random degradation
+            particle_mechanics = random.choice(particle_mechanics_list)
+            sei = random.choice(sei_list)
 
-    # if no degradation or if testing, continue
-    if (
-        (
-            particle_mechanics == "none"
-            and sei == "none"
-        )
-        or (
-            options["testing"]
-            and options["provided_degradation"]
-        )
-    ):
-        options["provided_degradation"] = False
-        # continue
-
-    # Add degradation only if we are plotting summary variables
-    if options["choice"] == (
-        "degradation comparison (summary variables)"
-    ):
-        # update model options
-        model_options = {}
-        if options["chemistry"] == (
-            pybamm.parameter_sets.Ai2020
-        ):
-            model_options.update({
-                "particle mechanics": particle_mechanics,
-                "SEI": sei
-            })
-        elif options["chemistry"] == (
-            pybamm.parameter_sets.Yang2017
-        ):
-            model_options.update({
-                "lithium plating": "irreversible",
-                "lithium plating porosity change": "true",
-                "SEI": "ec reaction limited"
-            })
-        else:
-            model_options.update({
-                "SEI": sei,
-            })
-    else:
-        model_options = None
-
-    models = [
-        pybamm.lithium_ion.DFN(
-            options=model_options
-        ),
-        pybamm.lithium_ion.SPM(
-            options=model_options
-        ),
-        pybamm.lithium_ion.SPMe(
-            options=model_options
-        ),
-    ]
-
-    # choose a random model
-    model = random.choice(models)
-
-    # logging the configuration
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    logger.info(
-        str(model.name)
-        + " "
-        + str(solver.name)
-        + " "
-        + str(model.options)
-        + " "
-        + str(options["chemistry"]["citation"])
-    )
-
-    if options["choice"] == (
-        "degradation comparison (summary variables)"
-    ):
-
-        # generating a random experiment if not testing
-        if options["testing"]:
-            cycle_received = [
+            # if no degradation or if testing, continue
+            if (
                 (
-                    "Discharge at C/10 for 10 hours or until 3.3 V",
-                    "Rest for 1 hour",
-                    "Charge at 1 A until 4.1 V",
-                    "Hold at 4.1 V until 50 mA",
-                    "Rest for 1 hour"
+                    particle_mechanics == "none"
+                    and sei == "none"
                 )
+                or (
+                    options["testing"]
+                    and options["provided_degradation"]
+                )
+            ):
+                options["provided_degradation"] = False
+                continue
+
+            # Add degradation only if we are plotting summary variables
+            if options["choice"] == (
+                "degradation comparison (summary variables)"
+            ):
+                # update model options
+                model_options = {}
+                if options["chemistry"] == (
+                    pybamm.parameter_sets.Ai2020
+                ):
+                    model_options.update({
+                        "particle mechanics": particle_mechanics,
+                        "SEI": sei
+                    })
+                elif options["chemistry"] == (
+                    pybamm.parameter_sets.Yang2017
+                ):
+                    model_options.update({
+                        "lithium plating": "irreversible",
+                        "lithium plating porosity change": "true",
+                        "SEI": "ec reaction limited"
+                    })
+                else:
+                    model_options.update({
+                        "SEI": sei,
+                    })
+            else:
+                model_options = None
+
+            models = [
+                pybamm.lithium_ion.DFN(
+                    options=model_options
+                ),
+                pybamm.lithium_ion.SPM(
+                    options=model_options
+                ),
+                pybamm.lithium_ion.SPMe(
+                    options=model_options
+                ),
             ]
-            number = 3
-        else:   # pragma: no cover
-            cycle_received = experiment_generator()
-            number = random.randint(4, 100)
 
-        if options["chemistry"] == pybamm.parameter_sets.Ai2020:
-            experiment = pybamm.Experiment(
-                cycle_received * number
+            # choose a random model
+            model = random.choice(models)
+
+            # logging the configuration
+            logging.basicConfig(level=logging.INFO)
+            logger = logging.getLogger()
+            logger.setLevel(logging.INFO)
+            logger.info(
+                str(model.name)
+                + " "
+                + str(solver.name)
+                + " "
+                + str(model.options)
+                + " "
+                + str(options["chemistry"]["citation"])
             )
-        else:
-            experiment = pybamm.Experiment(
-                cycle_received * number, termination="80% capacity"
-            )
 
-        # solving
-        (
-            sim,
-            solution,
-            parameter_values
-        ) = experiment_solver(
-            model=model,
-            experiment=experiment,
-            chemistry=options["chemistry"],
-            solver=solver
-        )
+            if options["choice"] == (
+                "degradation comparison (summary variables)"
+            ):
 
-        # plotting summary variables
-        generate_summary_variables(solution, options["chemistry"])
+                # generating a random experiment if not testing
+                if options["testing"]:
+                    cycle_received = [
+                        (
+                            "Discharge at C/10 for 10 hours or until 3.3 V",
+                            "Rest for 1 hour",
+                            "Charge at 1 A until 4.1 V",
+                            "Hold at 4.1 V until 50 mA",
+                            "Rest for 1 hour"
+                        )
+                    ]
+                    number = 3
+                else:   # pragma: no cover
+                    cycle_received = experiment_generator()
+                    number = random.randint(4, 100)
 
-        return_dict.update({
-            "model": model,
-            "chemistry": options["chemistry"],
-            "is_experiment": True,
-            "cycle": cycle_received,
-            "number": number,
-            "is_comparison": False
-        })
+                if options["chemistry"] == pybamm.parameter_sets.Ai2020:
+                    experiment = pybamm.Experiment(
+                        cycle_received * number
+                    )
+                else:
+                    experiment = pybamm.Experiment(
+                        cycle_received * number, termination="80% capacity"
+                    )
 
-        return
+                # solving
+                (
+                    sim,
+                    solution,
+                    parameter_values
+                ) = experiment_solver(
+                    model=model,
+                    experiment=experiment,
+                    chemistry=options["chemistry"],
+                    solver=solver
+                )
 
-    elif options["choice"] == "non-degradation comparisons":
+                # plotting summary variables
+                generate_summary_variables(solution, options["chemistry"])
 
-        # generating number of models to be compared
-        number_of_comp = random.randint(1, 3)
+                return_dict.update({
+                    "model": model,
+                    "chemistry": options["chemistry"],
+                    "is_experiment": True,
+                    "cycle": cycle_received,
+                    "number": number,
+                    "is_comparison": False
+                })
 
-        # selecting the models for comparison
-        random.shuffle(models)
-        models_for_comp = models[:number_of_comp]
-        models_for_comp = dict(list(enumerate(models_for_comp)))
+                return
 
-        # generating a comparison GIF
-        comparison_dict = comparison_generator(
-            number_of_comp,
-            models_for_comp,
-            options["chemistry"],
-        )
+            elif options["choice"] == "non-degradation comparisons":
 
-        return_dict.update({
-            "model": comparison_dict["model"],
-            "chemistry": comparison_dict["chemistry"],
-            "is_experiment": comparison_dict["is_experiment"],
-            "cycle": comparison_dict["cycle"],
-            "number": comparison_dict["number"],
-            "is_comparison": comparison_dict["is_comparison"],
-            "param_to_vary": comparison_dict["param_to_vary"],
-            "varied_values": comparison_dict["varied_values"],
-            "params": comparison_dict["params"]
-        })
+                # generating number of models to be compared
+                number_of_comp = random.randint(1, 3)
 
-        return
+                # selecting the models for comparison
+                random.shuffle(models)
+                models_for_comp = models[:number_of_comp]
+                models_for_comp = dict(list(enumerate(models_for_comp)))
 
-        # except Exception as e:  # pragma: no cover
-        #     print(e)
+                # generating a comparison GIF
+                comparison_dict = comparison_generator(
+                    number_of_comp,
+                    models_for_comp,
+                    options["chemistry"],
+                )
+
+                return_dict.update({
+                    "model": comparison_dict["model"],
+                    "chemistry": comparison_dict["chemistry"],
+                    "is_experiment": comparison_dict["is_experiment"],
+                    "cycle": comparison_dict["cycle"],
+                    "number": comparison_dict["number"],
+                    "is_comparison": comparison_dict["is_comparison"],
+                    "param_to_vary": comparison_dict["param_to_vary"],
+                    "varied_values": comparison_dict["varied_values"],
+                    "params": comparison_dict["params"]
+                })
+
+                return
+
+        except Exception as e:  # pragma: no cover
+            print(e)
