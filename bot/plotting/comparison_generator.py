@@ -117,105 +117,122 @@ def comparison_generator(
         choice_list = ["experiment", "no experiment"]
         choice = random.choice(choice_list)
 
-    while True:
-        try:
+    # while True:
+    #     try:
 
-            if choice == "no experiment":
+    if choice == "no experiment":
 
-                is_experiment = False
+        is_experiment = False
 
-                batch_study = pybamm.BatchStudy(
-                    models=models_for_comp,
-                    parameter_values=parameter_values_for_comp,
-                    permutations=True,
+        # vary "Current function [A]" and "Ambient temperature [K]"
+        # if comparing models with a constant discharge
+        if number_of_comp != 1:
+            # params, varied_value= parameter_value_generator(
+            #     chemistry, "Current function [A]"
+            # )
+            params, varied_values = parameter_value_generator(
+                chemistry,
+                "Ambient temperature [K]",
+                lower_bound=265,
+                upper_bound=355
+            )
+            parameter_values_for_comp = dict(
+                list(enumerate([params]))
+            )
+
+        batch_study = pybamm.BatchStudy(
+            models=models_for_comp,
+            parameter_values=parameter_values_for_comp,
+            permutations=True,
+        )
+
+        # if "Current function [A]" is varied, change the t_end
+        if param_to_vary == "Current function [A]":
+            factor = min_param_value / varied_value
+            t_end = (1 / factor * 1.1) * 3600
+        else:
+            # default t_end
+            t_end = 3700
+
+        batch_study.solve([0, t_end])
+
+    elif choice == "experiment":
+
+        is_experiment = True
+
+        # generate a random cycle and a number for experiment
+        cycle = experiment_generator()
+        number = random.randint(1, 3)
+
+        # if testing, use the following configuration
+        if provided_choice is not None:
+            cycle = [
+                (
+                    "Discharge at C/10 for 10 hours "
+                    + "or until 3.3 V",
+                    "Rest for 1 hour",
+                    "Charge at 1 A until 4.1 V",
+                    "Hold at 4.1 V until 50 mA",
+                    "Rest for 1 hour"
                 )
+            ]
+            number = 1
 
-                # if "Current function [A]" is varied, change the t_end
-                if param_to_vary == "Current function [A]":
-                    factor = min_param_value / varied_value
-                    t_end = (1 / factor * 1.1) * 3600
-                else:
-                    # default t_end
-                    t_end = 3700
-
-                batch_study.solve([0, t_end])
-
-            elif choice == "experiment":
-
-                is_experiment = True
-
-                # generate a random cycle and a number for experiment
-                cycle = experiment_generator()
-                number = random.randint(1, 3)
-
-                # if testing, use the following configuration
-                if provided_choice is not None:
-                    cycle = [
-                        (
-                            "Discharge at C/10 for 10 hours "
-                            + "or until 3.3 V",
-                            "Rest for 1 hour",
-                            "Charge at 1 A until 4.1 V",
-                            "Hold at 4.1 V until 50 mA",
-                            "Rest for 1 hour"
+        experiment = dict(
+            list(
+                enumerate(
+                    [
+                        pybamm.Experiment(
+                            cycle * number
                         )
                     ]
-                    number = 1
-
-                experiment = dict(
-                    list(
-                        enumerate(
-                            [
-                                pybamm.Experiment(
-                                    cycle * number
-                                )
-                            ]
-                        )
-                    )
                 )
+            )
+        )
 
-                batch_study = pybamm.BatchStudy(
-                    models=models_for_comp,
-                    parameter_values=parameter_values_for_comp,
-                    experiments=experiment,
-                    permutations=True,
-                )
+        batch_study = pybamm.BatchStudy(
+            models=models_for_comp,
+            parameter_values=parameter_values_for_comp,
+            experiments=experiment,
+            permutations=True,
+        )
 
-                if chemistry == pybamm.parameter_sets.Ai2020:
-                    batch_study.solve(calc_esoh=False)
-                else:
-                    batch_study.solve()
+        if chemistry == pybamm.parameter_sets.Ai2020:
+            batch_study.solve(calc_esoh=False)
+        else:
+            batch_study.solve()
 
-            # find the max "Time [s]" from all the solutions for the GIF
-            max_time = 0
-            solution = batch_study.sims[0].solution
-            for sim in batch_study.sims:
-                if sim.solution["Time [s]"].entries[-1] > max_time:
-                    max_time = sim.solution["Time [s]"].entries[-1]
-                    solution = sim.solution
+    # find the max "Time [s]" from all the solutions for the GIF
+    max_time = 0
+    solution = batch_study.sims[0].solution
+    for sim in batch_study.sims:
+        if sim.solution["Time [s]"].entries[-1] > max_time:
+            max_time = sim.solution["Time [s]"].entries[-1]
+            solution = sim.solution
 
-            # create the GIF
-            if len(labels) == 0:
-                plot_graph(
-                    solution=solution, sim=batch_study.sims
-                )
-            else:
-                plot_graph(
-                    solution=solution, sim=batch_study.sims, labels=labels
-                )
+    # create the GIF
+    if len(labels) == 0:
+        plot_graph(
+            solution=solution, sim=batch_study.sims
+        )
+    else:
+        plot_graph(
+            solution=solution, sim=batch_study.sims, labels=labels
+        )
 
-            comparison_dict.update({
-                "model": models_for_comp,
-                "chemistry": chemistry,
-                "is_experiment": is_experiment,
-                "cycle": cycle if is_experiment else None,
-                "number": number if is_experiment else None,
-                "is_comparison": True,
-                "param_to_vary": param_to_vary,
-                "varied_values": varied_values
-            })
+    comparison_dict.update({
+        "model": models_for_comp,
+        "chemistry": chemistry,
+        "is_experiment": is_experiment,
+        "cycle": cycle if is_experiment else None,
+        "number": number if is_experiment else None,
+        "is_comparison": True,
+        "param_to_vary": param_to_vary,
+        "varied_values": varied_values,
+        "params": parameter_values_for_comp
+    })
 
-            return comparison_dict
+    return comparison_dict
 
-        except Exception as e:  # pragma: no cover
-            print(e)
+        # except Exception as e:  # pragma: no cover
+        #     print(e)

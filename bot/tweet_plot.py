@@ -84,6 +84,7 @@ class Tweet(object):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
+        self.params = return_dict["params"]
         if choice == "non-degradation comparisons":
             self.param_to_vary = return_dict["param_to_vary"]
             self.varied_values = return_dict["varied_values"]
@@ -289,7 +290,8 @@ class Tweet(object):
                 self.cycle,
                 self.number,
                 self.is_comparison,
-                self.param_to_vary
+                self.param_to_vary,
+                self.params
             )
         )
         print(tweet_status)

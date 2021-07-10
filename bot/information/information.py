@@ -8,7 +8,8 @@ def information(
     cycle,
     number,
     is_comparison,
-    param_to_vary
+    param_to_vary,
+    params
 ):
     """
     Generates tweet text.
@@ -19,16 +20,17 @@ def information(
         cycle: list or None
         number: numerical or None
         is_comparison: bool
-        param_to_vary: str or None
+        param_to_vary: str or list or None
+        params: dict
+            To be used when varied values have to be added to the tweet text.
     Returns
         tweet_text: str
     """
 
-    params = pybamm.ParameterValues(chemistry=chemistry)
     c_rate = (
-        params["Current function [A]"] / params["Nominal cell capacity [A.h]"]
+        params[0]["Current function [A]"] / params[0]["Nominal cell capacity [A.h]"]
     )
-    temp = params["Ambient temperature [K]"] - 273.15
+    temp = params[0]["Ambient temperature [K]"] - 273.15
 
     if is_experiment and not is_comparison:
         tweet_text = (
