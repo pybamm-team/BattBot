@@ -1,6 +1,3 @@
-import pybamm
-
-
 def information(
     chemistry,
     model,

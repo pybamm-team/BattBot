@@ -1,4 +1,3 @@
-import pybamm
 from utils.desired_decimal_point_generator import (
     desired_decimal_point_generator
 )

@@ -133,7 +133,7 @@ def comparison_generator(
                 # vary "Current function [A]" and "Ambient temperature [K]"
                 # if comparing models with a constant discharge
                 if number_of_comp != 1:
-                    params, varied_value= parameter_value_generator(
+                    params, varied_value = parameter_value_generator(
                         parameter_values, "Current function [A]"
                     )
                     final_params, varied_value = parameter_value_generator(

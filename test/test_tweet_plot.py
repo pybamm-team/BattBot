@@ -27,7 +27,6 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsNone(tweet.varied_values)
         self.assertIsNone(tweet.params)
 
-
         tweet.upload_init()
 
         self.assertIsNotNone(tweet.media_id)
