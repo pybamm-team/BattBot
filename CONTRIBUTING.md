@@ -26,7 +26,7 @@ This will install all the dependencies in your local system including the develo
 ```bash
 python -m unittest
 ```
-**Note: The tests written in `test_tweet_plot.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
+**Note: The tests written in `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
 
 ## Workflow
 1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/pybamm-team/BattBot/issues) for discussing the topic with others.
@@ -41,8 +41,10 @@ Once this executes, you will be able to see if any tests are failing or if the c
 
 4. Once everything passes, you can go ahead and create a [Pull Request](https://github.com/pybamm-team/BattBot/pulls) for the constructive review process.
 
-## GitHub Actions
-All the tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file. This also means that the failing `test_tweet_plot.py` tests will pass (if everything is working) on a PR as it will pull the `Twitter API Keys` from repository secrets, this however does not mean that a plot will be tweeted everytime a PR is made or a commit is added to a PR, the tweet worklow is triggered only when something is pushed on the main branch.
+## GitHub Actions and Heroku
+ - All the tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file.
+ - All the replying process is being carried out by Heroku, hence the `Procfile`, `requirements.txt`, `runtime.txt` and `last_seen_id.txt` should be checked thoroughly before merging the code in the main (deployed) branch.
+ - This also means that the locally failing `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` tests will pass (if everything is working) on a PR as it will pull the `Twitter API Keys` from repository secrets, this however does not mean that a plot will be tweeted everytime a PR is made or a commit is added to a PR, the tweet worklow is triggered only during the scheduled run.
 
 ## Writing your code
 1. For styling we use [flake8](https://pypi.org/project/flake8/) and [black](https://pypi.org/project/black/) to maintain uniformity throughout the codebase.
