@@ -39,6 +39,6 @@ pybamm.print_citations()
 
 to the end of your script. This will print bibtex information to the terminal; passing a filename to `print_citations` will print the bibtex information to the specified file instead. A list of all citations can also be found in the [citations file](https://github.com/pybamm-team/PyBaMM/blob/develop/pybamm/CITATIONS.txt).
 
-## Contributing to PyBaMM-Twitter-Bot
+## Contributing to BattBot
 
 All contributions to this repository are welcome. You can go through our [contribution guidelines](https://github.com/Saransh-cpp/BattBot/blob/main/CONTRIBUTING.md) to make the whole process smoother.
