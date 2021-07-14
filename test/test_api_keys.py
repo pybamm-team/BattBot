@@ -2,6 +2,7 @@ import tweepy
 import unittest
 from bot.api_keys import Keys
 
+
 class TestApiKeys(unittest.TestCase):
     def test_api_keys(self):
 
@@ -19,7 +20,7 @@ class TestApiKeys(unittest.TestCase):
 
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-  
+
         api = tweepy.API(auth)
 
         self.assertTrue(api.verify_credentials())
