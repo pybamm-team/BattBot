@@ -84,17 +84,20 @@ def comparison_generator(
                         or param_to_vary == "Electrode width [m]"
                     ):
                         params, varied_value = parameter_value_generator(
-                            chemistry, param_to_vary, lower_bound=0
+                            parameter_values,
+                            param_to_vary,
+                            lower_bound=0
                         )
                     elif param_to_vary == "Ambient temperature [K]":
                         params, varied_value = parameter_value_generator(
-                            chemistry, param_to_vary,
+                            parameter_values,
+                            param_to_vary,
                             lower_bound=265,
                             upper_bound=355
                         )
                     else:
                         params, varied_value = parameter_value_generator(
-                            chemistry, param_to_vary
+                            parameter_values, param_to_vary
                         )
                     varied_values.append(varied_value)
 
