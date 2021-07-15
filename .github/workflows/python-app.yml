@@ -70,9 +70,8 @@ jobs:
         branch: ${{ github.ref }}      
 
     - name: Run macos unittests for PRs not from a fork
-      if: matrix.os == 'macos-latest' && ${{ github.event.pull_request.head.repo.full_name == 'github.repository' }}
+      if: matrix.os == 'macos-latest' && ${{ github.event.pull_request.head.repo.full_name == github.repository }}
       run: |
-        echo ${{ github.repository }}
         python -m unittest
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
@@ -81,12 +80,12 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Run macos unittests for PRs from a fork
-      if: matrix.os == 'macos-latest' && ${{ github.event.pull_request.head.repo.full_name != 'github.repository' }}
+      if: matrix.os == 'macos-latest' && ${{ github.event.pull_request.head.repo.full_name != github.repository }}
       run: |
         python -m unittest discover ./test/without_keys/
 
     - name: Run ubuntu unittests and generate coverage report for PRs not from a fork
-      if: matrix.os == 'ubuntu-latest' && ${{ github.event.pull_request.head.repo.full_name == 'github.repository'}}
+      if: matrix.os == 'ubuntu-latest' && ${{ github.event.pull_request.head.repo.full_name == github.repository }}
       run: |
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
@@ -99,7 +98,7 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Run ubuntu unittests and generate coverage report for PRs from a fork
-      if: matrix.os == 'ubuntu-latest' && ${{ github.event.pull_request.head.repo.full_name }} != 'github.repository' }}
+      if: matrix.os == 'ubuntu-latest' && ${{ github.event.pull_request.head.repo.full_name != github.repository }}
       run: |
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
