@@ -72,6 +72,7 @@ jobs:
     - name: Run macos unittests for PRs not from a fork
       if: matrix.os == 'macos-latest' && ${{ github.event.pull_request.head.repo.full_name }} == github.repository
       run: |
+        echo github.repository
         python -m unittest
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
