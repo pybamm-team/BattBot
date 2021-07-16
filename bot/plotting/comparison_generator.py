@@ -157,7 +157,9 @@ def comparison_generator(
 
                 # if "Current function [A]" is varied, change the t_end
                 if min_param_value != 100:
-                    factor = min_param_value / parameter_values["Current function [A]"]
+                    factor = min_param_value / parameter_values[
+                        "Current function [A]"
+                    ]
                     t_end = (1 / factor * 1.1) * 3600
                 else:
                     # default t_end
