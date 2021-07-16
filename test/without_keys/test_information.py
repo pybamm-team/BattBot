@@ -42,7 +42,8 @@ class TestInformation(unittest.TestCase):
             result,
             f"Summary varaibles for {self.model.name} with "
             f"{self.chemistry['citation']} parameters for the following "
-            f"experiment: {str(self.cycle)} * {self.number}"
+            f"experiment: {str(self.cycle)} * {self.number} "
+            "https://bit.ly/3z5p7q9"
         )
 
         self.is_comparison = True
@@ -65,7 +66,8 @@ class TestInformation(unittest.TestCase):
             result,
             f"Comparing {self.model[0].name} and {self.model[1].name} "
             f"with {self.chemistry['citation']} parameters for the "
-            f"following experiment: {self.cycle} * {self.number}"
+            f"following experiment: {self.cycle} * {self.number} "
+            "https://bit.ly/3z5p7q9"
         )
 
         self.model = {
@@ -89,7 +91,8 @@ class TestInformation(unittest.TestCase):
             f"Comparing {self.model[0].name}, {self.model[1].name}, and "
             f"{self.model[2].name} with {self.chemistry['citation']} "
             "parameters for the following experiment: "
-            f"{self.cycle} * {self.number}"
+            f"{self.cycle} * {self.number} "
+            "https://bit.ly/3z5p7q9"
         )
 
         self.param_to_vary = "Current function [A]"
@@ -108,8 +111,9 @@ class TestInformation(unittest.TestCase):
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
             "parameters "
-            f"varying {self.param_to_vary} for the following experiment: "
-            f"{self.cycle} * {self.number}"
+            f"varying '{self.param_to_vary}' for the following experiment: "
+            f"{self.cycle} * {self.number} "
+            "https://bit.ly/3z5p7q9"
         )
 
         self.is_experiment = False
@@ -133,7 +137,8 @@ class TestInformation(unittest.TestCase):
             result,
             f"Comparing {self.model[0].name} and {self.model[1].name} with "
             f"{self.chemistry['citation']} parameters for a {self.c_rate} C "
-            f"discharge at {self.temp}°C"
+            f"discharge at {self.temp}°C "
+            "https://bit.ly/3z5p7q9"
         )
 
         self.model = {
@@ -156,7 +161,8 @@ class TestInformation(unittest.TestCase):
             result,
             f"Comparing {self.model[0].name}, {self.model[1].name}, and "
             f"{self.model[2].name} with {self.chemistry['citation']} "
-            f"parameters for a {self.c_rate} C discharge at {self.temp}°C"
+            f"parameters for a {self.c_rate} C discharge at {self.temp}°C "
+            "https://bit.ly/3z5p7q9"
         )
 
         self.param_to_vary = "Current function [A]"
@@ -175,9 +181,50 @@ class TestInformation(unittest.TestCase):
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
             "parameters "
-            f"varying {self.param_to_vary} for a {self.c_rate} C discharge "
+            f"varying '{self.param_to_vary}' at {self.temp}°C "
+            "https://bit.ly/3z5p7q9"
+        )
+
+        self.param_to_vary = "Ambient temperature [K]"
+
+        result = information(
+            self.chemistry,
+            self.model,
+            self.is_experiment,
+            self.cycle,
+            self.number,
+            self.is_comparison,
+            self.param_to_vary
+        )
+
+        self.assertEqual(
+            result,
+            f"{self.model[0].name} with {self.chemistry['citation']} "
+            "parameters "
+            f"varying '{self.param_to_vary}' for a {self.c_rate} C discharge "
+            "https://bit.ly/3z5p7q9"
+        )
+
+        self.param_to_vary = "Electrode height [m]"
+
+        result = information(
+            self.chemistry,
+            self.model,
+            self.is_experiment,
+            self.cycle,
+            self.number,
+            self.is_comparison,
+            self.param_to_vary
+        )
+
+        self.assertEqual(
+            result,
+            f"{self.model[0].name} with {self.chemistry['citation']} "
+            "parameters "
+            f"varying '{self.param_to_vary}' for a {self.c_rate} C discharge "
             "at "
-            f"{self.temp}°C"
+            f"{self.temp}°C "
+            "https://bit.ly/3z5p7q9"
         )
 
 
