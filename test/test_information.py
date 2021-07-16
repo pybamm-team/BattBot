@@ -108,7 +108,7 @@ class TestInformation(unittest.TestCase):
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
             "parameters "
-            f"varying {self.param_to_vary} for the following experiment: "
+            f"varying '{self.param_to_vary}' for the following experiment: "
             f"{self.cycle} * {self.number}"
         )
 
@@ -175,7 +175,45 @@ class TestInformation(unittest.TestCase):
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
             "parameters "
-            f"varying {self.param_to_vary} for a {self.c_rate} C discharge "
+            f"varying '{self.param_to_vary}' at {self.temp}°C"
+        )
+
+        self.param_to_vary = "Ambient temperature [K]"
+
+        result = information(
+            self.chemistry,
+            self.model,
+            self.is_experiment,
+            self.cycle,
+            self.number,
+            self.is_comparison,
+            self.param_to_vary
+        )
+
+        self.assertEqual(
+            result,
+            f"{self.model[0].name} with {self.chemistry['citation']} "
+            "parameters "
+            f"varying '{self.param_to_vary}' for a {self.c_rate} C discharge"
+        )
+
+        self.param_to_vary = "Electrode height [m]"
+
+        result = information(
+            self.chemistry,
+            self.model,
+            self.is_experiment,
+            self.cycle,
+            self.number,
+            self.is_comparison,
+            self.param_to_vary
+        )
+
+        self.assertEqual(
+            result,
+            f"{self.model[0].name} with {self.chemistry['citation']} "
+            "parameters "
+            f"varying '{self.param_to_vary}' for a {self.c_rate} C discharge "
             "at "
             f"{self.temp}°C"
         )
