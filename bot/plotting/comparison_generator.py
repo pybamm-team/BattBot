@@ -97,8 +97,7 @@ def comparison_generator(
                         )
                     else:
                         params, varied_value = parameter_value_generator(
-                            parameter_values,
-                            param_to_vary
+                            parameter_values, param_to_vary
                         )
                     varied_values.append(varied_value)
 
@@ -108,7 +107,7 @@ def comparison_generator(
 
                     labels.append(param_to_vary + ": " + str(varied_value))
 
-                    param_list.append(params)
+                    param_list.append(params.copy())
 
                     # find the minimum value if "Current function [A]"
                     # is varied
@@ -134,10 +133,13 @@ def comparison_generator(
                 # vary "Current function [A]" and "Ambient temperature [K]"
                 # if comparing models with a constant discharge
                 if number_of_comp != 1:
-                    params, varied_value = parameter_value_generator(
+                    params, min_param_value = parameter_value_generator(
                         parameter_values, "Current function [A]"
                     )
-                    final_params, varied_value = parameter_value_generator(
+                    (
+                        final_params,
+                        varied_value_temp
+                    ) = parameter_value_generator(
                         params,
                         "Ambient temperature [K]",
                         lower_bound=265,
@@ -154,8 +156,10 @@ def comparison_generator(
                 )
 
                 # if "Current function [A]" is varied, change the t_end
-                if param_to_vary == "Current function [A]":
-                    factor = min_param_value / varied_value
+                if min_param_value != 100:
+                    factor = min_param_value / parameter_values[
+                        "Current function [A]"
+                    ]
                     t_end = (1 / factor * 1.1) * 3600
                 else:
                     # default t_end
