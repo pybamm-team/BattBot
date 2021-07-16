@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import random
+import logging
 import requests
 import datetime
 import multiprocessing
@@ -218,6 +219,11 @@ class Tweet(object):
         Posts a request on the Twitter API and makes
         sure that the given post request succeeds
         """
+        # logging configs
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger()
+        logger.setLevel(logging.INFO)
+
         while True:
             if files is None:
                 req = requests.post(
@@ -237,9 +243,9 @@ class Tweet(object):
             ):
                 break
             else:  # pragma: no cover
-                print(req.status_code)
-                print(req.text)
-                print(
+                logger.info(req.status_code)
+                logger.info(req.text)
+                logger.info(
                     "Twitter API internal error."
                     + " Trying again in 5 minutes"
                 )
