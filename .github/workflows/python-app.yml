@@ -49,12 +49,12 @@ jobs:
         pip install -r requirements.txt
             
     - name: Tweet
-      if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+      if: matrix.os == 'ubuntu-latest'
       run: |
         cd bot
-        python tweet_plot.py
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+        git pull origin main
         git commit -m "Update config and data - ci skip" -a
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
