@@ -90,4 +90,4 @@ def information(
                     f"{temp}°C"
                 )
 
-    return tweet_text
+    return tweet_text + " https://bit.ly/3z5p7q9"
