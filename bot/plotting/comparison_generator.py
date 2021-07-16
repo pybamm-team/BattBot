@@ -86,7 +86,7 @@ def comparison_generator(
                         params, varied_value = parameter_value_generator(
                             parameter_values,
                             param_to_vary,
-                            lower_bound=0
+                            lower_bound=0.1
                         )
                     elif param_to_vary == "Ambient temperature [K]":
                         params, varied_value = parameter_value_generator(
