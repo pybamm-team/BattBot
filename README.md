@@ -4,7 +4,7 @@
 
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/battbot_.svg?style=social&label=Follow%20@battbot_)](https://twitter.com/battbot_)
 [![BattBot](https://github.com/pybamm-team/BattBot/actions/workflows/python-app.yml/badge.svg)](https://github.com/pybamm-team/BattBot/actions/workflows/python-app.yml)
-[![codecov](https://codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot/branch/main/graph/badge.svg?token=P1h4VGtlSt)](https://codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot)
+[![codecov](https://codecov.io/gh/pybamm-team/BattBot/branch/main/graph/badge.svg?token=6wEJ6AiiGG)](https://codecov.io/gh/pybamm-team/BattBot)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/)
 [![black_code_style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
