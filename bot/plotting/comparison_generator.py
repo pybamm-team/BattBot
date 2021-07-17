@@ -84,20 +84,20 @@ def comparison_generator(
                         or param_to_vary == "Electrode width [m]"
                     ):
                         params, varied_value = parameter_value_generator(
-                            parameter_values,
+                            parameter_values.copy(),
                             param_to_vary,
-                            lower_bound=0
+                            lower_bound=0.1
                         )
                     elif param_to_vary == "Ambient temperature [K]":
                         params, varied_value = parameter_value_generator(
-                            parameter_values,
+                            parameter_values.copy(),
                             param_to_vary,
                             lower_bound=265,
                             upper_bound=355
                         )
                     else:
                         params, varied_value = parameter_value_generator(
-                            parameter_values, param_to_vary
+                            parameter_values.copy(), param_to_vary
                         )
                     varied_values.append(varied_value)
 
@@ -134,13 +134,13 @@ def comparison_generator(
                 # if comparing models with a constant discharge
                 if number_of_comp != 1:
                     params, min_param_value = parameter_value_generator(
-                        parameter_values, "Current function [A]"
+                        parameter_values.copy(), "Current function [A]"
                     )
                     (
                         final_params,
                         varied_value_temp
                     ) = parameter_value_generator(
-                        params,
+                        params.copy(),
                         "Ambient temperature [K]",
                         lower_bound=265,
                         upper_bound=355
