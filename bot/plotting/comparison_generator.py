@@ -46,8 +46,8 @@ def comparison_generator(
     while True:
         try:
 
-    # generate a list of parameter values by varying a single parameter
-    # if only 1 model is selected
+            # generate a list of parameter values by varying a single parameter
+            # if only 1 model is selected
             param_to_vary = None
             labels = []
             varied_values = []
