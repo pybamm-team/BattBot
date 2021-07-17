@@ -49,7 +49,7 @@ def information(
         elif param_to_vary is not None and is_comparison:
             tweet_text = (
                 f"{model[0].name} with {chemistry['citation']} parameters "
-                f"varying {param_to_vary} for the following experiment: "
+                f"varying '{param_to_vary}' for the following experiment: "
                 f"{cycle} * {number}"
             )
     elif not is_experiment:
@@ -75,10 +75,21 @@ def information(
                     f"parameters for a {c_rate} C discharge at {temp}°C"
                 )
         elif param_to_vary is not None and is_comparison:
-            tweet_text = (
-                f"{model[0].name} with {chemistry['citation']} parameters "
-                f"varying {param_to_vary} for a {c_rate} C discharge at "
-                f"{temp}°C"
-            )
+            if param_to_vary == "Current function [A]":
+                tweet_text = (
+                    f"{model[0].name} with {chemistry['citation']} parameters "
+                    f"varying '{param_to_vary}' at {temp}°C"
+                )
+            elif param_to_vary == "Ambient temperature [K]":
+                tweet_text = (
+                    f"{model[0].name} with {chemistry['citation']} parameters "
+                    f"varying '{param_to_vary}' for a {c_rate} C discharge"
+                )
+            else:
+                tweet_text = (
+                    f"{model[0].name} with {chemistry['citation']} parameters "
+                    f"varying '{param_to_vary}' for a {c_rate} C discharge at "
+                    f"{temp}°C"
+                )
 
-    return tweet_text
+    return tweet_text + " https://bit.ly/3z5p7q9"
