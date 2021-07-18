@@ -42,9 +42,9 @@ Once this executes, you will be able to see if any tests are failing or if the c
 4. Once everything passes, you can go ahead and create a [Pull Request](https://github.com/pybamm-team/BattBot/pulls) for the constructive review process.
 
 ## GitHub Actions
- - All the tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file.
- - This does not mean that the failing `test_tweet_plot.py` tests will pass (if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
- - This however does not mean that the tests will fail, only the tests which do not require the `Twitter API keys` will run on the PRs from a fork. This might effect the coverage but other tests will pass.
+ - Thes tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file.
+ - This does not mean that the failing `test_tweet_plot.py` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
+ - This however also does not mean that the tests will fail, only the tests which do not require the `Twitter API keys` will run on the PRs from a fork. This might effect the coverage but the other tests will pass.
 
 ## Writing your code
 1. For styling we use [flake8](https://pypi.org/project/flake8/) and [black](https://pypi.org/project/black/) to maintain uniformity throughout the codebase.
