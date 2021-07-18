@@ -9,7 +9,7 @@ import multiprocessing
 import matplotlib.pyplot as plt
 from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
-from information.information import information
+from tweet_text_generator.tweet_text_generator import tweet_text_generator
 
 
 media_endpoint_url = 'https://upload.twitter.com/1.1/media/upload.json'
@@ -288,7 +288,7 @@ class Tweet(object):
         Publishes Tweet with attached plot
         """
         tweet_status = (
-            information(
+            tweet_text_generator(
                 self.chemistry,
                 self.model,
                 self.is_experiment,

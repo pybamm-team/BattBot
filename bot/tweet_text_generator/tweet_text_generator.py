@@ -1,7 +1,7 @@
 import pybamm
 
 
-def information(
+def tweet_text_generator(
     chemistry,
     model,
     is_experiment,
@@ -90,4 +90,16 @@ def information(
                     f"{temp}°C"
                 )
 
-    return tweet_text + " https://bit.ly/3z5p7q9"
+    if len(tweet_text) >= 280:
+        tweet_text = tweet_text.replace("Single Particle Model", "SPM")
+        tweet_text = tweet_text.replace(
+            "Single Particle Model with electrolyte", "SPMe"
+        )
+        tweet_text = tweet_text.replace("Doyle-Fuller-Newman", "DFN")
+        tweet_text = tweet_text.replace("following ", "")
+
+    return (
+        tweet_text + " https://bit.ly/3z5p7q9"
+        if len(tweet_text + " https://bit.ly/3z5p7q9") <= 280
+        else tweet_text
+    )
