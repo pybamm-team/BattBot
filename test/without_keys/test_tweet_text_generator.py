@@ -28,7 +28,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.param_to_vary = None
 
     def test_tweet_text_generator(self):
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -38,9 +38,10 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.param_to_vary
         )
 
+        self.assertIsNone(experiment)
         self.assertEqual(
             result,
-            f"Summary varaibles for {self.model.name} with "
+            f"Summary variables for {self.model.name} with "
             f"{self.chemistry['citation']} parameters for the following "
             f"experiment: {str(self.cycle)} * {self.number} "
             "https://bit.ly/3z5p7q9"
@@ -52,7 +53,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             1: pybamm.lithium_ion.SPM()
         }
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -63,10 +64,14 @@ class TestTweetTextGenerator(unittest.TestCase):
         )
 
         self.assertEqual(
+            experiment,
+            str(self.cycle) + " * " + str(self.number)
+        )
+        self.assertEqual(
             result,
             f"Comparing {self.model[0].name} and {self.model[1].name} "
             f"with {self.chemistry['citation']} parameters for the "
-            f"following experiment: {self.cycle} * {self.number}"
+            f"following experiment \U0001F53D https://bit.ly/3z5p7q9"
         )
 
         self.model = {
@@ -75,7 +80,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             2: pybamm.lithium_ion.SPMe()
         }
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -86,17 +91,20 @@ class TestTweetTextGenerator(unittest.TestCase):
         )
 
         self.assertEqual(
+            experiment,
+            str(self.cycle) + " * " + str(self.number)
+        )
+        self.assertEqual(
             result,
-            f"Comparing DFN model, SPM, and "
-            f"SPM with electrolyte with {self.chemistry['citation']} "
-            "parameters for the experiment: "
-            f"{self.cycle} * {self.number} "
-            "https://bit.ly/3z5p7q9"
+            f"Comparing Doyle-Fuller-Newman model, Single Particle Model, and"
+            f" Single Particle Model with electrolyte with "
+            f"{self.chemistry['citation']} parameters for the "
+            "following experiment \U0001F53D https://bit.ly/3z5p7q9"
         )
 
         self.param_to_vary = "Current function [A]"
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -107,11 +115,15 @@ class TestTweetTextGenerator(unittest.TestCase):
         )
 
         self.assertEqual(
+            experiment,
+            str(self.cycle) + " * " + str(self.number)
+        )
+        self.assertEqual(
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
             "parameters "
-            f"varying '{self.param_to_vary}' for the following experiment: "
-            f"{self.cycle} * {self.number}"
+            f"varying '{self.param_to_vary}' for the following experiment "
+            "\U0001F53D https://bit.ly/3z5p7q9"
         )
 
         self.is_experiment = False
@@ -121,7 +133,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             1: pybamm.lithium_ion.SPM()
         }
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -131,6 +143,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.param_to_vary
         )
 
+        self.assertIsNone(experiment)
         self.assertEqual(
             result,
             f"Comparing {self.model[0].name} and {self.model[1].name} with "
@@ -145,7 +158,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             2: pybamm.lithium_ion.SPMe()
         }
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -155,6 +168,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.param_to_vary
         )
 
+        self.assertIsNone(experiment)
         self.assertEqual(
             result,
             f"Comparing {self.model[0].name}, {self.model[1].name}, and "
@@ -165,7 +179,7 @@ class TestTweetTextGenerator(unittest.TestCase):
 
         self.param_to_vary = "Current function [A]"
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -175,6 +189,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.param_to_vary
         )
 
+        self.assertIsNone(experiment)
         self.assertEqual(
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
@@ -185,7 +200,7 @@ class TestTweetTextGenerator(unittest.TestCase):
 
         self.param_to_vary = "Ambient temperature [K]"
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -195,6 +210,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.param_to_vary
         )
 
+        self.assertIsNone(experiment)
         self.assertEqual(
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
@@ -205,7 +221,7 @@ class TestTweetTextGenerator(unittest.TestCase):
 
         self.param_to_vary = "Electrode height [m]"
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -215,6 +231,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.param_to_vary
         )
 
+        self.assertIsNone(experiment)
         self.assertEqual(
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
@@ -229,7 +246,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.chemistry = pybamm.parameter_sets.Yang2017
         self.is_experiment = True
 
-        result = tweet_text_generator(
+        result, experiment = tweet_text_generator(
             self.chemistry,
             self.model,
             self.is_experiment,
@@ -240,10 +257,14 @@ class TestTweetTextGenerator(unittest.TestCase):
         )
 
         self.assertEqual(
+            experiment,
+            str(self.cycle) + " * " + str(self.number)
+        )
+        self.assertEqual(
             result,
-            f"DFN model with {self.chemistry['citation']} parameters "
-            f"varying '{self.param_to_vary}' for the experiment: "
-            f"{self.cycle} * {self.number}"
+            f"Doyle-Fuller-Newman model with {self.chemistry['citation']} "
+            f"parameters varying '{self.param_to_vary}' for the following "
+            "experiment \U0001F53D https://bit.ly/3z5p7q9"
         )
 
 

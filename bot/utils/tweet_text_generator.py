@@ -22,6 +22,7 @@ def tweet_text_generator(
         param_to_vary: str or None
     Returns
         tweet_text: str
+        experiment: str or None
     """
 
     params = pybamm.ParameterValues(chemistry=chemistry)
@@ -32,7 +33,7 @@ def tweet_text_generator(
 
     if is_experiment and not is_comparison:
         tweet_text = (
-            f"Summary varaibles for {model.name} with "
+            f"Summary variables for {model.name} with "
             f"{chemistry['citation']} parameters for the following "
             f"experiment: {cycle} * {number}"
         )
@@ -90,16 +91,11 @@ def tweet_text_generator(
                     f"{temp}°C"
                 )
 
-    if len(tweet_text) >= 280:
-        tweet_text = tweet_text.replace("Single Particle Model", "SPM")
-        tweet_text = tweet_text.replace(
-            "Single Particle Model with electrolyte", "SPMe"
-        )
-        tweet_text = tweet_text.replace("Doyle-Fuller-Newman", "DFN")
-        tweet_text = tweet_text.replace("following ", "")
+    if len(tweet_text + " https://bit.ly/3z5p7q9") > 280:
+        tweet_text = tweet_text.split(":")[0]
+        tweet_text = tweet_text.replace("experiment", "experiment \U0001F53D")
+        experiment = f"{cycle} * {number}"
+    else:
+        experiment = None
 
-    return (
-        tweet_text + " https://bit.ly/3z5p7q9"
-        if len(tweet_text + " https://bit.ly/3z5p7q9") <= 280
-        else tweet_text
-    )
+    return tweet_text + " https://bit.ly/3z5p7q9", experiment

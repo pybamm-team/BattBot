@@ -307,7 +307,7 @@ class Tweet(object):
         Publishes Tweet with attached plot
         """
         # generate a text for the tweet
-        tweet_status = (
+        tweet_status, experiment = (
             tweet_text_generator(
                 self.chemistry,
                 self.model,
@@ -335,14 +335,15 @@ class Tweet(object):
             self.write_config("data.txt", append=True)
 
             # reply to the posted tweet
-            reply = {
-                'status': 'This tweet will be in reply to the GIF I just uploaded',
-                'in_reply_to_status_id': req.json()['id'],
-                'auto_populate_reply_metadata': True
-            }
+            if experiment is not None:  # pragma: no cover
+                reply = {
+                    'status': experiment,
+                    'in_reply_to_status_id': req.json()['id'],
+                    'auto_populate_reply_metadata': True
+                }
 
-            # post reply
-            self.post_request(post_tweet_url, reply, oauth)
+                # post reply
+                self.post_request(post_tweet_url, reply, oauth)
 
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
