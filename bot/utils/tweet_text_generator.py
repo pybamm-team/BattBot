@@ -93,7 +93,7 @@ def tweet_text_generator(
 
     if len(tweet_text + " https://bit.ly/3z5p7q9") > 280:
         tweet_text = tweet_text.split(":")[0]
-        tweet_text = tweet_text.replace("experiment", "experiment \U0001F53D")
+        tweet_text += " \U0001F53D"
         experiment = f"{cycle} * {number}"
     else:
         experiment = None
