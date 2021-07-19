@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from bot.tweet_text_generator.tweet_text_generator import tweet_text_generator
+from bot.utils.tweet_text_generator import tweet_text_generator
 
 
 class TestTweetTextGenerator(unittest.TestCase):
