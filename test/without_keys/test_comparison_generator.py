@@ -207,6 +207,50 @@ class TestComparisonGenerator(unittest.TestCase):
 
         assert os.path.exists("plot.gif")
 
+        comparison_dict = comparison_generator(
+            1,
+            models_for_comp=self.model_for_comp,
+            chemistry=self.chemistry,
+            provided_choice="no experiment",
+            provided_param_to_vary="Negative electrode exchange-current density [A.m-2]"    # noqa
+        )
+
+        self.assertIsInstance(comparison_dict, dict)
+        self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
+        self.assertEqual(comparison_dict["model"], self.model_for_comp)
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertIsNone(comparison_dict["cycle"])
+        self.assertIsNone(comparison_dict["number"])
+        self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNotNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
+
+        assert os.path.exists("plot.gif")
+
+        comparison_dict = comparison_generator(
+            1,
+            models_for_comp=self.model_for_comp,
+            chemistry=self.chemistry,
+            provided_choice="no experiment",
+            provided_param_to_vary="Ambient temperature [K]"
+        )
+
+        self.assertIsInstance(comparison_dict, dict)
+        self.assertIsInstance(comparison_dict["model"], dict)
+        for model in comparison_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseModel)
+        self.assertEqual(comparison_dict["model"], self.model_for_comp)
+        self.assertTrue(comparison_dict["is_comparison"])
+        self.assertIsNone(comparison_dict["cycle"])
+        self.assertIsNone(comparison_dict["number"])
+        self.assertEqual(comparison_dict["chemistry"], self.chemistry)
+        self.assertIsNotNone(comparison_dict["param_to_vary"])
+        self.assertIsInstance(comparison_dict["params"], dict)
+
+        assert os.path.exists("plot.gif")
+
 
 if __name__ == "__main__":
     unittest.main()
