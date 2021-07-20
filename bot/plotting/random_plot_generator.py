@@ -1,185 +1,54 @@
 import pybamm
-import random
 import logging
-from experiment.experiment_generator import experiment_generator
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
 from plotting.comparison_generator import comparison_generator
-
-
-# possible chemistries for the bot
-chemistries = [
-    pybamm.parameter_sets.Ai2020,
-    pybamm.parameter_sets.Chen2020,
-    pybamm.parameter_sets.Marquis2019,
-    pybamm.parameter_sets.Yang2017,
-    # pybamm.parameter_sets.Ecker2015,
-    # pybamm.parameter_sets.Ramadass2004,
-]
-
-# possible "particle mechanics" for the bot, to be used with Ai2020 parameters
-particle_mechanics_list = [
-    "swelling and cracking",
-    "none"
-]
-
-# possible "SEI" for the bot
-sei_list = [
-    "ec reaction limited",
-    "reaction limited",
-    "solvent-diffusion limited",
-    "electron-migration limited",
-    "interstitial-diffusion limited",
-    "none"
-]
-
-solver = pybamm.CasadiSolver(mode="safe")
+from plotting.config_generator import config_generator
 
 
 def random_plot_generator(
     return_dict,
-    options={
-        "testing": False,
-        "choice": None,
-        "chemistry": None,
-        "provided_degradation": True,
-    },
+    choice,
+    reply_config=None
 ):
     """
     Generates a random plot.
     Parameters:
         return_dict: dict
             A shared dictionary in which all the return values are stored.
-        options: dict
-            testing: bool
-                default: False
-                Should be set to True when testing, this helps the tests to
-                execute small chunks of this function deterministically.
-            choice: str
-                default: None
-                Type of comparison that should be plotted.
-            chemistry: dict
-                default: None
-                Should be used only during testing, using this one can test
-                different parts of this function deterministically without
-                relying on the random functions to execute that part.
-            provided_degradation: bool
-                default: True
-                Using this one can test and cover some probabilistic lines
-                where no degradation option of a model is selected.
+        choice: str
+        reply_config: dict
+            Should be passed when the bot is replying to a requested
+            simulation tweet.
     """
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
 
     while True:
 
         try:
             pybamm.set_logging_level("NOTICE")
 
-            # randomly select a chemistry if not testing
-            if options["chemistry"] is None:
-                options["chemistry"] = random.choice(chemistries)
-
-            # choosing random degradation
-            particle_mechanics = random.choice(particle_mechanics_list)
-            sei = random.choice(sei_list)
-
-            # if no degradation or if testing, continue
-            if (
-                (
-                    particle_mechanics == "none"
-                    and sei == "none"
-                )
-                or (
-                    options["testing"]
-                    and options["provided_degradation"]
-                )
-            ):
-                options["provided_degradation"] = False
-                continue
-
-            # Add degradation only if we are plotting summary variables
-            if options["choice"] == (
-                "degradation comparison (summary variables)"
-            ):
-                # update model options
-                model_options = {}
-                if options["chemistry"] == (
-                    pybamm.parameter_sets.Ai2020
-                ):
-                    model_options.update({
-                        "particle mechanics": particle_mechanics,
-                        "SEI": sei
-                    })
-                elif options["chemistry"] == (
-                    pybamm.parameter_sets.Yang2017
-                ):
-                    model_options.update({
-                        "lithium plating": "irreversible",
-                        "lithium plating porosity change": "true",
-                        "SEI": "ec reaction limited"
-                    })
-                else:
-                    model_options.update({
-                        "SEI": sei,
-                    })
+            if reply_config is not None:
+                config = reply_config
             else:
-                model_options = None
+                config = config_generator(choice)
 
-            models = [
-                pybamm.lithium_ion.DFN(
-                    options=model_options
-                ),
-                pybamm.lithium_ion.SPM(
-                    options=model_options
-                ),
-                pybamm.lithium_ion.SPMe(
-                    options=model_options
-                ),
-            ]
+            logger.info(config)
 
-            # choose a random model
-            model = random.choice(models)
-
-            # logging the configuration
-            logging.basicConfig(level=logging.INFO)
-            logger = logging.getLogger()
-            logger.setLevel(logging.INFO)
-            logger.info(
-                str(model.name)
-                + " "
-                + str(solver.name)
-                + " "
-                + str(model.options)
-                + " "
-                + str(options["chemistry"]["citation"])
-            )
-
-            if options["choice"] == (
+            if choice == (
                 "degradation comparison (summary variables)"
             ):
 
-                # generating a random experiment if not testing
-                if options["testing"]:
-                    cycle_received = [
-                        (
-                            "Discharge at C/10 for 10 hours or until 3.3 V",
-                            "Rest for 1 hour",
-                            "Charge at 1 A until 4.1 V",
-                            "Hold at 4.1 V until 50 mA",
-                            "Rest for 1 hour"
-                        )
-                    ]
-                    number = 3
-                else:   # pragma: no cover
-                    cycle_received = experiment_generator()
-                    number = random.randint(4, 100)
-
-                if options["chemistry"] == pybamm.parameter_sets.Ai2020:
+                if config["chemistry"] == pybamm.parameter_sets.Ai2020:
                     experiment = pybamm.Experiment(
-                        cycle_received * number
+                        config["cycle"] * config["number"]
                     )
                 else:
                     experiment = pybamm.Experiment(
-                        cycle_received * number, termination="80% capacity"
+                        config["cycle"] * config["number"],
+                        termination="80% capacity"
                     )
 
                 # solving
@@ -188,51 +57,46 @@ def random_plot_generator(
                     solution,
                     parameter_values
                 ) = experiment_solver(
-                    model=model,
+                    model=config["model"],
                     experiment=experiment,
-                    chemistry=options["chemistry"],
-                    solver=solver
+                    chemistry=config["chemistry"],
                 )
 
                 # plotting summary variables
-                generate_summary_variables(solution, options["chemistry"])
+                generate_summary_variables(solution, config["chemistry"])
 
                 return_dict.update({
-                    "model": model,
-                    "chemistry": options["chemistry"],
+                    "model": config["model"],
+                    "chemistry": config["chemistry"],
                     "is_experiment": True,
-                    "cycle": cycle_received,
-                    "number": number,
+                    "cycle": config["cycle"],
+                    "number": config["number"],
                     "is_comparison": False
                 })
 
                 return
 
-            elif options["choice"] == "non-degradation comparisons":
-
-                # generating number of models to be compared
-                number_of_comp = random.randint(1, 3)
-
-                # selecting the models for comparison
-                random.shuffle(models)
-                models_for_comp = models[:number_of_comp]
-                models_for_comp = dict(list(enumerate(models_for_comp)))
+            elif choice == "non-degradation comparisons":
 
                 # generating a comparison GIF
                 comparison_dict = comparison_generator(
-                    number_of_comp,
-                    models_for_comp,
-                    options["chemistry"],
+                    config["number_of_comp"],
+                    config["models_for_comp"],
+                    config["chemistry"],
+                    config["is_experiment"],
+                    config["cycle"],
+                    config["number"],
+                    config["param_to_vary"],
                 )
 
                 return_dict.update({
-                    "model": comparison_dict["model"],
-                    "chemistry": comparison_dict["chemistry"],
-                    "is_experiment": comparison_dict["is_experiment"],
-                    "cycle": comparison_dict["cycle"],
-                    "number": comparison_dict["number"],
-                    "is_comparison": comparison_dict["is_comparison"],
-                    "param_to_vary": comparison_dict["param_to_vary"],
+                    "model": config["models_for_comp"],
+                    "chemistry": config["chemistry"],
+                    "is_experiment": config["is_experiment"],
+                    "cycle": config["cycle"],
+                    "number": config["number"],
+                    "is_comparison": True,
+                    "param_to_vary": config["param_to_vary"],
                     "varied_values": comparison_dict["varied_values"],
                     "params": comparison_dict["params"]
                 })

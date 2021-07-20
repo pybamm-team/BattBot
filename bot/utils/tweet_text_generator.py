@@ -1,6 +1,3 @@
-import pybamm
-
-
 def tweet_text_generator(
     chemistry,
     model,

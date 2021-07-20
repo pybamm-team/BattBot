@@ -48,12 +48,7 @@ class Tweet(object):
 
             p = multiprocessing.Process(target=random_plot_generator, args=(
                 return_dict,
-                {
-                    "testing": testing,
-                    "choice": choice,
-                    "chemistry": None,
-                    "provided_degradation": True
-                }
+                choice
             )
             )
 
