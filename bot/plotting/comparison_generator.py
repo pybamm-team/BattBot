@@ -98,6 +98,32 @@ def comparison_generator(
     while True:
         try:
 
+            # if testing, don't select simulations randomly
+            if provided_choice is not None:
+                choice = provided_choice
+            else:
+                choice_list = ["experiment", "no experiment"]
+                choice = random.choice(choice_list)
+
+            # remove "Current function [A]" from the dict if simulating an
+            # experiment and add it back if not an experiment
+            # (adding it back because pop edits the original list)
+            if (
+                choice == "experiment"
+                and "Current function [A]" in param_to_vary_dict
+            ):
+                param_to_vary_dict.pop("Current function [A]")
+            elif (
+                choice == "no experiment"
+                and "Current function [A]" not in param_to_vary_dict
+            ):
+                param_to_vary_dict.update({
+                    "Current function [A]": {
+                        "lower_bound": None,
+                        "upper_bound": None
+                    }
+                })
+
             # generate a list of parameter values by varying a single
             # parameter if only 1 model is selected
             param_to_vary = None
@@ -115,6 +141,8 @@ def comparison_generator(
                     )
 
                 param_list = []
+                # randomly select number of comparisons by varying a
+                # parameter value
                 diff_params = random.randint(2, 3)
                 for i in range(0, diff_params):
 
@@ -130,22 +158,22 @@ def comparison_generator(
                         param_to_vary + ": " + str(params[param_to_vary])
                     )
 
+                    # append the varied values in `labels` which will be used
+                    # in the GIF
                     labels.append(
                         param_to_vary + ": " + str(params[param_to_vary])
                     )
                     varied_values.append(params[param_to_vary])
+
+                    # create a list of ParameterValues with each element
+                    # having the same parameter varied
                     param_list.append(params)
 
+                # convert the list containing parameter values to a dictionary
+                # for pybamm.BatchStudy
                 parameter_values_for_comp = dict(
                     list(enumerate(param_list))
                 )
-
-            # if testing, don't select simulations randomly
-            if provided_choice is not None:
-                choice = provided_choice
-            else:
-                choice_list = ["experiment", "no experiment"]
-                choice = random.choice(choice_list)
 
             if choice == "no experiment":
 
@@ -163,6 +191,8 @@ def comparison_generator(
                             param_to_vary_dict["Ambient temperature [K]"]
                         }
                     )
+                    # convert the list containing parameter values to a
+                    # dictionary for pybamm.BatchStudy
                     parameter_values_for_comp = dict(
                         list(enumerate([params]))
                     )
@@ -217,6 +247,8 @@ def comparison_generator(
                     ]
                     number = 1
 
+                # create a dictionary containing pybamm.Experiment for
+                # pybamm.BatchStudy
                 experiment = dict(
                     list(
                         enumerate(
