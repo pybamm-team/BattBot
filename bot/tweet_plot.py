@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from api_keys import Keys
 from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
-from information.information import information
+from utils.tweet_text_generator import tweet_text_generator
 
 
 media_endpoint_url = 'https://upload.twitter.com/1.1/media/upload.json'
@@ -34,6 +34,7 @@ class Tweet(object):
         """
         Defines video tweet properties
         """
+        # create a random GIF
         while True:
             manager = multiprocessing.Manager()
             return_dict = manager.dict()
@@ -57,6 +58,7 @@ class Tweet(object):
             )
 
             p.start()
+            # time-out
             p.join(1200)
 
             if p.is_alive():    # pragma: no cover
@@ -99,6 +101,7 @@ class Tweet(object):
         """
         print('INIT')
 
+        # initiate uploading the data
         if os.path.exists("plot.gif"):
             request_data = {
                 'command': 'INIT',
@@ -114,8 +117,10 @@ class Tweet(object):
                 'media_category': 'tweet_image'
             }
 
+        # post the initial request
         req = self.post_request(media_endpoint_url, request_data, oauth)
 
+        # extract media id for the GIF
         media_id = req.json()['media_id']
 
         self.media_id = media_id
@@ -130,11 +135,15 @@ class Tweet(object):
         bytes_sent = 0
         file = open(self.plot, 'rb')
 
+        # upload the media in chunks
         while bytes_sent < self.total_bytes:
+
+            # initialise a single chunk
             chunk = file.read(4*1024*1024)
 
             print('APPEND')
 
+            # append the chunks
             request_data = {
                 'command': 'APPEND',
                 'media_id': self.media_id,
@@ -145,6 +154,7 @@ class Tweet(object):
                 'media': chunk
             }
 
+            # post request to append the chunks
             self.post_request(media_endpoint_url, request_data, oauth, files)
 
             segment_id = segment_id + 1
@@ -166,15 +176,19 @@ class Tweet(object):
         """
         print('FINALIZE')
 
+        # finalize the media upload
         request_data = {
             'command': 'FINALIZE',
             'media_id': self.media_id
         }
 
+        # send a request for finalizing the media upload
         req = self.post_request(media_endpoint_url, request_data, oauth)
 
         print(req.json())
 
+        # extract the processing information of the GIF and check status
+        # until it either passes or fails
         self.processing_info = req.json().get('processing_info', None)
         self.check_status()
 
@@ -224,6 +238,8 @@ class Tweet(object):
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
 
+        # try to post request, if the API gives an error, sleep for 5 minutes
+        # and then try again
         while True:
             if files is None:
                 req = requests.post(
@@ -258,6 +274,7 @@ class Tweet(object):
         Writes the random config to config.txt and appends the same to
         data.txt with date and time.
         """
+        # the configuration for the GIF
         self.config = {
             "model": str(self.model),
             "model options": self.model.options
@@ -271,6 +288,8 @@ class Tweet(object):
             "param_to_vary": self.param_to_vary,
             "varied_values": self.varied_values
         }
+
+        # append to data.txt and write to config.txt
         if not append:
             f = open(filename, "w")
             f.write(str(self.config))
@@ -287,8 +306,9 @@ class Tweet(object):
         """
         Publishes Tweet with attached plot
         """
-        tweet_status = (
-            information(
+        # generate a text for the tweet
+        tweet_status, experiment = (
+            tweet_text_generator(
                 self.chemistry,
                 self.model,
                 self.is_experiment,
@@ -301,15 +321,31 @@ class Tweet(object):
         )
         print(tweet_status)
 
+        # data for the GIF tweet
         request_data = {
             'status': tweet_status,
             'media_ids': self.media_id
         }
 
         if not self.testing:    # pragma: no cover
-            self.post_request(post_tweet_url, request_data, oauth)
+            # tweet the GIF
+            req = self.post_request(post_tweet_url, request_data, oauth)
+
+            # write the config in txt files for users to reproduce
             self.write_config("config.txt")
             self.write_config("data.txt", append=True)
+
+            # reply to the posted tweet
+            if experiment is not None:  # pragma: no cover
+                reply = {
+                    'status': experiment,
+                    'in_reply_to_status_id': req.json()['id'],
+                    'auto_populate_reply_metadata': True
+                }
+
+                # post reply
+                self.post_request(post_tweet_url, reply, oauth)
+
         if os.path.exists("plot.gif"):
             os.remove("plot.gif")
         if os.path.exists("plot.png"):

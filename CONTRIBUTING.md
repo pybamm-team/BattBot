@@ -44,7 +44,8 @@ Once this executes, you will be able to see if any tests are failing or if the c
 ## GitHub Actions and Heroku
  - All the tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file.
  - All the replying process is being carried out by Heroku, hence the `Procfile`, `requirements.txt`, `runtime.txt` and `last_seen_id.txt` should be checked thoroughly before merging the code in the main (deployed) branch.
- - This also means that the locally failing `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` tests will pass (if everything is working) on a PR as it will pull the `Twitter API Keys` from repository secrets, this however does not mean that a plot will be tweeted everytime a PR is made or a commit is added to a PR, the tweet worklow is triggered only during the scheduled run.
+ - This does not mean that the failing `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
+ - This however also does not mean that the tests will fail, only the tests which do not require the `Twitter API keys` will run on the PRs from a fork. This might effect the coverage but the other tests will pass.
 
 ## Writing your code
 1. For styling we use [flake8](https://pypi.org/project/flake8/) and [black](https://pypi.org/project/black/) to maintain uniformity throughout the codebase.
@@ -55,6 +56,8 @@ Once this executes, you will be able to see if any tests are failing or if the c
 
 ## Testing
 All code requires testing. We use the [unittest](https://docs.python.org/3/library/unittest.html) package for our tests.
+
+The tests right now are divided into two directories, which are `with_keys` and `without_keys`. The tests which require `Twitter API keys` to run should be placed in the `with_keys` directory so that they do not run on a PR from a fork. Other tests should be placed in the `without_keys` directory.
 
 Every new feature should have its own test. To create ones, have a look at the test directory and see if there's a test for a similar method. Copy-pasting this is a good way to start.
 

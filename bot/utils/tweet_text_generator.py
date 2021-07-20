@@ -1,4 +1,7 @@
-def information(
+import pybamm
+
+
+def tweet_text_generator(
     chemistry,
     model,
     is_experiment,
@@ -22,11 +25,12 @@ def information(
             To be used when varied values have to be added to the tweet text.
     Returns
         tweet_text: str
+        experiment: str or None
     """
 
     if is_experiment and not is_comparison:
         tweet_text = (
-            f"Summary varaibles for {model.name} with "
+            f"Summary variables for {model.name} with "
             f"{chemistry['citation']} parameters for the following "
             f"experiment: {cycle} * {number}"
         )
@@ -92,4 +96,11 @@ def information(
                     f"{temp}°C"
                 )
 
-    return tweet_text + " https://bit.ly/3z5p7q9"
+    if len(tweet_text + " https://bit.ly/3z5p7q9") > 280:
+        tweet_text = tweet_text.split(":")[0]
+        tweet_text += " \U0001F53D"
+        experiment = f"{cycle} * {number}"
+    else:
+        experiment = None
+
+    return tweet_text + " https://bit.ly/3z5p7q9", experiment
