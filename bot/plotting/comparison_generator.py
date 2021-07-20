@@ -34,8 +34,8 @@ def comparison_generator(
             different parts of this function deterministically without relying
             on the random functions to execute that part.
     """
-    params = pybamm.ParameterValues(chemistry=chemistry)
-    parameter_values_for_comp = dict(list(enumerate([params])))
+    parameter_values = pybamm.ParameterValues(chemistry=chemistry)
+    parameter_values_for_comp = dict(list(enumerate([parameter_values])))
     comparison_dict = {}
 
     # logging configuration
@@ -84,17 +84,20 @@ def comparison_generator(
                         or param_to_vary == "Electrode width [m]"
                     ):
                         params, varied_value = parameter_value_generator(
-                            chemistry, param_to_vary, lower_bound=0
+                            parameter_values.copy(),
+                            param_to_vary,
+                            lower_bound=0.1
                         )
                     elif param_to_vary == "Ambient temperature [K]":
                         params, varied_value = parameter_value_generator(
-                            chemistry, param_to_vary,
+                            parameter_values.copy(),
+                            param_to_vary,
                             lower_bound=265,
                             upper_bound=355
                         )
                     else:
                         params, varied_value = parameter_value_generator(
-                            chemistry, param_to_vary
+                            parameter_values.copy(), param_to_vary
                         )
                     varied_values.append(varied_value)
 
@@ -104,7 +107,7 @@ def comparison_generator(
 
                     labels.append(param_to_vary + ": " + str(varied_value))
 
-                    param_list.append(params)
+                    param_list.append(params.copy())
 
                     # find the minimum value if "Current function [A]"
                     # is varied
@@ -127,6 +130,25 @@ def comparison_generator(
 
                 is_experiment = False
 
+                # vary "Current function [A]" and "Ambient temperature [K]"
+                # if comparing models with a constant discharge
+                if number_of_comp != 1:
+                    params, min_param_value = parameter_value_generator(
+                        parameter_values.copy(), "Current function [A]"
+                    )
+                    (
+                        final_params,
+                        varied_value_temp
+                    ) = parameter_value_generator(
+                        params.copy(),
+                        "Ambient temperature [K]",
+                        lower_bound=265,
+                        upper_bound=355
+                    )
+                    parameter_values_for_comp = dict(
+                        list(enumerate([final_params]))
+                    )
+
                 batch_study = pybamm.BatchStudy(
                     models=models_for_comp,
                     parameter_values=parameter_values_for_comp,
@@ -134,8 +156,10 @@ def comparison_generator(
                 )
 
                 # if "Current function [A]" is varied, change the t_end
-                if param_to_vary == "Current function [A]":
-                    factor = min_param_value / varied_value
+                if min_param_value != 100:
+                    factor = min_param_value / parameter_values[
+                        "Current function [A]"
+                    ]
                     t_end = (1 / factor * 1.1) * 3600
                 else:
                     # default t_end
@@ -215,7 +239,8 @@ def comparison_generator(
                 "number": number if is_experiment else None,
                 "is_comparison": True,
                 "param_to_vary": param_to_vary,
-                "varied_values": varied_values
+                "varied_values": varied_values,
+                "params": parameter_values_for_comp
             })
 
             return comparison_dict

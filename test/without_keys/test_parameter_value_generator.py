@@ -13,7 +13,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
 
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -26,7 +26,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -39,7 +39,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -52,7 +52,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -65,7 +65,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -82,7 +82,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -93,7 +93,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -104,7 +104,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -115,7 +115,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 
@@ -126,7 +126,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             chemistry=chemistry
         )
         new_params, varied_value = parameter_value_generator(
-            chemistry,
+            params,
             parameter
         )
 

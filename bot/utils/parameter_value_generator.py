@@ -1,4 +1,3 @@
-import pybamm
 from utils.desired_decimal_point_generator import (
     desired_decimal_point_generator
 )
@@ -12,12 +11,9 @@ class FunctionLike:
         self.fun = fun
         self.parameter = parameter
 
-    def __call__(self, *args):
-        return self.parameter * self.fun(*args)
-
 
 def parameter_value_generator(
-    chemistry,
+    params,
     parameter,
     lower_bound=None,
     upper_bound=None,
@@ -26,7 +22,7 @@ def parameter_value_generator(
     Generates random values for a given parameter and
     for a given chemistry.
     Parameters:
-        chemistry: dict
+        params: pybamm.ParameterValues
         parameter: str
         lower_bound: numerical
         upper_bound: numerical
@@ -34,7 +30,6 @@ def parameter_value_generator(
         params: pybamm.ParameterValues
         new_parameter_value: numerical
     """
-    params = pybamm.ParameterValues(chemistry=chemistry)
 
     if callable(params[parameter]):
         base_value = 1

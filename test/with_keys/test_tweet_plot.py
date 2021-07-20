@@ -23,6 +23,9 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.number, int)
         self.assertIsInstance(tweet.is_comparison, bool)
         self.assertIsInstance(tweet.testing, bool)
+        self.assertIsNone(tweet.param_to_vary)
+        self.assertIsNone(tweet.varied_values)
+        self.assertIsNone(tweet.params)
 
         tweet.upload_init()
 
@@ -47,6 +50,8 @@ class TestTweetPlot(unittest.TestCase):
         self.assertIsInstance(tweet.is_comparison, bool)
         self.assertTrue(tweet.is_comparison)
         self.assertIsInstance(tweet.testing, bool)
+        self.assertIsInstance(tweet.varied_values, list)
+        self.assertIsInstance(tweet.params, dict)
 
         tweet.upload_init()
 

@@ -233,7 +233,8 @@ def random_plot_generator(
                     "number": comparison_dict["number"],
                     "is_comparison": comparison_dict["is_comparison"],
                     "param_to_vary": comparison_dict["param_to_vary"],
-                    "varied_values": comparison_dict["varied_values"]
+                    "varied_values": comparison_dict["varied_values"],
+                    "params": comparison_dict["params"]
                 })
 
                 return
