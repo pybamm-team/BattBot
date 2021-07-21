@@ -85,7 +85,7 @@ def tweet_text_generator(
                     f"{model[2].name} with {chemistry['citation']} "
                     f"parameters for a {c_rate} C discharge at {temp}°C"
                 )
-        
+
         # comparing a single model by varying a parameter value
         elif param_to_vary is not None and is_comparison:
             if param_to_vary == "Current function [A]":
