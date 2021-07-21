@@ -7,10 +7,7 @@ class TestParameterValueGenerator(unittest.TestCase):
     def test_parameter_value_generator(self):
 
         parameter = {
-            "Lower voltage cut-off [V]": {
-                "lower_bound": None,
-                "upper_bound": None,
-            }
+            "Lower voltage cut-off [V]": (None, None)
         }
         chemistry = pybamm.parameter_sets.Chen2020
         params = pybamm.ParameterValues(
@@ -109,10 +106,9 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         parameter = {
-            "Negative electrode exchange-current density [A.m-2]": {
-                "lower_bound": None,
-                "upper_bound": None
-            }
+            "Negative electrode exchange-current density [A.m-2]": (
+                None, None
+            )
         }
 
         chemistry = pybamm.parameter_sets.Chen2020
@@ -171,10 +167,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         parameter = {
-            "Negative electrode diffusivity [m2.s-1]": {
-                "lower_bound": None,
-                "upper_bound": None,
-            }
+            "Negative electrode diffusivity [m2.s-1]": (None, None)
         }
         chemistry = pybamm.parameter_sets.Chen2020
         params = pybamm.ParameterValues(
