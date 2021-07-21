@@ -6,6 +6,11 @@ from plotting.plot_graph import plot_graph
 from experiment.experiment_generator import experiment_generator
 
 
+# parameters that can be varied in comparisons, of the form -
+# parameter: ("lower_bound", "upper_bound")
+# if the bounds are given as None, the default bounds will be used -
+# parameter: (parameter_values[parameter] / 2, parameter_values[parameter] * 2)
+# the varied value will always be in these bounds
 param_to_vary_dict = {
     "Current function [A]": (None, None),
     "Electrode height [m]": (0.1, None),
