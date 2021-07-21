@@ -13,6 +13,7 @@ def comparison_generator(
     cycle=None,
     number=None,
     param_to_vary=None,
+    param_to_vary_dict=None
 ):
     """
     Generates a random comparison plot.
@@ -27,7 +28,7 @@ def comparison_generator(
         is_experiment: bool
         cycle: list
         number: numerical
-        param_to_vary: str
+        param_to_vary: dict
     """
     parameter_values = pybamm.ParameterValues(chemistry=chemistry)
     parameter_values_for_comp = dict(list(enumerate([parameter_values])))
@@ -38,52 +39,43 @@ def comparison_generator(
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
+    # generate a list of parameter values by varying a single
+    # parameter if only 1 model is selected
     labels = []
     varied_values = []
     if number_of_comp == 1:
 
         param_list = []
+        # randomly select number of comparisons by varying a
+        # parameter value
         diff_params = random.randint(2, 3)
-        min_param_value = 100
         for i in range(0, diff_params):
 
             # generate parameter values
-            if (
-                param_to_vary == "Electrode height [m]"
-                or param_to_vary == "Electrode width [m]"
-            ):
-                params, varied_value = parameter_value_generator(
-                    parameter_values.copy(),
-                    param_to_vary,
-                    lower_bound=0.1
-                )
-            elif param_to_vary == "Ambient temperature [K]":
-                params, varied_value = parameter_value_generator(
-                    parameter_values.copy(),
-                    param_to_vary,
-                    lower_bound=265,
-                    upper_bound=355
-                )
-            else:
-                params, varied_value = parameter_value_generator(
-                    parameter_values.copy(), param_to_vary
-                )
-            varied_values.append(varied_value)
-
-            logger.info(
-                param_to_vary + ": " + str(varied_value)
+            params = parameter_value_generator(
+                parameter_values.copy(),
+                {
+                    param_to_vary: param_to_vary_dict[param_to_vary]
+                }
             )
 
-            labels.append(param_to_vary + ": " + str(varied_value))
+            logger.info(
+                param_to_vary + ": " + str(params[param_to_vary])
+            )
 
-            param_list.append(params.copy())
+            # append the varied values in `labels` which will be used
+            # in the GIF
+            labels.append(
+                param_to_vary + ": " + str(params[param_to_vary])
+            )
+            varied_values.append(params[param_to_vary])
 
-            # find the minimum value if "Current function [A]"
-            # is varied
-            if param_to_vary == "Current function [A]":
-                if varied_value < min_param_value:
-                    min_param_value = varied_value
+            # create a list of ParameterValues with each element
+            # having the same parameter varied
+            param_list.append(params)
 
+        # convert the list containing parameter values to a dictionary
+        # for pybamm.BatchStudy
         parameter_values_for_comp = dict(
             list(enumerate(param_list))
         )
@@ -93,20 +85,17 @@ def comparison_generator(
         # vary "Current function [A]" and "Ambient temperature [K]"
         # if comparing models with a constant discharge
         if number_of_comp != 1:
-            params, min_param_value = parameter_value_generator(
-                parameter_values.copy(), "Current function [A]"
+            params = parameter_value_generator(
+                parameter_values.copy(),
+                {
+                    "Current function [A]": (None, None),
+                    "Ambient temperature [K]": (365 ,355)
+                }
             )
-            (
-                final_params,
-                varied_value_temp
-            ) = parameter_value_generator(
-                params.copy(),
-                "Ambient temperature [K]",
-                lower_bound=265,
-                upper_bound=355
-            )
+            # convert the list containing parameter values to a
+            # dictionary for pybamm.BatchStudy
             parameter_values_for_comp = dict(
-                list(enumerate([final_params]))
+                list(enumerate([params]))
             )
 
         batch_study = pybamm.BatchStudy(
@@ -116,7 +105,17 @@ def comparison_generator(
         )
 
         # if "Current function [A]" is varied, change the t_end
-        if min_param_value != 100:
+        if (
+            param_to_vary == "Current function [A]"
+            or number_of_comp != 1
+        ):
+            # find the minimum value for "Current function [A]"
+            min_param_value = min(
+                [
+                    item["Current function [A]"]
+                    for k, item in parameter_values_for_comp.items()
+                ]
+            )
             factor = min_param_value / parameter_values[
                 "Current function [A]"
             ]
@@ -129,6 +128,8 @@ def comparison_generator(
 
     elif is_experiment:
 
+        # create a dictionary containing pybamm.Experiment for
+        # pybamm.BatchStudy
         experiment = dict(
             list(
                 enumerate(

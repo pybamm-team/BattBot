@@ -263,7 +263,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(

@@ -87,6 +87,7 @@ def random_plot_generator(
                     config["cycle"],
                     config["number"],
                     config["param_to_vary"],
+                    config["param_to_vary_dict"]
                 )
 
                 return_dict.update({

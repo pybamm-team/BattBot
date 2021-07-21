@@ -26,21 +26,25 @@ sei_list = [
     "interstitial-diffusion limited",
 ]
 
-# possible parameter values to vary
-param_to_vary_list = [
-    "Current function [A]",
-    "Electrode height [m]",
-    "Electrode width [m]",
-    "Negative electrode conductivity [S.m-1]",
-    "Negative electrode porosity",
-    "Negative electrode active material volume fraction",
-    "Negative electrode Bruggeman coefficient (electrolyte)",
-    "Negative electrode exchange-current density [A.m-2]",
-    "Positive electrode porosity",
-    "Positive electrode exchange-current density [A.m-2]",
-    "Positive electrode Bruggeman coefficient (electrolyte)",
-    "Ambient temperature [K]"
-]
+# parameters that can be varied in comparisons, of the form -
+# parameter: ("lower_bound", "upper_bound")
+# if the bounds are given as None, the default bounds will be used -
+# parameter: (parameter_values[parameter] / 2, parameter_values[parameter] * 2)
+# the varied value will always be in these bounds
+param_to_vary_dict = {
+    "Current function [A]": (None, None),
+    "Electrode height [m]": (0.1, None),
+    "Electrode width [m]": (0.1, None),
+    "Negative electrode conductivity [S.m-1]": (None, None),
+    "Negative electrode porosity": (None, None),
+    "Negative electrode active material volume fraction": (None, None),
+    "Negative electrode Bruggeman coefficient (electrolyte)": (None, None),
+    "Negative electrode exchange-current density [A.m-2]": (None, None),
+    "Positive electrode porosity": (None, None),
+    "Positive electrode exchange-current density [A.m-2]": (None, None),
+    "Positive electrode Bruggeman coefficient (electrolyte)": (None, None),
+    "Ambient temperature [K]": (265, 355),
+}
 
 
 def config_generator(choice, test_config=None):
@@ -111,8 +115,28 @@ def config_generator(choice, test_config=None):
             cycle = None
             number = None
 
+        # remove "Current function [A]" from the dict if simulating an
+        # experiment and add it back if not an experiment
+        # (adding it back because pop edits the original dict)
+        if (
+            is_experiment
+            and "Current function [A]" in param_to_vary_dict
+        ):
+            param_to_vary_dict.pop("Current function [A]")
+        elif (
+            not is_experiment
+            and "Current function [A]" not in param_to_vary_dict
+        ):
+            param_to_vary_dict.update({
+                "Current function [A]": (None, None)
+            })
+
         if number_of_comp == 1:
-            param_to_vary = random.choice(param_to_vary_list)
+            param_to_vary = random.choice(
+                list(
+                    param_to_vary_dict.keys()
+                )
+            )
         else:
             param_to_vary = None
 
@@ -123,7 +147,8 @@ def config_generator(choice, test_config=None):
             "is_experiment": is_experiment,
             "cycle": cycle,
             "number": number,
-            "param_to_vary": param_to_vary
+            "param_to_vary": param_to_vary,
+            "param_to_vary_dict": param_to_vary_dict
         })
 
     elif choice == "degradation comparison (summary variables)":
