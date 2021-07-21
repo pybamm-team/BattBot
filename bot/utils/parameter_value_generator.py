@@ -1,4 +1,3 @@
-import pybamm
 from utils.desired_decimal_point_generator import (
     desired_decimal_point_generator
 )
@@ -17,42 +16,44 @@ class FunctionLike:
 
 
 def parameter_value_generator(
-    chemistry,
-    parameter,
-    lower_bound=None,
-    upper_bound=None,
+    params,
+    parameter_dict,
 ):
     """
-    Generates random values for a given parameter and
-    for a given chemistry.
+    Generates random values for given parameters and
+    plugs them in params.
     Parameters:
-        chemistry: dict
-        parameter: str
-        lower_bound: numerical
-        upper_bound: numerical
+        params: pybamm.ParameterValues
+        parameter_dict: dict
+            Parameters to be varied. Should be of the form -
+            {
+                "parameter1": (lower_bound, upper_bound),
+                "parameter2": (lower_bound, upper_bound),
+            }
+            where lower_bound and upper_bound can be either
+            numerical or None.
     Returns:
         params: pybamm.ParameterValues
-        new_parameter_value: numerical
     """
-    params = pybamm.ParameterValues(chemistry=chemistry)
 
-    if callable(params[parameter]):
-        base_value = 1
-        new_parameter_value = desired_decimal_point_generator(
-            lower_bound if lower_bound is not None else base_value*0.5,
-            upper_bound if upper_bound is not None else base_value*2,
-            2
-        )
-        params[parameter] = FunctionLike(
-            params[parameter], new_parameter_value
-        )
-    else:
-        base_value = params[parameter]
-        new_parameter_value = desired_decimal_point_generator(
-            lower_bound if lower_bound is not None else base_value*0.5,
-            upper_bound if upper_bound is not None else base_value*2,
-            2
-        )
-        params[parameter] = new_parameter_value
+    for parameter, bounds in parameter_dict.items():
+        if callable(params[parameter]):
+            base_value = 1
+            new_parameter_value = desired_decimal_point_generator(
+                bounds[0] if bounds[0] is not None else base_value*0.5,
+                bounds[1] if bounds[1] is not None else base_value*2,
+                2
+            )
+            params[parameter] = FunctionLike(
+                params[parameter], new_parameter_value
+            )
+        else:
+            base_value = params[parameter]
+            new_parameter_value = desired_decimal_point_generator(
+                bounds[0] if bounds[0] is not None else base_value*0.5,
+                bounds[1] if bounds[1] is not None else base_value*2,
+                2
+            )
+            params[parameter] = new_parameter_value
 
-    return params, new_parameter_value
+    return params
