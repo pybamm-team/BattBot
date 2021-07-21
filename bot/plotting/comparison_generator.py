@@ -7,54 +7,18 @@ from experiment.experiment_generator import experiment_generator
 
 
 param_to_vary_dict = {
-    "Current function [A]": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Electrode height [m]": {
-        "lower_bound": 0.1,
-        "upper_bound": None
-    },
-    "Electrode width [m]": {
-        "lower_bound": 0.1,
-        "upper_bound": None
-    },
-    "Negative electrode conductivity [S.m-1]": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Negative electrode porosity": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Negative electrode active material volume fraction": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Negative electrode Bruggeman coefficient (electrolyte)": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Negative electrode exchange-current density [A.m-2]": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Positive electrode porosity": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Positive electrode exchange-current density [A.m-2]": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Positive electrode Bruggeman coefficient (electrolyte)": {
-        "lower_bound": None,
-        "upper_bound": None
-    },
-    "Ambient temperature [K]": {
-        "lower_bound": 265,
-        "upper_bound": 355
-    }
+    "Current function [A]": (None, None),
+    "Electrode height [m]": (0.1, None),
+    "Electrode width [m]": (0.1, None),
+    "Negative electrode conductivity [S.m-1]": (None, None),
+    "Negative electrode porosity": (None, None),
+    "Negative electrode active material volume fraction": (None, None),
+    "Negative electrode Bruggeman coefficient (electrolyte)": (None, None),
+    "Negative electrode exchange-current density [A.m-2]": (None, None),
+    "Positive electrode porosity": (None, None),
+    "Positive electrode exchange-current density [A.m-2]": (None, None),
+    "Positive electrode Bruggeman coefficient (electrolyte)": (None, None),
+    "Ambient temperature [K]": (265, 355),
 }
 
 
