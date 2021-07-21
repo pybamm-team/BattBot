@@ -71,7 +71,7 @@ def comparison_generator(
 
             # remove "Current function [A]" from the dict if simulating an
             # experiment and add it back if not an experiment
-            # (adding it back because pop edits the original list)
+            # (adding it back because pop edits the original dict)
             if (
                 choice == "experiment"
                 and "Current function [A]" in param_to_vary_dict
@@ -82,10 +82,7 @@ def comparison_generator(
                 and "Current function [A]" not in param_to_vary_dict
             ):
                 param_to_vary_dict.update({
-                    "Current function [A]": {
-                        "lower_bound": None,
-                        "upper_bound": None
-                    }
+                    "Current function [A]": (None, None)
                 })
 
             # generate a list of parameter values by varying a single
