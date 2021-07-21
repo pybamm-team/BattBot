@@ -26,6 +26,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.number = 3
         self.is_comparison = False
         self.param_to_vary = None
+        self.params = dict(list(enumerate([self.params])))
 
     def test_tweet_text_generator(self):
         result, experiment = tweet_text_generator(
@@ -35,7 +36,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertIsNone(experiment)
@@ -60,7 +62,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -87,7 +90,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -111,7 +115,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
@@ -140,7 +145,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertIsNone(experiment)
@@ -165,7 +171,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertIsNone(experiment)
@@ -186,7 +193,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertIsNone(experiment)
@@ -207,7 +215,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertIsNone(experiment)
@@ -228,7 +237,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertIsNone(experiment)
@@ -253,7 +263,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.cycle,
             self.number,
             self.is_comparison,
-            self.param_to_vary
+            self.param_to_vary,
+            self.params
         )
 
         self.assertEqual(
