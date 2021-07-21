@@ -19,14 +19,13 @@ class TestExperimentSolver(unittest.TestCase):
             * 3,
         )
         self.chemistry = pybamm.parameter_sets.Chen2020
-        self.solver = pybamm.CasadiSolver(mode="fast with events")
         self.parameter_values = pybamm.ParameterValues(
             chemistry=self.chemistry
         )
 
     def test_experiment_solver(self):
         sim, solution, parameter_values = experiment_solver(
-            self.model, self.experiment, self.chemistry, self.solver
+            self.model, self.experiment, self.chemistry
         )
 
         self.assertEqual(

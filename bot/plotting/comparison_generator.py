@@ -13,7 +13,7 @@ def comparison_generator(
     cycle=None,
     number=None,
     param_to_vary=None,
-    param_to_vary_dict=None
+    bounds=None
 ):
     """
     Generates a random comparison plot.
@@ -55,7 +55,7 @@ def comparison_generator(
             params = parameter_value_generator(
                 parameter_values.copy(),
                 {
-                    param_to_vary: param_to_vary_dict[param_to_vary]
+                    param_to_vary: bounds
                 }
             )
 
@@ -89,7 +89,7 @@ def comparison_generator(
                 parameter_values.copy(),
                 {
                     "Current function [A]": (None, None),
-                    "Ambient temperature [K]": (365 ,355)
+                    "Ambient temperature [K]": (265, 355)
                 }
             )
             # convert the list containing parameter values to a

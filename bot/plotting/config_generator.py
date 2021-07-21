@@ -148,7 +148,7 @@ def config_generator(choice, test_config=None):
             "cycle": cycle,
             "number": number,
             "param_to_vary": param_to_vary,
-            "param_to_vary_dict": param_to_vary_dict
+            "bounds": param_to_vary_dict[param_to_vary]
         })
 
     elif choice == "degradation comparison (summary variables)":
