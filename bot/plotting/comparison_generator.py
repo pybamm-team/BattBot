@@ -6,6 +6,58 @@ from plotting.plot_graph import plot_graph
 from experiment.experiment_generator import experiment_generator
 
 
+param_to_vary_dict = {
+    "Current function [A]": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Electrode height [m]": {
+        "lower_bound": 0.1,
+        "upper_bound": None
+    },
+    "Electrode width [m]": {
+        "lower_bound": 0.1,
+        "upper_bound": None
+    },
+    "Negative electrode conductivity [S.m-1]": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Negative electrode porosity": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Negative electrode active material volume fraction": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Negative electrode Bruggeman coefficient (electrolyte)": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Negative electrode exchange-current density [A.m-2]": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Positive electrode porosity": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Positive electrode exchange-current density [A.m-2]": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Positive electrode Bruggeman coefficient (electrolyte)": {
+        "lower_bound": None,
+        "upper_bound": None
+    },
+    "Ambient temperature [K]": {
+        "lower_bound": 265,
+        "upper_bound": 355
+    }
+}
+
+
 def comparison_generator(
     number_of_comp,
     models_for_comp,
@@ -46,85 +98,82 @@ def comparison_generator(
     while True:
         try:
 
-            # generate a list of parameter values by varying a single parameter
-            # if only 1 model is selected
-            param_to_vary = None
-            labels = []
-            varied_values = []
-            if number_of_comp == 1:
-
-                param_to_vary_list = [
-                    "Current function [A]",
-                    "Electrode height [m]",
-                    "Electrode width [m]",
-                    "Negative electrode conductivity [S.m-1]",
-                    "Negative electrode porosity",
-                    "Negative electrode active material volume fraction",
-                    "Negative electrode Bruggeman coefficient (electrolyte)",
-                    "Negative electrode exchange-current density [A.m-2]",
-                    "Positive electrode porosity",
-                    "Positive electrode exchange-current density [A.m-2]",
-                    "Positive electrode Bruggeman coefficient (electrolyte)",
-                    "Ambient temperature [K]"
-                ]
-
-                if provided_param_to_vary is not None:
-                    param_to_vary = provided_param_to_vary
-                else:
-                    param_to_vary = random.choice(param_to_vary_list)
-
-                param_list = []
-                diff_params = random.randint(2, 3)
-                min_param_value = 100
-                for i in range(0, diff_params):
-
-                    # generate parameter values
-                    if (
-                        param_to_vary == "Electrode height [m]"
-                        or param_to_vary == "Electrode width [m]"
-                    ):
-                        params, varied_value = parameter_value_generator(
-                            parameter_values.copy(),
-                            param_to_vary,
-                            lower_bound=0.1
-                        )
-                    elif param_to_vary == "Ambient temperature [K]":
-                        params, varied_value = parameter_value_generator(
-                            parameter_values.copy(),
-                            param_to_vary,
-                            lower_bound=265,
-                            upper_bound=355
-                        )
-                    else:
-                        params, varied_value = parameter_value_generator(
-                            parameter_values.copy(), param_to_vary
-                        )
-                    varied_values.append(varied_value)
-
-                    logger.info(
-                        param_to_vary + ": " + str(varied_value)
-                    )
-
-                    labels.append(param_to_vary + ": " + str(varied_value))
-
-                    param_list.append(params.copy())
-
-                    # find the minimum value if "Current function [A]"
-                    # is varied
-                    if param_to_vary == "Current function [A]":
-                        if varied_value < min_param_value:
-                            min_param_value = varied_value
-
-                parameter_values_for_comp = dict(
-                    list(enumerate(param_list))
-                )
-
             # if testing, don't select simulations randomly
             if provided_choice is not None:
                 choice = provided_choice
             else:
                 choice_list = ["experiment", "no experiment"]
                 choice = random.choice(choice_list)
+
+            # remove "Current function [A]" from the dict if simulating an
+            # experiment and add it back if not an experiment
+            # (adding it back because pop edits the original list)
+            if (
+                choice == "experiment"
+                and "Current function [A]" in param_to_vary_dict
+            ):
+                param_to_vary_dict.pop("Current function [A]")
+            elif (
+                choice == "no experiment"
+                and "Current function [A]" not in param_to_vary_dict
+            ):
+                param_to_vary_dict.update({
+                    "Current function [A]": {
+                        "lower_bound": None,
+                        "upper_bound": None
+                    }
+                })
+
+            # generate a list of parameter values by varying a single
+            # parameter if only 1 model is selected
+            param_to_vary = None
+            labels = []
+            varied_values = []
+            if number_of_comp == 1:
+
+                if provided_param_to_vary is not None:
+                    param_to_vary = provided_param_to_vary
+                else:
+                    param_to_vary = random.choice(
+                        list(
+                            param_to_vary_dict.keys()
+                        )
+                    )
+
+                param_list = []
+                # randomly select number of comparisons by varying a
+                # parameter value
+                diff_params = random.randint(2, 3)
+                for i in range(0, diff_params):
+
+                    # generate parameter values
+                    params = parameter_value_generator(
+                        parameter_values.copy(),
+                        {
+                            param_to_vary: param_to_vary_dict[param_to_vary]
+                        }
+                    )
+
+                    logger.info(
+                        param_to_vary + ": " + str(params[param_to_vary])
+                    )
+
+                    # append the varied values in `labels` which will be used
+                    # in the GIF
+                    labels.append(
+                        param_to_vary + ": " + str(params[param_to_vary])
+                    )
+                    varied_values.append(params[param_to_vary])
+
+                    # create a list of ParameterValues with each element
+                    # having the same parameter varied
+                    param_list.append(params)
+
+                # convert the list containing parameter values to a dictionary
+                # for pybamm.BatchStudy
+                parameter_values_for_comp = dict(
+                    list(enumerate(param_list))
+                )
 
             if choice == "no experiment":
 
@@ -133,20 +182,19 @@ def comparison_generator(
                 # vary "Current function [A]" and "Ambient temperature [K]"
                 # if comparing models with a constant discharge
                 if number_of_comp != 1:
-                    params, min_param_value = parameter_value_generator(
-                        parameter_values.copy(), "Current function [A]"
+                    params = parameter_value_generator(
+                        parameter_values.copy(),
+                        {
+                            "Current function [A]":
+                            param_to_vary_dict["Current function [A]"],
+                            "Ambient temperature [K]":
+                            param_to_vary_dict["Ambient temperature [K]"]
+                        }
                     )
-                    (
-                        final_params,
-                        varied_value_temp
-                    ) = parameter_value_generator(
-                        params.copy(),
-                        "Ambient temperature [K]",
-                        lower_bound=265,
-                        upper_bound=355
-                    )
+                    # convert the list containing parameter values to a
+                    # dictionary for pybamm.BatchStudy
                     parameter_values_for_comp = dict(
-                        list(enumerate([final_params]))
+                        list(enumerate([params]))
                     )
 
                 batch_study = pybamm.BatchStudy(
@@ -156,7 +204,17 @@ def comparison_generator(
                 )
 
                 # if "Current function [A]" is varied, change the t_end
-                if min_param_value != 100:
+                if (
+                    param_to_vary == "Current function [A]"
+                    or number_of_comp != 1
+                ):
+                    # find the minimum value for "Current function [A]"
+                    min_param_value = min(
+                        [
+                            item["Current function [A]"]
+                            for k, item in parameter_values_for_comp.items()
+                        ]
+                    )
                     factor = min_param_value / parameter_values[
                         "Current function [A]"
                     ]
@@ -189,6 +247,8 @@ def comparison_generator(
                     ]
                     number = 1
 
+                # create a dictionary containing pybamm.Experiment for
+                # pybamm.BatchStudy
                 experiment = dict(
                     list(
                         enumerate(
