@@ -20,8 +20,8 @@ def parameter_value_generator(
     parameter_dict,
 ):
     """
-    Generates random values for a given parameter and
-    for a given chemistry.
+    Generates random values for given parameters and
+    plugs them in params.
     Parameters:
         params: pybamm.ParameterValues
         parameter_dict: dict
