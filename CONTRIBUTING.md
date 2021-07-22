@@ -26,7 +26,7 @@ This will install all the dependencies in your local system including the develo
 ```bash
 python -m unittest
 ```
-**Note: The tests written in `test_tweet_plot.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
+**Note: The tests written in `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
 
 ## Workflow
 1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/pybamm-team/BattBot/issues) for discussing the topic with others.
@@ -44,7 +44,9 @@ Once this executes, you will be able to see if any tests are failing or if the c
 ## GitHub Actions
  - The tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file.
 
- - This does not mean that the failing `test_tweet_plot.py` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
+ - All the replying process is being carried out by Heroku, hence the `Procfile`, `requirements.txt`, `runtime.txt` and `last_seen_id.txt` should be checked thoroughly before merging the code in the main (deployed) branch.
+
+ - This does not mean that the failing `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
 
  - This however also does not mean that the tests will fail, only the tests which do not require the `Twitter API keys` will run on the PRs from a fork. This might effect the coverage but the other tests will pass.
 

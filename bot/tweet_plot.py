@@ -7,6 +7,7 @@ import requests
 import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
+from api_keys import Keys
 from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
 from utils.tweet_text_generator import tweet_text_generator
@@ -15,16 +16,13 @@ from utils.tweet_text_generator import tweet_text_generator
 media_endpoint_url = 'https://upload.twitter.com/1.1/media/upload.json'
 post_tweet_url = 'https://api.twitter.com/1.1/statuses/update.json'
 
-CONSUMER_KEY = os.environ["CONSUMER_KEY"]
-CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
-ACCESS_TOKEN = os.environ["ACCESS_KEY"]
-ACCESS_TOKEN_SECRET = os.environ["ACCESS_SECRET"]
+keys = Keys()
 
 oauth = OAuth1(
-    CONSUMER_KEY,
-    client_secret=CONSUMER_SECRET,
-    resource_owner_key=ACCESS_TOKEN,
-    resource_owner_secret=ACCESS_TOKEN_SECRET
+    keys.CONSUMER_KEY,
+    client_secret=keys.CONSUMER_SECRET,
+    resource_owner_key=keys.ACCESS_TOKEN,
+    resource_owner_secret=keys.ACCESS_TOKEN_SECRET
 )
 
 
