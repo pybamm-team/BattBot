@@ -71,7 +71,7 @@ Most of the documentation in this repository is of the form of docstrings and co
 Editable notebook, to run the random tweeted configurations is made available using Google Colab [here](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/).
 
 ## Codecov
-Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot.
+Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/pybamm-team/BattBot/.
 
 ## Pre-commit checks
 1. Style `$ flake8`
