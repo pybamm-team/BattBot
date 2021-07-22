@@ -47,7 +47,14 @@ param_to_vary_dict = {
 }
 
 
-def config_generator(choice, test_config=None):
+def config_generator(
+    choice,
+    test_config={
+        "chemistry": None,
+        "is_experiment": None,
+        "number_of_comp": None
+    }
+):
     """
     Generates a random configuration to plot.
     Parameters:
@@ -61,9 +68,17 @@ def config_generator(choice, test_config=None):
     config = {}
     model_options = {}
 
-    chemistry = random.choice(chemistries)
+    # choose a random chemistry
+    # don't select randomly if testing
+    if test_config["chemistry"] is not None:
+        chemistry = test_config["chemistry"]
+    else:
+        chemistry = random.choice(chemistries)
 
+    # choose random degradation for a degradation comparison
     if choice == "degradation comparison (summary variables)":
+
+        # add degradation / update model options
         if chemistry == pybamm.parameter_sets.Ai2020:
             particle_mechanics = random.choice(particle_mechanics_list)
             model_options.update({
@@ -79,9 +94,12 @@ def config_generator(choice, test_config=None):
             model_options.update({
                 "SEI": sei,
             })
+
+    # no degradation
     elif choice == "non-degradation comparisons":
         model_options = None
 
+    # list of all the possible models
     models = [
         pybamm.lithium_ion.DFN(
             options=model_options
@@ -94,10 +112,15 @@ def config_generator(choice, test_config=None):
         ),
     ]
 
+    # choose random configuration for no degradation
     if choice == "non-degradation comparisons":
 
-        # randomly generating number of models to be compared
-        number_of_comp = random.randint(1, 3)
+        # generating number of models to be compared
+        # don't select randomly if testing
+        if test_config["number_of_comp"] is not None:
+            number_of_comp = test_config["number_of_comp"]
+        else:
+            number_of_comp = random.randint(1, 3)
 
         # selecting the models for comparison
         random.shuffle(models)
@@ -105,7 +128,11 @@ def config_generator(choice, test_config=None):
         models_for_comp = dict(list(enumerate(models_for_comp)))
 
         # if the comparison should be made with an experiment
-        is_experiment = random.choice([True, False])
+        # don't select randomly when testing
+        if test_config["is_experiment"] is not None:
+            is_experiment = test_config["is_experiment"]
+        else:
+            is_experiment = random.choice([True, False])
 
         # generating a random experiment
         if is_experiment:
@@ -131,6 +158,7 @@ def config_generator(choice, test_config=None):
                 "Current function [A]": (None, None)
             })
 
+        # choosing a parameter to be varied if only 1 model is selected
         if number_of_comp == 1:
             param_to_vary = random.choice(
                 list(
@@ -140,6 +168,7 @@ def config_generator(choice, test_config=None):
         else:
             param_to_vary = None
 
+        # updating the config dictionary
         config.update({
             "chemistry": chemistry,
             "number_of_comp": number_of_comp,
@@ -149,15 +178,20 @@ def config_generator(choice, test_config=None):
             "number": number,
             "param_to_vary": param_to_vary,
             "bounds": param_to_vary_dict[param_to_vary]
+            if param_to_vary is not None
+            else None
         })
 
     elif choice == "degradation comparison (summary variables)":
 
+        # choosing a random model
         model = random.choice(models)
 
+        # choosing a random experiment
         cycle = experiment_generator()
         number = random.randint(4, 100)
 
+        # updating the config dictionary
         config.update({
             "model": model,
             "chemistry": chemistry,
