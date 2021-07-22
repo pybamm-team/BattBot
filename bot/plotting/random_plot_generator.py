@@ -30,7 +30,7 @@ def random_plot_generator(
         try:
             pybamm.set_logging_level("NOTICE")
 
-            if reply_config is not None:
+            if reply_config is not None:    # pragma: no cover
                 config = reply_config
             else:
                 config = config_generator(choice)

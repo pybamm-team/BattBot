@@ -69,7 +69,7 @@ class Reply:
                         + mention.user.screen_name
                         + " Hi there! The replying feature is still under "
                         + "active development. "
-                        + "Try this again after a few weeks:)",
+                        + "Try this again in a few weeks :)",
                         mention._json["id"]
                     )
 
