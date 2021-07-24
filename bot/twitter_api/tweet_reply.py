@@ -1,6 +1,6 @@
 import time
 import tweepy
-from api_keys import Keys
+from twitter_api.api_keys import Keys
 
 
 # setting up the API keys, tweepy auth and tweepy api object

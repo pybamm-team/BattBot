@@ -1,6 +1,6 @@
 import tweepy
 import unittest
-from bot.api_keys import Keys
+from bot.twitter_api.api_keys import Keys
 
 
 class TestApiKeys(unittest.TestCase):

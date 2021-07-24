@@ -1,7 +1,7 @@
 import unittest
 import os
 import pybamm
-from bot.tweet_plot import Tweet
+from bot.twitter_api.tweet_plot import Tweet
 
 
 class TestTweetPlot(unittest.TestCase):

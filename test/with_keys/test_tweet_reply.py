@@ -1,5 +1,5 @@
 import unittest
-from bot.tweet_reply import Reply
+from bot.twitter_api.tweet_reply import Reply
 
 
 class TestTweetReply(unittest.TestCase):

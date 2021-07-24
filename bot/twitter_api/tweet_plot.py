@@ -7,7 +7,7 @@ import requests
 import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
-from api_keys import Keys
+from twitter_api.api_keys import Keys
 from requests_oauthlib import OAuth1
 from plotting.random_plot_generator import random_plot_generator
 from utils.tweet_text_generator import tweet_text_generator
