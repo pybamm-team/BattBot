@@ -24,3 +24,7 @@ class TestApiKeys(unittest.TestCase):
         api = tweepy.API(auth)
 
         self.assertTrue(api.verify_credentials())
+
+
+if __name__ == "__main__":
+    unittest.main()

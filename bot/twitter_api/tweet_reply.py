@@ -39,7 +39,9 @@ class Reply:
         hashtag "battbot".
         """
         if self.testing:
-            last_seen_id = self.retrieve_tweet_id("bot/last_seen_id.txt")
+            last_seen_id = self.retrieve_tweet_id(
+                "bot/twitter_api/last_seen_id.txt"
+            )
         else:   # pragma: no cover
             last_seen_id = self.retrieve_tweet_id("last_seen_id.txt")
 
