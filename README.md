@@ -10,7 +10,7 @@
 
 
 
-An automated Battery Bot that tweets random battery configuration plots in the form of a GIF with the help of [PyBaMM](https://github.com/pybamm-team/PyBaMM). The bot focuses on comparing 2 or 3 different configurations. All the tweeted configurations are stored in [data.txt](https://github.com/pybamm-team/BattBot/blob/main/bot/twitter_api/data.txt) and the latest tweeted configuration is stored in [config.txt](https://github.com/pybamm-team/BattBot/blob/main/bot/twitter_api/config.txt) which can also be played with on Google Colab [here](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/bot/twitter_api/run-simulation.ipynb).
+An automated Battery Bot that tweets random battery configuration plots in the form of a GIF with the help of [PyBaMM](https://github.com/pybamm-team/PyBaMM). The bot focuses on comparing 2 or 3 different configurations. All the tweeted configurations are stored in [data.txt](https://github.com/pybamm-team/BattBot/blob/main/bot/data.txt) and the latest tweeted configuration is stored in [config.txt](https://github.com/pybamm-team/BattBot/blob/main/bot/config.txt) which can also be played with on Google Colab [here](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/bot/run-simulation.ipynb).
 
 
 ## Citing PyBaMM

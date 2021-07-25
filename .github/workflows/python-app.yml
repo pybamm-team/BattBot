@@ -51,9 +51,9 @@ jobs:
     - name: Tweet
       if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
       run: |
-        cd bot/twitter_api
-        python tweet_plot.py
-        python sync_last_seen_id.py
+        cd bot
+        python -m twitter_api.tweet_plot
+        python -m twitter_api.sync_last_seen_id
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git pull origin main

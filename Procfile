@@ -1,1 +1,1 @@
-start: cd bot/twitter_api; python tweet_reply.py
+start: cd bot; python -m twitter_api.tweet_reply

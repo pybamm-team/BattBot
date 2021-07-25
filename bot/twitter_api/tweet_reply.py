@@ -1,5 +1,5 @@
 import time
-from api_keys import Keys
+from twitter_api.api_keys import Keys
 
 
 # setting up the API keys, tweepy auth and tweepy api object
@@ -40,7 +40,7 @@ class Reply:
         """
         if self.testing:
             last_seen_id = self.retrieve_tweet_id(
-                "bot/twitter_api/last_seen_id.txt"
+                "bot/last_seen_id.txt"
             )
         else:   # pragma: no cover
             last_seen_id = self.retrieve_tweet_id("last_seen_id.txt")
