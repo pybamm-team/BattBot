@@ -17,17 +17,21 @@ An automated Battery Bot that tweets random battery configuration plots in the f
 
 If you use PyBaMM in your work, please cite the paper
 
-> Sulzer, V., Marquis, S. G., Timms, R., Robinson, M., & Chapman, S. J. (2020). Python Battery Mathematical Modelling (PyBaMM). _ECSarXiv. February, 7_.
+> Sulzer, V., Marquis, S. G., Timms, R., Robinson, M., & Chapman, S. J. (2021). Python Battery Mathematical Modelling (PyBaMM). Journal of Open Research Software, 9(1).
 
 You can use the bibtex
 
 ```
-@article{sulzer2020python,
-  title={Python Battery Mathematical Modelling (PyBaMM)},
-  author={Sulzer, Valentin and Marquis, Scott G and Timms, Robert and Robinson, Martin and Chapman, S Jon},
-  journal={ECSarXiv. February},
-  volume={7},
-  year={2020}
+@article{Sulzer2021,
+  title = {{Python Battery Mathematical Modelling (PyBaMM)}},
+  author = {Sulzer, Valentin and Marquis, Scott G. and Timms, Robert and Robinson, Martin and Chapman, S. Jon},
+  doi = {10.5334/jors.309},
+  journal = {Journal of Open Research Software},
+  publisher = {Software Sustainability Institute},
+  volume = {9},
+  number = {1},
+  pages = {14},
+  year = {2021}
 }
 ```
 
