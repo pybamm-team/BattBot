@@ -1,13 +1,10 @@
 import time
-import tweepy
-from api_keys import Keys
+from twitter_api.api_keys import Keys
 
 
 # setting up the API keys, tweepy auth and tweepy api object
 keys = Keys()
-auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_SECRET)
-auth.set_access_token(keys.ACCESS_TOKEN, keys.ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth)
+api = keys.api
 
 
 # inspired from https://www.youtube.com/watch?v=W0wWwglE1Vc
@@ -42,7 +39,9 @@ class Reply:
         hashtag "battbot".
         """
         if self.testing:
-            last_seen_id = self.retrieve_tweet_id("bot/last_seen_id.txt")
+            last_seen_id = self.retrieve_tweet_id(
+                "bot/last_seen_id.txt"
+            )
         else:   # pragma: no cover
             last_seen_id = self.retrieve_tweet_id("last_seen_id.txt")
 

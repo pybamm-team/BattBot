@@ -1,5 +1,5 @@
 import unittest
-from bot.tweet_reply import Reply
+from bot.twitter_api.tweet_reply import Reply
 
 
 class TestTweetReply(unittest.TestCase):
@@ -12,3 +12,7 @@ class TestTweetReply(unittest.TestCase):
 
         reply.store_tweet_id(id, "bot/last_seen_id.txt")
         reply.reply_to_tweet()
+
+
+if __name__ == "__main__":
+    unittest.main()

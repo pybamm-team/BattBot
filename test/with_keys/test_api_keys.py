@@ -1,6 +1,6 @@
 import tweepy
 import unittest
-from bot.api_keys import Keys
+from bot.twitter_api.api_keys import Keys
 
 
 class TestApiKeys(unittest.TestCase):
@@ -24,3 +24,7 @@ class TestApiKeys(unittest.TestCase):
         api = tweepy.API(auth)
 
         self.assertTrue(api.verify_credentials())
+
+
+if __name__ == "__main__":
+    unittest.main()
