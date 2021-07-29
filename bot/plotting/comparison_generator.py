@@ -5,9 +5,40 @@ from plotting.plot_graph import plot_graph
 
 
 class ComparisonGenerator:
+    """
+    Generates a GIF comparing 2 or more configurations using the random values provided.
+    Parameters:
+        models_for_comp: dict
+            Models to be used in comparison. Should be of the form -
+                {
+                    0: pybamm.BaseBatteryModel,
+                    1: pybamm.BaseBatteryModel
+                }
+                Provide only 1 model for "parameter comparison" and 2 or more models for
+                "model comparison".
+        chemistry: dict
+            Chemistry for the models.
+        is_experiment: bool
+            If the comparison includes an experiment.
+        cycle: list
+            default: None
+            Single cycle of the experiment. Provide only when the comparison includes an
+            experiment.
+        number: numerical
+            default: None
+            The number with which the cycle is being multiplied. Provide only when the
+            comparison includes an experiment.
+        number: str
+            default: None
+            The parameter which is to be varied in "parameter comparison". Provide only
+            when the comparison is of type "parameter comparison".
+        bounds: tuple
+            default: None
+            The bounds of the parameter which is to be varied in "parameter comparison".
+            Provide only when the comparison is of type "parameter comparison".    
+    """
     def __init__(
         self,
-        number_of_comp,
         models_for_comp,
         chemistry,
         is_experiment,
@@ -16,7 +47,6 @@ class ComparisonGenerator:
         param_to_vary=None,
         bounds=None,
     ):
-        self.number_of_comp = number_of_comp
         self.models_for_comp = models_for_comp
         self.chemistry = chemistry
         self.is_experiment = is_experiment

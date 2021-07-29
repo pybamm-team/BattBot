@@ -5,14 +5,11 @@ import os
 
 
 class TestComparisonGenerator(unittest.TestCase):
-
     def setUp(self):
-        self.model_for_comp = {
-            "DFN": pybamm.lithium_ion.DFN()
-        }
+        self.model_for_comp = {"DFN": pybamm.lithium_ion.DFN()}
         self.models_for_comp = {
             "DFN": pybamm.lithium_ion.DFN(),
-            "SPM": pybamm.lithium_ion.SPM()
+            "SPM": pybamm.lithium_ion.SPM(),
         }
         self.chemistry = pybamm.parameter_sets.Chen2020
         self.cycle = [
@@ -34,15 +31,11 @@ class TestComparisonGenerator(unittest.TestCase):
             "Negative electrode conductivity [S.m-1]": (None, None),
             "Negative electrode porosity": (None, None),
             "Negative electrode active material volume fraction": (None, None),
-            "Negative electrode Bruggeman coefficient (electrolyte)":
-            (None, None),
-            "Negative electrode exchange-current density [A.m-2]":
-            (None, None),
+            "Negative electrode Bruggeman coefficient (electrolyte)": (None, None),
+            "Negative electrode exchange-current density [A.m-2]": (None, None),
             "Positive electrode porosity": (None, None),
-            "Positive electrode exchange-current density [A.m-2]":
-            (None, None),
-            "Positive electrode Bruggeman coefficient (electrolyte)":
-            (None, None),
+            "Positive electrode exchange-current density [A.m-2]": (None, None),
+            "Positive electrode Bruggeman coefficient (electrolyte)": (None, None),
             "Ambient temperature [K]": (265, 355),
         }
 
@@ -50,65 +43,76 @@ class TestComparisonGenerator(unittest.TestCase):
         os.remove("plot.gif")
 
     def test_comparsion_generator(self):
-        comparison_dict = comparison_generator(
-            1,
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
             param_to_vary=self.param_to_vary,
-            bounds=self.param_to_vary_dict[self.param_to_vary]
+            bounds=self.param_to_vary_dict[self.param_to_vary],
         )
 
-        self.assertIsInstance(comparison_dict["varied_values"], list)
-        self.assertIsInstance(comparison_dict["params"], dict)
+        comparison_generator.parameter_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
-        comparison_dict = comparison_generator(
-            2,
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.models_for_comp,
             chemistry=self.chemistry,
-            is_experiment=self.is_experiment
+            is_experiment=self.is_experiment,
         )
 
-        self.assertIsInstance(comparison_dict["varied_values"], list)
-        self.assertTrue(len(comparison_dict["varied_values"]) == 0)
-        self.assertIsInstance(comparison_dict["params"], dict)
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
-        comparison_dict = comparison_generator(
-            2,
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.models_for_comp,
             chemistry=self.chemistry,
-            is_experiment=self.is_experiment
+            is_experiment=self.is_experiment,
         )
 
-        self.assertIsInstance(comparison_dict["varied_values"], list)
-        self.assertTrue(len(comparison_dict["varied_values"]) == 0)
-        self.assertIsInstance(comparison_dict["params"], dict)
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
         self.is_experiment = True
-        comparison_dict = comparison_generator(
-            1,
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
             param_to_vary=self.param_to_vary,
-            bounds=self.param_to_vary_dict[self.param_to_vary]
+            bounds=self.param_to_vary_dict[self.param_to_vary],
         )
 
-        self.assertIsInstance(comparison_dict["varied_values"], list)
-        self.assertIsInstance(comparison_dict["params"], dict)
+        comparison_generator.parameter_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 
-        comparison_dict = comparison_generator(
-            2,
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.models_for_comp,
             chemistry=pybamm.parameter_sets.Ai2020,
             is_experiment=self.is_experiment,
@@ -116,23 +120,30 @@ class TestComparisonGenerator(unittest.TestCase):
             number=self.number,
         )
 
-        self.assertIsInstance(comparison_dict["varied_values"], list)
-        self.assertTrue(len(comparison_dict["varied_values"]) == 0)
-        self.assertIsInstance(comparison_dict["params"], dict)
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         self.is_experiment = False
 
-        comparison_dict = comparison_generator(
-            1,
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
-            param_to_vary="Negative electrode exchange-current density [A.m-2]",    # noqa
-            bounds=self.param_to_vary_dict[self.param_to_vary]
+            param_to_vary="Negative electrode exchange-current density [A.m-2]",  # noqa
+            bounds=self.param_to_vary_dict[self.param_to_vary],
         )
 
-        self.assertIsInstance(comparison_dict["varied_values"], list)
-        self.assertIsInstance(comparison_dict["params"], dict)
+        comparison_generator.parameter_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
 

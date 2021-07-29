@@ -59,6 +59,8 @@ def config_generator(
     Generates a random configuration to plot.
     Parameters:
         choice: str
+            Can be "model comparison", "parameter comparison" or
+            "degradation comparison (summary variables)".
         test_config: dict
             Should be used while testing to deterministically test this
             function.
@@ -96,7 +98,7 @@ def config_generator(
             })
 
     # no degradation
-    elif choice == "non-degradation comparisons":
+    else:
         model_options = None
 
     # list of all the possible models
@@ -173,7 +175,6 @@ def config_generator(
         # updating the config dictionary
         config.update({
             "chemistry": chemistry,
-            "number_of_comp": number_of_comp,
             "models_for_comp": models_for_comp,
             "is_experiment": is_experiment,
             "cycle": cycle,

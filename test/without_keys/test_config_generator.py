@@ -19,8 +19,8 @@ class TestConfigGenerator(unittest.TestCase):
             test_config={
                 "chemistry": pybamm.parameter_sets.Ai2020,
                 "is_experiment": None,
-                "number_of_comp": None
-            }
+                "number_of_comp": None,
+            },
         )
 
         self.assertIsInstance(config, dict)
@@ -35,8 +35,8 @@ class TestConfigGenerator(unittest.TestCase):
             test_config={
                 "chemistry": pybamm.parameter_sets.Yang2017,
                 "is_experiment": None,
-                "number_of_comp": None
-            }
+                "number_of_comp": None,
+            },
         )
 
         self.assertIsInstance(config, dict)
@@ -51,8 +51,8 @@ class TestConfigGenerator(unittest.TestCase):
             test_config={
                 "chemistry": pybamm.parameter_sets.Chen2020,
                 "is_experiment": None,
-                "number_of_comp": None
-            }
+                "number_of_comp": None,
+            },
         )
 
         self.assertIsInstance(config, dict)
@@ -62,39 +62,35 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
 
-        config = config_generator("non-degradation comparisons")
+        config = config_generator("parameter comparison")
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["models_for_comp"], dict)
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
         self.assertIsInstance(config["chemistry"], dict)
-        self.assertIsInstance(config["number_of_comp"], int)
         self.assertIsInstance(config["is_experiment"], bool)
-        self.assertTrue(
-            isinstance(config["cycle"], list)
-            or config["cycle"] is None
-        )
-        self.assertTrue(
-            isinstance(config["number"], int)
-            or config["number"] is None
-        )
-        self.assertTrue(
-            isinstance(config["param_to_vary"], str)
-            or config["param_to_vary"] is None
-        )
-        self.assertTrue(
-            isinstance(config["bounds"], tuple)
-            or config["bounds"] is None
-        )
+        self.assertTrue(isinstance(config["cycle"], list) or config["cycle"] is None)
+        self.assertTrue(isinstance(config["number"], int) or config["number"] is None)
+        self.assertTrue(isinstance(config["param_to_vary"], str))
+        self.assertTrue(isinstance(config["bounds"], tuple))
+
+        config = config_generator("model comparison")
+
+        self.assertIsInstance(config, dict)
+        self.assertIsInstance(config["models_for_comp"], dict)
+        for model in config["models_for_comp"].values():
+            self.assertIsInstance(model, pybamm.BaseBatteryModel)
+        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["is_experiment"], bool)
+        self.assertTrue(isinstance(config["cycle"], list) or config["cycle"] is None)
+        self.assertTrue(isinstance(config["number"], int) or config["number"] is None)
+        self.assertIsNone(config["param_to_vary"])
+        self.assertIsNone(config["bounds"])
 
         config = config_generator(
-            "non-degradation comparisons",
-            test_config={
-                "chemistry": None,
-                "is_experiment": True,
-                "number_of_comp": 1
-            }
+            "parameter comparison",
+            test_config={"chemistry": None, "is_experiment": True, "number_of_comp": 1},
         )
 
         self.assertIsInstance(config, dict)
@@ -102,7 +98,6 @@ class TestConfigGenerator(unittest.TestCase):
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
         self.assertIsInstance(config["chemistry"], dict)
-        self.assertIsInstance(config["number_of_comp"], int)
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertTrue(config["is_experiment"])
         self.assertIsInstance(config["cycle"], list)
@@ -111,12 +106,12 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["bounds"], tuple)
 
         config = config_generator(
-            "non-degradation comparisons",
+            "model comparison",
             test_config={
                 "chemistry": None,
                 "is_experiment": False,
-                "number_of_comp": 2
-            }
+                "number_of_comp": 2,
+            },
         )
 
         self.assertIsInstance(config, dict)
@@ -124,7 +119,6 @@ class TestConfigGenerator(unittest.TestCase):
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
         self.assertIsInstance(config["chemistry"], dict)
-        self.assertIsInstance(config["number_of_comp"], int)
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertFalse(config["is_experiment"])
         self.assertIsNone(config["cycle"])

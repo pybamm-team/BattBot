@@ -29,7 +29,16 @@ oauth = OAuth1(
 # Official Twitter API example by Twitter Developer Relations:
 # https://github.com/twitterdev/large-video-upload-python
 class Tweet(object):
-
+    """
+    Tweets a random battery simulation.
+    Parameter:
+        testing: bool
+            To be used while testing.
+        choice: str
+            To be used while testing. Can be "model comparison",
+            "parameter comparison" or "degradation comparison
+            (summary variables)".
+    """
     def __init__(self, testing=False, choice=None):
         """
         Defines video tweet properties

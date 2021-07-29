@@ -17,6 +17,8 @@ def random_plot_generator(
         return_dict: dict
             A shared dictionary in which all the return values are stored.
         choice: str
+            Can be "model comparison", "parameter comparison" or
+            "degradation comparison (summary variables)".
         reply_config: dict
             Should be passed when the bot is replying to a requested
             simulation tweet.
@@ -81,7 +83,6 @@ def random_plot_generator(
                 # create an object of ComparisonGenerator with the random
                 # configuration
                 comparison_generator = ComparisonGenerator(
-                    config["number_of_comp"],
                     config["models_for_comp"],
                     config["chemistry"],
                     config["is_experiment"],
