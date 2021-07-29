@@ -113,6 +113,25 @@ class TestComparisonGenerator(unittest.TestCase):
         assert os.path.exists("plot.gif")
 
         comparison_generator = ComparisonGenerator(
+            models_for_comp=self.model_for_comp,
+            chemistry=pybamm.parameter_sets.Ai2020,
+            is_experiment=self.is_experiment,
+            cycle=self.cycle,
+            number=self.number,
+            param_to_vary=self.param_to_vary,
+            bounds=self.param_to_vary_dict[self.param_to_vary],
+        )
+
+        comparison_generator.parameter_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+
+        assert os.path.exists("plot.gif")
+
+        comparison_generator = ComparisonGenerator(
             models_for_comp=self.models_for_comp,
             chemistry=pybamm.parameter_sets.Ai2020,
             is_experiment=self.is_experiment,

@@ -43,11 +43,13 @@ def random_plot_generator(
                 "degradation comparison (summary variables)"
             ):
 
-                if config["chemistry"] == pybamm.parameter_sets.Ai2020:
+                if (
+                    config["chemistry"] == pybamm.parameter_sets.Ai2020
+                ):    # pragma: no cover
                     experiment = pybamm.Experiment(
                         config["cycle"] * config["number"]
                     )
-                else:
+                else:   # pragma: no cover
                     experiment = pybamm.Experiment(
                         config["cycle"] * config["number"],
                         termination="80% capacity"
