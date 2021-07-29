@@ -41,7 +41,8 @@ class Tweet(object):
 
             choice_list = [
                 # "degradation comparison (summary variables)",
-                "non-degradation comparisons"
+                "model comparison",
+                "parameter comparison",
             ]
             if choice is None:
                 choice = random.choice(choice_list)
@@ -80,7 +81,7 @@ class Tweet(object):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
-        if choice == "non-degradation comparisons":
+        if choice == "model comparison" or choice == "parameter comparison":
             self.param_to_vary = return_dict["param_to_vary"]
             self.varied_values = return_dict["varied_values"]
             self.params = return_dict["params"]

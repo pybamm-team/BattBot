@@ -2,7 +2,7 @@ import pybamm
 import logging
 from experiment.experiment_solver import experiment_solver
 from plotting.summary_variables import generate_summary_variables
-from plotting.comparison_generator import comparison_generator
+from plotting.comparison_generator import ComparisonGenerator
 from plotting.config_generator import config_generator
 
 
@@ -76,10 +76,11 @@ def random_plot_generator(
 
                 return
 
-            elif choice == "non-degradation comparisons":
+            else:
 
-                # generating a comparison GIF
-                comparison_dict = comparison_generator(
+                # create an object of ComparisonGenerator with the random
+                # configuration
+                comparison_generator = ComparisonGenerator(
                     config["number_of_comp"],
                     config["models_for_comp"],
                     config["chemistry"],
@@ -90,6 +91,12 @@ def random_plot_generator(
                     config["bounds"]
                 )
 
+                # create a GIF
+                if choice == "model comparison":
+                    comparison_generator.model_comparison()
+                elif choice == "parameter comparison":
+                    comparison_generator.parameter_comparison()
+
                 return_dict.update({
                     "model": config["models_for_comp"],
                     "chemistry": config["chemistry"],
@@ -98,8 +105,8 @@ def random_plot_generator(
                     "number": config["number"],
                     "is_comparison": True,
                     "param_to_vary": config["param_to_vary"],
-                    "varied_values": comparison_dict["varied_values"],
-                    "params": comparison_dict["params"]
+                    "varied_values": comparison_generator.comparison_dict["varied_values"],    # noqa
+                    "params": comparison_generator.comparison_dict["params"]    # noqa
                 })
 
                 return

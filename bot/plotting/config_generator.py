@@ -113,14 +113,16 @@ def config_generator(
     ]
 
     # choose random configuration for no degradation
-    if choice == "non-degradation comparisons":
+    if choice == "model comparison" or choice == "parameter comparison":
 
         # generating number of models to be compared
         # don't select randomly if testing
         if test_config["number_of_comp"] is not None:
             number_of_comp = test_config["number_of_comp"]
-        else:
-            number_of_comp = random.randint(1, 3)
+        elif choice == "model comparison":
+            number_of_comp = random.randint(2, 3)
+        elif choice == "parameter comparison":
+            number_of_comp = 1
 
         # selecting the models for comparison
         random.shuffle(models)
@@ -158,14 +160,14 @@ def config_generator(
                 "Current function [A]": (None, None)
             })
 
-        # choosing a parameter to be varied if only 1 model is selected
-        if number_of_comp == 1:
+        # choosing a parameter to be varied
+        if choice == "parameter comparison":
             param_to_vary = random.choice(
                 list(
                     param_to_vary_dict.keys()
                 )
             )
-        else:
+        elif choice == "model comparison":
             param_to_vary = None
 
         # updating the config dictionary
