@@ -8,6 +8,7 @@ class TestCreateGIF(unittest.TestCase):
     def setUp(self):
         self.model = {0: pybamm.lithium_ion.DFN()}
         self.batch_study = pybamm.BatchStudy(self.model)
+        self.batch_study.solve([0, 3700])
 
     def tearDown(self):
         os.remove("plot.gif")
