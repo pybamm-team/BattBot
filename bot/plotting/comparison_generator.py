@@ -1,7 +1,7 @@
 import pybamm
 import random
 from utils.parameter_value_generator import parameter_value_generator
-from plotting.plot_graph import plot_graph
+from plotting.create_gif import create_gif
 
 
 class ComparisonGenerator:
@@ -61,28 +61,6 @@ class ComparisonGenerator:
             else None
         )
         self.comparison_dict = {}
-
-    def create_gif(self, batch_study, labels=[]):
-        """
-        Creates a GIF using the provided pybamm.BatchStudy object
-        Parameters:
-            batch_study: pybamm.BatchStudy
-            labels: list
-                To override the default pybamm plot labels
-        """
-        # find the max "Time [s]" from all the solutions for the GIF
-        max_time = 0
-        solution = batch_study.sims[0].solution
-        for sim in batch_study.sims:
-            if sim.solution["Time [s]"].entries[-1] > max_time:
-                max_time = sim.solution["Time [s]"].entries[-1]
-                solution = sim.solution
-
-        # create the GIF
-        if len(labels) == 0:
-            plot_graph(solution=solution, sim=batch_study.sims)
-        else:
-            plot_graph(solution=solution, sim=batch_study.sims, labels=labels)
 
     def calculate_t_end(self, parameter_values_for_comp):
         """
@@ -149,7 +127,7 @@ class ComparisonGenerator:
         else:
             batch_study.solve([0, t_end])
 
-        self.create_gif(batch_study)
+        create_gif(batch_study)
 
         self.comparison_dict.update(
             {"varied_values": [], "params": parameter_values_for_comp}
@@ -204,7 +182,7 @@ class ComparisonGenerator:
         else:
             batch_study.solve([0, t_end])
 
-        self.create_gif(batch_study, labels=labels)
+        create_gif(batch_study, labels=labels)
 
         self.comparison_dict.update(
             {"varied_values": varied_values, "params": parameter_values_for_comp}
