@@ -135,6 +135,5 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["is_comparison"], bool)
 
 
-
 if __name__ == "__main__":
     unittest.main()

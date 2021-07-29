@@ -96,7 +96,6 @@ class TestTweetPlot(unittest.TestCase):
         assert not os.path.exists("plot.gif")
         assert not os.path.exists("plot.png")
 
-
         tweet = Tweet(testing=True)
 
         self.assertIsNone(tweet.media_id)

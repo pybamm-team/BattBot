@@ -35,7 +35,7 @@ class ComparisonGenerator:
         bounds: tuple
             default: None
             The bounds of the parameter which is to be varied in "parameter comparison".
-            Provide only when the comparison is of type "parameter comparison".    
+            Provide only when the comparison is of type "parameter comparison".
     """
     def __init__(
         self,
