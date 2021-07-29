@@ -17,7 +17,7 @@ An automated Battery Bot that tweets random battery configuration plots in the f
 
 If you use PyBaMM in your work, please cite the paper
 
-> Sulzer, V., Marquis, S. G., Timms, R., Robinson, M., & Chapman, S. J. (2021). Python Battery Mathematical Modelling (PyBaMM). Journal of Open Research Software, 9(1).
+> Sulzer, V., Marquis, S. G., Timms, R., Robinson, M., & Chapman, S. J. (2021). Python Battery Mathematical Modelling (PyBaMM). _Journal of Open Research Software, 9(1)_.
 
 You can use the bibtex
 
