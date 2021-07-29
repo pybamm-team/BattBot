@@ -33,6 +33,13 @@ class ComparisonGenerator:
         self.comparison_dict = {}
 
     def create_gif(self, batch_study, labels=[]):
+        """
+        Creates a GIF using the provided pybamm.BatchStudy object
+        Parameters:
+            batch_study: pybamm.BatchStudy
+            labels: list
+                To override the default pybamm plot labels
+        """
         # find the max "Time [s]" from all the solutions for the GIF
         max_time = 0
         solution = batch_study.sims[0].solution
@@ -48,6 +55,16 @@ class ComparisonGenerator:
             plot_graph(solution=solution, sim=batch_study.sims, labels=labels)
 
     def calculate_t_end(self, parameter_values_for_comp):
+        """
+        Calculates the t_end for t_eval (t_eval=[0, t_end])
+        Parameter:
+            parameter_values_for_comp: dict
+                Of the form -
+                {
+                    0: pybamm.ParameterValues,
+                    1: pybamm.ParameterValues
+                }
+        """
         # find the minimum value for "Current function [A]"
         min_curr_value = min(
             [
@@ -61,7 +78,9 @@ class ComparisonGenerator:
         return t_end
 
     def model_comparison(self):
-
+        """
+        Generates a comparison GIF with 2 or more models
+        """
         params = {}
         if not self.is_experiment:
 
@@ -107,7 +126,9 @@ class ComparisonGenerator:
         )
 
     def parameter_comparison(self):
-
+        """
+        Generates a comparison with a single model, by varying a single parameter
+        """
         # generate a list of parameter values by varying a single parameter
         labels = []
         varied_values = []

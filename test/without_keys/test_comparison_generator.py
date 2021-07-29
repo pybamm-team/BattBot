@@ -1,6 +1,6 @@
 import unittest
 import pybamm
-from bot.plotting.comparison_generator import comparison_generator
+from bot.plotting.comparison_generator import ComparisonGenerator
 import os
 
 
