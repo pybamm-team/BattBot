@@ -132,7 +132,10 @@ class ComparisonGenerator:
         )
 
         if self.is_experiment:
-            batch_study.solve()
+            if self.chemistry == pybamm.parameter_sets.Ai2020:
+                batch_study.solve(calc_esoh=False)
+            else:
+                batch_study.solve()
         else:
             t_end = self.calculate_t_end(parameter_values_for_comp, force=True)
             batch_study.solve([0, t_end])
