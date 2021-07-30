@@ -65,7 +65,7 @@ class ComparisonGenerator:
 
     def calculate_t_end(self, parameter_values_for_comp, force=False):
         """
-        Calculates the t_end for t_eval (t_eval=[0, t_end])
+        Calculates the t_end for t_eval (t_eval=[0, t_end]).
         Parameter:
             parameter_values_for_comp: dict
                 Of the form -
@@ -73,6 +73,8 @@ class ComparisonGenerator:
                     0: pybamm.ParameterValues,
                     1: pybamm.ParameterValues
                 }
+            force: bool
+                To be used to force the calculation of t_end.
         """
         # find the minimum value for "Current function [A]"
         if self.param_to_vary == "Current function [A]" or force:
