@@ -1,16 +1,12 @@
 import time
-from twitter_api.api_keys import Keys
-
-
-# setting up the API keys, tweepy auth and tweepy api object
-keys = Keys()
-api = keys.api
+from twitter_api.upload import Upload
 
 
 # inspired from https://www.youtube.com/watch?v=W0wWwglE1Vc
-class Reply:
+class Reply(Upload):
 
     def __init__(self, testing=False):
+        super().__init__()
         self.testing = testing
 
     def retrieve_tweet_id(self, file_name):
@@ -46,7 +42,7 @@ class Reply:
             last_seen_id = self.retrieve_tweet_id("last_seen_id.txt")
 
         # retreiving all the mentions after the tweet with id=last_seen_id
-        mentions = api.mentions_timeline(last_seen_id, tweet_mode="extended")
+        mentions = self.api.mentions_timeline(last_seen_id, tweet_mode="extended")
 
         # iterating through all the mentions if not testing
         if not self.testing:    # pragma: no cover
@@ -63,7 +59,7 @@ class Reply:
                 if '#battbot' in mention.full_text.lower():
 
                     # replying
-                    api.update_status(
+                    self.api.update_status(
                         "@"
                         + mention.user.screen_name
                         + " Hi there! The replying feature is still under "
