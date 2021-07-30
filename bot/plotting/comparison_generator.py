@@ -37,6 +37,7 @@ class ComparisonGenerator:
             The bounds of the parameter which is to be varied in "parameter comparison".
             Provide only when the comparison is of type "parameter comparison".
     """
+
     def __init__(
         self,
         models_for_comp,
@@ -110,10 +111,6 @@ class ComparisonGenerator:
         )
 
         t_end = self.calculate_t_end(parameter_values_for_comp)
-
-        # convert the list containing parameter values to a
-        # dictionary for pybamm.BatchStudy
-        parameter_values_for_comp = dict(list(enumerate([params])))
 
         batch_study = pybamm.BatchStudy(
             models=self.models_for_comp,
