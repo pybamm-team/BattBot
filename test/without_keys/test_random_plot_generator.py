@@ -29,12 +29,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
                     return_dict,
-                    {
-                        "testing": True,
-                        "choice": "degradation comparison (summary variables)",
-                        "chemistry": pybamm.parameter_sets.Chen2020,
-                        "provided_degradation": True
-                    }
+                    "degradation comparison (summary variables)",
                 )
             )
             p.start()
@@ -74,16 +69,11 @@ class TestRandomPlotGenerator(unittest.TestCase):
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
                     return_dict,
-                    {
-                        "testing": True,
-                        "choice": "degradation comparison (summary variables)",
-                        "chemistry": pybamm.parameter_sets.Ai2020,
-                        "provided_degradation": True
-                    }
+                    "model comparison"
                 )
             )
             p.start()
-            p.join(600)
+            p.join(1200)
 
             if p.is_alive():
                 print(
@@ -99,18 +89,14 @@ class TestRandomPlotGenerator(unittest.TestCase):
             else:
                 break
 
-        self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
-        self.assertIsNotNone(return_dict["model"].options)
-        self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(
-            key in key_list for key in return_dict["model"].options.keys()
-        )
+        for model in return_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseBatteryModel)
+            self.assertIsNotNone(model.options)
+            self.assertIsInstance(model.options, dict)
+            self.assertTrue(key in key_list for key in model.options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertIsNotNone(return_dict["cycle"])
-        self.assertIsNotNone(return_dict["number"])
-        self.assertTrue(return_dict["is_experiment"])
-        self.assertFalse(return_dict["is_comparison"])
-        pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
+        self.assertIsInstance(return_dict["is_experiment"], bool)
+        self.assertIsInstance(return_dict["is_comparison"], bool)
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
@@ -119,57 +105,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             p = multiprocessing.Process(
                 target=random_plot_generator, args=(
                     return_dict,
-                    {
-                        "testing": True,
-                        "choice": "degradation comparison (summary variables)",
-                        "chemistry": pybamm.parameter_sets.Yang2017,
-                        "provided_degradation": True
-                    }
-                )
-            )
-            p.start()
-            p.join(600)
-
-            if p.is_alive():
-                print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
-                )
-                curr_dir = os.getcwd()
-                for file in os.listdir(curr_dir):
-                    if file.startswith("plot"):
-                        os.remove(file)
-                p.kill()
-                p.join()
-            else:
-                break
-
-        self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
-        self.assertIsNotNone(return_dict["model"].options)
-        self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(
-            key in key_list for key in return_dict["model"].options.keys()
-        )
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertIsNotNone(return_dict["cycle"])
-        self.assertIsNotNone(return_dict["number"])
-        self.assertTrue(return_dict["is_experiment"])
-        self.assertFalse(return_dict["is_comparison"])
-        pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
-
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
-
-        while True:
-            p = multiprocessing.Process(
-                target=random_plot_generator, args=(
-                    return_dict,
-                    {
-                        "testing": True,
-                        "choice": "non-degradation comparisons",
-                        "chemistry": None,
-                        "provided_degradation": True
-                    }
+                    "parameter comparison"
                 )
             )
             p.start()

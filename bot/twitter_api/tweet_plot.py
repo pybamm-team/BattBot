@@ -29,7 +29,16 @@ oauth = OAuth1(
 # Official Twitter API example by Twitter Developer Relations:
 # https://github.com/twitterdev/large-video-upload-python
 class Tweet(object):
-
+    """
+    Tweets a random battery simulation.
+    Parameter:
+        testing: bool
+            To be used while testing.
+        choice: str
+            To be used while testing. Can be "model comparison",
+            "parameter comparison" or "degradation comparison
+            (summary variables)".
+    """
     def __init__(self, testing=False, choice=None):
         """
         Defines video tweet properties
@@ -41,19 +50,15 @@ class Tweet(object):
 
             choice_list = [
                 # "degradation comparison (summary variables)",
-                "non-degradation comparisons"
+                "model comparison",
+                "parameter comparison",
             ]
             if choice is None:
                 choice = random.choice(choice_list)
 
             p = multiprocessing.Process(target=random_plot_generator, args=(
                 return_dict,
-                {
-                    "testing": testing,
-                    "choice": choice,
-                    "chemistry": None,
-                    "provided_degradation": True
-                }
+                choice
             )
             )
 
@@ -85,7 +90,7 @@ class Tweet(object):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
-        if choice == "non-degradation comparisons":
+        if choice == "model comparison" or choice == "parameter comparison":
             self.param_to_vary = return_dict["param_to_vary"]
             self.varied_values = return_dict["varied_values"]
             self.params = return_dict["params"]
