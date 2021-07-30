@@ -46,7 +46,7 @@ def sync_last_seen_id(testing=False):
                     # if the bot has replied
                     if(
                         reply._json['in_reply_to_status_id'] == mention._json["id"]    # noqa
-                        and mention.user.screen_name == "battbot_"
+                        and reply._json['user']['screen_name'] == "battbot_"
                     ):
                         # storing the id
                         tweet_reply.store_tweet_id(
