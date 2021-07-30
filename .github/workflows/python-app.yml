@@ -71,6 +71,11 @@ jobs:
         git config --local user.name "github-actions[bot]"
         python -m twitter_api.sync_last_seen_id
         git commit -m "Update last_seen_id" -a
+      env:
+        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+        ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Push changes
       if: "!contains(github.event.head_commit.message, 'ci skip') && github.ref == 'refs/heads/main'"
