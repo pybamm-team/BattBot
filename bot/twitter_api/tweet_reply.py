@@ -1,7 +1,9 @@
+import os
 import re
 import time
 import pybamm
 import multiprocessing
+import matplotlib.pyplot as plt
 from twitter_api.upload import Upload
 from plotting.random_plot_generator import random_plot_generator
 
@@ -32,7 +34,7 @@ class Reply(Upload):
         f.close()
         return
 
-    def generate_config(self, tweet_text):
+    def generate_reply(self, tweet_text):
         models = []
         reply_config = {}
         text_list = tweet_text.split(" ")
@@ -71,8 +73,10 @@ class Reply(Upload):
                     "bounds": None,
                 }
             )
+        return_dict = {}
+        random_plot_generator(return_dict, choice, config=reply_config)
 
-        return reply_config, choice
+        return
 
     def reply_to_tweet(self):
         """
@@ -93,7 +97,6 @@ class Reply(Upload):
                 # storing the id
                 self.store_tweet_id(mention._json["id"], "last_seen_id.txt")
 
-                models = []
                 # reading the tweet text
                 if "#battbot" in mention.full_text.lower():
 
@@ -106,17 +109,9 @@ class Reply(Upload):
                     )
 
                     try:
-                        reply_config, choice = self.generate_config(
-                            mention.full_text.lower()
-                        )
-
-                        manager = multiprocessing.Manager()
-                        return_dict = manager.dict()
-
-                    
                         p = multiprocessing.Process(
-                            target=random_plot_generator,
-                            args=(return_dict, choice, reply_config),
+                            target=self.generate_reply,
+                            args=(mention.full_text.lower(),),
                         )
 
                         p.start()
@@ -134,29 +129,40 @@ class Reply(Upload):
                                 mention._json["id"],
                             )
 
-                        return
+                            return
                     except Exception as e:
                         pass
-                        # self.api.update_status(
-                        #     "@"
-                        #     + mention.user.screen_name
-                        #     + " Hi there! There was an error while solving the "
-                        #     + f"simulation - {e}. "
-                        #     + "Please try again with a different configuration.",
-                        #     mention._json["id"],
-                        # )
+                        self.api.update_status(
+                            "@"
+                            + mention.user.screen_name
+                            + " Hi there! There was an error while solving the "
+                            + f"simulation - {e}. "
+                            + "Please try again with a different configuration.",
+                            mention._json["id"],
+                        )
 
                         return
 
                     # replying
-                    self.api.update_status(
-                        "@"
-                        + mention.user.screen_name
-                        + " Hi there! The replying feature is still under "
-                        + "active development. "
-                        + "Try this again in a few weeks :)",
-                        mention._json["id"],
-                    )
+                    self.plot = "plot.gif"
+                    self.total_bytes = os.path.getsize(self.plot)
+                    self.upload_init()
+                    self.upload_append()
+                    self.upload_finalize()
+
+                    reply = {
+                        "in_reply_to_status_id": mention._json["id"],
+                        "auto_populate_reply_metadata": True,
+                        "media_ids": self.media_id
+                    }
+
+                    self.post_request(self.post_tweet_url, reply, self.oauth)
+
+                    if os.path.exists("plot.gif"):
+                        os.remove("plot.gif")
+                    if os.path.exists("plot.png"):
+                        os.remove("plot.png")
+                    plt.close()
 
 
 if __name__ == "__main__":  # pragma: no cover

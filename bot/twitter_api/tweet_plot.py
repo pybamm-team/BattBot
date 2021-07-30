@@ -82,6 +82,12 @@ class Tweet(Upload):
         """
         Writes the random config to config.txt and appends the same to
         data.txt with date and time.
+        Parameters:
+            filename: str
+                Name of the file to write to.
+            append: bool
+                default: False
+                If the file has to be opened up in append mode.
         """
         # the configuration for the GIF
         self.config = {
@@ -163,6 +169,6 @@ if __name__ == "__main__":  # pragma: no cover
     tweet.upload_init()
     tweet.upload_append()
     tweet.upload_finalize()
-    # if not tweet.testing:
-    #     time.sleep(random.randint(0, 3600))
+    if not tweet.testing:
+        time.sleep(random.randint(0, 3600))
     tweet.tweet()
