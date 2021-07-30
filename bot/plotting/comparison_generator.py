@@ -28,7 +28,7 @@ class ComparisonGenerator:
             default: None
             The number with which the cycle is being multiplied. Provide only when the
             comparison includes an experiment.
-        number: str
+        param_to_vary: str
             default: None
             The parameter which is to be varied in "parameter comparison". Provide only
             when the comparison is of type "parameter comparison".
@@ -63,7 +63,7 @@ class ComparisonGenerator:
         )
         self.comparison_dict = {}
 
-    def calculate_t_end(self, parameter_values_for_comp):
+    def calculate_t_end(self, parameter_values_for_comp, force=False):
         """
         Calculates the t_end for t_eval (t_eval=[0, t_end])
         Parameter:
@@ -75,14 +75,18 @@ class ComparisonGenerator:
                 }
         """
         # find the minimum value for "Current function [A]"
-        min_curr_value = min(
-            [
-                item["Current function [A]"]
-                for k, item in parameter_values_for_comp.items()
-            ]
-        )
-        factor = min_curr_value / self.parameter_values["Current function [A]"]
-        t_end = (1 / factor * 1.1) * 3600
+        if self.param_to_vary == "Current function [A]" or force:
+            # find the minimum value for "Current function [A]"
+            min_curr_value = min(
+                [
+                    item["Current function [A]"]
+                    for k, item in parameter_values_for_comp.items()
+                ]
+            )
+            factor = min_curr_value / self.parameter_values["Current function [A]"]
+            t_end = (1 / factor * 1.1) * 3600
+        else:
+            t_end = 3700
 
         return t_end
 
@@ -92,7 +96,6 @@ class ComparisonGenerator:
         """
         params = {}
         if not self.is_experiment:
-
             # vary "Current function [A]" and "Ambient temperature [K]"
             params = parameter_value_generator(
                 self.parameter_values.copy(),
@@ -102,15 +105,22 @@ class ComparisonGenerator:
                 },
             )
 
+        elif self.is_experiment:
+            # vary "Ambient temperature [K]"
+            params = parameter_value_generator(
+                self.parameter_values.copy(),
+                {
+                    "Ambient temperature [K]": (265, 355),
+                },
+            )
+
         # convert the list containing parameter values to a
         # dictionary for pybamm.BatchStudy
         parameter_values_for_comp = dict(
             list(
-                enumerate([params if not self.is_experiment else self.parameter_values])
+                enumerate([params])
             )
         )
-
-        t_end = self.calculate_t_end(parameter_values_for_comp)
 
         batch_study = pybamm.BatchStudy(
             models=self.models_for_comp,
@@ -119,9 +129,10 @@ class ComparisonGenerator:
             permutations=True,
         )
 
-        if self.chemistry == pybamm.parameter_sets.Ai2020 and self.is_experiment:
-            batch_study.solve(calc_esoh=False)
+        if self.is_experiment:
+            batch_study.solve()
         else:
+            t_end = self.calculate_t_end(parameter_values_for_comp, force=True)
             batch_study.solve([0, t_end])
 
         create_gif(batch_study)
@@ -161,12 +172,6 @@ class ComparisonGenerator:
         # for pybamm.BatchStudy
         parameter_values_for_comp = dict(list(enumerate(param_list)))
 
-        # calculate t_end if varying "Current function [A]"
-        if self.param_to_vary == "Current function [A]":
-            t_end = self.calculate_t_end(parameter_values_for_comp)
-        else:
-            t_end = 3700
-
         batch_study = pybamm.BatchStudy(
             models=self.models_for_comp,
             parameter_values=parameter_values_for_comp,
@@ -174,9 +179,13 @@ class ComparisonGenerator:
             permutations=True,
         )
 
-        if self.chemistry == pybamm.parameter_sets.Ai2020 and self.is_experiment:
-            batch_study.solve(calc_esoh=False)
+        if self.is_experiment:
+            if self.chemistry == pybamm.parameter_sets.Ai2020:
+                batch_study.solve(calc_esoh=False)
+            else:
+                batch_study.solve()
         else:
+            t_end = self.calculate_t_end(parameter_values_for_comp)
             batch_study.solve([0, t_end])
 
         create_gif(batch_study, labels=labels)

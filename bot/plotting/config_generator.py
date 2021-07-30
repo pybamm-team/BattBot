@@ -7,9 +7,6 @@ chemistries = [
     pybamm.parameter_sets.Ai2020,
     pybamm.parameter_sets.Chen2020,
     pybamm.parameter_sets.Marquis2019,
-    pybamm.parameter_sets.Yang2017,
-    # pybamm.parameter_sets.Ecker2015,
-    # pybamm.parameter_sets.Ramadass2004,
 ]
 
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters
@@ -49,11 +46,7 @@ param_to_vary_dict = {
 
 def config_generator(
     choice,
-    test_config={
-        "chemistry": None,
-        "is_experiment": None,
-        "number_of_comp": None
-    }
+    test_config={"chemistry": None, "is_experiment": None, "number_of_comp": None},
 ):
     """
     Generates a random configuration to plot.
@@ -83,19 +76,18 @@ def config_generator(
         # add degradation / update model options
         if chemistry == pybamm.parameter_sets.Ai2020:
             particle_mechanics = random.choice(particle_mechanics_list)
-            model_options.update({
-                "particle mechanics": particle_mechanics,
-            })
-        elif chemistry == pybamm.parameter_sets.Yang2017:
-            model_options.update({
-                "lithium plating": "irreversible",
-                "lithium plating porosity change": "true",
-            })
+            model_options.update(
+                {
+                    "particle mechanics": particle_mechanics,
+                }
+            )
         else:
             sei = random.choice(sei_list)
-            model_options.update({
-                "SEI": sei,
-            })
+            model_options.update(
+                {
+                    "SEI": sei,
+                }
+            )
 
     # no degradation
     else:
@@ -103,15 +95,9 @@ def config_generator(
 
     # list of all the possible models
     models = [
-        pybamm.lithium_ion.DFN(
-            options=model_options
-        ),
-        pybamm.lithium_ion.SPM(
-            options=model_options
-        ),
-        pybamm.lithium_ion.SPMe(
-            options=model_options
-        ),
+        pybamm.lithium_ion.DFN(options=model_options),
+        pybamm.lithium_ion.SPM(options=model_options),
+        pybamm.lithium_ion.SPMe(options=model_options),
     ]
 
     # choose random configuration for no degradation
@@ -149,41 +135,31 @@ def config_generator(
         # remove "Current function [A]" from the dict if simulating an
         # experiment and add it back if not an experiment
         # (adding it back because pop edits the original dict)
-        if (
-            is_experiment
-            and "Current function [A]" in param_to_vary_dict
-        ):
+        if is_experiment and "Current function [A]" in param_to_vary_dict:
             param_to_vary_dict.pop("Current function [A]")
-        elif (
-            not is_experiment
-            and "Current function [A]" not in param_to_vary_dict
-        ):
-            param_to_vary_dict.update({
-                "Current function [A]": (None, None)
-            })
+        elif not is_experiment and "Current function [A]" not in param_to_vary_dict:
+            param_to_vary_dict.update({"Current function [A]": (None, None)})
 
         # choosing a parameter to be varied
         if choice == "parameter comparison":
-            param_to_vary = random.choice(
-                list(
-                    param_to_vary_dict.keys()
-                )
-            )
+            param_to_vary = random.choice(list(param_to_vary_dict.keys()))
         elif choice == "model comparison":
             param_to_vary = None
 
         # updating the config dictionary
-        config.update({
-            "chemistry": chemistry,
-            "models_for_comp": models_for_comp,
-            "is_experiment": is_experiment,
-            "cycle": cycle,
-            "number": number,
-            "param_to_vary": param_to_vary,
-            "bounds": param_to_vary_dict[param_to_vary]
-            if param_to_vary is not None
-            else None
-        })
+        config.update(
+            {
+                "chemistry": chemistry,
+                "models_for_comp": models_for_comp,
+                "is_experiment": is_experiment,
+                "cycle": cycle,
+                "number": number,
+                "param_to_vary": param_to_vary,
+                "bounds": param_to_vary_dict[param_to_vary]
+                if param_to_vary is not None
+                else None,
+            }
+        )
 
     elif choice == "degradation comparison (summary variables)":
 
@@ -195,11 +171,13 @@ def config_generator(
         number = random.randint(4, 100)
 
         # updating the config dictionary
-        config.update({
-            "model": model,
-            "chemistry": chemistry,
-            "cycle": cycle,
-            "number": number,
-        })
+        config.update(
+            {
+                "model": model,
+                "chemistry": chemistry,
+                "cycle": cycle,
+                "number": number,
+            }
+        )
 
     return config

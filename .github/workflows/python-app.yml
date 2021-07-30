@@ -70,7 +70,7 @@ jobs:
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         python -m twitter_api.sync_last_seen_id
-        git commit -m "Update last_seen_id" -a
+        git commit --allow-empty -m "Update last_seen_id" -a
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
