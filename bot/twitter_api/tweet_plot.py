@@ -1,9 +1,11 @@
 import os
+import time
 import random
 import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
 from twitter_api.upload import Upload
+from twitter_api.custom_process import Process
 from plotting.random_plot_generator import random_plot_generator
 from utils.tweet_text_generator import tweet_text_generator
 
@@ -38,9 +40,7 @@ class Tweet(Upload):
             if choice is None:
                 choice = random.choice(choice_list)
 
-            p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, choice)
-            )
+            p = Process(target=random_plot_generator, args=(return_dict, choice))
 
             p.start()
             # time-out
