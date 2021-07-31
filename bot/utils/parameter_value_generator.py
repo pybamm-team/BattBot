@@ -14,6 +14,9 @@ class FunctionLike:
     def __call__(self, *args):
         return self.parameter * self.fun(*args)
 
+    def __str__(self):
+        return str(self.parameter)
+
 
 def parameter_value_generator(
     params,
