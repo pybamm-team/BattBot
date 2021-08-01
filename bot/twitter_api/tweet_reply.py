@@ -47,28 +47,36 @@ class Reply(Upload):
     def generate_reply(self, tweet_text):
         models = []
         reply_config = {}
-        text_list = tweet_text.split(" ")
-        if (
-            re.search(r"\bsingle particle model\b", tweet_text)
-            and "electrolyte" not in text_list
-        ) or re.search(r"\bspm\b", tweet_text):
-            models.append(pybamm.lithium_ion.SPM())
-        if "doyle-fuller-newman" in tweet_text or "dfn" in tweet_text:
-            models.append(pybamm.lithium_ion.DFN())
-        if (
-            "single particle model with electrolyte" in tweet_text
-            or "spme" in tweet_text
-        ):
-            models.append(pybamm.lithium_ion.SPMe())
+        text_list = tweet_text.replace(",", " ").split(" ")
+        text_list = [x for x in text_list if x != ""]
+        single_indices = [i for i, x in enumerate(text_list) if x == "single" or "spm" in x]
 
-        if len(models) == 0:
-            raise Exception("Please provide atleast 1 model. Some tweet examples - ")
+        if len(single_indices) > 1:
+            models.append(pybamm.lithium_ion.SPM())
+            models.append(pybamm.lithium_ion.SPMe())
+        elif (
+            "single" in text_list
+            and "particle" in text_list
+            and "electrolyte" not in text_list
+        ) or "spm" in text_list:
+            models.append(pybamm.lithium_ion.SPM())
+        elif (
+            "single" in text_list
+            and "particle" in text_list
+            and "electrolyte" in text_list
+        ) or "spme" in tweet_text:
+            models.append(pybamm.lithium_ion.SPMe())
+        if "doyle-fuller-newman" in text_list or "dfn" in text_list:
+            models.append(pybamm.lithium_ion.DFN())
+
+        if len(models) <= 1:
+            raise Exception("Please provide atleast 2 models. Some tweet examples - ")
 
         models_for_comp = dict(list(enumerate(models)))
 
         if "parameters" not in tweet_text:
             raise Exception(
-                "Please provide a parameter set in the format - Chen2020 parameters."
+                "Please provide a parameter set in the format - Chen2020 parameters -"
                 + " Some tweet examples - "
             )
 
@@ -80,6 +88,11 @@ class Reply(Upload):
             chemistry = pybamm.parameter_sets.Marquis2019
         elif chemistry == "ai2020":
             chemistry = pybamm.parameter_sets.Ai2020
+        else:
+            raise Exception(
+                "Please provide a parameter set in the format - Chen2020 parameters -"
+                + " Some tweet examples - "
+            )
 
         if "compare" in tweet_text:
 
