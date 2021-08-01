@@ -1,4 +1,5 @@
 import tweepy
+from requests_oauthlib import OAuth1
 from twitter_api.api_keys import Keys
 from twitter_api.tweet_reply import Reply
 
@@ -68,5 +69,5 @@ def sync_last_seen_id(testing=False):
                         )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     sync_last_seen_id()

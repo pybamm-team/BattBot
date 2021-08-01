@@ -15,7 +15,7 @@ class Upload:
     Uploads a media to the twitter API by dividing it into chunks.
     """
 
-    def __init__(self):
+    def __init__(self, plot=None, total_bytes=None):
         self.media_endpoint_url = "https://upload.twitter.com/1.1/media/upload.json"
         self.post_tweet_url = "https://api.twitter.com/1.1/statuses/update.json"
         self.keys = Keys()
@@ -32,9 +32,10 @@ class Upload:
             self.keys.ACCESS_TOKEN, self.keys.ACCESS_TOKEN_SECRET
         )
         self.api = tweepy.API(self.auth)
-        self.total_bytes = None
+        self.total_bytes = total_bytes
         self.media_id = None
         self.processing_info = None
+        self.plot = plot
 
     def upload_init(self):
         """

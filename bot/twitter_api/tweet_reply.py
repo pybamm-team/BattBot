@@ -1,5 +1,4 @@
 import os
-import re
 import time
 import pybamm
 import matplotlib.pyplot as plt
@@ -81,15 +80,14 @@ class Reply(Upload):
 
         # if less than 2 models are provided for "model comparison"
         # or no model is provided for "parameter comparison"
-        if len(models) == 0:
-            if "compare" in tweet_list:
-                raise Exception(
-                    "Please provide atleast 2 models. Some tweet examples - "
-                )
-            else:
-                raise Exception(
-                    "Please provide atleast 1 model. Some tweet examples - "
-                )
+        if len(models) <= 1 and "compare" in text_list:
+            raise Exception(
+                "Please provide atleast 2 models. Some tweet examples - "
+            )
+        elif len(models) == 0:
+            raise Exception(
+                "Please provide atleast 1 model. Some tweet examples - "
+            )
 
         models_for_comp = dict(list(enumerate(models)))
 

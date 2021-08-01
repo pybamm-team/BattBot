@@ -69,7 +69,12 @@ class TestParameterValueGenerator(unittest.TestCase):
         new_params = parameter_value_generator(params, parameter)
 
         self.assertIsInstance(
-            int(new_param["Negative electrode exchange-current density [A.m-2]"]), int
+            float(
+                new_params[
+                    "Negative electrode exchange-current density [A.m-2]"
+                ].__str__()
+            ),
+            float,
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
@@ -78,7 +83,12 @@ class TestParameterValueGenerator(unittest.TestCase):
         new_params = parameter_value_generator(params, parameter)
 
         self.assertIsInstance(
-            int(new_param["Negative electrode exchange-current density [A.m-2]"]), int
+            float(
+                new_params[
+                    "Negative electrode exchange-current density [A.m-2]"
+                ].__str__()
+            ),
+            float,
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
@@ -87,7 +97,12 @@ class TestParameterValueGenerator(unittest.TestCase):
         new_params = parameter_value_generator(params, parameter)
 
         self.assertIsInstance(
-            int(new_param["Negative electrode exchange-current density [A.m-2]"]), int
+            float(
+                new_params[
+                    "Negative electrode exchange-current density [A.m-2]"
+                ].__str__()
+            ),
+            float,
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
@@ -96,7 +111,12 @@ class TestParameterValueGenerator(unittest.TestCase):
         new_params = parameter_value_generator(params, parameter)
 
         self.assertIsInstance(
-            int(new_param["Negative electrode exchange-current density [A.m-2]"]), int
+            float(
+                new_params[
+                    "Negative electrode exchange-current density [A.m-2]"
+                ].__str__()
+            ),
+            float,
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
