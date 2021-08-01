@@ -47,53 +47,66 @@ class Reply(Upload):
     def generate_reply(self, tweet_text):
         models = []
         reply_config = {}
+
+        # split the tweet text and remove all ','
         text_list = tweet_text.replace(",", " ").split(" ")
         text_list = [x for x in text_list if x != ""]
-        single_indices = [i for i, x in enumerate(text_list) if x == "single" or "spm" in x]
 
+        # check if there are 2 occurences of "single"
+        single_indices = [
+            i for i, x in enumerate(text_list) if x == "single" or "spm" in x
+        ]
+
+        # if there are, append SPM and SPMe to models
         if len(single_indices) > 1:
             models.append(pybamm.lithium_ion.SPM())
             models.append(pybamm.lithium_ion.SPMe())
+        # if user wants "SPM"
         elif (
             "single" in text_list
             and "particle" in text_list
             and "electrolyte" not in text_list
         ) or "spm" in text_list:
             models.append(pybamm.lithium_ion.SPM())
+        # if user wants "SPMe"
         elif (
             "single" in text_list
             and "particle" in text_list
             and "electrolyte" in text_list
         ) or "spme" in tweet_text:
             models.append(pybamm.lithium_ion.SPMe())
+        # if user wants "DFN" model
         if "doyle-fuller-newman" in text_list or "dfn" in text_list:
             models.append(pybamm.lithium_ion.DFN())
 
-        if len(models) <= 1:
-            raise Exception("Please provide atleast 2 models. Some tweet examples - ")
+        # if less than 2 models are provided for "model comparison"
+        # or no model is provided for "parameter comparison"
+        if len(models) == 0:
+            if "compare" in tweet_list:
+                raise Exception(
+                    "Please provide atleast 2 models. Some tweet examples - "
+                )
+            else:
+                raise Exception(
+                    "Please provide atleast 1 model. Some tweet examples - "
+                )
 
         models_for_comp = dict(list(enumerate(models)))
 
-        if "parameters" not in tweet_text:
-            raise Exception(
-                "Please provide a parameter set in the format - Chen2020 parameters -"
-                + " Some tweet examples - "
-            )
-
-        chemistry = text_list[text_list.index("parameters") - 1]
-
-        if chemistry == "chen2020":
+        if "chen2020" in text_list:
             chemistry = pybamm.parameter_sets.Chen2020
-        elif chemistry == "marquis2019":
+        elif "marquis2019" in text_list:
             chemistry = pybamm.parameter_sets.Marquis2019
-        elif chemistry == "ai2020":
+        elif "ai2020" in text_list:
             chemistry = pybamm.parameter_sets.Ai2020
         else:
+            # if no chemistry is provided
             raise Exception(
                 "Please provide a parameter set in the format - Chen2020 parameters -"
                 + " Some tweet examples - "
             )
 
+        # if "model comparison"
         if "compare" in tweet_text:
 
             choice = "model comparison"
@@ -115,6 +128,8 @@ class Reply(Upload):
                 "I'm sorry, I couldn't understand the requested simulation."
                 + " Some tweet examples - "
             )
+
+        # generate the simulation and GIF
         return_dict = {}
         random_plot_generator(return_dict, choice, config=reply_config)
 
@@ -148,7 +163,7 @@ class Reply(Upload):
                         + str(mention._json["id"])
                     )
 
-                    # creating a new process to generate the requested simulation
+                    # creating a custom process to generate the requested simulation
                     p = Process(
                         target=self.generate_reply,
                         args=(mention.full_text.lower(),),

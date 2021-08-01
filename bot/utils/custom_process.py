@@ -21,6 +21,7 @@ class Process(multiprocessing.Process):
             tb = traceback.format_exc()
             self._child_conn.send((e, tb))
 
+    # the exception can now be accessed in the main process using object
     @property
     def exception(self):
         if self._parent_conn.poll():
