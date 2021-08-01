@@ -5,7 +5,7 @@ import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
 from twitter_api.upload import Upload
-from twitter_api.custom_process import Process
+from utils.custom_process import Process
 from plotting.random_plot_generator import random_plot_generator
 from utils.tweet_text_generator import tweet_text_generator
 

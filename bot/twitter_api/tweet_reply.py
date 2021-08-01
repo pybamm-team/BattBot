@@ -4,7 +4,7 @@ import time
 import pybamm
 import matplotlib.pyplot as plt
 from twitter_api.upload import Upload
-from twitter_api.custom_process import Process
+from utils.custom_process import Process
 from plotting.random_plot_generator import random_plot_generator
 
 
