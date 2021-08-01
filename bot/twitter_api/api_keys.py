@@ -2,7 +2,6 @@ import os
 
 
 class Keys:
-
     def __init__(self):
         self.CONSUMER_KEY = os.environ["CONSUMER_KEY"]
         self.CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]

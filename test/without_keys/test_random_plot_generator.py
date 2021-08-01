@@ -6,7 +6,6 @@ import os
 
 
 class TestRandomPlotGenerator(unittest.TestCase):
-
     def tearDown(self):
         if os.path.exists("plot.png"):
             os.remove("plot.png")
@@ -19,7 +18,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             "particle mechanics",
             "lithium plating",
             "SEI",
-            "lithium plating porosity change"
+            "lithium plating porosity change",
         ]
 
         manager = multiprocessing.Manager()
@@ -27,10 +26,11 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(
+                target=random_plot_generator,
+                args=(
                     return_dict,
                     "degradation comparison (summary variables)",
-                )
+                ),
             )
             p.start()
             p.join(600)
@@ -52,9 +52,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(
-            key in key_list for key in return_dict["model"].options.keys()
-        )
+        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
@@ -67,10 +65,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(
-                    return_dict,
-                    "model comparison"
-                )
+                target=random_plot_generator, args=(return_dict, "model comparison")
             )
             p.start()
             p.join(1200)
@@ -103,10 +98,56 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(
+                target=random_plot_generator,
+                args=(
                     return_dict,
-                    "parameter comparison"
+                    "model comparison",
+                    {
+                        "chemistry": pybamm.parameter_sets.Chen2020,
+                        "models_for_comp": {
+                            0: pybamm.lithium_ion.DFN(),
+                            1: pybamm.lithium_ion.SPM(),
+                        },
+                        "is_experiment": False,
+                        "cycle": None,
+                        "number": None,
+                        "param_to_vary": None,
+                        "bounds": None,
+                    },
+                ),
+            )
+            p.start()
+            p.join(1200)
+
+            if p.is_alive():
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
+                p.kill()
+                p.join()
+            else:
+                break
+
+        for model in return_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseBatteryModel)
+            self.assertIsNotNone(model.options)
+            self.assertIsInstance(model.options, dict)
+            self.assertTrue(key in key_list for key in model.options.keys())
+        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
+        self.assertIsInstance(return_dict["is_experiment"], bool)
+        self.assertIsInstance(return_dict["is_comparison"], bool)
+
+        manager = multiprocessing.Manager()
+        return_dict = manager.dict()
+
+        while True:
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(return_dict, "parameter comparison")
             )
             p.start()
             p.join(1200)

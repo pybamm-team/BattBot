@@ -5,7 +5,15 @@ from twitter_api.tweet_reply import Reply
 
 # setting up the API keys, tweepy auth and tweepy api object
 keys = Keys()
-api = keys.api
+oauth = OAuth1(
+    keys.CONSUMER_KEY,
+    client_secret=keys.CONSUMER_SECRET,
+    resource_owner_key=keys.ACCESS_TOKEN,
+    resource_owner_secret=keys.ACCESS_TOKEN_SECRET,
+)
+auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_SECRET)
+auth.set_access_token(keys.ACCESS_TOKEN, keys.ACCESS_TOKEN_SECRET)
+api = tweepy.API(auth)
 
 
 def sync_last_seen_id(testing=False):
@@ -18,10 +26,8 @@ def sync_last_seen_id(testing=False):
     tweet_reply = Reply()
 
     if testing:
-        last_seen_id = tweet_reply.retrieve_tweet_id(
-            "bot/last_seen_id.txt"
-        )
-    else:   # pragma: no cover
+        last_seen_id = tweet_reply.retrieve_tweet_id("bot/last_seen_id.txt")
+    else:  # pragma: no cover
         last_seen_id = tweet_reply.retrieve_tweet_id("last_seen_id.txt")
 
     # retreiving all the mentions after the tweet with id=last_seen_id
@@ -30,31 +36,34 @@ def sync_last_seen_id(testing=False):
     # iterating through all the mentions if not testing
     if not testing:  # pragma: no cover
         for mention in reversed(mentions):
-            if '#battbot' in mention.full_text.lower():
+            if "#battbot" in mention.full_text.lower():
 
                 # scraping all the replies of the tweet with id=last_seen_id
                 replies = tweepy.Cursor(
                     api.search,
-                    q='to:{}'.format(mention.user.screen_name),
+                    q="to:{}".format(mention.user.screen_name),
                     since_id=mention._json["id"],
-                    tweet_mode='extended'
+                    tweet_mode="extended",
                 ).items()
 
                 # iterating through the replies
                 for reply in replies:
 
                     # if the bot has replied
-                    if(
-                        reply._json['in_reply_to_status_id'] == mention._json["id"]    # noqa
-                        and reply._json['user']['screen_name'] == "battbot_"
+                    if (
+                        reply._json["in_reply_to_status_id"]
+                        == mention._json["id"]  # noqa
+                        and reply._json["user"]["screen_name"] == "battbot_"
                     ):
                         # storing the id
                         tweet_reply.store_tweet_id(
                             mention._json["id"], "last_seen_id.txt"
                         )
                         print(
-                            mention.user.screen_name + " "
-                            + mention.full_text + " "
+                            mention.user.screen_name
+                            + " "
+                            + mention.full_text
+                            + " "
                             + str(mention._json["id"])
                         )
 
