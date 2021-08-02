@@ -73,6 +73,8 @@ class TestTweetReply(unittest.TestCase):
                 + "Some tweet examples - ",
             )
 
+        reply.reply()
+
 
 if __name__ == "__main__":
     unittest.main()

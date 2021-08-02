@@ -13,6 +13,15 @@ from requests_oauthlib import OAuth1
 class Upload:
     """
     Uploads a media to the twitter API by dividing it into chunks.
+    Parameters:
+        plot: str
+            Relative path of the file that has to be uploaded. Should be used
+            during testing. In a subclasses, it can be accessed as `self.plot`,
+            thus passing it as a parameter will be redundant.
+        total_bytes: numerical
+            Size of the passed file. Should be used during testing. In a subclasses,
+            it can be accessed as `self.total_bytes`, thus passing it as a parameter
+            will be redundant.
     """
 
     def __init__(self, plot=None, total_bytes=None):
