@@ -98,55 +98,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator,
-                args=(
-                    return_dict,
-                    "model comparison",
-                    {
-                        "chemistry": pybamm.parameter_sets.Chen2020,
-                        "models_for_comp": {
-                            0: pybamm.lithium_ion.DFN(),
-                            1: pybamm.lithium_ion.SPM(),
-                        },
-                        "is_experiment": False,
-                        "cycle": None,
-                        "number": None,
-                        "param_to_vary": None,
-                        "bounds": None,
-                    },
-                ),
-            )
-            p.start()
-            p.join(1200)
-
-            if p.is_alive():
-                print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
-                )
-                curr_dir = os.getcwd()
-                for file in os.listdir(curr_dir):
-                    if file.startswith("plot"):
-                        os.remove(file)
-                p.kill()
-                p.join()
-            else:
-                break
-
-        for model in return_dict["model"].values():
-            self.assertIsInstance(model, pybamm.BaseBatteryModel)
-            self.assertIsNotNone(model.options)
-            self.assertIsInstance(model.options, dict)
-            self.assertTrue(key in key_list for key in model.options.keys())
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertIsInstance(return_dict["is_experiment"], bool)
-        self.assertIsInstance(return_dict["is_comparison"], bool)
-
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
-
-        while True:
-            p = multiprocessing.Process(
                 target=random_plot_generator, args=(return_dict, "parameter comparison")
             )
             p.start()
