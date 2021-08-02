@@ -9,7 +9,7 @@ from plotting.config_generator import config_generator
 def random_plot_generator(
     return_dict,
     choice,
-    config=None
+    reply_config=None
 ):
     """
     Generates a random plot.
@@ -32,8 +32,10 @@ def random_plot_generator(
         try:
             pybamm.set_logging_level("NOTICE")
 
-            if config is None:
+            if reply_config is None:
                 config = config_generator(choice)
+            else:
+                config = reply_config
 
             logger.info(config)
 

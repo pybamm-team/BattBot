@@ -4,8 +4,8 @@ import pybamm
 from bot.twitter_api.tweet_plot import Tweet
 
 
-class TestTweetPlot(unittest.TestCase):
-    def test_tweet_graph(self):
+class TestTweet(unittest.TestCase):
+    def test_tweet(self):
         tweet = Tweet(
             testing=True, choice="degradation comparison (summary variables)"
         )

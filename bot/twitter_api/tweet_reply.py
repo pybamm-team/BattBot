@@ -129,7 +129,7 @@ class Reply(Upload):
 
         # generate the simulation and GIF
         return_dict = {}
-        random_plot_generator(return_dict, choice, config=reply_config)
+        random_plot_generator(return_dict, choice, reply_config=reply_config)
 
     def reply(self):
         """
