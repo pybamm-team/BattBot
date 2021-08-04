@@ -56,7 +56,7 @@ jobs:
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git pull origin main
-        git commit -m "Update config, data - ci skip" -a
+        git commit -m "Update config, data - [skip ci]" -a
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
@@ -69,8 +69,9 @@ jobs:
         cd bot
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+        git pull origin main
         python -m twitter_api.sync_last_seen_id
-        git commit --allow-empty -m "Update last_seen_id" -a
+        git commit --allow-empty -m "Update last_seen_id - [skip ci]" -a
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
@@ -78,7 +79,7 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Push changes
-      if: "!contains(github.event.head_commit.message, 'ci skip') && github.ref == 'refs/heads/main'"
+      if: github.ref == 'refs/heads/main'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
