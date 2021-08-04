@@ -76,22 +76,6 @@ class TestComparisonGenerator(unittest.TestCase):
 
         assert os.path.exists("plot.gif")
 
-        comparison_generator = ComparisonGenerator(
-            models_for_comp=self.models_for_comp,
-            chemistry=self.chemistry,
-            is_experiment=self.is_experiment,
-        )
-
-        comparison_generator.model_comparison()
-
-        self.assertIsInstance(
-            comparison_generator.comparison_dict["varied_values"], list
-        )
-        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
-        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
-
-        assert os.path.exists("plot.gif")
-
         self.is_experiment = True
         comparison_generator = ComparisonGenerator(
             models_for_comp=self.model_for_comp,
@@ -134,6 +118,22 @@ class TestComparisonGenerator(unittest.TestCase):
         comparison_generator = ComparisonGenerator(
             models_for_comp=self.models_for_comp,
             chemistry=pybamm.parameter_sets.Ai2020,
+            is_experiment=self.is_experiment,
+            cycle=self.cycle,
+            number=self.number,
+        )
+
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+
+        comparison_generator = ComparisonGenerator(
+            models_for_comp=self.models_for_comp,
+            chemistry=self.chemistry,
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
