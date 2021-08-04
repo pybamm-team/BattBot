@@ -115,7 +115,7 @@ jobs:
     - name: Run ubuntu unittests and generate coverage report for PRs from a fork
       if: matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name != github.repository
       run: |
-        echo github.repository
+        echo ${{ github.repository }}
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
         coverage run --concurrency=multiprocessing -m unittest discover -s test/without_keys
