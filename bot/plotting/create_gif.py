@@ -6,28 +6,29 @@ from utils.resize_gif import resize_gif
 import matplotlib.pyplot as plt
 
 
-def plot_graph(solution=None, sim=None, labels=None):
+def create_gif(batch_study, labels=None):
     """
     This function generates 80 plots over a time
     span of t_eval seconds and then compiles them to
     create a GIF.
     Parameters:
-        solution: pybamm.Simulation.solution or list
-            default: None
-        sim: pybamm.Simulation
-            default: None
+        batch_study: pybamm.BatchStudy
         labels: list
             default: None
             A list of labels for the GIF.
     """
 
     # generating time to plot the simulation
-    if solution is not None:
-        t = solution["Time [s]"]
-        final_time = int(t.entries[len(t.entries) - 1])
-        time_array = np.linspace(int(t.entries[0]), final_time, num=80)
-    else:
-        time_array = np.linspace(0, 3700, num=80)
+    max_time = 0
+    solution = batch_study.sims[0].solution
+    for sim in batch_study.sims:
+        if sim.solution["Time [s]"].entries[-1] > max_time:
+            max_time = sim.solution["Time [s]"].entries[-1]
+            solution = sim.solution
+
+    t = solution["Time [s]"]
+    final_time = int(t.entries[len(t.entries) - 1])
+    time_array = np.linspace(int(t.entries[0]), final_time, num=80)
 
     images = []
     image_files = []
@@ -43,9 +44,10 @@ def plot_graph(solution=None, sim=None, labels=None):
         "Terminal voltage [V]",
     ]
 
+    # creating 80 comparison plots
     for val in time_array:
         plot = pybamm.QuickPlot(
-            sim,
+            batch_study.sims,
             time_unit="seconds",
             labels=labels,
             output_variables=output_variables,
@@ -55,11 +57,13 @@ def plot_graph(solution=None, sim=None, labels=None):
         plot.fig.savefig("plot" + str(val) + ".png", dpi=300)
         plt.close()
 
+    # compiling the plots to create a GIF
     for image in images:
         image_files.append(imageio.imread(image))
-    imageio.mimsave('plot.gif', image_files, duration=0.1)
+    imageio.mimsave("plot.gif", image_files, duration=0.1)
 
     for image in images:
         os.remove(image)
 
+    # resizing the GIF for Twitter
     resize_gif("plot.gif", resize_to=(1440, 1440))

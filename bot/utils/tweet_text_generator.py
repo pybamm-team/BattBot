@@ -1,12 +1,5 @@
 def tweet_text_generator(
-    chemistry,
-    model,
-    is_experiment,
-    cycle,
-    number,
-    is_comparison,
-    param_to_vary,
-    params
+    chemistry, model, is_experiment, cycle, number, is_comparison, param_to_vary, params
 ):
     """
     Generates tweet text.
@@ -17,13 +10,22 @@ def tweet_text_generator(
         cycle: list or None
         number: numerical or None
         is_comparison: bool
-        param_to_vary: str or list or None
+        param_to_vary: str or None
         params: dict
             To be used when varied values have to be added to the tweet text.
     Returns
         tweet_text: str
         experiment: str or None
     """
+
+    if is_comparison:
+        # calculate C-rate and Temperature to add in tweet text
+        c_rate = round(
+            params[0]["Current function [A]"]
+            / params[0]["Nominal cell capacity [A.h]"],
+            2,
+        )
+        temp = round(params[0]["Ambient temperature [K]"] - 273.15, 2)
 
     # summary variable
     if is_experiment and not is_comparison:
@@ -40,14 +42,14 @@ def tweet_text_generator(
             if len(model) == 2:
                 tweet_text = (
                     f"Comparing {model[0].name} and {model[1].name} "
-                    f"with {chemistry['citation']} parameters for the "
+                    f"with {chemistry['citation']} parameters at {temp}°C for the "
                     f"following experiment: {cycle} * {number}"
                 )
             else:
                 tweet_text = (
                     f"Comparing {model[0].name}, {model[1].name}, and "
                     f"{model[2].name} with {chemistry['citation']} "
-                    "parameters for the following experiment: "
+                    f"parameters at {temp}°C for the following experiment: "
                     f"{cycle} * {number}"
                 )
         # comparing a single model and a single experiment while varying
@@ -61,15 +63,6 @@ def tweet_text_generator(
 
     # not simulating an experiment
     elif not is_experiment:
-
-        # calculate C-rate and Temperature to add in tweet text when
-        # comparing 2 or more models with a constant discharge
-        c_rate = round(
-            params[0]["Current function [A]"]
-            / params[0]["Nominal cell capacity [A.h]"],
-            2
-        )
-        temp = round(params[0]["Ambient temperature [K]"] - 273.15, 2)
 
         # comparing 2 or more models with a constant discharge
         if param_to_vary is None and is_comparison:

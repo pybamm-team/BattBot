@@ -38,7 +38,36 @@ class TestTweetPlot(unittest.TestCase):
         assert not os.path.exists("plot.gif")
         assert not os.path.exists("plot.png")
 
-        tweet = Tweet(testing=True, choice="non-degradation comparisons")
+        tweet = Tweet(testing=True, choice="model comparison")
+
+        self.assertIsNone(tweet.media_id)
+        self.assertIsInstance(tweet.plot, str)
+        assert os.path.exists(tweet.plot)
+        self.assertIsNone(tweet.processing_info)
+        self.assertIsInstance(tweet.model, dict)
+        self.assertIsInstance(tweet.chemistry, dict)
+        self.assertIsInstance(tweet.is_experiment, bool)
+        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertTrue(tweet.is_comparison)
+        self.assertIsInstance(tweet.testing, bool)
+        self.assertIsInstance(tweet.varied_values, list)
+        self.assertIsInstance(tweet.params, dict)
+
+        tweet.upload_init()
+
+        self.assertIsNotNone(tweet.media_id)
+
+        tweet.upload_append()
+        tweet.upload_finalize()
+
+        self.assertIsNotNone(tweet.processing_info)
+
+        tweet.tweet()
+
+        assert not os.path.exists("plot.gif")
+        assert not os.path.exists("plot.png")
+
+        tweet = Tweet(testing=True, choice="parameter comparison")
 
         self.assertIsNone(tweet.media_id)
         self.assertIsInstance(tweet.plot, str)
