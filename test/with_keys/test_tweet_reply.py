@@ -35,43 +35,45 @@ class TestTweetReply(unittest.TestCase):
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
 
+        tweet_text = "Compare SPM and DFN model with Marquis2019 parameters".lower()
+        reply.generate_reply(tweet_text)
+
+        assert os.path.exists("plot.gif")
+        os.remove("plot.gif")
+
+        tweet_text = "Compare SPM and DFN model with Ai2020 parameters".lower()
+        reply.generate_reply(tweet_text)
+
+        assert os.path.exists("plot.gif")
+        os.remove("plot.gif")
+
         tweet_text = "Compare DFN model with Chen2020 parameters".lower()
-        with self.assertRaises(Exception) as e:
+        with self.assertRaisesRegex(
+            Exception, "Please provide atleast 2 models. Some tweet examples - "
+        ):
             reply.generate_reply(tweet_text)
-            self.assertEqual(
-                str(e.exception),
-                "Please provide atleast 2 models. Some tweet examples - ",
-            )
 
-            tweet_text = "Compare DFN model with Chen2020 parameters".lower()
+        tweet_text = "Chen2020 parameters".lower()
+        with self.assertRaisesRegex(
+            Exception, "Please provide atleast 1 model. Some tweet examples - "
+        ):
             reply.generate_reply(tweet_text)
-            self.assertEqual(
-                str(e.exception),
-                "Please provide atleast 2 models. Some tweet examples - ",
-            )
 
-            tweet_text = "Chen2020 parameters".lower()
+        tweet_text = "Compare SPMe and DFN model withChen2020 parameters".lower()
+        with self.assertRaisesRegex(
+            Exception,
+            "Please provide a parameter set in the format - Chen2020 parameters - "
+            + "Some tweet examples - ",
+        ):
             reply.generate_reply(tweet_text)
-            self.assertEqual(
-                str(e.exception),
-                "Please provide atleast 1 model. Some tweet examples - ",
-            )
 
-            tweet_text = "Compare SPMe and DFN model withChen2020 parameters".lower()
+        tweet_text = "SPM and DFN model with Chen2020 parameters".lower()
+        with self.assertRaisesRegex(
+            Exception,
+            "I'm sorry, I couldn't understand the requested simulation. "
+            + "Some tweet examples - ",
+        ):
             reply.generate_reply(tweet_text)
-            self.assertEqual(
-                str(e.exception),
-                "Please provide a parameter set in the format - Chen2020 parameters - "
-                + "Some tweet examples - ",
-            )
-
-            tweet_text = "SPM and DFN model with Chen2020 parameters".lower()
-            reply.generate_reply(tweet_text)
-            self.assertEqual(
-                str(e.exception),
-                "I'm sorry, I couldn't understand the requested simulation. "
-                + "Some tweet examples - ",
-            )
 
         reply.reply()
 
