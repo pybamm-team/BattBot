@@ -147,6 +147,22 @@ class TestComparisonGenerator(unittest.TestCase):
         self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
+        comparison_generator = ComparisonGenerator(
+            models_for_comp=self.models_for_comp,
+            chemistry=self.chemistry,
+            is_experiment=self.is_experiment,
+            cycle=self.cycle,
+            number=self.number,
+        )
+
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+
         self.is_experiment = False
 
         comparison_generator = ComparisonGenerator(

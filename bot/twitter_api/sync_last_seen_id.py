@@ -35,7 +35,7 @@ def sync_last_seen_id(testing=False):
     mentions = api.mentions_timeline(last_seen_id, tweet_mode="extended")
 
     # iterating through all the mentions if not testing
-    if not testing:  # pragma: no cover
+    if not testing:
         for mention in reversed(mentions):
             if "#battbot" in mention.full_text.lower():
 
@@ -69,5 +69,5 @@ def sync_last_seen_id(testing=False):
                         )
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     sync_last_seen_id()

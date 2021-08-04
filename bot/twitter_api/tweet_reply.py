@@ -145,7 +145,7 @@ class Reply(Upload):
         mentions = self.api.mentions_timeline(last_seen_id, tweet_mode="extended")
 
         # iterating through all the mentions if not testing
-        if not self.testing:  # pragma: no cover
+        if not self.testing:
             for mention in reversed(mentions):
                 # storing the id
                 self.store_tweet_id(mention._json["id"], "last_seen_id.txt")
@@ -226,7 +226,7 @@ class Reply(Upload):
                     plt.close()
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     reply = Reply()
     while True:
         reply.reply()

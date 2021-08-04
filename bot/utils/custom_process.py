@@ -16,7 +16,7 @@ class Process(multiprocessing.Process):
     def run(self):
         try:
             multiprocessing.Process.run(self)
-            self._child_conn.send(None)
+            self._child_conn.send(None)    # pragma: no cover
         except Exception as e:
             tb = traceback.format_exc()
             self._child_conn.send((e, tb))

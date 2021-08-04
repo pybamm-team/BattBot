@@ -138,7 +138,7 @@ class Tweet(Upload):
         # data for the GIF tweet
         request_data = {"status": tweet_status, "media_ids": self.media_id}
 
-        if not self.testing:  # pragma: no cover
+        if not self.testing:
             # tweet the GIF
             req = self.post_request(self.post_tweet_url, request_data, self.oauth)
 
@@ -164,7 +164,7 @@ class Tweet(Upload):
         plt.close()
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     tweet = Tweet()
     tweet.upload_init()
     tweet.upload_append()
