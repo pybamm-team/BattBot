@@ -73,23 +73,38 @@ def config_generator(
     # choose random degradation for a degradation comparison
     if choice == "degradation comparison":
 
+        # use only Mohtat2020 and SPM till others are fixed
+        chemistry = pybamm.parameter_sets.Mohtat2020
+
         # add degradation / update model options
         if chemistry == pybamm.parameter_sets.Ai2020:
-            particle_mechanics = random.choice(particle_mechanics_list)
+            degradtiaon_value = particle_mechanics_list[0]
             degradation_mode = "particle mechanics"
-            degradation_value = particle_mechanics
             model_options.update(
                 {
-                    "particle mechanics": particle_mechanics,
+                    degradation_mode: degradation_value,
+                }
+            )
+        elif chemistry == pybamm.parameter_sets.Mohtat2020:
+            degradation_mode = random.choice(["SEI"])
+            if degradation_mode == "particle mechanics":
+                degradation_value = particle_mechanics_list[0]
+            elif degradation_mode == "SEI":
+                degradation_value = random.choice(sei_list)
+            model_options.update(
+                {
+                    degradation_mode: degradation_value,
+                    "SEI porosity change": random.choice(["true", "false"])
+                    if degradation_mode == "SEI"
+                    else "false",
                 }
             )
         else:
-            sei = random.choice(sei_list)
+            degradation_value = random.choice(sei_list)
             degradation_mode = "SEI"
-            degradation_value = sei
             model_options.update(
                 {
-                    "SEI": sei,
+                    degradation_mode: degradation_value,
                 }
             )
 
@@ -162,14 +177,14 @@ def config_generator(
                 "bounds": param_to_vary_dict[param_to_vary]
                 if param_to_vary is not None
                 else None,
-                "reply_overrides": None
+                "reply_overrides": None,
             }
         )
 
     elif choice == "degradation comparison":
 
         # choosing a random model
-        model = random.choice(models)
+        model = models[1]
 
         # choosing a random experiment
         cycle = experiment_generator()
