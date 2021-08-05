@@ -87,7 +87,7 @@ class TestTweetReply(unittest.TestCase):
         tweet_text = "Compare SPMe and DFN model withChen2020 parameters".lower()
         with self.assertRaisesRegex(
             Exception,
-            "Please provide a parameter set in the format - Chen2020 parameters - "
+            "Please provide a parameter set in the format - Chen2020. "
             + f"Some tweet examples - {request_examples}",
         ):
             reply.generate_reply(tweet_text)
