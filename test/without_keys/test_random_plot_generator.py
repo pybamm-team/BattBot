@@ -6,7 +6,6 @@ import os
 
 
 class TestRandomPlotGenerator(unittest.TestCase):
-
     def tearDown(self):
         if os.path.exists("plot.png"):
             os.remove("plot.png")
@@ -19,9 +18,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
             "particle mechanics",
             "lithium plating",
             "SEI",
-            "lithium plating porosity change"
+            "lithium plating porosity change",
         ]
 
+<<<<<<< HEAD:test/test_random_plot_generator.py
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
 
@@ -36,33 +36,40 @@ class TestRandomPlotGenerator(unittest.TestCase):
                         "provided_degradation": True
                     }
                 )
+=======
+        model = pybamm.lithium_ion.DFN(options={"SEI": "ec reaction limited"})
+        cycle = [
+            (
+                "Discharge at C/10 for 10 hours or until 3.3 V",
+                "Rest for 1 hour",
+                "Charge at 1 A until 4.1 V",
+                "Hold at 4.1 V until 50 mA",
+                "Rest for 1 hour",
+>>>>>>> super-class-for-tweet-and-reply:test/without_keys/test_random_plot_generator.py
             )
-            p.start()
-            p.join(600)
+        ]
+        number = 2
+        chemistry = pybamm.parameter_sets.Chen2020
 
-            if p.is_alive():
-                print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
-                )
-                curr_dir = os.getcwd()
-                for file in os.listdir(curr_dir):
-                    if file.startswith("plot"):
-                        os.remove(file)
-                p.kill()
-                p.join()
-            else:
-                break
+        return_dict = {}
+        random_plot_generator(
+            return_dict,
+            "degradation comparison (summary variables)",
+            {
+                "model": model,
+                "cycle": cycle,
+                "number": number,
+                "chemistry": chemistry,
+            },
+        )
 
-        self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
+        self.assertEqual(return_dict["model"], model)
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(
-            key in key_list for key in return_dict["model"].options.keys()
-        )
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
-        self.assertIsNotNone(return_dict["cycle"])
-        self.assertIsNotNone(return_dict["number"])
+        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
+        self.assertEqual(return_dict["chemistry"], chemistry)
+        self.assertEqual(return_dict["cycle"], cycle)
+        self.assertEqual(return_dict["number"], number)
         self.assertTrue(return_dict["is_experiment"])
         self.assertTrue(return_dict["is_summary_variable"])
         self.assertEqual(return_dict["degradation_mode"], "SEI")
@@ -82,8 +89,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(
+                target=random_plot_generator,
+                args=(
                     return_dict,
+<<<<<<< HEAD:test/test_random_plot_generator.py
                     {
                         "testing": True,
                         "choice": "degradation comparisons",
@@ -91,6 +100,10 @@ class TestRandomPlotGenerator(unittest.TestCase):
                         "provided_degradation": True
                     }
                 )
+=======
+                    "degradation comparison (summary variables)",
+                ),
+>>>>>>> super-class-for-tweet-and-reply:test/without_keys/test_random_plot_generator.py
             )
             p.start()
             p.join(600)
@@ -112,13 +125,12 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(
-            key in key_list for key in return_dict["model"].options.keys()
-        )
+        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
+<<<<<<< HEAD:test/test_random_plot_generator.py
         self.assertTrue(return_dict["is_summary_variable"])
         self.assertEqual(
             return_dict["degradation_mode"], "particle mechanics"
@@ -129,21 +141,50 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsInstance(return_dict["param_to_vary"], str)
 
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
+=======
+        self.assertFalse(return_dict["is_comparison"])
+        pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(
-                    return_dict,
-                    {
-                        "testing": True,
-                        "choice": "non-degradation comparisons",
-                        "chemistry": None,
-                        "provided_degradation": True
-                    }
+                target=random_plot_generator, args=(return_dict, "model comparison")
+            )
+            p.start()
+            p.join(1200)
+
+            if p.is_alive():
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
                 )
+                curr_dir = os.getcwd()
+                for file in os.listdir(curr_dir):
+                    if file.startswith("plot"):
+                        os.remove(file)
+                p.kill()
+                p.join()
+            else:
+                break
+
+        for model in return_dict["model"].values():
+            self.assertIsInstance(model, pybamm.BaseBatteryModel)
+            self.assertIsNotNone(model.options)
+            self.assertIsInstance(model.options, dict)
+            self.assertTrue(key in key_list for key in model.options.keys())
+        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
+        self.assertIsInstance(return_dict["is_experiment"], bool)
+        self.assertIsInstance(return_dict["is_comparison"], bool)
+>>>>>>> super-class-for-tweet-and-reply:test/without_keys/test_random_plot_generator.py
+
+        manager = multiprocessing.Manager()
+        return_dict = manager.dict()
+
+        while True:
+            p = multiprocessing.Process(
+                target=random_plot_generator, args=(return_dict, "parameter comparison")
             )
             p.start()
             p.join(1200)

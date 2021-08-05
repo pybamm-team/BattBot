@@ -13,7 +13,7 @@ If you do have one, or have applied for one, you can follow the step below to se
 
 ## Local installation
 Follow the steps below to locally install the bot for development -
-1. Fork [this](https://github.com/Saransh-cpp/BattBot) repository.
+1. Fork [this](https://github.com/pybamm-team/BattBot) repository.
 2. Clone the forked repository.
 3. Run the following commands - 
 ```bash
@@ -26,10 +26,10 @@ This will install all the dependencies in your local system including the develo
 ```bash
 python -m unittest
 ```
-**Note: The tests written in `test_tweet_plot.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
+**Note: The tests written in `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
 
 ## Workflow
-1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/Saransh-cpp/BattBot/issues) for discussing the topic with others.
+1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/pybamm-team/BattBot/issues) for discussing the topic with others.
 2. Once you take up the issue (or a pre-existing issue), you can proceed with creating a branch on your fork.
 3. Once you are done with the changes, you can test your code and the coverage by running -
 ```bash
@@ -39,10 +39,16 @@ coverage report  # for a better visualisation, you can run coverage html
 ```
 Once this executes, you will be able to see if any tests are failing or if the coverage dropped. You can always create a PR to get even better test/coverage suggestions and reviews.
 
-4. Once everything passes, you can go ahead and create a [Pull Request](https://github.com/Saransh-cpp/BattBot/pulls) for the constructive review process.
+4. Once everything passes, you can go ahead and create a [Pull Request](https://github.com/pybamm-team/BattBot/pulls) for the constructive review process.
 
 ## GitHub Actions
-All the tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file. This also means that the failing `test_tweet_plot.py` tests will pass (if everything is working) on a PR as it will pull the `Twitter API Keys` from repository secrets, this however does not mean that a plot will be tweeted everytime a PR is made or a commit is added to a PR, the tweet worklow is triggered only when something is pushed on the main branch.
+ - The tweeting process is being carried out by GitHub Actions and hence, utmost care should be taken while editing the `.yml` file.
+
+ - All the replying process is being carried out by Heroku, hence the `Procfile`, `requirements.txt`, `runtime.txt` and `last_seen_id.txt` should be checked thoroughly before merging the code in the main (deployed) branch.
+
+ - This does not mean that the failing `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
+
+ - This however also does not mean that the tests will fail, only the tests which do not require the `Twitter API keys` will run on the PRs from a fork. This might effect the coverage but the other tests will pass.
 
 ## Writing your code
 1. For styling we use [flake8](https://pypi.org/project/flake8/) and [black](https://pypi.org/project/black/) to maintain uniformity throughout the codebase.
@@ -54,6 +60,8 @@ All the tweeting process is being carried out by GitHub Actions and hence, utmos
 ## Testing
 All code requires testing. We use the [unittest](https://docs.python.org/3/library/unittest.html) package for our tests.
 
+The tests right now are divided into two directories, which are `with_keys` and `without_keys`. The tests which require `Twitter API keys` to run should be placed in the `with_keys` directory so that they do not run on a PR from a fork. Other tests should be placed in the `without_keys` directory.
+
 Every new feature should have its own test. To create ones, have a look at the test directory and see if there's a test for a similar method. Copy-pasting this is a good way to start.
 
 Next, add some simple (and speedy!) tests of your main features. If these run without exceptions that's a good start! Next, check the output of your methods using any of these [assert method](https://docs.python.org/3.3/library/unittest.html#assert-methods).
@@ -62,10 +70,10 @@ Next, add some simple (and speedy!) tests of your main features. If these run wi
 Most of the documentation in this repository is of the form of docstrings and comments. Every class and function should have a docstring and the codebase should be well commented. Other than this, there is some documentation in markdown as well, which can be updated whenever required.
 
 ## Google Colab
-Editable notebook, to run the random tweeted configurations is made available using Google Colab [here](https://colab.research.google.com/github/Saransh-cpp/BattBot/blob/main/).
+Editable notebook, to run the random tweeted configurations is made available using Google Colab [here](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/).
 
 ## Codecov
-Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot.
+Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/pybamm-team/BattBot/.
 
 ## Pre-commit checks
 1. Style `$ flake8`

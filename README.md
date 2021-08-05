@@ -3,31 +3,35 @@
 ![image](https://miro.medium.com/max/788/1*z_AwTGIVYneAzpzwPUGDxw.gif)
 
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/battbot_.svg?style=social&label=Follow%20@battbot_)](https://twitter.com/battbot_)
-[![BattBot](https://github.com/Saransh-cpp/BattBot/actions/workflows/python-app.yml/badge.svg)](https://github.com/Saransh-cpp/BattBot/actions/workflows/python-app.yml)
-[![codecov](https://codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot/branch/main/graph/badge.svg?token=P1h4VGtlSt)](https://codecov.io/gh/Saransh-cpp/PyBaMM-Twitter-Bot)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Saransh-cpp/BattBot/blob/main/)
+[![BattBot](https://github.com/pybamm-team/BattBot/actions/workflows/python-app.yml/badge.svg)](https://github.com/pybamm-team/BattBot/actions/workflows/python-app.yml)
+[![codecov](https://codecov.io/gh/pybamm-team/BattBot/branch/main/graph/badge.svg?token=6wEJ6AiiGG)](https://codecov.io/gh/pybamm-team/BattBot)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/)
 [![black_code_style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 
 
-An automated Battery Bot that tweets random battery configuration plots in the form of a GIF with the help of [PyBaMM](https://github.com/pybamm-team/PyBaMM). The bot focuses on comparing 2 or 3 different configurations. All the tweeted configurations are stored in [data.txt](https://github.com/Saransh-cpp/BattBot/blob/main/bot/data.txt) and the latest tweeted configuration is stored in [config.txt](https://github.com/Saransh-cpp/BattBot/blob/main/bot/config.txt) which can also be played with on Google Colab [here](https://colab.research.google.com/github/Saransh-cpp/BattBot/blob/main/bot/run-simulation.ipynb).
+An automated Battery Bot that tweets random battery configuration plots in the form of a GIF with the help of [PyBaMM](https://github.com/pybamm-team/PyBaMM). The bot focuses on comparing 2 or 3 different configurations. All the tweeted configurations are stored in [data.txt](https://github.com/pybamm-team/BattBot/blob/main/bot/data.txt) and the latest tweeted configuration is stored in [config.txt](https://github.com/pybamm-team/BattBot/blob/main/bot/config.txt) which can also be played with on Google Colab [here](https://colab.research.google.com/github/pybamm-team/BattBot/blob/main/bot/run-simulation.ipynb).
 
 
 ## Citing PyBaMM
 
 If you use PyBaMM in your work, please cite the paper
 
-> Sulzer, V., Marquis, S. G., Timms, R., Robinson, M., & Chapman, S. J. (2020). Python Battery Mathematical Modelling (PyBaMM). _ECSarXiv. February, 7_.
+> Sulzer, V., Marquis, S. G., Timms, R., Robinson, M., & Chapman, S. J. (2021). Python Battery Mathematical Modelling (PyBaMM). _Journal of Open Research Software, 9(1)_.
 
 You can use the bibtex
 
 ```
-@article{sulzer2020python,
-  title={Python Battery Mathematical Modelling (PyBaMM)},
-  author={Sulzer, Valentin and Marquis, Scott G and Timms, Robert and Robinson, Martin and Chapman, S Jon},
-  journal={ECSarXiv. February},
-  volume={7},
-  year={2020}
+@article{Sulzer2021,
+  title = {{Python Battery Mathematical Modelling (PyBaMM)}},
+  author = {Sulzer, Valentin and Marquis, Scott G. and Timms, Robert and Robinson, Martin and Chapman, S. Jon},
+  doi = {10.5334/jors.309},
+  journal = {Journal of Open Research Software},
+  publisher = {Software Sustainability Institute},
+  volume = {9},
+  number = {1},
+  pages = {14},
+  year = {2021}
 }
 ```
 
@@ -39,6 +43,6 @@ pybamm.print_citations()
 
 to the end of your script. This will print bibtex information to the terminal; passing a filename to `print_citations` will print the bibtex information to the specified file instead. A list of all citations can also be found in the [citations file](https://github.com/pybamm-team/PyBaMM/blob/develop/pybamm/CITATIONS.txt).
 
-## Contributing to PyBaMM-Twitter-Bot
+## Contributing to BattBot
 
-All contributions to this repository are welcome. You can go through our [contribution guidelines](https://github.com/Saransh-cpp/BattBot/blob/main/CONTRIBUTING.md) to make the whole process smoother.
+All contributions to this repository are welcome. You can go through our [contribution guidelines](https://github.com/pybamm-team/BattBot/blob/main/CONTRIBUTING.md) to make the whole process smoother.

@@ -23,7 +23,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install flake8
-        flake8
+        flake8 --max-line-length=89
 
   build:
     needs: style
@@ -34,12 +34,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+        fetch-depth: 0 # otherwise will fail to push refs to dest repo
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-        fetch-depth: 0 # otherwise will fail to push refs to dest repo
 
     - name: Install dependencies
       run: |
@@ -48,13 +49,29 @@ jobs:
         pip install -r requirements.txt
             
     - name: Tweet
+      if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+      run: |
+        cd bot
+        python -m twitter_api.tweet_plot
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git pull origin main
+        git commit -m "Update config, data - [skip ci]" -a
+      env:
+        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+        ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+
+    - name: Sync last seen ID
       if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main'
       run: |
         cd bot
-        python tweet_plot.py
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git commit -m "Update config and data - ci skip" -a
+        git pull origin main
+        python -m twitter_api.sync_last_seen_id
+        git commit --allow-empty -m "Update last_seen_id - [skip ci]" -a
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
@@ -62,14 +79,14 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Push changes
-      if: "!contains(github.event.head_commit.message, 'ci skip') && github.ref == 'refs/heads/main'"
+      if: github.ref == 'refs/heads/main'
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
         branch: ${{ github.ref }}      
 
-    - name: Run unit tests
-      if: matrix.os == 'macos-latest'
+    - name: Run macos unittests for PRs not from a fork
+      if: (matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name == github.repository) || github.event_name == 'schedule'
       run: |
         python -m unittest
       env:
@@ -78,9 +95,13 @@ jobs:
         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
-    
-    - name: Generate coverage report
-      if: matrix.os == 'ubuntu-latest'
+    - name: Run macos unittests for PRs from a fork
+      if: matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule'
+      run: |
+        python -m unittest discover ./test/without_keys/
+
+    - name: Run ubuntu unittests and generate coverage report for PRs not from a fork
+      if: (matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name == github.repository) || github.event_name == 'schedule'
       run: |
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
@@ -91,7 +112,16 @@ jobs:
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-    
+
+    - name: Run ubuntu unittests and generate coverage report for PRs from a fork
+      if: matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule'
+      run: |
+        echo ${{ github.event.pull_request.head.repo.full_name }}
+        echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
+        echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
+        coverage run --concurrency=multiprocessing -m unittest discover -s test/without_keys
+        coverage combine
+        
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1

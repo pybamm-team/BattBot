@@ -1,221 +1,216 @@
 import pybamm
 import random
-import logging
 from utils.parameter_value_generator import parameter_value_generator
-from plotting.plot_graph import plot_graph
-from experiment.experiment_generator import experiment_generator
+from plotting.create_gif import create_gif
 
 
-def comparison_generator(
-    number_of_comp,
-    models_for_comp,
-    chemistry,
-    provided_choice=None,
-    provided_param_to_vary=None
-):
+class ComparisonGenerator:
     """
-    Generates a random comparison plot.
+    Generates a GIF comparing 2 or more configurations using the random values provided.
     Parameters:
-        number_of_comp: numerical
-            Number of models be used in the comparison plot.
         models_for_comp: dict
-            Different models that are to be used in the comparison plot.
+            Models to be used in comparison. Should be of the form -
+            {
+                0: pybamm.BaseBatteryModel,
+                1: pybamm.BaseBatteryModel
+            }
+            Provide only 1 model for "parameter comparison" and 2 or more models for
+            "model comparison".
         chemistry: dict
-            A single chemistry value which will be used in the comparison
-            plot.
-        provided_choice: str
+            Chemistry for the models.
+        is_experiment: bool
+            If the comparison includes an experiment.
+        cycle: list
             default: None
-            Should be used only during testing, using this one can test
-            different parts of this function deterministically without relying
-            on the random functions to execute that part.
-        provided_param_to_vary: str
+            Single cycle of the experiment. Provide only when the comparison includes an
+            experiment.
+        number: numerical
             default: None
-            Should be used only during testing, using this one can test
-            different parts of this function deterministically without relying
-            on the random functions to execute that part.
-
+            The number with which the cycle is being multiplied. Provide only when the
+            comparison includes an experiment.
+        param_to_vary: str
+            default: None
+            The parameter which is to be varied in "parameter comparison". Provide only
+            when the comparison is of type "parameter comparison".
+        bounds: tuple
+            default: None
+            The bounds of the parameter which is to be varied in "parameter comparison".
+            Provide only when the comparison is of type "parameter comparison".
+        reply_overrides: dict
+            default: None
+            Provides overrides for "Current function [A]" and "Ambient temperature [K]"
+            for a reply tweet. Should be of the form -
+            {
+                "Current function [A]": numerical, "Ambient temperature [K]": numerical
+            }
+            They will be randomised if not provided.
     """
-    params = pybamm.ParameterValues(chemistry=chemistry)
-    parameter_values_for_comp = dict(list(enumerate([params])))
-    comparison_dict = {}
 
-    # logging configuration
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    def __init__(
+        self,
+        models_for_comp,
+        chemistry,
+        is_experiment,
+        cycle=None,
+        number=None,
+        param_to_vary=None,
+        bounds=None,
+        reply_overrides=None,
+    ):
+        self.models_for_comp = models_for_comp
+        self.chemistry = chemistry
+        self.is_experiment = is_experiment
+        self.cycle = cycle
+        self.number = number
+        self.param_to_vary = param_to_vary
+        self.bounds = bounds
+        self.parameter_values = pybamm.ParameterValues(chemistry=self.chemistry)
+        self.experiment = (
+            dict(list(enumerate([pybamm.Experiment(self.cycle * self.number)])))
+            if self.cycle is not None
+            else None
+        )
+        self.comparison_dict = {}
+        self.reply_overrides = reply_overrides
 
-    # generate a list of parameter values by varying a single parameter
-    # if only 1 model is selected
-    param_to_vary = None
-    labels = []
-    varied_values = []
-    if number_of_comp == 1:
-
-        param_to_vary_list = [
-            "Current function [A]",
-            "Electrode height [m]",
-            "Electrode width [m]",
-            "Negative electrode conductivity [S.m-1]",
-            "Negative electrode porosity",
-            "Negative electrode active material volume fraction",
-            "Negative electrode Bruggeman coefficient (electrolyte)",
-            "Negative electrode exchange-current density [A.m-2]",
-            "Positive electrode porosity",
-            "Positive electrode exchange-current density [A.m-2]",
-            "Positive electrode Bruggeman coefficient (electrolyte)",
-            "Ambient temperature [K]"
-        ]
-
-        if provided_param_to_vary is not None:
-            param_to_vary = provided_param_to_vary
+    def calculate_t_end(self, parameter_values_for_comp, force=False):
+        """
+        Calculates the t_end for t_eval (t_eval=[0, t_end]).
+        Parameter:
+            parameter_values_for_comp: dict
+                Of the form -
+                {
+                    0: pybamm.ParameterValues,
+                    1: pybamm.ParameterValues
+                }
+            force: bool
+                To be used to force the calculation of t_end.
+        """
+        # find the minimum value for "Current function [A]"
+        if self.param_to_vary == "Current function [A]" or force:
+            # find the minimum value for "Current function [A]"
+            min_curr_value = min(
+                [
+                    item["Current function [A]"]
+                    for k, item in parameter_values_for_comp.items()
+                ]
+            )
+            factor = min_curr_value / self.parameter_values["Current function [A]"]
+            t_end = (1 / factor * 1.1) * 3600
         else:
-            param_to_vary = random.choice(param_to_vary_list)
+            t_end = 3700
 
+        return t_end
+
+    def model_comparison(self):
+        """
+        Generates a comparison GIF with 2 or more models
+        """
+        params = {}
+        # if not a reply
+        if self.reply_overrides is None:
+            if not self.is_experiment:
+                # vary "Current function [A]" and "Ambient temperature [K]"
+                params = parameter_value_generator(
+                    self.parameter_values.copy(),
+                    {
+                        "Current function [A]": (None, None),
+                        "Ambient temperature [K]": (265, 355),
+                    },
+                )
+
+            elif self.is_experiment:
+                # vary "Ambient temperature [K]"
+                params = parameter_value_generator(
+                    self.parameter_values.copy(),
+                    {
+                        "Ambient temperature [K]": (265, 355),
+                    },
+                )
+        else:
+            self.parameter_values["Current function [A]"] = self.reply_overrides[
+                "Current function [A]"
+            ]
+            self.parameter_values["Ambient temperature [K]"] = self.reply_overrides[
+                "Ambient temperature [K]"
+            ]
+            params = self.parameter_values.copy()
+
+        # convert the list containing parameter values to a
+        # dictionary for pybamm.BatchStudy
+        parameter_values_for_comp = dict(list(enumerate([params])))
+
+        batch_study = pybamm.BatchStudy(
+            models=self.models_for_comp,
+            parameter_values=parameter_values_for_comp,
+            experiments=self.experiment,
+            permutations=True,
+        )
+
+        if self.is_experiment:
+            if self.chemistry == pybamm.parameter_sets.Ai2020:
+                batch_study.solve(calc_esoh=False)
+            else:
+                batch_study.solve()
+        else:
+            t_end = self.calculate_t_end(parameter_values_for_comp, force=True)
+            batch_study.solve([0, t_end])
+
+        create_gif(batch_study)
+
+        self.comparison_dict.update(
+            {"varied_values": [], "params": parameter_values_for_comp}
+        )
+
+    def parameter_comparison(self):
+        """
+        Generates a comparison with a single model, by varying a single parameter
+        """
+        # generate a list of parameter values by varying a single parameter
+        labels = []
+        varied_values = []
         param_list = []
+        # randomly select number of comparisons and vary a
+        # parameter value
         diff_params = random.randint(2, 3)
-        min_param_value = 100
         for i in range(0, diff_params):
 
             # generate parameter values
-            if (
-                param_to_vary == "Electrode height [m]"
-                or param_to_vary == "Electrode width [m]"
-            ):
-                params = parameter_value_generator(
-                    chemistry, param_to_vary, lower_bound=0
-                )
-            elif param_to_vary == "Ambient temperature [K]":
-                params = parameter_value_generator(
-                    chemistry, param_to_vary, lower_bound=265, upper_bound=355
-                )
-            else:
-                params = parameter_value_generator(
-                    chemistry, param_to_vary
-                )
-            varied_values.append(params[param_to_vary])
-
-            logger.info(
-                param_to_vary + ": " + str(params[param_to_vary])
+            params = parameter_value_generator(
+                self.parameter_values.copy(), {self.param_to_vary: self.bounds}
             )
 
-            labels.append(param_to_vary + ": " + str(params[param_to_vary]))
+            # append the varied values in `labels` which will be used
+            # in the GIF
+            labels.append(self.param_to_vary + ": " + str(params[self.param_to_vary]))
+            varied_values.append(params[self.param_to_vary])
 
+            # create a list of ParameterValues with each element
+            # having the same parameter varied
             param_list.append(params)
 
-            # find the minimum value if "Current function [A]" is varied
-            if param_to_vary == "Current function [A]":
-                if params[param_to_vary] < min_param_value:
-                    min_param_value = params[param_to_vary]
+        # convert the list containing parameter values to a dictionary
+        # for pybamm.BatchStudy
+        parameter_values_for_comp = dict(list(enumerate(param_list)))
 
-        parameter_values_for_comp = dict(
-            list(enumerate(param_list))
+        batch_study = pybamm.BatchStudy(
+            models=self.models_for_comp,
+            parameter_values=parameter_values_for_comp,
+            experiments=self.experiment,
+            permutations=True,
         )
 
-    # if testing, don't select simulations randomly
-    if provided_choice is not None:
-        choice = provided_choice
-    else:
-        choice_list = ["experiment", "no experiment"]
-        choice = random.choice(choice_list)
-
-    while True:
-        try:
-
-            if choice == "no experiment":
-
-                is_experiment = False
-
-                s = pybamm.BatchStudy(
-                    models=models_for_comp,
-                    parameter_values=parameter_values_for_comp,
-                    permutations=True,
-                )
-
-                # if "Current function [A]" is varied, change the t_end
-                if param_to_vary == "Current function [A]":
-                    factor = min_param_value / params[param_to_vary]
-                    t_end = (1 / factor * 1.1) * 3600
-                else:
-                    # default t_end
-                    t_end = 3700
-
-                s.solve([0, t_end])
-
-            elif choice == "experiment":
-
-                is_experiment = True
-
-                # generate a random cycle and a number for experiment
-                cycle = experiment_generator()
-                number = random.randint(1, 3)
-
-                # if testing, use the following configuration
-                if provided_choice is not None:
-                    cycle = [
-                        (
-                            "Discharge at C/10 for 10 hours "
-                            + "or until 3.3 V",
-                            "Rest for 1 hour",
-                            "Charge at 1 A until 4.1 V",
-                            "Hold at 4.1 V until 50 mA",
-                            "Rest for 1 hour"
-                        )
-                    ]
-                    number = 1
-
-                experiment = dict(
-                    list(
-                        enumerate(
-                            [
-                                pybamm.Experiment(
-                                    cycle * number
-                                )
-                            ]
-                        )
-                    )
-                )
-
-                s = pybamm.BatchStudy(
-                    models=models_for_comp,
-                    parameter_values=parameter_values_for_comp,
-                    experiments=experiment,
-                    permutations=True,
-                )
-
-                if chemistry == pybamm.parameter_sets.Ai2020:
-                    s.solve(calc_esoh=False)
-                else:
-                    s.solve()
-
-            # find the max "Time [s]" from all the solutions for the GIF
-            max_time = 0
-            solution = s.sims[0].solution
-            for sim in s.sims:
-                if sim.solution["Time [s]"].entries[-1] > max_time:
-                    max_time = sim.solution["Time [s]"].entries[-1]
-                    solution = sim.solution
-
-            # create the GIF
-            if len(labels) == 0:
-                plot_graph(
-                    solution=solution, sim=s.sims
-                )
+        if self.is_experiment:
+            if self.chemistry == pybamm.parameter_sets.Ai2020:
+                batch_study.solve(calc_esoh=False)
             else:
-                plot_graph(
-                    solution=solution, sim=s.sims, labels=labels
-                )
+                batch_study.solve()
+        else:
+            t_end = self.calculate_t_end(parameter_values_for_comp)
+            batch_study.solve([0, t_end])
 
-            comparison_dict.update({
-                "model": models_for_comp,
-                "chemistry": chemistry,
-                "is_experiment": is_experiment,
-                "cycle": cycle if is_experiment else None,
-                "number": number if is_experiment else None,
-                "param_to_vary": param_to_vary,
-                "varied_values": varied_values
-            })
+        create_gif(batch_study, labels=labels)
 
-            return comparison_dict
-
-        except Exception as e:  # pragma: no cover
-            print(e)
+        self.comparison_dict.update(
+            {"varied_values": varied_values, "params": parameter_values_for_comp}
+        )
