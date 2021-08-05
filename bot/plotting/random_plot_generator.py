@@ -91,7 +91,8 @@ def random_plot_generator(
                     config["cycle"],
                     config["number"],
                     config["param_to_vary"],
-                    config["bounds"]
+                    config["bounds"],
+                    config["reply_overrides"]
                 )
 
                 # create a GIF

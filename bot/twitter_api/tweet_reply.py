@@ -44,11 +44,14 @@ class Reply(Upload):
         f.close()
 
     def generate_reply(self, tweet_text):
+        request_examples = (
+            "https://github.com/pybamm-team/BattBot/blob/main/REQUEST_EXAMPLES.md"
+        )
         models = []
         reply_config = {}
 
         # split the tweet text and remove all ','
-        text_list = tweet_text.replace(",", " ").split(" ")
+        text_list = tweet_text.replace(",", " ").replace('.', "").split(" ")
         text_list = [x for x in text_list if x != ""]
 
         # check if there are 2 occurences of "single"
@@ -83,10 +86,12 @@ class Reply(Upload):
         if len(models) <= 1 and "compare" in text_list:
             raise Exception(
                 "Please provide atleast 2 models. Some tweet examples - "
+                + f"{request_examples}"
             )
         elif len(models) == 0:
             raise Exception(
                 "Please provide atleast 1 model. Some tweet examples - "
+                + f"{request_examples}"
             )
 
         models_for_comp = dict(list(enumerate(models)))
@@ -100,8 +105,54 @@ class Reply(Upload):
         else:
             # if no chemistry is provided
             raise Exception(
-                "Please provide a parameter set in the format - Chen2020 parameters -"
-                + " Some tweet examples - "
+                "Please provide a parameter set in the format - Chen2020."
+                + f"Some tweet examples - {request_examples}"
+            )
+
+        temp = None
+        c_rate = None
+        temp_is_present = False
+        c_rate_is_present = False
+        for x in text_list:
+            if x[-1] == "k" and len(x) > 1:
+                try:
+                    temp = float(x[:-1])
+                    temp_is_present = True
+                    break
+                except Exception:
+                    raise Exception(
+                        "Please provide 'Ambient temperature' in the format - "
+                        + f"273.15K. Some tweet examples - {request_examples}",
+                    )
+
+        if not temp_is_present:
+            raise Exception(
+                "Please provide 'Ambient temperature' in the format - "
+                + f"273.15K. Some tweet examples - {request_examples}"
+            )
+
+        for x in text_list:
+            if x[-1] == "c" and len(x) > 1:
+                try:
+                    c_rate = float(x[:-1])
+                    c_rate_is_present = True
+                    current = (
+                        c_rate
+                        * pybamm.ParameterValues(chemistry=chemistry)[
+                            "Nominal cell capacity [A.h]"
+                        ]
+                    )
+                    break
+                except Exception:
+                    raise Exception(
+                        "Please provide 'C rate' in the format - "
+                        + f"1C. Some tweet examples - {request_examples}"
+                    )
+
+        if not c_rate_is_present:
+            raise Exception(
+                "Please provide 'C rate' in the format - "
+                + f"1C. Some tweet examples - {request_examples}"
             )
 
         # if "model comparison"
@@ -118,13 +169,17 @@ class Reply(Upload):
                     "number": None,
                     "param_to_vary": None,
                     "bounds": None,
+                    "reply_overrides": {
+                        "Current function [A]": current,
+                        "Ambient temperature [K]": temp,
+                    },
                 }
             )
 
         else:
             raise Exception(
-                "I'm sorry, I couldn't understand the requested simulation."
-                + " Some tweet examples - "
+                "I'm sorry, I couldn't understand the requested simulation. "
+                + f"Some tweet examples - {request_examples}"
             )
 
         # generate the simulation and GIF

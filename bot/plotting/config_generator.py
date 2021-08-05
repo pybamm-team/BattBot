@@ -158,6 +158,7 @@ def config_generator(
                 "bounds": param_to_vary_dict[param_to_vary]
                 if param_to_vary is not None
                 else None,
+                "reply_overrides": None
             }
         )
 

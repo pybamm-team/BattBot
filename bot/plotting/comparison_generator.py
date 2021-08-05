@@ -10,12 +10,12 @@ class ComparisonGenerator:
     Parameters:
         models_for_comp: dict
             Models to be used in comparison. Should be of the form -
-                {
-                    0: pybamm.BaseBatteryModel,
-                    1: pybamm.BaseBatteryModel
-                }
-                Provide only 1 model for "parameter comparison" and 2 or more models for
-                "model comparison".
+            {
+                0: pybamm.BaseBatteryModel,
+                1: pybamm.BaseBatteryModel
+            }
+            Provide only 1 model for "parameter comparison" and 2 or more models for
+            "model comparison".
         chemistry: dict
             Chemistry for the models.
         is_experiment: bool
@@ -36,6 +36,14 @@ class ComparisonGenerator:
             default: None
             The bounds of the parameter which is to be varied in "parameter comparison".
             Provide only when the comparison is of type "parameter comparison".
+        reply_overrides: dict
+            default: None
+            Provides overrides for "Current function [A]" and "Ambient temperature [K]"
+            for a reply tweet. Should be of the form -
+            {
+                "Current function [A]": numerical, "Ambient temperature [K]": numerical
+            }
+            They will be randomised if not provided.
     """
 
     def __init__(
@@ -47,6 +55,7 @@ class ComparisonGenerator:
         number=None,
         param_to_vary=None,
         bounds=None,
+        reply_overrides=None,
     ):
         self.models_for_comp = models_for_comp
         self.chemistry = chemistry
@@ -62,6 +71,7 @@ class ComparisonGenerator:
             else None
         )
         self.comparison_dict = {}
+        self.reply_overrides = reply_overrides
 
     def calculate_t_end(self, parameter_values_for_comp, force=False):
         """
@@ -97,32 +107,38 @@ class ComparisonGenerator:
         Generates a comparison GIF with 2 or more models
         """
         params = {}
-        if not self.is_experiment:
-            # vary "Current function [A]" and "Ambient temperature [K]"
-            params = parameter_value_generator(
-                self.parameter_values.copy(),
-                {
-                    "Current function [A]": (None, None),
-                    "Ambient temperature [K]": (265, 355),
-                },
-            )
+        # if not a reply
+        if self.reply_overrides is None:
+            if not self.is_experiment:
+                # vary "Current function [A]" and "Ambient temperature [K]"
+                params = parameter_value_generator(
+                    self.parameter_values.copy(),
+                    {
+                        "Current function [A]": (None, None),
+                        "Ambient temperature [K]": (265, 355),
+                    },
+                )
 
-        elif self.is_experiment:
-            # vary "Ambient temperature [K]"
-            params = parameter_value_generator(
-                self.parameter_values.copy(),
-                {
-                    "Ambient temperature [K]": (265, 355),
-                },
-            )
+            elif self.is_experiment:
+                # vary "Ambient temperature [K]"
+                params = parameter_value_generator(
+                    self.parameter_values.copy(),
+                    {
+                        "Ambient temperature [K]": (265, 355),
+                    },
+                )
+        else:
+            self.parameter_values["Current function [A]"] = self.reply_overrides[
+                "Current function [A]"
+            ]
+            self.parameter_values["Ambient temperature [K]"] = self.reply_overrides[
+                "Ambient temperature [K]"
+            ]
+            params = self.parameter_values.copy()
 
         # convert the list containing parameter values to a
         # dictionary for pybamm.BatchStudy
-        parameter_values_for_comp = dict(
-            list(
-                enumerate([params])
-            )
-        )
+        parameter_values_for_comp = dict(list(enumerate([params])))
 
         batch_study = pybamm.BatchStudy(
             models=self.models_for_comp,
