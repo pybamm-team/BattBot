@@ -20,7 +20,7 @@ class TestUpload(unittest.TestCase):
                 "is_experiment": False,
                 "cycle": None,
                 "number": None,
-                "param_to_vary": None,
+                "param_to_vary_info": None,
                 "bounds": None,
                 "reply_overrides": None,
             },

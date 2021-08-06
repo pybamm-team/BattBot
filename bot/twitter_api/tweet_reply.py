@@ -167,8 +167,7 @@ class Reply(Upload):
                     "is_experiment": False,
                     "cycle": None,
                     "number": None,
-                    "param_to_vary": None,
-                    "bounds": None,
+                    "param_to_vary_info": None,
                     "reply_overrides": {
                         "Current function [A]": current,
                         "Ambient temperature [K]": temp,
