@@ -6,7 +6,6 @@ from bot.plotting.random_plot_generator import random_plot_generator
 
 
 class TestUpload(unittest.TestCase):
-
     def test_upload(self):
         return_dict = {}
         random_plot_generator(
@@ -23,6 +22,7 @@ class TestUpload(unittest.TestCase):
                 "number": None,
                 "param_to_vary": None,
                 "bounds": None,
+                "reply_overrides": None,
             },
         )
 
@@ -49,7 +49,7 @@ class TestUpload(unittest.TestCase):
                         "Rest for 1 hour",
                         "Charge at 1 A until 4.1 V",
                         "Hold at 4.1 V until 50 mA",
-                        "Rest for 1 hour"
+                        "Rest for 1 hour",
                     )
                 ],
                 "number": 2,

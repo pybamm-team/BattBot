@@ -105,7 +105,7 @@ class Reply(Upload):
         else:
             # if no chemistry is provided
             raise Exception(
-                "Please provide a parameter set in the format - Chen2020."
+                "Please provide a parameter set in the format - Chen2020. "
                 + f"Some tweet examples - {request_examples}"
             )
 
