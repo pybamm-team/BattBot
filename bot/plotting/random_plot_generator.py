@@ -37,7 +37,9 @@ def random_plot_generator(return_dict, choice, reply_config=None):
 
             if choice == ("degradation comparison (summary variables)"):
 
-                if config["chemistry"] == pybamm.parameter_sets.Ai2020:  # pragma: no cover
+                if (
+                    config["chemistry"] == pybamm.parameter_sets.Ai2020
+                ):  # pragma: no cover
                     experiment = pybamm.Experiment(config["cycle"] * config["number"])
                 else:  # pragma: no cover
                     experiment = pybamm.Experiment(
@@ -100,7 +102,9 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                         "varied_values": comparison_generator.comparison_dict[
                             "varied_values"
                         ],
-                        "params": comparison_generator.comparison_dict["params"],  # noqa
+                        "params": comparison_generator.comparison_dict[
+                            "params"
+                        ],
                     }
                 )
 
