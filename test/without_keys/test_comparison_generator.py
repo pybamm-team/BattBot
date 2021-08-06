@@ -23,20 +23,8 @@ class TestComparisonGenerator(unittest.TestCase):
         ]
         self.number = 1
         self.is_experiment = False
-        self.param_to_vary = "Current function [A]"
-        self.param_to_vary_dict = {
-            "Current function [A]": (None, None),
-            "Electrode height [m]": (0.1, None),
-            "Electrode width [m]": (0.1, None),
-            "Negative electrode conductivity [S.m-1]": (None, None),
-            "Negative electrode porosity": (None, None),
-            "Negative electrode active material volume fraction": (None, None),
-            "Negative electrode Bruggeman coefficient (electrolyte)": (None, None),
-            "Negative electrode exchange-current density [A.m-2]": (None, None),
-            "Positive electrode porosity": (None, None),
-            "Positive electrode exchange-current density [A.m-2]": (None, None),
-            "Positive electrode Bruggeman coefficient (electrolyte)": (None, None),
-            "Ambient temperature [K]": (265, 355),
+        self.param_to_vary_info = {
+            "Current function [A]": {"print_name": None, "bounds": (None, None)}
         }
 
     def tearDown(self):
@@ -47,8 +35,7 @@ class TestComparisonGenerator(unittest.TestCase):
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
-            param_to_vary=self.param_to_vary,
-            bounds=self.param_to_vary_dict[self.param_to_vary],
+            param_to_vary_info=self.param_to_vary_info,
         )
 
         comparison_generator.parameter_comparison()
@@ -83,8 +70,7 @@ class TestComparisonGenerator(unittest.TestCase):
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
-            param_to_vary=self.param_to_vary,
-            bounds=self.param_to_vary_dict[self.param_to_vary],
+            param_to_vary_info=self.param_to_vary_info,
         )
 
         comparison_generator.parameter_comparison()
@@ -102,8 +88,7 @@ class TestComparisonGenerator(unittest.TestCase):
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
-            param_to_vary=self.param_to_vary,
-            bounds=self.param_to_vary_dict[self.param_to_vary],
+            param_to_vary_info=self.param_to_vary_info,
         )
 
         comparison_generator.parameter_comparison()
@@ -153,8 +138,12 @@ class TestComparisonGenerator(unittest.TestCase):
             models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
-            param_to_vary="Negative electrode exchange-current density [A.m-2]",  # noqa
-            bounds=self.param_to_vary_dict[self.param_to_vary],
+            param_to_vary_info={
+                "Negative electrode exchange-current density [A.m-2]": {
+                    "print_name": r"$j_{0,n}$",
+                    "bounds": (None, None),
+                }
+            },
         )
 
         comparison_generator.parameter_comparison()
