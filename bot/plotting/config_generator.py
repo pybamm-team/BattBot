@@ -24,23 +24,44 @@ sei_list = [
 ]
 
 # parameters that can be varied in comparisons, of the form -
-# parameter: ("lower_bound", "upper_bound")
+# parameter: {
+#   "print_name": str
+#   "bounds": (lower_bound, upper_bound)
+# }
 # if the bounds are given as None, the default bounds will be used -
-# parameter: (parameter_values[parameter] / 2, parameter_values[parameter] * 2)
+# (parameter_values[parameter] / 2, parameter_values[parameter] * 2)
 # the varied value will always be in these bounds
 param_to_vary_dict = {
-    "Current function [A]": (None, None),
-    "Electrode height [m]": (0.1, None),
-    "Electrode width [m]": (0.1, None),
-    "Negative electrode conductivity [S.m-1]": (None, None),
-    "Negative electrode porosity": (None, None),
-    "Negative electrode active material volume fraction": (None, None),
-    "Negative electrode Bruggeman coefficient (electrolyte)": (None, None),
-    "Negative electrode exchange-current density [A.m-2]": (None, None),
-    "Positive electrode porosity": (None, None),
-    "Positive electrode exchange-current density [A.m-2]": (None, None),
-    "Positive electrode Bruggeman coefficient (electrolyte)": (None, None),
-    "Ambient temperature [K]": (265, 355),
+    "Current function [A]": {"print_name": None, "bounds": (None, None)},
+    "Electrode height [m]": {"print_name": None, "bounds": (0.1, None)},
+    "Electrode width [m]": {"print_name": None, "bounds": (0.1, None)},
+    "Negative electrode conductivity [S.m-1]": {
+        "print_name": None,
+        "bounds": (None, None),
+    },
+    "Negative electrode porosity": {"print_name": None, "bounds": (None, None)},
+    "Negative electrode active material volume fraction": {
+        "print_name": None,
+        "bounds": (None, None),
+    },
+    "Negative electrode Bruggeman coefficient (electrolyte)": {
+        "print_name": None,
+        "bounds": (None, None),
+    },
+    "Negative electrode exchange-current density [A.m-2]": {
+        "print_name": r"$j_{0,n}$",
+        "bounds": (None, None),
+    },
+    "Positive electrode porosity": {"print_name": None, "bounds": (None, None)},
+    "Positive electrode exchange-current density [A.m-2]": {
+        "print_name": r"$j_{0,p}$",
+        "bounds": (None, None),
+    },
+    "Positive electrode Bruggeman coefficient (electrolyte)": {
+        "print_name": None,
+        "bounds": (None, None),
+    },
+    "Ambient temperature [K]": {"print_name": None, "bounds": (265, 355)},
 }
 
 
@@ -138,7 +159,9 @@ def config_generator(
         if is_experiment and "Current function [A]" in param_to_vary_dict:
             param_to_vary_dict.pop("Current function [A]")
         elif not is_experiment and "Current function [A]" not in param_to_vary_dict:
-            param_to_vary_dict.update({"Current function [A]": (None, None)})
+            param_to_vary_dict.update(
+                {"Current function [A]": {"print_name": None, "bounds": (None, None)}}
+            )
 
         # choosing a parameter to be varied
         if choice == "parameter comparison":
@@ -154,8 +177,12 @@ def config_generator(
                 "is_experiment": is_experiment,
                 "cycle": cycle,
                 "number": number,
-                "param_to_vary": param_to_vary,
-                "bounds": param_to_vary_dict[param_to_vary]
+                "param_to_vary_info": {
+                    param_to_vary: {
+                        "print_name": param_to_vary_dict[param_to_vary]["print_name"],
+                        "bounds": param_to_vary_dict[param_to_vary]["bounds"],
+                    }
+                }
                 if param_to_vary is not None
                 else None,
                 "reply_overrides": None

@@ -28,14 +28,17 @@ class ComparisonGenerator:
             default: None
             The number with which the cycle is being multiplied. Provide only when the
             comparison includes an experiment.
-        param_to_vary: str
+        param_to_vary_info: dict
             default: None
-            The parameter which is to be varied in "parameter comparison". Provide only
-            when the comparison is of type "parameter comparison".
-        bounds: tuple
-            default: None
-            The bounds of the parameter which is to be varied in "parameter comparison".
-            Provide only when the comparison is of type "parameter comparison".
+            Information about parameter which is to be varied in "parameter comparison".
+            Provide only when the comparison is of type "parameter comparison". Should
+            be of the form -
+            {
+                parameter: {
+                    "print_name": str,
+                    "bounds": (numerical, numerical)
+                }
+            }
         reply_overrides: dict
             default: None
             Provides overrides for "Current function [A]" and "Ambient temperature [K]"
@@ -43,7 +46,6 @@ class ComparisonGenerator:
             {
                 "Current function [A]": numerical, "Ambient temperature [K]": numerical
             }
-            They will be randomised if not provided.
     """
 
     def __init__(
@@ -53,17 +55,29 @@ class ComparisonGenerator:
         is_experiment,
         cycle=None,
         number=None,
-        param_to_vary=None,
-        bounds=None,
         reply_overrides=None,
+        param_to_vary_info=None,
     ):
         self.models_for_comp = models_for_comp
         self.chemistry = chemistry
         self.is_experiment = is_experiment
         self.cycle = cycle
         self.number = number
-        self.param_to_vary = param_to_vary
-        self.bounds = bounds
+        self.param_to_vary = (
+            list(param_to_vary_info.keys())[0]
+            if param_to_vary_info is not None
+            else None
+        )
+        self.bounds = (
+            list(param_to_vary_info.values())[0]["bounds"]
+            if param_to_vary_info is not None
+            else None
+        )
+        self.print_name = (
+            list(param_to_vary_info.values())[0]["print_name"]
+            if param_to_vary_info is not None
+            else None
+        )
         self.parameter_values = pybamm.ParameterValues(chemistry=self.chemistry)
         self.experiment = (
             dict(list(enumerate([pybamm.Experiment(self.cycle * self.number)])))
@@ -183,13 +197,20 @@ class ComparisonGenerator:
 
             # generate parameter values
             params = parameter_value_generator(
-                self.parameter_values.copy(), {self.param_to_vary: self.bounds}
+                self.parameter_values.copy(),
+                {self.param_to_vary: self.bounds},
             )
 
             # append the varied values in `labels` which will be used
             # in the GIF
-            labels.append(self.param_to_vary + ": " + str(params[self.param_to_vary]))
-            varied_values.append(params[self.param_to_vary])
+            if self.print_name is not None:
+                labels.append(self.print_name + " * " + str(params[self.param_to_vary]))
+                varied_values.append(float(params[self.param_to_vary].__str__()))
+            else:
+                labels.append(
+                    self.param_to_vary + ": " + str(params[self.param_to_vary])
+                )
+                varied_values.append(params[self.param_to_vary])
 
             # create a list of ParameterValues with each element
             # having the same parameter varied

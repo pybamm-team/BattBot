@@ -6,11 +6,7 @@ from plotting.comparison_generator import ComparisonGenerator
 from plotting.config_generator import config_generator
 
 
-def random_plot_generator(
-    return_dict,
-    choice,
-    reply_config=None
-):
+def random_plot_generator(return_dict, choice, reply_config=None):
     """
     Generates a random plot.
     Parameters:
@@ -39,28 +35,19 @@ def random_plot_generator(
 
             logger.info(config)
 
-            if choice == (
-                "degradation comparison (summary variables)"
-            ):
+            if choice == ("degradation comparison (summary variables)"):
 
                 if (
                     config["chemistry"] == pybamm.parameter_sets.Ai2020
-                ):    # pragma: no cover
+                ):  # pragma: no cover
+                    experiment = pybamm.Experiment(config["cycle"] * config["number"])
+                else:  # pragma: no cover
                     experiment = pybamm.Experiment(
-                        config["cycle"] * config["number"]
-                    )
-                else:   # pragma: no cover
-                    experiment = pybamm.Experiment(
-                        config["cycle"] * config["number"],
-                        termination="80% capacity"
+                        config["cycle"] * config["number"], termination="80% capacity"
                     )
 
                 # solving
-                (
-                    sim,
-                    solution,
-                    parameter_values
-                ) = experiment_solver(
+                (sim, solution, parameter_values) = experiment_solver(
                     model=config["model"],
                     experiment=experiment,
                     chemistry=config["chemistry"],
@@ -69,14 +56,16 @@ def random_plot_generator(
                 # plotting summary variables
                 generate_summary_variables(solution, config["chemistry"])
 
-                return_dict.update({
-                    "model": config["model"],
-                    "chemistry": config["chemistry"],
-                    "is_experiment": True,
-                    "cycle": config["cycle"],
-                    "number": config["number"],
-                    "is_comparison": False
-                })
+                return_dict.update(
+                    {
+                        "model": config["model"],
+                        "chemistry": config["chemistry"],
+                        "is_experiment": True,
+                        "cycle": config["cycle"],
+                        "number": config["number"],
+                        "is_comparison": False,
+                    }
+                )
 
                 return
 
@@ -90,9 +79,8 @@ def random_plot_generator(
                     config["is_experiment"],
                     config["cycle"],
                     config["number"],
-                    config["param_to_vary"],
-                    config["bounds"],
-                    config["reply_overrides"]
+                    config["reply_overrides"],
+                    config["param_to_vary_info"],
                 )
 
                 # create a GIF
@@ -101,17 +89,25 @@ def random_plot_generator(
                 elif choice == "parameter comparison":
                     comparison_generator.parameter_comparison()
 
-                return_dict.update({
-                    "model": config["models_for_comp"],
-                    "chemistry": config["chemistry"],
-                    "is_experiment": config["is_experiment"],
-                    "cycle": config["cycle"],
-                    "number": config["number"],
-                    "is_comparison": True,
-                    "param_to_vary": config["param_to_vary"],
-                    "varied_values": comparison_generator.comparison_dict["varied_values"],    # noqa
-                    "params": comparison_generator.comparison_dict["params"]    # noqa
-                })
+                return_dict.update(
+                    {
+                        "model": config["models_for_comp"],
+                        "chemistry": config["chemistry"],
+                        "is_experiment": config["is_experiment"],
+                        "cycle": config["cycle"],
+                        "number": config["number"],
+                        "is_comparison": True,
+                        "param_to_vary": list(config["param_to_vary_info"].keys())[0]
+                        if config["param_to_vary_info"] is not None
+                        else None,
+                        "varied_values": comparison_generator.comparison_dict[
+                            "varied_values"
+                        ],
+                        "params": comparison_generator.comparison_dict[
+                            "params"
+                        ],
+                    }
+                )
 
                 return
 
