@@ -51,7 +51,7 @@ class Reply(Upload):
         reply_config = {}
 
         # split the tweet text and remove all ','
-        text_list = tweet_text.replace(",", " ").replace('.', "").split(" ")
+        text_list = tweet_text.replace(",", " ").split(" ")
         text_list = [x for x in text_list if x != ""]
 
         # check if there are 2 occurences of "single"

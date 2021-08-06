@@ -159,7 +159,13 @@ class ComparisonGenerator:
         create_gif(batch_study)
 
         self.comparison_dict.update(
-            {"varied_values": [], "params": parameter_values_for_comp}
+            {
+                "varied_values": {
+                    "Current function [A]": params["Current function [A]"],
+                    "Ambient temperature [K]": params["Ambient temperature [K]"],
+                },
+                "params": parameter_values_for_comp,
+            }
         )
 
     def parameter_comparison(self):
