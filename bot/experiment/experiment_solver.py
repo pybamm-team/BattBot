@@ -32,6 +32,8 @@ def experiment_solver(
         )
         if chemistry == pybamm.parameter_sets.Ai2020:
             sim.solve(calc_esoh=False)
+        elif chemistry == pybamm.parameter_sets.Mohtat2020:
+            sim.solve(initial_soc=1)
         else:
             sim.solve()
         solution = sim.solution
