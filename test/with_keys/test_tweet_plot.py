@@ -50,7 +50,7 @@ class TestTweet(unittest.TestCase):
         self.assertIsInstance(tweet.is_summary_variable, bool)
         self.assertFalse(tweet.is_summary_variable)
         self.assertIsInstance(tweet.testing, bool)
-        self.assertIsInstance(tweet.varied_values, list)
+        self.assertIsInstance(tweet.varied_values, dict)
         self.assertIsInstance(tweet.params, dict)
 
         tweet.upload_init()

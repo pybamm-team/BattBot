@@ -7,8 +7,8 @@ This file contains a list of possible tweets that the bot can effectively read a
 ## Models
 The model names that you can use in a tweet (casing of the sentence won't matter) -
  - `Doyle-FUller-Newman model` or `DFN`
- - `Single particle model` or `spm`
- - `Single particle model with electrolyte` or `spme`
+ - `Single particle model` or `SPM`
+ - `Single particle model with electrolyte` or `SPMe`
 
 ## Parameter sets / Chemistries
 The parameter sets or the chemistries that you can use in a tweet (casing of the sentence won't matter) -
@@ -21,11 +21,11 @@ The parameter sets or the chemistries that you can use in a tweet (casing of the
 ```
 @battbot_ compare SPM and SPMe for a constant dicharge of 1.25C at 290K with Chen2020 parameters #battbot.
 @battbot_ #battbot can you compare Single particle model, Single particle model with electrolyte and DFN model at 300K with a c-rate of 0.5C with Marquis2019 chemistry?
-@battbot_ #battbot compare spm, spme DFN model with a constant dicharge of 0.75C with Ai2020 at 280K.
+@battbot_ #battbot compare spm, spme DFN model with a constant dicharge of 0.75C with Ai2020 at 280K
 ```
 
 ### Mandatory keywords -
-Adding '.' or ',' anywhere in the tweet text won't effect the simulation.
+Adding ',' anywhere and the casing of the sentence in the tweet text won't effect the simulation.
  - Adding the keyword `"Compare"`.
  For example -
  ```
@@ -45,7 +45,7 @@ Adding '.' or ',' anywhere in the tweet text won't effect the simulation.
  ```
  If not provided, the bot will give the following error -
  ```
- "Please provide atleast 2 models. "
+ "Please provide atleast 2 models."
  ```
  - Providing `parameter sets or chemistry`.
  For example -

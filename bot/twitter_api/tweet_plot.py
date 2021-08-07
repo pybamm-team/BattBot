@@ -34,8 +34,8 @@ class Tweet(Upload):
 
             choice_list = [
                 "degradation comparison",
-                # "model comparison",
-                # "parameter comparison",
+                "model comparison",
+                "parameter comparison",
             ]
             if choice is None:
                 choice = random.choice(choice_list)
@@ -138,29 +138,29 @@ class Tweet(Upload):
         # data for the GIF tweet
         request_data = {"status": tweet_status, "media_ids": self.media_id}
 
-        # if not self.testing:
-        #     # tweet the GIF
-        #     req = self.post_request(self.post_tweet_url, request_data, self.oauth)
+        if not self.testing:
+            # tweet the GIF
+            req = self.post_request(self.post_tweet_url, request_data, self.oauth)
 
-        #     # write the config in txt files for users to reproduce
-        #     self.write_config("config.txt")
-        #     self.write_config("data.txt", append=True)
+            # write the config in txt files for users to reproduce
+            self.write_config("config.txt")
+            self.write_config("data.txt", append=True)
 
-        #     # reply to the posted tweet
-        #     if experiment is not None:  # pragma: no cover
-        #         reply = {
-        #             "status": experiment,
-        #             "in_reply_to_status_id": req.json()["id"],
-        #             "auto_populate_reply_metadata": True,
-        #         }
+            # reply to the posted tweet
+            if experiment is not None:  # pragma: no cover
+                reply = {
+                    "status": experiment,
+                    "in_reply_to_status_id": req.json()["id"],
+                    "auto_populate_reply_metadata": True,
+                }
 
-        #         # post reply
-        #         self.post_request(self.post_tweet_url, reply, self.oauth)
+                # post reply
+                self.post_request(self.post_tweet_url, reply, self.oauth)
 
-        # if os.path.exists("plot.gif"):
-        #     os.remove("plot.gif")
-        # if os.path.exists("plot.png"):
-        #     os.remove("plot.png")
+        if os.path.exists("plot.gif"):
+            os.remove("plot.gif")
+        if os.path.exists("plot.png"):
+            os.remove("plot.png")
         plt.close()
 
 
@@ -169,6 +169,6 @@ if __name__ == "__main__":
     tweet.upload_init()
     tweet.upload_append()
     tweet.upload_finalize()
-    # if not tweet.testing:
-    #     time.sleep(random.randint(0, 3600))
+    if not tweet.testing:
+        time.sleep(random.randint(0, 3600))
     tweet.tweet()

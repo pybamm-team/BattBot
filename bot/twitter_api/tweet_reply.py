@@ -51,7 +51,7 @@ class Reply(Upload):
         reply_config = {}
 
         # split the tweet text and remove all ','
-        text_list = tweet_text.replace(",", " ").replace('.', "").split(" ")
+        text_list = tweet_text.replace(",", " ").split(" ")
         text_list = [x for x in text_list if x != ""]
 
         # check if there are 2 occurences of "single"
@@ -105,7 +105,7 @@ class Reply(Upload):
         else:
             # if no chemistry is provided
             raise Exception(
-                "Please provide a parameter set in the format - Chen2020."
+                "Please provide a parameter set in the format - Chen2020. "
                 + f"Some tweet examples - {request_examples}"
             )
 
@@ -167,8 +167,7 @@ class Reply(Upload):
                     "is_experiment": False,
                     "cycle": None,
                     "number": None,
-                    "param_to_vary": None,
-                    "bounds": None,
+                    "param_to_vary_info": None,
                     "reply_overrides": {
                         "Current function [A]": current,
                         "Ambient temperature [K]": temp,

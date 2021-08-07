@@ -46,14 +46,11 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                     )
 
                 # generating a random degradation parameter to vary
-                (
-                    param_values,
-                    degradation_parameter
-                ) = degradation_parameter_generator(
+                param_values, degradation_parameter = degradation_parameter_generator(
                     config["chemistry"],
                     config["number_of_comp"],
                     degradation_mode=config["degradation_mode"],
-                    degradation_value=config["degradation_value"]
+                    degradation_value=config["degradation_value"],
                 )
 
                 # solving
@@ -100,9 +97,8 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                     config["is_experiment"],
                     config["cycle"],
                     config["number"],
-                    config["param_to_vary"],
-                    config["bounds"],
                     config["reply_overrides"],
+                    config["param_to_vary_info"],
                 )
 
                 # create a GIF
@@ -119,13 +115,13 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                         "cycle": config["cycle"],
                         "number": config["number"],
                         "is_comparison": True,
-                        "param_to_vary": config["param_to_vary"],
+                        "param_to_vary": list(config["param_to_vary_info"].keys())[0]
+                        if config["param_to_vary_info"] is not None
+                        else None,
                         "varied_values": comparison_generator.comparison_dict[
                             "varied_values"
                         ],
-                        "params": comparison_generator.comparison_dict[
-                            "params"
-                        ],
+                        "params": comparison_generator.comparison_dict["params"],
                     }
                 )
 

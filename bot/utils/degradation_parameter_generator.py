@@ -21,22 +21,46 @@ def degradation_parameter_generator(
     params = pybamm.ParameterValues(chemistry=chemistry)
     if degradation_mode == "particle mechanics":
         degradation_parameters = {
-            "Negative electrode Paris' law constant b": (None, None),
-            "Positive electrode Paris' law constant b": (None, None),
-            "Negative electrode Paris' law constant m": (None, None),
-            "Positive electrode Paris' law constant m": (None, None),
-            "Negative electrode Poisson's ratio": (None, None),
-            "Positive electrode Poisson's ratio": (None, None),
-            "Negative electrode Young's modulus [Pa]": (None, None),
-            "Positive electrode Young's modulus [Pa]": (None, None),
-            "Negative electrode reference concentration for free of deformation [mol.m-3]": (  # noqa
-                None,
-                None,
-            ),
-            "Positive electrode reference concentration for free of deformation [mol.m-3]": (  # noqa
-                None,
-                None,
-            ),
+            "Negative electrode Paris' law constant b": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Positive electrode Paris' law constant b": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Negative electrode Paris' law constant m": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Positive electrode Paris' law constant m": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Negative electrode Poisson's ratio": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Positive electrode Poisson's ratio": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Negative electrode Young's modulus [Pa]": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Positive electrode Young's modulus [Pa]": {
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Negative electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
+                "print_name": None,
+                "bounds": (None, None),
+            },
+            "Positive electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
+                "print_name": None,
+                "bounds": (None, None),
+            },
         }
 
     if degradation_mode == "SEI":
@@ -44,32 +68,49 @@ def degradation_parameter_generator(
         if degradation_value == "ec reaction limited":
             degradation_parameters.update(
                 {
-                    "EC initial concentration in electrolyte [mol.m-3]": (
-                        None,
-                        None,
-                    ),
-                    "SEI open-circuit potential [V]": (None, None),
+                    "EC initial concentration in electrolyte [mol.m-3]": {
+                        "print_name": None,
+                        "bounds": (None, None),
+                    },
+                    "SEI open-circuit potential [V]": {
+                        "print_name": None,
+                        "bounds": (None, None),
+                    },
                 }
             )
         elif degradation_value == "solvent-diffusion limited":
             degradation_parameters.update(
-                {"Bulk solvent concentration [mol.m-3]": (None, None)}
+                {
+                    "Bulk solvent concentration [mol.m-3]": {
+                        "print_name": None,
+                        "bounds": (None, None),
+                    }
+                },
             )
         elif degradation_value == "electron-migration limited":
             degradation_parameters.update(
-                {"Inner SEI open-circuit potential [V]": (None, None)}
+                {
+                    "Inner SEI open-circuit potential [V]": {
+                        "print_name": None,
+                        "bounds": (None, None),
+                    },
+                }
             )
         elif degradation_value == "interstitial-diffusion limited":
             degradation_parameters.update(
                 {
-                    "Lithium interstitial reference concentration [mol.m-3]": (
-                        None,
-                        None,
-                    )
+                    "Lithium interstitial reference concentration [mol.m-3]": {
+                        "print_name": None,
+                        "bounds": (None, None),
+                    },
                 }
             )
 
-        degradation_parameters.update({"Ambient temperature [K]": (265, 355)})
+        degradation_parameters.update(
+            {
+                "Ambient temperature [K]": {"print_name": None, "bounds": (265, 355)},
+            }
+        )
 
     degradation_parameter = random.choice(list(degradation_parameters.keys()))
 
@@ -77,7 +118,11 @@ def degradation_parameter_generator(
     for i in range(0, number_of_comp):
         params = parameter_value_generator(
             params.copy(),
-            {degradation_parameter: degradation_parameters[degradation_parameter]},
+            {
+                degradation_parameter: degradation_parameters[degradation_parameter][
+                    "bounds"
+                ]
+            },
         )
         param_values.append(params)
 

@@ -56,8 +56,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertTrue(isinstance(config["cycle"], list) or config["cycle"] is None)
         self.assertTrue(isinstance(config["number"], int) or config["number"] is None)
-        self.assertTrue(isinstance(config["param_to_vary"], str))
-        self.assertTrue(isinstance(config["bounds"], tuple))
+        self.assertTrue(isinstance(config["param_to_vary_info"], dict))
 
         config = config_generator("model comparison")
 
@@ -69,8 +68,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertTrue(isinstance(config["cycle"], list) or config["cycle"] is None)
         self.assertTrue(isinstance(config["number"], int) or config["number"] is None)
-        self.assertIsNone(config["param_to_vary"])
-        self.assertIsNone(config["bounds"])
+        self.assertIsNone(config["param_to_vary_info"])
 
         config = config_generator(
             "parameter comparison",
@@ -86,8 +84,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertTrue(config["is_experiment"])
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
-        self.assertIsInstance(config["param_to_vary"], str)
-        self.assertIsInstance(config["bounds"], tuple)
+        self.assertIsInstance(config["param_to_vary_info"], dict)
 
         config = config_generator(
             "model comparison",
@@ -107,5 +104,4 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertFalse(config["is_experiment"])
         self.assertIsNone(config["cycle"])
         self.assertIsNone(config["number"])
-        self.assertIsNone(config["param_to_vary"])
-        self.assertIsNone(config["bounds"])
+        self.assertIsNone(config["param_to_vary_info"])
