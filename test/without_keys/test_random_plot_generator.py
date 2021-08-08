@@ -21,22 +21,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             "lithium plating porosity change",
         ]
 
-<<<<<<< HEAD:test/test_random_plot_generator.py
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
-
-        while True:
-            p = multiprocessing.Process(
-                target=random_plot_generator, args=(
-                    return_dict,
-                    {
-                        "testing": True,
-                        "choice": "degradation comparisons",
-                        "chemistry": pybamm.parameter_sets.Chen2020,
-                        "provided_degradation": True
-                    }
-                )
-=======
         model = pybamm.lithium_ion.DFN(options={"SEI": "ec reaction limited"})
         cycle = [
             (
@@ -45,7 +29,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 "Charge at 1 A until 4.1 V",
                 "Hold at 4.1 V until 50 mA",
                 "Rest for 1 hour",
->>>>>>> super-class-for-tweet-and-reply:test/without_keys/test_random_plot_generator.py
             )
         ]
         number = 2
@@ -92,18 +75,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 target=random_plot_generator,
                 args=(
                     return_dict,
-<<<<<<< HEAD:test/test_random_plot_generator.py
-                    {
-                        "testing": True,
-                        "choice": "degradation comparisons",
-                        "chemistry": pybamm.parameter_sets.Ai2020,
-                        "provided_degradation": True
-                    }
-                )
-=======
                     "degradation comparison (summary variables)",
                 ),
->>>>>>> super-class-for-tweet-and-reply:test/without_keys/test_random_plot_generator.py
             )
             p.start()
             p.join(600)
@@ -130,18 +103,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
-<<<<<<< HEAD:test/test_random_plot_generator.py
-        self.assertTrue(return_dict["is_summary_variable"])
-        self.assertEqual(
-            return_dict["degradation_mode"], "particle mechanics"
-        )
-        self.assertTrue(
-            return_dict["degradation_value"] == "swelling and cracking"
-        )
-        self.assertIsInstance(return_dict["param_to_vary"], str)
-
-        pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
-=======
         self.assertFalse(return_dict["is_comparison"])
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
@@ -177,7 +138,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsInstance(return_dict["is_experiment"], bool)
         self.assertIsInstance(return_dict["is_comparison"], bool)
->>>>>>> super-class-for-tweet-and-reply:test/without_keys/test_random_plot_generator.py
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()

@@ -68,14 +68,13 @@ class Tweet(Upload):
         self.cycle = return_dict["cycle"]
         self.number = return_dict["number"]
         self.is_comparison = return_dict["is_comparison"]
-        if choice == "model comparison" or choice == "parameter comparison":
-            self.param_to_vary = return_dict["param_to_vary"]
-            self.varied_values = return_dict["varied_values"]
-            self.params = return_dict["params"]
-        else:
-            self.param_to_vary = None
-            self.varied_values = None
-            self.params = None
+        self.param_to_vary = return_dict["param_to_vary"]
+        self.varied_values = return_dict["varied_values"]
+        self.params = (
+            return_dict["params"]
+            if choice == "model comparison" or choice == "parameter comparison"
+            else None
+        )
         self.testing = testing
 
     def write_config(self, filename, append=False):  # pragma: no cover

@@ -1,6 +1,7 @@
 import random
 import pybamm
 from experiment.experiment_generator import experiment_generator
+from utils.degradation_parameter_generator import degradation_parameter_generator
 
 # possible chemistries for the bot
 chemistries = [
@@ -99,7 +100,7 @@ def config_generator(
 
         # add degradation / update model options
         if chemistry == pybamm.parameter_sets.Ai2020:
-            degradtiaon_value = particle_mechanics_list[0]
+            degradation_value = particle_mechanics_list[0]
             degradation_mode = "particle mechanics"
             model_options.update(
                 {
@@ -219,6 +220,17 @@ def config_generator(
 
         number_of_comp = random.randint(2, 3)
 
+        # generating a random parameter to vary and the parameter values after
+        # varying it
+        param_values, degradation_parameter = degradation_parameter_generator(
+            chemistry,
+            number_of_comp,
+            degradation_mode=degradation_mode,
+            degradation_value=degradation_value,
+        )
+
+        varied_values = [x[degradation_parameter] for x in param_values]
+
         # updating the config dictionary
         config.update(
             {
@@ -229,6 +241,9 @@ def config_generator(
                 "number": number,
                 "degradation_mode": degradation_mode,
                 "degradation_value": degradation_value,
+                "param_values": param_values,
+                "degradation_parameter": degradation_parameter,
+                "varied_values": varied_values,
             }
         )
 
