@@ -89,14 +89,14 @@ def config_generator(
     # don't select randomly if testing
     if test_config["chemistry"] is not None:
         chemistry = test_config["chemistry"]
+    # use only Mohtat2020 and SPM till others are fixed
+    elif choice == "degradation comparison":
+        chemistry = pybamm.parameter_sets.Mohtat2020
     else:
         chemistry = random.choice(chemistries)
 
     # choose random degradation for a degradation comparison
     if choice == "degradation comparison":
-
-        # use only Mohtat2020 and SPM till others are fixed
-        chemistry = pybamm.parameter_sets.Mohtat2020
 
         # add degradation / update model options
         if chemistry == pybamm.parameter_sets.Ai2020:
@@ -109,7 +109,7 @@ def config_generator(
             )
         elif chemistry == pybamm.parameter_sets.Mohtat2020:
             degradation_mode = random.choice(["SEI"])
-            if degradation_mode == "particle mechanics":
+            if degradation_mode == "particle mechanics":    # pragma: no cover
                 degradation_value = particle_mechanics_list[0]
             elif degradation_mode == "SEI":
                 degradation_value = random.choice(sei_list)

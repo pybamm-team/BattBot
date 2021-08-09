@@ -47,6 +47,29 @@ class TestConfigGenerator(unittest.TestCase):
         config = config_generator(
             "degradation comparison",
             test_config={
+                "chemistry": pybamm.parameter_sets.Mohtat2020,
+                "is_experiment": None,
+                "number_of_comp": None,
+            },
+        )
+
+        self.assertIsInstance(config, dict)
+        self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
+        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["cycle"], list)
+        self.assertIsInstance(config["number"], int)
+        pybamm.Experiment(config["cycle"] * config["number"])
+        self.assertIsInstance(config["degradation_parameter"], str)
+        self.assertIsInstance(config["degradation_mode"], str)
+        self.assertIsInstance(config["degradation_value"], str)
+        self.assertIsInstance(config["varied_values"], list)
+        self.assertIsInstance(config["param_values"], list)
+        for param in config["param_values"]:
+            self.assertIsInstance(param, pybamm.ParameterValues)
+
+        config = config_generator(
+            "degradation comparison",
+            test_config={
                 "chemistry": pybamm.parameter_sets.Chen2020,
                 "is_experiment": None,
                 "number_of_comp": None,

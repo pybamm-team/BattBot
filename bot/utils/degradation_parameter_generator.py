@@ -4,15 +4,19 @@ from utils.parameter_value_generator import parameter_value_generator
 
 
 def degradation_parameter_generator(
-    chemistry, number_of_comp, degradation_mode=None, degradation_value=None
+    chemistry, number_of_comp, degradation_mode, degradation_value
 ):
     """
     Generates a random degradation parameter and random values for the same.
     Parameters:
         chemistry: dict
         number_of_comp: numerical
+            Number of times a parameter has to be varied.
         degradation_mode: str
+            The degradation option added to a model. Can be "SEI" and
+            "particle mechanics".
         degradation_value: str
+            Value of the degradation mode.
     Returns:
         param_values: list
         degradation_parameter: str

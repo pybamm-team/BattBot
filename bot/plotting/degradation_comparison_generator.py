@@ -69,11 +69,11 @@ class DegradationComparisonGenerator:
                 experiment=experiment,
                 parameter_values=self.param_values[i],
             )
-            if self.chemistry == pybamm.parameter_sets.Ai2020:
+            if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
                 sim.solve(calc_esoh=False)
             elif self.chemistry == pybamm.parameter_sets.Mohtat2020:
                 sim.solve(initial_soc=1)
-            else:
+            else:  # pragma: no cover
                 sim.solve()
             solution = sim.solution
 
@@ -92,7 +92,7 @@ class DegradationComparisonGenerator:
         """
         Solves an expeiment with the given configuration.
         """
-        if self.chemistry == pybamm.parameter_sets.Ai2020:
+        if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
             experiment = pybamm.Experiment(self.cycle * self.number)
         else:
             experiment = pybamm.Experiment(
@@ -114,7 +114,7 @@ class DegradationComparisonGenerator:
         """
         Creates and saves a picture of summary variable comparison plot.
         """
-        if self.chemistry == pybamm.parameter_sets.Ai2020:
+        if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
             vars_to_plot = [
                 "Measured capacity [A.h]",
                 "Loss of lithium inventory [%]",
