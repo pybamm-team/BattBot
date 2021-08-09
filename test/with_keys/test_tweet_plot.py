@@ -7,7 +7,7 @@ from bot.twitter_api.tweet_plot import Tweet
 class TestTweet(unittest.TestCase):
     def test_tweet(self):
         tweet = Tweet(
-            testing=True, choice="degradation comparisons"
+            testing=True, choice="degradation comparison"
         )
 
         self.assertIsNone(tweet.media_id)
@@ -21,10 +21,11 @@ class TestTweet(unittest.TestCase):
         self.assertIsInstance(tweet.cycle, list)
         self.assertIsInstance(tweet.cycle[0], tuple)
         self.assertIsInstance(tweet.number, int)
-        self.assertIsInstance(tweet.is_summary_variable, bool)
+        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertFalse(tweet.is_comparison)
         self.assertIsInstance(tweet.testing, bool)
-        self.assertIsNone(tweet.param_to_vary)
-        self.assertIsNone(tweet.varied_values)
+        self.assertIsInstance(tweet.param_to_vary, str)
+        self.assertIsInstance(tweet.varied_values, list)
         self.assertIsNone(tweet.params)
 
         tweet.upload_init()
@@ -47,8 +48,8 @@ class TestTweet(unittest.TestCase):
         self.assertIsInstance(tweet.model, dict)
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_summary_variable, bool)
-        self.assertFalse(tweet.is_summary_variable)
+        self.assertIsInstance(tweet.is_comparison, bool)
+        self.assertTrue(tweet.is_comparison)
         self.assertIsInstance(tweet.testing, bool)
         self.assertIsInstance(tweet.varied_values, dict)
         self.assertIsInstance(tweet.params, dict)
@@ -108,7 +109,7 @@ class TestTweet(unittest.TestCase):
         )
         self.assertIsInstance(tweet.chemistry, dict)
         self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_summary_variable, bool)
+        self.assertIsInstance(tweet.is_comparison, bool)
         self.assertIsInstance(tweet.testing, bool)
 
         tweet.upload_init()

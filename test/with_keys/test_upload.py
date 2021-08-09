@@ -36,10 +36,19 @@ class TestUpload(unittest.TestCase):
 
         os.remove(plot)
 
+        chemistry = pybamm.parameter_sets.Chen2020
+        params = [
+            pybamm.ParameterValues(chemistry=chemistry),
+            pybamm.ParameterValues(chemistry=chemistry),
+        ]
+
+        params[0]["Ambient temperature [K]"] = 280
+        params[1]["Ambient temperature [K]"] = 295
+
         return_dict = {}
         random_plot_generator(
             return_dict,
-            "degradation comparison (summary variables)",
+            "degradation comparison",
             {
                 "chemistry": pybamm.parameter_sets.Chen2020,
                 "model": pybamm.lithium_ion.DFN(),
@@ -53,6 +62,9 @@ class TestUpload(unittest.TestCase):
                     )
                 ],
                 "number": 2,
+                "degradation_parameter": "Ambient temperature [K]",
+                "varied_values": [280, 295],
+                "param_values": params,
             },
         )
 
