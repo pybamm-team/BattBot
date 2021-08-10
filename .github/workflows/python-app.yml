@@ -86,7 +86,7 @@ jobs:
         branch: ${{ github.ref }}      
 
     - name: Run macos unittests for PRs not from a fork
-      if: (matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name == github.repository) || github.event_name == 'schedule'
+      if: (matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name == github.repository) || (matrix.os == 'macos-latest' && github.event_name == 'schedule') || (matrix.os == 'macos-latest' && github.event.pull_request.merged == true)
       run: |
         python -m unittest
       env:
@@ -96,12 +96,12 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Run macos unittests for PRs from a fork
-      if: matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule'
+      if: matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event.pull_request.merged == false
       run: |
         python -m unittest discover ./test/without_keys/
 
     - name: Run ubuntu unittests and generate coverage report for PRs not from a fork
-      if: (matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name == github.repository) || github.event_name == 'schedule'
+      if: (matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name == github.repository) || (matrix.os == 'ubuntu-latest' && github.event_name == 'schedule') || (matrix.os == 'ubuntu-latest' && github.event.pull_request.merged == true)
       run: |
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
@@ -114,7 +114,7 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Run ubuntu unittests and generate coverage report for PRs from a fork
-      if: matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule'
+      if: matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event.pull_request.merged == false
       run: |
         echo ${{ github.event.pull_request.head.repo.full_name }}
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
