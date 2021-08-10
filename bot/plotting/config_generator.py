@@ -12,6 +12,7 @@ chemistries = [
 
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters
 particle_mechanics_list = [
+    "swelling only",
     "swelling and cracking",
 ]
 
@@ -108,7 +109,7 @@ def config_generator(
                 }
             )
         elif chemistry == pybamm.parameter_sets.Mohtat2020:
-            degradation_mode = random.choice(["SEI"])
+            degradation_mode = random.choice(["particle mechanics", "SEI"])
             if degradation_mode == "particle mechanics":    # pragma: no cover
                 degradation_value = particle_mechanics_list[0]
             elif degradation_mode == "SEI":
