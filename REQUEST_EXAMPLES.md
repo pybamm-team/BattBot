@@ -6,7 +6,7 @@ This file contains a list of possible tweets that the bot can effectively read a
 
 ## Models
 The model names that you can use in a tweet (casing of the sentence won't matter) -
- - `Doyle-FUller-Newman model` or `DFN`
+ - `Doyle-Fuller-Newman model` or `DFN`
  - `Single particle model` or `SPM`
  - `Single particle model with electrolyte` or `SPMe`
 
