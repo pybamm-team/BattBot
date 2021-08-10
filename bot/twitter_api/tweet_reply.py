@@ -43,7 +43,7 @@ class Reply(Upload):
         f.write(str(last_seen_id))
         f.close()
 
-    def generate_reply(self, tweet_text):
+    def generate_reply(self):
         request_examples = (
             "https://github.com/pybamm-team/BattBot/blob/main/REQUEST_EXAMPLES.md"
         )
@@ -51,7 +51,7 @@ class Reply(Upload):
         reply_config = {}
 
         # split the tweet text and remove all ','
-        text_list = tweet_text.replace(",", " ").split(" ")
+        text_list = self.tweet_text_lower.replace(",", " ").split(" ")
         text_list = [x for x in text_list if x != ""]
 
         # check if there are 2 occurences of "single"
@@ -75,7 +75,7 @@ class Reply(Upload):
             "single" in text_list
             and "particle" in text_list
             and "electrolyte" in text_list
-        ) or "spme" in tweet_text:
+        ) or "spme" in text_list:
             models.append(pybamm.lithium_ion.SPMe())
         # if user wants "DFN" model
         if "doyle-fuller-newman" in text_list or "dfn" in text_list:
@@ -110,9 +110,7 @@ class Reply(Upload):
             )
 
         temp = None
-        c_rate = None
         temp_is_present = False
-        c_rate_is_present = False
         for x in text_list:
             if x[-1] == "k" and len(x) > 1:
                 try:
@@ -131,32 +129,55 @@ class Reply(Upload):
                 + f"273.15K. Some tweet examples - {request_examples}"
             )
 
-        for x in text_list:
-            if x[-1] == "c" and len(x) > 1:
-                try:
-                    c_rate = float(x[:-1])
-                    c_rate_is_present = True
-                    current = (
-                        c_rate
-                        * pybamm.ParameterValues(chemistry=chemistry)[
-                            "Nominal cell capacity [A.h]"
-                        ]
-                    )
-                    break
-                except Exception:
-                    raise Exception(
-                        "Please provide 'C rate' in the format - "
-                        + f"1C. Some tweet examples - {request_examples}"
-                    )
+        if "experiment" not in text_list:
+            c_rate = None
+            c_rate_is_present = False
+            for x in text_list:
+                if x[-1] == "c" and len(x) > 1:
+                    try:
+                        c_rate = float(x[:-1])
+                        c_rate_is_present = True
+                        current = (
+                            c_rate
+                            * pybamm.ParameterValues(chemistry=chemistry)[
+                                "Nominal cell capacity [A.h]"
+                            ]
+                        )
+                        break
+                    except Exception:
+                        raise Exception(
+                            "Please provide 'C rate' in the format - "
+                            + f"1C. Some tweet examples - {request_examples}"
+                        )
 
-        if not c_rate_is_present:
-            raise Exception(
-                "Please provide 'C rate' in the format - "
-                + f"1C. Some tweet examples - {request_examples}"
-            )
+            if not c_rate_is_present:
+                raise Exception(
+                    "Please provide 'C rate' in the format - "
+                    + f"1C. Some tweet examples - {request_examples}"
+                )
+
+        if "experiment" in text_list:
+            is_experiment = True
+            current = None
+            try:
+                cycle = eval(self.tweet_text[
+                    self.tweet_text.index("[") : self.tweet_text.index("]") + 1
+                ])
+                print(cycle)
+                print(type(cycle))
+                number = int(self.tweet_text[self.tweet_text.index("*") + 2])
+            except Exception:
+                raise Exception(
+                    "Please provide experiment in the format - "
+                    + f"[('Charge at )] * 2. Some tweet examples - {request_examples}"
+                )
+        else:
+            is_experiment = False
+            cycle = None
+            number = None
 
         # if "model comparison"
-        if "compare" in tweet_text:
+        if "compare" in text_list:
 
             choice = "model comparison"
 
@@ -164,9 +185,9 @@ class Reply(Upload):
                 {
                     "chemistry": chemistry,
                     "models_for_comp": models_for_comp,
-                    "is_experiment": False,
-                    "cycle": None,
-                    "number": None,
+                    "is_experiment": is_experiment,
+                    "cycle": cycle,
+                    "number": number,
                     "param_to_vary_info": None,
                     "reply_overrides": {
                         "Current function [A]": current,
@@ -214,11 +235,12 @@ class Reply(Upload):
                         + " "
                         + str(mention._json["id"])
                     )
+                    self.tweet_text_lower = mention.full_text.lower()
+                    self.tweet_text = mention.full_text
 
                     # creating a custom process to generate the requested simulation
                     p = Process(
                         target=self.generate_reply,
-                        args=(mention.full_text.lower(),),
                     )
 
                     p.start()
