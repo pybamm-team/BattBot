@@ -69,7 +69,12 @@ param_to_vary_dict = {
 
 def config_generator(
     choice,
-    test_config={"chemistry": None, "is_experiment": None, "number_of_comp": None},
+    test_config={
+        "chemistry": None,
+        "is_experiment": None,
+        "number_of_comp": None,
+        "degradation_mode": None,
+    },
 ):
     """
     Generates a random configuration to plot.
@@ -109,8 +114,12 @@ def config_generator(
                 }
             )
         elif chemistry == pybamm.parameter_sets.Mohtat2020:
-            degradation_mode = random.choice(["particle mechanics", "SEI"])
-            if degradation_mode == "particle mechanics":    # pragma: no cover
+            if test_config["degradation_mode"] is None:
+                degradation_mode = random.choice(["particle mechanics", "SEI"])
+            else:
+                degradation_mode = test_config["degradation_mode"]
+
+            if degradation_mode == "particle mechanics":
                 degradation_value = particle_mechanics_list[0]
             elif degradation_mode == "SEI":
                 degradation_value = random.choice(sei_list)

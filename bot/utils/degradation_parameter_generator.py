@@ -194,6 +194,7 @@ def degradation_parameter_generator(
 
     degradation_parameter = random.choice(list(degradation_parameters.keys()))
 
+    # generate parameter values by varying a single parameter
     param_values = []
     for i in range(0, number_of_comp):
         params = parameter_value_generator(
