@@ -45,7 +45,7 @@ Adding ',' anywhere and the casing of the sentence in the tweet text won't effec
  ```
  If not provided, the bot will give the following error -
  ```
- "Please provide atleast 2 models."
+ "Please provide at least 2 models."
  ```
  - Providing `parameter sets or chemistry`.
  For example -
