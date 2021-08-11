@@ -1,6 +1,7 @@
 import random
 import pybamm
 from experiment.experiment_generator import experiment_generator
+from utils.parameter_value_generator import parameter_value_generator
 
 # possible chemistries for the bot
 chemistries = [
@@ -32,7 +33,6 @@ sei_list = [
 # (parameter_values[parameter] / 2, parameter_values[parameter] * 2)
 # the varied value will always be in these bounds
 param_to_vary_dict = {
-    "Current function [A]": {"print_name": None, "bounds": (None, None)},
     "Electrode height [m]": {"print_name": None, "bounds": (0.1, None)},
     "Electrode width [m]": {"print_name": None, "bounds": (0.1, None)},
     "Negative electrode conductivity [S.m-1]": {
@@ -61,7 +61,6 @@ param_to_vary_dict = {
         "print_name": None,
         "bounds": (None, None),
     },
-    "Ambient temperature [K]": {"print_name": None, "bounds": (265, 355)},
 }
 
 
@@ -90,6 +89,7 @@ def config_generator(
         chemistry = test_config["chemistry"]
     else:
         chemistry = random.choice(chemistries)
+    parameter_values = pybamm.ParameterValues(chemistry=chemistry)
 
     # choose random degradation for a degradation comparison
     if choice == "degradation comparison (summary variables)":
@@ -145,13 +145,29 @@ def config_generator(
         else:
             is_experiment = random.choice([True, False])
 
-        # generating a random experiment
         if is_experiment:
+            # generating a random experiment
             cycle = experiment_generator()
             number = random.randint(1, 3)
+            # generating parameter values with varied "Ambient temperature [K]"
+            params = parameter_value_generator(
+                parameter_values.copy(),
+                {
+                    "Ambient temperature [K]": (265, 355),
+                },
+            )
         else:
             cycle = None
             number = None
+            # generating parameter values with varied "Ambient temperature [K]" and
+            # "Current function [A]"
+            params = parameter_value_generator(
+                parameter_values.copy(),
+                {
+                    "Current function [A]": (None, None),
+                    "Ambient temperature [K]": (265, 355),
+                },
+            )
 
         # remove "Current function [A]" from the dict if simulating an
         # experiment and add it back if not an experiment
@@ -185,7 +201,7 @@ def config_generator(
                 }
                 if param_to_vary is not None
                 else None,
-                "reply_overrides": None
+                "params": params,
             }
         )
 
