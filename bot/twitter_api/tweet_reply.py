@@ -51,7 +51,12 @@ class Reply(Upload):
         reply_config = {}
 
         # split the tweet text and remove all ','
-        text_list = self.tweet_text_lower.replace(",", " ").split(" ")
+        text_list = (
+            self.tweet_text_lower.replace(",", " ")
+            .replace(":", " ")
+            .replace("-", " ")
+            .split(" ")
+        )
         text_list = [x for x in text_list if x != ""]
 
         # check if there are 2 occurences of "single"
@@ -109,32 +114,30 @@ class Reply(Upload):
                 + f"Some tweet examples - {request_examples}"
             )
 
-        temp = None
         temp_is_present = False
-        for x in text_list:
-            if x[-1] == "k" and len(x) > 1:
-                try:
+        try:
+            for x in text_list:
+                if x[-1] == "k" and len(x) > 1:
                     temp = float(x[:-1])
                     temp_is_present = True
                     break
-                except Exception:
-                    raise Exception(
-                        "Please provide 'Ambient temperature' in the format - "
-                        + f"273.15K. Some tweet examples - {request_examples}",
-                    )
-
-        if not temp_is_present:
+        except Exception:
             raise Exception(
                 "Please provide 'Ambient temperature' in the format - "
                 + f"273.15K. Some tweet examples - {request_examples}"
             )
+        finally:
+            if not temp_is_present:
+                raise Exception(
+                    "Please provide 'Ambient temperature' in the format - "
+                    + f"273.15K. Some tweet examples - {request_examples}"
+                )
 
         if "experiment" not in text_list:
-            c_rate = None
             c_rate_is_present = False
-            for x in text_list:
-                if x[-1] == "c" and len(x) > 1:
-                    try:
+            try:
+                for x in text_list:
+                    if x[-1] == "c" and len(x) > 1:
                         c_rate = float(x[:-1])
                         c_rate_is_present = True
                         current = (
@@ -144,32 +147,34 @@ class Reply(Upload):
                             ]
                         )
                         break
-                    except Exception:
-                        raise Exception(
-                            "Please provide 'C rate' in the format - "
-                            + f"1C. Some tweet examples - {request_examples}"
-                        )
-
-            if not c_rate_is_present:
+            except Exception:
                 raise Exception(
                     "Please provide 'C rate' in the format - "
                     + f"1C. Some tweet examples - {request_examples}"
                 )
+            finally:
+                if not c_rate_is_present:
+                    raise Exception(
+                        "Please provide 'C rate' in the format - "
+                        + f"1C. Some tweet examples - {request_examples}"
+                    )
 
         if "experiment" in text_list:
             is_experiment = True
             current = None
             try:
-                cycle = eval(self.tweet_text[
-                    self.tweet_text.index("[") : self.tweet_text.index("]") + 1
-                ])
-                print(cycle)
-                print(type(cycle))
+                cycle = eval(
+                    self.tweet_text[
+                        self.tweet_text.index("["):self.tweet_text.index("]") + 1
+                    ]
+                )
                 number = int(self.tweet_text[self.tweet_text.index("*") + 2])
+                pybamm.Experiment(cycle * number)
             except Exception:
                 raise Exception(
                     "Please provide experiment in the format - "
-                    + f"[('Charge at )] * 2. Some tweet examples - {request_examples}"
+                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."    # noqa
+                    + f" Some tweet examples - {request_examples}",
                 )
         else:
             is_experiment = False
