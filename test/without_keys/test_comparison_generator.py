@@ -56,9 +56,45 @@ class TestComparisonGenerator(unittest.TestCase):
         comparison_generator.model_comparison()
 
         self.assertIsInstance(
-            comparison_generator.comparison_dict["varied_values"], list
+            comparison_generator.comparison_dict["varied_values"], dict
         )
-        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertTrue(
+            "Current function [A]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(
+            "Ambient temperature [K]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 2)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+
+        assert os.path.exists("plot.gif")
+
+        comparison_generator = ComparisonGenerator(
+            models_for_comp=self.models_for_comp,
+            chemistry=self.chemistry,
+            is_experiment=self.is_experiment,
+            reply_overrides={
+                "Current function [A]": 5.0,
+                "Ambient temperature [K]": 298.15,
+            },
+        )
+
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], dict
+        )
+        self.assertTrue(
+            "Current function [A]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(
+            "Ambient temperature [K]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 2)
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         assert os.path.exists("plot.gif")
@@ -111,9 +147,17 @@ class TestComparisonGenerator(unittest.TestCase):
         comparison_generator.model_comparison()
 
         self.assertIsInstance(
-            comparison_generator.comparison_dict["varied_values"], list
+            comparison_generator.comparison_dict["varied_values"], dict
         )
-        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertTrue(
+            "Current function [A]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(
+            "Ambient temperature [K]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 2)
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         comparison_generator = ComparisonGenerator(
@@ -127,9 +171,41 @@ class TestComparisonGenerator(unittest.TestCase):
         comparison_generator.model_comparison()
 
         self.assertIsInstance(
-            comparison_generator.comparison_dict["varied_values"], list
+            comparison_generator.comparison_dict["varied_values"], dict
         )
-        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 0)
+        self.assertTrue(
+            "Current function [A]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(
+            "Ambient temperature [K]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 2)
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+
+        comparison_generator = ComparisonGenerator(
+            models_for_comp=self.models_for_comp,
+            chemistry=self.chemistry,
+            is_experiment=self.is_experiment,
+            cycle=self.cycle,
+            number=self.number,
+        )
+
+        comparison_generator.model_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], dict
+        )
+        self.assertTrue(
+            "Current function [A]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(
+            "Ambient temperature [K]"
+            in comparison_generator.comparison_dict["varied_values"]
+        )
+        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 2)
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
         self.is_experiment = False

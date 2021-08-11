@@ -28,10 +28,10 @@ def random_plot_generator(return_dict, choice, reply_config=None):
         try:
             pybamm.set_logging_level("NOTICE")
 
-            if reply_config is not None:  # pragma: no cover
-                config = reply_config
-            else:
+            if reply_config is None:
                 config = config_generator(choice)
+            else:
+                config = reply_config
 
             logger.info(config)
 
@@ -79,6 +79,7 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                     config["is_experiment"],
                     config["cycle"],
                     config["number"],
+                    config["reply_overrides"],
                     config["param_to_vary_info"],
                 )
 
