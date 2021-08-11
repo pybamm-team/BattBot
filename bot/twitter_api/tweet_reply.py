@@ -173,10 +173,9 @@ class Reply(Upload):
         # read the provided experiment
         if "experiment" in text_list:
             is_experiment = True
-            current = None
             try:
                 cycle = eval(
-                    tweet_text[tweet_text.index("[") : tweet_text.index("]") + 1]
+                    tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
                 )
                 number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
