@@ -114,8 +114,8 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(
             result,
             f"{self.model[0].name} with {self.chemistry['citation']} "
-            "parameters "
-            f"varying '{self.param_to_vary}' for the following experiment "
+            f"parameters varying '{self.param_to_vary}'"
+            f" at {self.temp}°C for the following experiment "
             "\U0001F53D https://bit.ly/3z5p7q9",
         )
 
@@ -169,50 +169,6 @@ class TestTweetTextGenerator(unittest.TestCase):
             "https://bit.ly/3z5p7q9",
         )
 
-        self.param_to_vary = "Current function [A]"
-
-        result, experiment = tweet_text_generator(
-            self.chemistry,
-            self.model,
-            self.is_experiment,
-            self.cycle,
-            self.number,
-            self.is_comparison,
-            self.param_to_vary,
-            self.params,
-        )
-
-        self.assertIsNone(experiment)
-        self.assertEqual(
-            result,
-            f"{self.model[0].name} with {self.chemistry['citation']} "
-            "parameters "
-            f"varying '{self.param_to_vary}' at {self.temp}°C "
-            "https://bit.ly/3z5p7q9",
-        )
-
-        self.param_to_vary = "Ambient temperature [K]"
-
-        result, experiment = tweet_text_generator(
-            self.chemistry,
-            self.model,
-            self.is_experiment,
-            self.cycle,
-            self.number,
-            self.is_comparison,
-            self.param_to_vary,
-            self.params,
-        )
-
-        self.assertIsNone(experiment)
-        self.assertEqual(
-            result,
-            f"{self.model[0].name} with {self.chemistry['citation']} "
-            "parameters "
-            f"varying '{self.param_to_vary}' for a {self.c_rate} C discharge "
-            "https://bit.ly/3z5p7q9",
-        )
-
         self.param_to_vary = "Electrode height [m]"
 
         result, experiment = tweet_text_generator(
@@ -258,7 +214,8 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(
             result,
             f"Doyle-Fuller-Newman model with {self.chemistry['citation']} "
-            f"parameters varying '{self.param_to_vary}' for the following "
+            f"parameters varying '{self.param_to_vary}' "
+            f"at {self.temp}°C for the following "
             "experiment \U0001F53D https://bit.ly/3z5p7q9",
         )
 
