@@ -1,6 +1,10 @@
 import pybamm
 import unittest
-from bot.utils.degradation_parameter_generator import *
+from bot.utils.degradation_parameter_generator import (
+    degradation_parameter_generator,
+    lico2_volume_change_Ai2020,
+    graphite_volume_change_Ai2020,
+)
 
 
 class TestDegradationParameterGenerator(unittest.TestCase):

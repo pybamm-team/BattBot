@@ -63,7 +63,7 @@ def degradation_parameter_generator(
                 # mechanical properties
                 "Positive electrode Poisson's ratio": 0.3,
                 "Positive electrode Young's modulus [Pa]": 375e9,
-                "Positive electrode reference concentration for free of deformation [mol.m-3]": 0,
+                "Positive electrode reference concentration for free of deformation [mol.m-3]": 0,  # noqa
                 "Positive electrode partial molar volume [m3.mol-1]": -7.28e-7,
                 "Positive electrode volume change": lico2_volume_change_Ai2020,
                 "Negative electrode volume change": graphite_volume_change_Ai2020,
@@ -73,7 +73,7 @@ def degradation_parameter_generator(
                 # mechanical properties
                 "Negative electrode Poisson's ratio": 0.3,
                 "Negative electrode Young's modulus [Pa]": 15e9,
-                "Negative electrode reference concentration for free of deformation [mol.m-3]": 0,
+                "Negative electrode reference concentration for free of deformation [mol.m-3]": 0,  # noqa
                 "Negative electrode partial molar volume [m3.mol-1]": 3.1e-6,
                 # Loss of active materials (LAM) model
                 "Negative electrode LAM constant exponential term": 2,
