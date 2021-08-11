@@ -43,7 +43,12 @@ class Reply(Upload):
         f.write(str(last_seen_id))
         f.close()
 
-    def generate_reply(self):
+    def generate_reply(self, tweet_text):
+        """
+        Generates an appropriate GIF fot the given tweet text.
+        Parameters:
+            tweet_text: str
+        """
         request_examples = (
             "https://github.com/pybamm-team/BattBot/blob/main/REQUEST_EXAMPLES.md"
         )
@@ -52,7 +57,8 @@ class Reply(Upload):
 
         # split the tweet text and remove all ','
         text_list = (
-            self.tweet_text_lower.replace(",", " ")
+            tweet_text.lower()
+            .replace(",", " ")
             .replace(":", " ")
             .replace("-", " ")
             .split(" ")
@@ -164,16 +170,14 @@ class Reply(Upload):
             current = None
             try:
                 cycle = eval(
-                    self.tweet_text[
-                        self.tweet_text.index("["):self.tweet_text.index("]") + 1
-                    ]
+                    tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
                 )
-                number = int(self.tweet_text[self.tweet_text.index("*") + 2])
+                number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
             except Exception:
                 raise Exception(
                     "Please provide experiment in the format - "
-                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."    # noqa
+                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa
                     + f" Some tweet examples - {request_examples}",
                 )
         else:
@@ -240,13 +244,10 @@ class Reply(Upload):
                         + " "
                         + str(mention._json["id"])
                     )
-                    self.tweet_text_lower = mention.full_text.lower()
-                    self.tweet_text = mention.full_text
+                    tweet_text = mention.full_text
 
                     # creating a custom process to generate the requested simulation
-                    p = Process(
-                        target=self.generate_reply,
-                    )
+                    p = Process(target=self.generate_reply, args=(tweet_text,))
 
                     p.start()
                     # time-out
