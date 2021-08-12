@@ -9,16 +9,14 @@ def resize_gif(path, resize_to):
         path: str
         resize_to : tuple
     """
+
+    print("RESIZING THE GIF")
     all_frames = extract_and_resize_frames(path, resize_to)
 
     save_as = path
 
     all_frames[0].save(
-        save_as,
-        optimize=True,
-        save_all=True,
-        append_images=all_frames[1:],
-        loop=1000
+        save_as, optimize=True, save_all=True, append_images=all_frames[1:], loop=1000
     )
 
 
@@ -32,8 +30,8 @@ def analyseImage(path):
     """
     im = Image.open(path)
     results = {
-        'size': im.size,
-        'mode': 'full',
+        "size": im.size,
+        "mode": "full",
     }
     try:
         while True:
@@ -41,8 +39,8 @@ def analyseImage(path):
                 tile = im.tile[0]
                 update_region = tile[1]
                 update_region_dimensions = update_region[2:]
-                if update_region_dimensions != im.size:    # pragma: no cover
-                    results['mode'] = 'partial'
+                if update_region_dimensions != im.size:  # pragma: no cover
+                    results["mode"] = "partial"
                     break
             im.seek(im.tell() + 1)
 
@@ -62,13 +60,13 @@ def extract_and_resize_frames(path, resize_to):
     Returns:
         all_frames: list
     """
-    mode = analyseImage(path)['mode']
+    mode = analyseImage(path)["mode"]
 
     im = Image.open(path)
 
     i = 0
     p = im.getpalette()
-    last_frame = im.convert('RGBA')
+    last_frame = im.convert("RGBA")
 
     all_frames = []
 
@@ -79,20 +77,20 @@ def extract_and_resize_frames(path, resize_to):
             palette. If not, we need to apply the global palette to the new
             frame.
             """
-            if not im.getpalette():    # pragma: no cover
+            if not im.getpalette():  # pragma: no cover
                 im.putpalette(p)
 
-            new_frame = Image.new('RGBA', im.size)
+            new_frame = Image.new("RGBA", im.size)
 
             """
             Is this file a "partial"-mode GIF where frames update a region of
             a different size to the entire image? If so, we need to construct
             the new frame by pasting it on top of the preceding frames.
             """
-            if mode == 'partial':     # pragma: no cover
+            if mode == "partial":  # pragma: no cover
                 new_frame.paste(last_frame)
 
-            new_frame.paste(im, (0, 0), im.convert('RGBA'))
+            new_frame.paste(im, (0, 0), im.convert("RGBA"))
 
             new_frame.thumbnail(resize_to, Image.ANTIALIAS)
             all_frames.append(new_frame)

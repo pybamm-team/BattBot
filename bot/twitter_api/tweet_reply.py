@@ -44,6 +44,11 @@ class Reply(Upload):
         f.close()
 
     def generate_reply(self, tweet_text):
+        """
+        Generates an appropriate GIF fot the given tweet text.
+        Parameters:
+            tweet_text: str
+        """
         request_examples = (
             "https://github.com/pybamm-team/BattBot/blob/main/REQUEST_EXAMPLES.md"
         )
@@ -51,7 +56,13 @@ class Reply(Upload):
         reply_config = {}
 
         # split the tweet text and remove all ','
-        text_list = tweet_text.replace(",", " ").split(" ")
+        text_list = (
+            tweet_text.lower()
+            .replace(",", " ")
+            .replace(":", " ")
+            .replace("-", " ")
+            .split(" ")
+        )
         text_list = [x for x in text_list if x != ""]
 
         # check if there are 2 occurences of "single"
@@ -75,7 +86,7 @@ class Reply(Upload):
             "single" in text_list
             and "particle" in text_list
             and "electrolyte" in text_list
-        ) or "spme" in tweet_text:
+        ) or "spme" in text_list:
             models.append(pybamm.lithium_ion.SPMe())
         # if user wants "DFN" model
         if "doyle-fuller-newman" in text_list or "dfn" in text_list:
@@ -109,54 +120,73 @@ class Reply(Upload):
                 + f"Some tweet examples - {request_examples}"
             )
 
-        temp = None
-        c_rate = None
         temp_is_present = False
-        c_rate_is_present = False
-        for x in text_list:
-            if x[-1] == "k" and len(x) > 1:
-                try:
+        try:
+            for x in text_list:
+                if x[-1] == "k" and len(x) > 1:
                     temp = float(x[:-1])
                     temp_is_present = True
                     break
-                except Exception:
-                    raise Exception(
-                        "Please provide 'Ambient temperature' in the format - "
-                        + f"273.15K. Some tweet examples - {request_examples}",
-                    )
-
-        if not temp_is_present:
+        except Exception:
             raise Exception(
                 "Please provide 'Ambient temperature' in the format - "
                 + f"273.15K. Some tweet examples - {request_examples}"
             )
+        finally:
+            if not temp_is_present:
+                raise Exception(
+                    "Please provide 'Ambient temperature' in the format - "
+                    + f"273.15K. Some tweet examples - {request_examples}"
+                )
 
-        for x in text_list:
-            if x[-1] == "c" and len(x) > 1:
-                try:
-                    c_rate = float(x[:-1])
-                    c_rate_is_present = True
-                    current = (
-                        c_rate
-                        * pybamm.ParameterValues(chemistry=chemistry)[
-                            "Nominal cell capacity [A.h]"
-                        ]
-                    )
-                    break
-                except Exception:
+        if "experiment" not in text_list:
+            c_rate_is_present = False
+            try:
+                for x in text_list:
+                    if x[-1] == "c" and len(x) > 1:
+                        c_rate = float(x[:-1])
+                        c_rate_is_present = True
+                        current = (
+                            c_rate
+                            * pybamm.ParameterValues(chemistry=chemistry)[
+                                "Nominal cell capacity [A.h]"
+                            ]
+                        )
+                        break
+            except Exception:
+                raise Exception(
+                    "Please provide 'C rate' in the format - "
+                    + f"1C. Some tweet examples - {request_examples}"
+                )
+            finally:
+                if not c_rate_is_present:
                     raise Exception(
                         "Please provide 'C rate' in the format - "
                         + f"1C. Some tweet examples - {request_examples}"
                     )
 
-        if not c_rate_is_present:
-            raise Exception(
-                "Please provide 'C rate' in the format - "
-                + f"1C. Some tweet examples - {request_examples}"
-            )
+        if "experiment" in text_list:
+            is_experiment = True
+            current = None
+            try:
+                cycle = eval(
+                    tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
+                )
+                number = int(tweet_text[tweet_text.index("*") + 2])
+                pybamm.Experiment(cycle * number)
+            except Exception:
+                raise Exception(
+                    "Please provide experiment in the format - "
+                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa
+                    + f" Some tweet examples - {request_examples}",
+                )
+        else:
+            is_experiment = False
+            cycle = None
+            number = None
 
         # if "model comparison"
-        if "compare" in tweet_text:
+        if "compare" in text_list:
 
             choice = "model comparison"
 
@@ -164,9 +194,9 @@ class Reply(Upload):
                 {
                     "chemistry": chemistry,
                     "models_for_comp": models_for_comp,
-                    "is_experiment": False,
-                    "cycle": None,
-                    "number": None,
+                    "is_experiment": is_experiment,
+                    "cycle": cycle,
+                    "number": number,
                     "param_to_vary_info": None,
                     "reply_overrides": {
                         "Current function [A]": current,
@@ -214,12 +244,10 @@ class Reply(Upload):
                         + " "
                         + str(mention._json["id"])
                     )
+                    tweet_text = mention.full_text
 
                     # creating a custom process to generate the requested simulation
-                    p = Process(
-                        target=self.generate_reply,
-                        args=(mention.full_text.lower(),),
-                    )
+                    p = Process(target=self.generate_reply, args=(tweet_text,))
 
                     p.start()
                     # time-out
