@@ -46,6 +46,14 @@ class Tweet(Upload):
             # time-out
             p.join(1200)
 
+            if os.path.exists("plot.gif"):
+                self.plot = "plot.gif"
+            elif os.path.exists("plot.png"):
+                self.plot = "plot.png"
+
+            if os.path.exists(self.plot):
+                self.total_bytes = os.path.getsize(self.plot)
+
             if p.is_alive():  # pragma: no cover
                 print(
                     "Simulation is taking too long, "
@@ -53,14 +61,11 @@ class Tweet(Upload):
                 )
                 p.kill()
                 p.join()
+            elif self.total_bytes >= 15728640:  # pragma: no cover
+                continue
             else:  # pragma: no cover
                 break
 
-        if os.path.exists("plot.gif"):
-            self.plot = "plot.gif"
-        else:
-            self.plot = "plot.png"
-        self.total_bytes = os.path.getsize(self.plot)
         self.config = None
         self.model = return_dict["model"]
         self.chemistry = return_dict["chemistry"]
