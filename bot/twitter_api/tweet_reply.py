@@ -70,6 +70,13 @@ class Reply(Upload):
             i for i, x in enumerate(text_list) if x == "single" or "spm" in x
         ]
 
+        if "compare" not in text_list and "vary" not in text_list:
+            raise Exception(
+                "I'm sorry, I couldn't understand the requested simulation. "
+                + f"Some tweet examples - {request_examples}"
+            )
+
+
         # if there are, append SPM and SPMe to models
         if len(single_indices) > 1:
             models.append(pybamm.lithium_ion.SPM())
@@ -99,9 +106,9 @@ class Reply(Upload):
                 "Please provide atleast 2 models. Some tweet examples - "
                 + f"{request_examples}"
             )
-        elif len(models) == 0 and "vary" in text_list:
+        elif len(models) != 1 and "vary" in text_list:
             raise Exception(
-                "Please provide atleast 1 model. Some tweet examples - "
+                "Please provide a model. Some tweet examples - "
                 + f"{request_examples}"
             )
 
@@ -268,17 +275,11 @@ class Reply(Upload):
                     }
                 )
             except Exception as e:
-                print(e)
                 raise Exception(
                     "Please provide a parameter to vary and the varied values in the "
                     + 'format - "Parameter to vary" with the values [1, 2, 3]. '
                     + f"Some tweet examples - {request_examples}"
                 )
-        else:
-            raise Exception(
-                "I'm sorry, I couldn't understand the requested simulation. "
-                + f"Some tweet examples - {request_examples}"
-            )
 
         reply_config.update(
             {

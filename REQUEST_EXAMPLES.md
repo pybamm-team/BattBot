@@ -16,34 +16,16 @@ The parameter sets or the chemistries that you can use in a tweet (casing of the
  - `Marquis2019`
  - `Ai2020`
 
-## Compare 2 or more models with a constant discharge or with an experiment
-### Some examples -
-```
-@battbot_ compare SPM and SPMe for a constant dicharge of 1.25C at 290K with Chen2020 parameters #battbot.
-@battbot_ #battbot can you compare Single particle model, Single particle model with electrolyte and DFN model at 300K with a c-rate of 0.5C with Marquis2019 chemistry?
-@battbot_ #battbot compare spm, spme DFN model with a constant dicharge of 0.75C with Ai2020 at 280K
-@battbot #battbot compare spm and spme with chen2020 parameters with the experiment - [("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")] * 3 at 298K
-```
-
-### Mandatory keywords -
+## Commom mandatory keywords -
 Adding ',', ':' or '-' anywhere in the tweet text won't affect the simulation.
 Casing of the experiment conditions should be correct, other than that it won't affect the simulation.
- - Adding the keyword `"Compare"`.
- For example -
- ```
- <space or no character>Compare<space or no character>
- Compare SPM and SPMe
- ```
- If not provided, the bot will give the following error -
- ```
- "I'm sorry, I couldn't understand the requested simulation."
- ```
  - Providing `models`.
- For example -
+ Provide only 1 model for `"parameter comparison"` and more 2 or more than 2 models for `"model comparison"`. For example -
  ```
  <space or no character>SPM<space or no character>
  SPM, SPMe and DFN model
  Single particle model and Doyle-Fuller-Newman model
+ SPM
  ```
  If not provided, the bot will give the following error -
  ```
@@ -84,6 +66,8 @@ Casing of the experiment conditions should be correct, other than that it won't 
  ```
  "Please provide 'Ambient temperature' in the format - 273.15K."
  ```
+
+## Commom optional keywords -
  - Providing `experiment`.
  Required only when you want to simulate an experiment. Casing of the exepriment should be correct and always use "'" to specify the conditions. For example -
  ```
@@ -93,4 +77,67 @@ Casing of the experiment conditions should be correct, other than that it won't 
  If not provided or if incorrectly provided, the bot will give the following error -
  ```
  "Please provide 'Ambient temperature' in the format - 273.15K."
+ ```
+
+## Compare 2 or more models with a constant discharge or with an experiment
+### Some examples -
+```
+@battbot_ compare SPM and SPMe for a constant dicharge of 1.25C at 290K with Chen2020 parameters #battbot.
+@battbot_ #battbot can you compare Single particle model, Single particle model with electrolyte and DFN model at 300K with a c-rate of 0.5C with Marquis2019 chemistry?
+@battbot_ #battbot compare spm, spme DFN model with a constant dicharge of 0.75C with Ai2020 at 280K
+@battbot #battbot compare spm and spme with chen2020 parameters with the experiment - [("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")] * 3 at 298K
+```
+ - Adding the keyword `"Compare"`.
+ For example -
+ ```
+ <space or no character>Compare<space or no character>
+ Compare SPM and SPMe
+ ```
+ If not provided, the bot will give the following error -
+ ```
+ "I'm sorry, I couldn't understand the requested simulation."
+ ```
+
+## Compare 2 or more values for a parameter with a constant discharge or with an experiment
+
+Always provide the keywords in the following order -
+1. Parameter to vary
+2. Varied values
+3. Experiment
+### Some examples -
+```
+@battbot_ #battbot Vary "Electrode height [m]", values - [0.1, 0.4, 0.7] with DFN model with a constant dicharge of 0.75C with Ai2020 at 280K
+@battbot #battbot vary "Electrode height [m]" with the values [0.1, 0.4, 0.7] with spm using chen2020 parameters with the experiment - [("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")] * 3 at 298K
+```
+
+ - Adding the keyword `"Vary"`.
+ For example -
+ ```
+ <space or no character>Vary<space or no character>
+ Vary "Electrode height [m]"
+ ```
+ If not provided, the bot will give the following error -
+ ```
+ "I'm sorry, I couldn't understand the requested simulation."
+ ```
+  - Adding a `parameter to vary` enclosed with `" "`.
+ For example -
+ ```
+ "Electrode height [m]"
+ Vary "Electrode height [m]"
+ ```
+ If not provided, the bot will give the following error -
+ ```
+ 'Please provide a parameter to vary and the varied values in the format - "Parameter to vary" with the values [1, 2, 3].'
+ ```
+  - Providing `values`.
+ For example -
+ ```
+ [1, 2, 3]
+ Vary "Electrode height [m]", values - [0.1, 0.4, 0.7]
+ Vary "Electrode height [m]" with values - [0.1, 0.4, 0.7]
+ ```
+ If not provided, the bot will give the following error -
+ ```
+ 'Please provide a parameter to vary and the varied values in the format - "Parameter to vary" with the values [1, 2, 3].'
  ```
