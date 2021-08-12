@@ -5,13 +5,13 @@ This file contains a list of possible tweets that the bot can effectively read a
 **Using `#battbot` and mentioning `@battbot_` in every tweet request is mandatory.**
 
 ## Models
-The model names that you can use in a tweet (casing of the sentence won't matter) -
+The model names that you can use in a tweet (casing of the model won't matter) -
  - `Doyle-Fuller-Newman model` or `DFN`
  - `Single particle model` or `SPM`
  - `Single particle model with electrolyte` or `SPMe`
 
 ## Parameter sets / Chemistries
-The parameter sets or the chemistries that you can use in a tweet (casing of the sentence won't matter) -
+The parameter sets or the chemistries that you can use in a tweet (casing of the chemistry won't matter) -
  - `Chen2020`
  - `Marquis2019`
  - `Ai2020`
@@ -26,7 +26,8 @@ The parameter sets or the chemistries that you can use in a tweet (casing of the
 ```
 
 ### Mandatory keywords -
-Adding ',', ':' or '-' anywhere and the casing of the sentence in the tweet text won't effect the simulation.
+Adding ',', ':' or '-' anywhere in the tweet text won't affect the simulation.
+Casing of the experiment conditions should be correct, other than that it won't affect the simulation.
  - Adding the keyword `"Compare"`.
  For example -
  ```
