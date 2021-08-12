@@ -16,16 +16,17 @@ The parameter sets or the chemistries that you can use in a tweet (casing of the
  - `Marquis2019`
  - `Ai2020`
 
-## Compare 2 or more models with a constant discharge
+## Compare 2 or more models with a constant discharge or with an experiment
 ### Some examples -
 ```
 @battbot_ compare SPM and SPMe for a constant dicharge of 1.25C at 290K with Chen2020 parameters #battbot.
 @battbot_ #battbot can you compare Single particle model, Single particle model with electrolyte and DFN model at 300K with a c-rate of 0.5C with Marquis2019 chemistry?
 @battbot_ #battbot compare spm, spme DFN model with a constant dicharge of 0.75C with Ai2020 at 280K
+@battbot #battbot compare spm and spme with chen2020 parameters with the experiment - [("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")] * 3 at 298K
 ```
 
 ### Mandatory keywords -
-Adding ',' anywhere and the casing of the sentence in the tweet text won't effect the simulation.
+Adding ',', ':' or '-' anywhere and the casing of the sentence in the tweet text won't effect the simulation.
  - Adding the keyword `"Compare"`.
  For example -
  ```
@@ -71,12 +72,22 @@ Adding ',' anywhere and the casing of the sentence in the tweet text won't effec
  ```
  "Please provide 'C rate' in the format - 1C."
  ```
- - Providing `"Ambient temperature [K]`.
+ - Providing `"Ambient temperature [K]"`.
  For example -
  ```
  <space or no character>298K<space or no character>
  at a temperature of 290K
  at 298K
+ ```
+ If not provided or if incorrectly provided, the bot will give the following error -
+ ```
+ "Please provide 'Ambient temperature' in the format - 273.15K."
+ ```
+ - Providing `experiment`.
+ Required only when you want to simulate an experiment. For example -
+ ```
+ with<space or no character>experiment<space or no character>- [("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")]<space>*<space>3
+ use the<space or no character>experiment<space or no character>[("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")]<space>*<space>3
  ```
  If not provided or if incorrectly provided, the bot will give the following error -
  ```

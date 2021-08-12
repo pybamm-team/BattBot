@@ -142,9 +142,10 @@ class ComparisonGenerator:
                     },
                 )
         else:
-            self.parameter_values["Current function [A]"] = self.reply_overrides[
-                "Current function [A]"
-            ]
+            if not self.is_experiment:
+                self.parameter_values["Current function [A]"] = self.reply_overrides[
+                    "Current function [A]"
+                ]
             self.parameter_values["Ambient temperature [K]"] = self.reply_overrides[
                 "Ambient temperature [K]"
             ]

@@ -57,10 +57,14 @@ def create_gif(batch_study, labels=None):
         plot.fig.savefig("plot" + str(val) + ".png", dpi=300)
         plt.close()
 
+    print("PLOTS CREATED")
+
     # compiling the plots to create a GIF
     for image in images:
         image_files.append(imageio.imread(image))
     imageio.mimsave("plot.gif", image_files, duration=0.1)
+
+    print("GIF CREATED")
 
     for image in images:
         os.remove(image)
