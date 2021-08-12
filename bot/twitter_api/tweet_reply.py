@@ -76,7 +76,6 @@ class Reply(Upload):
                 + f"Some tweet examples - {request_examples}"
             )
 
-
         # if there are, append SPM and SPMe to models
         if len(single_indices) > 1:
             models.append(pybamm.lithium_ion.SPM())
@@ -108,8 +107,7 @@ class Reply(Upload):
             )
         elif len(models) != 1 and "vary" in text_list:
             raise Exception(
-                "Please provide a model. Some tweet examples - "
-                + f"{request_examples}"
+                "Please provide a model. Some tweet examples - " + f"{request_examples}"
             )
 
         models_for_comp = dict(list(enumerate(models)))
@@ -182,7 +180,7 @@ class Reply(Upload):
             is_experiment = True
             try:
                 cycle = eval(
-                    tweet_text[tweet_text.index("[") : tweet_text.index("]") + 1]
+                    tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
                 )
                 number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
@@ -200,7 +198,7 @@ class Reply(Upload):
             is_experiment = True
             try:
                 cycle = eval(
-                    tweet_text[tweet_text.rindex("[") : tweet_text.rindex("]") + 1]
+                    tweet_text[tweet_text.rindex("["):tweet_text.rindex("]") + 1]
                 )
                 number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
@@ -233,14 +231,13 @@ class Reply(Upload):
             try:
                 # extract the varied parameter
                 param_to_vary = tweet_text[
-                    tweet_text.index('"') : tweet_text.index(
+                    tweet_text.index('"'):tweet_text.index(
                         '"', tweet_text.index('"') + 1
                     )
                     + 1
                 ].replace('"', "")
                 params[param_to_vary]
 
-                ### TODO
                 # extract the varied values
                 # if an experiment is provided
                 if is_experiment:
@@ -274,7 +271,7 @@ class Reply(Upload):
                         },
                     }
                 )
-            except Exception as e:
+            except Exception:
                 raise Exception(
                     "Please provide a parameter to vary and the varied values in the "
                     + 'format - "Parameter to vary" with the values [1, 2, 3]. '
