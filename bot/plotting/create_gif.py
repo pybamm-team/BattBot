@@ -60,9 +60,10 @@ def create_gif(batch_study, labels=None):
     print("PLOTS CREATED")
 
     # compiling the plots to create a GIF
-    for image in images:
-        image_files.append(imageio.imread(image))
-    imageio.mimsave("plot.gif", image_files, duration=0.1)
+    with imageio.get_writer('plot1.gif', mode='I', duration=0.1) as writer:
+        for image in images:
+            writer.append_data(imageio.imread(image))
+
 
     print("GIF CREATED")
 
