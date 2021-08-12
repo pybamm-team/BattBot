@@ -202,6 +202,7 @@ def config_generator(
                 if param_to_vary is not None
                 else None,
                 "params": params,
+                "varied_values_override": None
             }
         )
 

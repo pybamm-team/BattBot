@@ -41,6 +41,10 @@ class ComparisonGenerator:
                     "bounds": (numerical, numerical)
                 }
             }
+        varied_values_override: list
+            default: None
+            A list of varied values which will override the default random values. To be
+            used while replying.
     """
 
     def __init__(
@@ -52,6 +56,7 @@ class ComparisonGenerator:
         cycle=None,
         number=None,
         param_to_vary_info=None,
+        varied_values_override=None,
     ):
         self.models_for_comp = models_for_comp
         self.chemistry = chemistry
@@ -81,6 +86,7 @@ class ComparisonGenerator:
         )
         self.comparison_dict = {}
         self.params = params
+        self.varied_values_override = varied_values_override
 
     def calculate_t_end(self, parameter_values_for_comp, force=False):
         """
@@ -156,15 +162,24 @@ class ComparisonGenerator:
         varied_values = []
         param_list = []
         # randomly select number of comparisons and vary a
-        # parameter value
-        diff_params = random.randint(2, 3)
+        # parameter value or use the varied_values_override
+        # list to change a parameter's value
+        diff_params = (
+            random.randint(2, 3)
+            if self.varied_values_override is None
+            else len(self.varied_values_override)
+        )
         for i in range(0, diff_params):
 
             # generate parameter values
-            params = parameter_value_generator(
-                self.params.copy(),
-                {self.param_to_vary: self.bounds},
-            )
+            if self.varied_values_override is None:
+                params = parameter_value_generator(
+                    self.params.copy(),
+                    {self.param_to_vary: self.bounds},
+                )
+            else:
+                params = self.params.copy()
+                params[self.param_to_vary] = self.varied_values_override[i]
 
             # append the varied values in `labels` which will be used
             # in the GIF

@@ -85,10 +85,10 @@ Casing of the experiment conditions should be correct, other than that it won't 
  "Please provide 'Ambient temperature' in the format - 273.15K."
  ```
  - Providing `experiment`.
- Required only when you want to simulate an experiment. For example -
+ Required only when you want to simulate an experiment. Casing of the exepriment should be correct and always use "'" to specify the conditions. For example -
  ```
- with<space or no character>experiment<space or no character>- [("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")]<space>*<space>3
- use the<space or no character>experiment<space or no character>[("Discharge at C/10 for 10 hours or until 3.3 V","Rest for 1 hour","Charge at 1 A until 4.1 V","Hold at 4.1 V until 50 mA","Rest for 1 hour")]<space>*<space>3
+ with<space or no character>experiment<space or no character>- [('Discharge at C/10 for 10 hours or until 3.3 V','Rest for 1 hour','Charge at 1 A until 4.1 V','Hold at 4.1 V until 50 mA','Rest for 1 hour')]<space>*<space>3
+ use the<space or no character>experiment<space or no character>[('Discharge at C/10 for 10 hours or until 3.3 V','Rest for 1 hour','Charge at 1 A until 4.1 V','Hold at 4.1 V until 50 mA','Rest for 1 hour')]<space>*<space>3
  ```
  If not provided or if incorrectly provided, the bot will give the following error -
  ```
