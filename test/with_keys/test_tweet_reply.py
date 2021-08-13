@@ -33,6 +33,27 @@ class TestTweetReply(unittest.TestCase):
         tweet_text = (
             "Compare SPM, SPMe with Chen2020 parameters with experiment -"
             "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa
+            " at 278.15K"
+        )
+        reply.generate_reply(tweet_text)
+
+        assert os.path.exists("plot.gif")
+        os.remove("plot.gif")
+
+        tweet_text = (
+            'Vary "Electrode height [m]" with values [0.3, 0.4, 0.5] with SPM with '
+            "Chen2020 parameters with experiment - "
+            "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa
+            " at 278.15K"
+        )
+        reply.generate_reply(tweet_text)
+
+        assert os.path.exists("plot.gif")
+        os.remove("plot.gif")
+
+        tweet_text = (
+            'Vary "Electrode height [m]" with values [0.3, 0.4, 0.5] with SPM with '
+            "Chen2020 parameters for a discharge of 1C"
             " discharge at 278.15K"
         )
         reply.generate_reply(tweet_text)
@@ -42,15 +63,6 @@ class TestTweetReply(unittest.TestCase):
 
         tweet_text = (
             "Compare SPMe and DFN model with Chen2020 parameters with a 1C discharge at"
-            " 278.15K"
-        )
-        reply.generate_reply(tweet_text)
-
-        assert os.path.exists("plot.gif")
-        os.remove("plot.gif")
-
-        tweet_text = (
-            "Compare SPM and DFN model with Chen2020 parameters with a 1C discharge at"
             " 278.15K"
         )
         reply.generate_reply(tweet_text)
@@ -89,7 +101,8 @@ class TestTweetReply(unittest.TestCase):
         tweet_text = "Chen2020 parameters"
         with self.assertRaisesRegex(
             Exception,
-            f"Please provide atleast 1 model. Some tweet examples - {request_examples}",
+            "I'm sorry, I couldn't understand the requested simulation. "
+            + f"Some tweet examples - {request_examples}",
         ):
             reply.generate_reply(tweet_text)
 
@@ -151,6 +164,56 @@ class TestTweetReply(unittest.TestCase):
         tweet_text = (
             "Compare SPM, SPMe and DFN model with Chen2020 parameters with experiment"
             " [('Charge at')] at 278.15K"
+        )
+        with self.assertRaises(
+            Exception,
+        ):
+            reply.generate_reply(tweet_text)
+
+        tweet_text = (
+            'Vary "Electrode Height [m]", [1, 3, 2] SPM with Chen2020 parameters with '
+            "experiment [('Charge at')] at 278.15K"
+        )
+        with self.assertRaises(
+            Exception,
+        ):
+            reply.generate_reply(tweet_text)
+
+        tweet_text = (
+            'Vary "Electrode height [m]" with values [0.3, 0.4g, 0.5f] with SPM with '
+            "Chen2020 parameters for a discharge of 1C"
+            " discharge at 278.15K"
+        )
+        with self.assertRaises(
+            Exception,
+        ):
+            reply.generate_reply(tweet_text)
+
+        tweet_text = (
+            'Vary "Negative electrode porosity" with values [0.3, 0.4g, 0.5f] with SPM '
+            "with Chen2020 parameters for a discharge of 1C"
+            " discharge at 278.15K"
+        )
+        with self.assertRaises(
+            Exception,
+        ):
+            reply.generate_reply(tweet_text)
+
+        tweet_text = (
+            'Vary "Negative electrode porosity" with values [0.3, 0.4g, 0.5f] with SPM '
+            "with Chen2020 parameters with the experiment "
+            "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa
+            " discharge at 278.15K"
+        )
+        with self.assertRaises(
+            Exception,
+        ):
+            reply.generate_reply(tweet_text)
+
+        tweet_text = (
+            'Vary "Electrode height [m]" with values [0.3, 0.4, 0.5] with SPM and DFN '
+            "with Chen2020 parameters for a discharge of 1C"
+            " discharge at 278.15K"
         )
         with self.assertRaises(
             Exception,

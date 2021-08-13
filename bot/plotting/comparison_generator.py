@@ -20,6 +20,8 @@ class ComparisonGenerator:
             Chemistry for the models.
         is_experiment: bool
             If the comparison includes an experiment.
+        params: pybamm.ParameterValues
+            ParameterValues to be used in the comparisons.
         cycle: list
             default: None
             Single cycle of the experiment. Provide only when the comparison includes an
@@ -39,13 +41,10 @@ class ComparisonGenerator:
                     "bounds": (numerical, numerical)
                 }
             }
-        reply_overrides: dict
+        varied_values_override: list
             default: None
-            Provides overrides for "Current function [A]" and "Ambient temperature [K]"
-            for a reply tweet. Should be of the form -
-            {
-                "Current function [A]": numerical, "Ambient temperature [K]": numerical
-            }
+            A list of varied values which will override the default random values. To be
+            used while replying.
     """
 
     def __init__(
@@ -53,10 +52,11 @@ class ComparisonGenerator:
         models_for_comp,
         chemistry,
         is_experiment,
+        params,
         cycle=None,
         number=None,
-        reply_overrides=None,
         param_to_vary_info=None,
+        varied_values_override=None,
     ):
         self.models_for_comp = models_for_comp
         self.chemistry = chemistry
@@ -85,7 +85,8 @@ class ComparisonGenerator:
             else None
         )
         self.comparison_dict = {}
-        self.reply_overrides = reply_overrides
+        self.params = params
+        self.varied_values_override = varied_values_override
 
     def calculate_t_end(self, parameter_values_for_comp, force=False):
         """
@@ -120,40 +121,9 @@ class ComparisonGenerator:
         """
         Generates a comparison GIF with 2 or more models
         """
-        params = {}
-        # if not a reply
-        if self.reply_overrides is None:
-            if not self.is_experiment:
-                # vary "Current function [A]" and "Ambient temperature [K]"
-                params = parameter_value_generator(
-                    self.parameter_values.copy(),
-                    {
-                        "Current function [A]": (None, None),
-                        "Ambient temperature [K]": (265, 355),
-                    },
-                )
-
-            elif self.is_experiment:
-                # vary "Ambient temperature [K]"
-                params = parameter_value_generator(
-                    self.parameter_values.copy(),
-                    {
-                        "Ambient temperature [K]": (265, 355),
-                    },
-                )
-        else:
-            if not self.is_experiment:
-                self.parameter_values["Current function [A]"] = self.reply_overrides[
-                    "Current function [A]"
-                ]
-            self.parameter_values["Ambient temperature [K]"] = self.reply_overrides[
-                "Ambient temperature [K]"
-            ]
-            params = self.parameter_values.copy()
-
         # convert the list containing parameter values to a
         # dictionary for pybamm.BatchStudy
-        parameter_values_for_comp = dict(list(enumerate([params])))
+        parameter_values_for_comp = dict(list(enumerate([self.params])))
 
         batch_study = pybamm.BatchStudy(
             models=self.models_for_comp,
@@ -176,8 +146,8 @@ class ComparisonGenerator:
         self.comparison_dict.update(
             {
                 "varied_values": {
-                    "Current function [A]": params["Current function [A]"],
-                    "Ambient temperature [K]": params["Ambient temperature [K]"],
+                    "Current function [A]": self.params["Current function [A]"],
+                    "Ambient temperature [K]": self.params["Ambient temperature [K]"],
                 },
                 "params": parameter_values_for_comp,
             }
@@ -192,15 +162,24 @@ class ComparisonGenerator:
         varied_values = []
         param_list = []
         # randomly select number of comparisons and vary a
-        # parameter value
-        diff_params = random.randint(2, 3)
+        # parameter value or use the varied_values_override
+        # list to change a parameter's value
+        diff_params = (
+            random.randint(2, 3)
+            if self.varied_values_override is None
+            else len(self.varied_values_override)
+        )
         for i in range(0, diff_params):
 
             # generate parameter values
-            params = parameter_value_generator(
-                self.parameter_values.copy(),
-                {self.param_to_vary: self.bounds},
-            )
+            if self.varied_values_override is None:
+                params = parameter_value_generator(
+                    self.params.copy(),
+                    {self.param_to_vary: self.bounds},
+                )
+            else:
+                params = self.params.copy()
+                params[self.param_to_vary] = self.varied_values_override[i]
 
             # append the varied values in `labels` which will be used
             # in the GIF

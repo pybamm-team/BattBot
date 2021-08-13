@@ -12,6 +12,7 @@ class TestComparisonGenerator(unittest.TestCase):
             "SPM": pybamm.lithium_ion.SPM(),
         }
         self.chemistry = pybamm.parameter_sets.Chen2020
+        self.params = pybamm.ParameterValues(chemistry=self.chemistry)
         self.cycle = [
             (
                 "Discharge at C/10 for 10 hours or until 3.3 V",
@@ -36,6 +37,7 @@ class TestComparisonGenerator(unittest.TestCase):
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
             param_to_vary_info=self.param_to_vary_info,
+            params=self.params,
         )
 
         comparison_generator.parameter_comparison()
@@ -45,29 +47,33 @@ class TestComparisonGenerator(unittest.TestCase):
         )
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
-        assert os.path.exists("plot.gif")
-
         comparison_generator = ComparisonGenerator(
-            models_for_comp=self.models_for_comp,
+            models_for_comp=self.model_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
+            param_to_vary_info=self.param_to_vary_info,
+            params=self.params,
+            varied_values_override=[5.2, 5.4, 5.6],
         )
 
-        comparison_generator.model_comparison()
+        comparison_generator.parameter_comparison()
 
         self.assertIsInstance(
-            comparison_generator.comparison_dict["varied_values"], dict
+            comparison_generator.comparison_dict["varied_values"], list
         )
-        self.assertTrue(
-            "Current function [A]"
-            in comparison_generator.comparison_dict["varied_values"]
-        )
-        self.assertTrue(
-            "Ambient temperature [K]"
-            in comparison_generator.comparison_dict["varied_values"]
-        )
-        self.assertTrue(len(comparison_generator.comparison_dict["varied_values"]) == 2)
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+        self.assertEqual(
+            comparison_generator.comparison_dict["params"][0]["Current function [A]"],
+            5.2,
+        )
+        self.assertEqual(
+            comparison_generator.comparison_dict["params"][1]["Current function [A]"],
+            5.4,
+        )
+        self.assertEqual(
+            comparison_generator.comparison_dict["params"][2]["Current function [A]"],
+            5.6,
+        )
 
         assert os.path.exists("plot.gif")
 
@@ -75,10 +81,7 @@ class TestComparisonGenerator(unittest.TestCase):
             models_for_comp=self.models_for_comp,
             chemistry=self.chemistry,
             is_experiment=self.is_experiment,
-            reply_overrides={
-                "Current function [A]": 5.0,
-                "Ambient temperature [K]": 298.15,
-            },
+            params=self.params,
         )
 
         comparison_generator.model_comparison()
@@ -107,6 +110,7 @@ class TestComparisonGenerator(unittest.TestCase):
             cycle=self.cycle,
             number=self.number,
             param_to_vary_info=self.param_to_vary_info,
+            params=self.params,
         )
 
         comparison_generator.parameter_comparison()
@@ -125,6 +129,7 @@ class TestComparisonGenerator(unittest.TestCase):
             cycle=self.cycle,
             number=self.number,
             param_to_vary_info=self.param_to_vary_info,
+            params=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ai2020),
         )
 
         comparison_generator.parameter_comparison()
@@ -142,6 +147,7 @@ class TestComparisonGenerator(unittest.TestCase):
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
+            params=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ai2020),
         )
 
         comparison_generator.model_comparison()
@@ -166,6 +172,7 @@ class TestComparisonGenerator(unittest.TestCase):
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
+            params=self.params,
         )
 
         comparison_generator.model_comparison()
@@ -190,6 +197,7 @@ class TestComparisonGenerator(unittest.TestCase):
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
+            params=self.params,
         )
 
         comparison_generator.model_comparison()
@@ -220,6 +228,7 @@ class TestComparisonGenerator(unittest.TestCase):
                     "bounds": (None, None),
                 }
             },
+            params=self.params,
         )
 
         comparison_generator.parameter_comparison()

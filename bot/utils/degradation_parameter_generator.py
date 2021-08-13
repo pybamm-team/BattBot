@@ -124,7 +124,7 @@ def degradation_parameter_generator(
                 },
                 "Negative electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
                     "print_name": None,
-                    "bounds": (None, None),
+                    "bounds": (0., None),
                 },
                 "Positive electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
                     "print_name": None,
@@ -140,7 +140,23 @@ def degradation_parameter_generator(
                 "Negative electrode LAM constant propotional term": {
                     "print_name": None,
                     "bounds": (None, None),
-                }
+                },
+                "Negative electrode Poisson's ratio": {
+                    "print_name": None,
+                    "bounds": (None, None),
+                },
+                "Positive electrode Poisson's ratio": {
+                    "print_name": None,
+                    "bounds": (None, None),
+                },
+                "Negative electrode Young's modulus [Pa]": {
+                    "print_name": None,
+                    "bounds": (None, None),
+                },
+                "Positive electrode Young's modulus [Pa]": {
+                    "print_name": None,
+                    "bounds": (None, None),
+                },
             }
 
     if degradation_mode == "SEI":

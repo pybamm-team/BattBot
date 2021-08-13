@@ -58,7 +58,7 @@ class Tweet(Upload):
 
         if os.path.exists("plot.gif"):
             self.plot = "plot.gif"
-        else:
+        elif os.path.exists("plot.png"):
             self.plot = "plot.png"
         self.total_bytes = os.path.getsize(self.plot)
         self.config = None
