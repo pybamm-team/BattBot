@@ -77,10 +77,11 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                     config["models_for_comp"],
                     config["chemistry"],
                     config["is_experiment"],
+                    config["params"],
                     config["cycle"],
                     config["number"],
-                    config["reply_overrides"],
                     config["param_to_vary_info"],
+                    config["varied_values_override"]
                 )
 
                 # create a GIF
