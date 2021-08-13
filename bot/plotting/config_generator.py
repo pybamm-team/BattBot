@@ -169,16 +169,6 @@ def config_generator(
                 },
             )
 
-        # remove "Current function [A]" from the dict if simulating an
-        # experiment and add it back if not an experiment
-        # (adding it back because pop edits the original dict)
-        if is_experiment and "Current function [A]" in param_to_vary_dict:
-            param_to_vary_dict.pop("Current function [A]")
-        elif not is_experiment and "Current function [A]" not in param_to_vary_dict:
-            param_to_vary_dict.update(
-                {"Current function [A]": {"print_name": None, "bounds": (None, None)}}
-            )
-
         # choosing a parameter to be varied
         if choice == "parameter comparison":
             param_to_vary = random.choice(list(param_to_vary_dict.keys()))
