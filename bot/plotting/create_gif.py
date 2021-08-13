@@ -71,3 +71,6 @@ def create_gif(batch_study, labels=None):
 
     # resizing the GIF for Twitter
     resize_gif("plot.gif", resize_to=(1440, 1440))
+
+    if os.path.getsize("plot.gif") >= 15728640:    # pragma: no cover
+        resize_gif("plot.gif", resize_to=(1080, 1080))
