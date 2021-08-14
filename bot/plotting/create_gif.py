@@ -60,10 +60,9 @@ def create_gif(batch_study, labels=None):
     print("PLOTS CREATED")
 
     # compiling the plots to create a GIF
-    with imageio.get_writer('plot1.gif', mode='I', duration=0.1) as writer:
+    with imageio.get_writer("plot.gif", mode="I", duration=0.1) as writer:
         for image in images:
             writer.append_data(imageio.imread(image))
-
 
     print("GIF CREATED")
 
@@ -73,5 +72,5 @@ def create_gif(batch_study, labels=None):
     # resizing the GIF for Twitter
     resize_gif("plot.gif", resize_to=(1440, 1440))
 
-    if os.path.getsize("plot.gif") >= 15728640:    # pragma: no cover
+    if os.path.getsize("plot.gif") >= 15728640:  # pragma: no cover
         resize_gif("plot.gif", resize_to=(1080, 1080))
