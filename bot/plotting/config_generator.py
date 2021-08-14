@@ -128,7 +128,7 @@ def config_generator(
                     degradation_mode: degradation_value,
                     "loss of active material": "stress-driven"
                     if degradation_mode == "particle mechanics"
-                    else None,
+                    else 'none',
                     "SEI porosity change": random.choice(["true", "false"])
                     if degradation_mode == "SEI"
                     else "false",
