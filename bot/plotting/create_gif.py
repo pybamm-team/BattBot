@@ -31,7 +31,6 @@ def create_gif(batch_study, labels=None):
     time_array = np.linspace(int(t.entries[0]), final_time, num=80)
 
     images = []
-    image_files = []
 
     output_variables = [
         "Negative particle surface concentration [mol.m-3]",
