@@ -1,6 +1,7 @@
 import os
 import time
 import pybamm
+from PIL import Image
 import matplotlib.pyplot as plt
 from twitter_api.upload import Upload
 from utils.custom_process import Process
@@ -120,11 +121,15 @@ class Reply(Upload):
                 + f"Some tweet examples - {request_examples}"
             )
 
+        # parameter values
+        params = pybamm.ParameterValues(chemistry=chemistry)
+
+        # update "Ambient temperature [K]" from the tweet text
         temp_is_present = False
         try:
             for x in text_list:
                 if x[-1] == "k" and len(x) > 1:
-                    temp = float(x[:-1])
+                    params["Ambient temperature [K]"] = float(x[:-1])
                     temp_is_present = True
                     break
         except Exception:
@@ -139,6 +144,7 @@ class Reply(Upload):
                     + f"273.15K. Some tweet examples - {request_examples}"
                 )
 
+        # update "Current function [A]" from the tweet text
         if "experiment" not in text_list:
             c_rate_is_present = False
             try:
@@ -146,7 +152,7 @@ class Reply(Upload):
                     if x[-1] == "c" and len(x) > 1:
                         c_rate = float(x[:-1])
                         c_rate_is_present = True
-                        current = (
+                        params["Current function [A]"] = (
                             c_rate
                             * pybamm.ParameterValues(chemistry=chemistry)[
                                 "Nominal cell capacity [A.h]"
@@ -165,9 +171,9 @@ class Reply(Upload):
                         + f"1C. Some tweet examples - {request_examples}"
                     )
 
+        # read the provided experiment
         if "experiment" in text_list:
             is_experiment = True
-            current = None
             try:
                 cycle = eval(
                     tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
@@ -198,10 +204,7 @@ class Reply(Upload):
                     "cycle": cycle,
                     "number": number,
                     "param_to_vary_info": None,
-                    "reply_overrides": {
-                        "Current function [A]": current,
-                        "Ambient temperature [K]": temp,
-                    },
+                    "params": params,
                 }
             )
 
@@ -292,7 +295,16 @@ class Reply(Upload):
                     self.upload_finalize()
 
                     # reply configuration
+                    img = Image.open("plot.gif").size
+                    if img[0] <= 1080:  # pragma: no cover
+                        status = (
+                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "   # noqa
+                            + "Please request a smaller simulation for a better quality GIF."   # noqa
+                        )
+                    else:
+                        status = None
                     reply = {
+                        "status": status,
                         "in_reply_to_status_id": mention._json["id"],
                         "auto_populate_reply_metadata": True,
                         "media_ids": self.media_id,

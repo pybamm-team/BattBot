@@ -22,7 +22,9 @@ class TestUpload(unittest.TestCase):
                 "number": None,
                 "param_to_vary_info": None,
                 "bounds": None,
-                "reply_overrides": None,
+                "params": pybamm.ParameterValues(
+                    chemistry=pybamm.parameter_sets.Chen2020
+                ),
             },
         )
 
