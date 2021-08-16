@@ -20,7 +20,7 @@ The parameter sets or the chemistries that you can use in a tweet (casing of the
 Adding ',', ':' or '-' anywhere in the tweet text won't affect the simulation.
 Casing of the experiment conditions should be correct, other than that it won't affect the simulation.
  - Providing `models`.
- Provide only 1 model for `"parameter comparison"` and more 2 or more than 2 models for `"model comparison"`. For example -
+ Provide only 1 model for `"parameter comparison"` and 2 or more models for `"model comparison"`. For example -
  ```
  <space or no character>SPM<space or no character>
  SPM, SPMe and DFN model
