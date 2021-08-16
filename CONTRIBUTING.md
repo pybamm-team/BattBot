@@ -25,17 +25,22 @@ This will install all the dependencies in your local system including the develo
 4. To check if the installation worked, execute (this will take some time) - 
 ```bash
 python -m unittest
+# or if you haven't completed the pre-installation process, this -
+python -m unittest discover ./test/without_keys/
 ```
-**Note: The tests written in `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
+**Note: The tests written in `with_keys` subdirectory will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
 
 ## Workflow
 1. If you find something that is wrong or something that can be improved, you can open up an [issue](https://github.com/pybamm-team/BattBot/issues) for discussing the topic with others.
 2. Once you take up the issue (or a pre-existing issue), you can proceed with creating a branch on your fork.
 3. Once you are done with the changes, you can test your code and the coverage by running -
 ```bash
-coverage run -m unittest
+echo "COVERAGE_PROCESS_START=$PWD/.coveragerc"  # to enable coverage to run tests in subprocesses
+coverage run --concurrency=multiprocessing -m unittest
+# or if you haven't completed the pre-installation process
+coverage run --concurrency=multiprocessing -m unittest discover -s test/without_keys
 coverage combine
-coverage report  # for a better visualisation, you can run coverage html
+coverage report  # for a better visualisation, you can run - coverage html
 ```
 Once this executes, you will be able to see if any tests are failing or if the coverage dropped. You can always create a PR to get even better test/coverage suggestions and reviews.
 
@@ -46,7 +51,7 @@ Once this executes, you will be able to see if any tests are failing or if the c
 
  - All the replying process is being carried out by Heroku, hence the `Procfile`, `requirements.txt`, `runtime.txt` and `last_seen_id.txt` should be checked thoroughly before merging the code in the main (deployed) branch.
 
- - This does not mean that the failing `test_tweet_plot.py`, `test_api_keys.py` and `test_tweet_reply.py` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
+ - This does not mean that the failing `with_keys` tests will pass (even if everything is working) on a PR as a PR from a fork cannot pull the `Twitter API Keys` from repository secrets due to security reasons.
 
  - This however also does not mean that the tests will fail, only the tests which do not require the `Twitter API keys` will run on the PRs from a fork. This might effect the coverage but the other tests will pass.
 
@@ -77,8 +82,8 @@ Code coverage (how much of our code is actually seen by the (linux) unit tests) 
 
 ## Pre-commit checks
 1. Style `$ flake8`
-2. Tests `$ coverage run -m unittest` or `$ python -m unittest`
-- The `test_tweet_plot.py` will fail if you don't have the `Twitter API Keys`, you can always create a PR to run these tests on `GitHub Actions`.
-- Use `$ coverage run -m unittest` if you want to check the coverage locally.
+2. Tests `$ coverage run --concurrency=multiprocessing -m unittest` or `$ python -m unittest`
+- The tests in `with_keys` subdirectory will fail if you don't have the `Twitter API Keys`.
+- Use `$ coverage run --concurrency=multiprocessing -m unittest` if you want to check the coverage locally.
 3. coverage `$ coverage report` or `$ coverage html`
 - You can also directly create a PR after the tests pass to get a better coverage visualisation.
