@@ -90,7 +90,7 @@ class DegradationComparisonGenerator:
 
     def solve(self):
         """
-        Solves an expeiment with the given configuration.
+        Solves an experiment with the given configuration.
         """
         if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
             experiment = pybamm.Experiment(self.cycle * self.number)
