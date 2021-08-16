@@ -25,6 +25,7 @@ class TestUpload(unittest.TestCase):
                 "params": pybamm.ParameterValues(
                     chemistry=pybamm.parameter_sets.Chen2020
                 ),
+                "varied_values_override": None,
             },
         )
 

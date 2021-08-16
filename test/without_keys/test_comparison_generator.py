@@ -47,6 +47,34 @@ class TestComparisonGenerator(unittest.TestCase):
         )
         self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
 
+        comparison_generator = ComparisonGenerator(
+            models_for_comp=self.model_for_comp,
+            chemistry=self.chemistry,
+            is_experiment=self.is_experiment,
+            param_to_vary_info=self.param_to_vary_info,
+            params=self.params,
+            varied_values_override=[5.2, 5.4, 5.6],
+        )
+
+        comparison_generator.parameter_comparison()
+
+        self.assertIsInstance(
+            comparison_generator.comparison_dict["varied_values"], list
+        )
+        self.assertIsInstance(comparison_generator.comparison_dict["params"], dict)
+        self.assertEqual(
+            comparison_generator.comparison_dict["params"][0]["Current function [A]"],
+            5.2,
+        )
+        self.assertEqual(
+            comparison_generator.comparison_dict["params"][1]["Current function [A]"],
+            5.4,
+        )
+        self.assertEqual(
+            comparison_generator.comparison_dict["params"][2]["Current function [A]"],
+            5.6,
+        )
+
         assert os.path.exists("plot.gif")
 
         comparison_generator = ComparisonGenerator(

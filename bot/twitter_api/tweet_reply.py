@@ -71,6 +71,12 @@ class Reply(Upload):
             i for i, x in enumerate(text_list) if x == "single" or "spm" in x
         ]
 
+        if "compare" not in text_list and "vary" not in text_list:
+            raise Exception(
+                "I'm sorry, I couldn't understand the requested simulation. "
+                + f"Some tweet examples - {request_examples}"
+            )
+
         # if there are, append SPM and SPMe to models
         if len(single_indices) > 1:
             models.append(pybamm.lithium_ion.SPM())
@@ -100,10 +106,9 @@ class Reply(Upload):
                 "Please provide atleast 2 models. Some tweet examples - "
                 + f"{request_examples}"
             )
-        elif len(models) == 0:
+        elif len(models) != 1 and "vary" in text_list:
             raise Exception(
-                "Please provide atleast 1 model. Some tweet examples - "
-                + f"{request_examples}"
+                "Please provide a model. Some tweet examples - " + f"{request_examples}"
             )
 
         models_for_comp = dict(list(enumerate(models)))
@@ -172,11 +177,29 @@ class Reply(Upload):
                     )
 
         # read the provided experiment
-        if "experiment" in text_list:
+        if "experiment" in text_list and "vary" not in text_list:
             is_experiment = True
             try:
                 cycle = eval(
                     tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
+                )
+                number = int(tweet_text[tweet_text.index("*") + 2])
+                pybamm.Experiment(cycle * number)
+            except Exception:
+                raise Exception(
+                    "Please provide experiment in the format - "
+                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa
+                    + f" Some tweet examples - {request_examples}",
+                )
+        # having varied values in the text makes the process of extraction of experiment
+        # a bit tricky -
+        # "Electrode height [m]" with values [x, y, z] with experiment [(a), (b), (c)]
+        # so the script starts looking for "[" and "]" from the end
+        elif "experiment" in text_list and "vary" in text_list:
+            is_experiment = True
+            try:
+                cycle = eval(
+                    tweet_text[tweet_text.rindex("["):tweet_text.rindex("]") + 1]
                 )
                 number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
@@ -198,21 +221,75 @@ class Reply(Upload):
 
             reply_config.update(
                 {
-                    "chemistry": chemistry,
-                    "models_for_comp": models_for_comp,
-                    "is_experiment": is_experiment,
-                    "cycle": cycle,
-                    "number": number,
+                    "varied_values_override": None,
                     "param_to_vary_info": None,
                     "params": params,
                 }
             )
+        elif "vary" in text_list:
 
-        else:
-            raise Exception(
-                "I'm sorry, I couldn't understand the requested simulation. "
-                + f"Some tweet examples - {request_examples}"
-            )
+            choice = "parameter comparison"
+
+            try:
+                # extract the varied parameter
+                param_to_vary = tweet_text[
+                    tweet_text.index('"'):tweet_text.index(
+                        '"', tweet_text.index('"') + 1
+                    )
+                    + 1
+                ].replace('"', "")
+                params[param_to_vary]
+
+                # extract the varied values
+                # if an experiment is provided
+                if is_experiment:
+                    # if the varied parameter has units / dimensions
+                    if tweet_text.count("]") > 2:
+                        varied_values = eval(
+                            tweet_text[
+                                tweet_text.index(
+                                    "[", tweet_text.index("]") + 1
+                                ):tweet_text.index("]", tweet_text.index("]") + 1)
+                                + 1
+                            ]
+                        )
+                    # if the varied parameter does not have units / dimensions
+                    elif tweet_text.count("]") == 2:
+                        varied_values = eval(
+                            tweet_text[
+                                tweet_text.index("["):tweet_text.index("]") + 1
+                            ]
+                        )
+                else:
+                    varied_values = eval(
+                        tweet_text[tweet_text.rindex("["):tweet_text.rindex("]") + 1]
+                    )
+
+                reply_config.update(
+                    {
+                        "varied_values_override": varied_values,
+                        "param_to_vary_info": {
+                            param_to_vary: {"print_name": None, "bounds": (None, None)}
+                        },
+                    }
+                )
+            except Exception:
+                raise Exception(
+                    "Please provide a parameter to vary and the varied values in the "
+                    + 'format - "Parameter to vary" with the values [1, 2, 3]. '
+                    + f"Some tweet examples - {request_examples}"
+                )
+
+        reply_config.update(
+            {
+                "chemistry": chemistry,
+                "models_for_comp": models_for_comp,
+                "is_experiment": is_experiment,
+                "cycle": cycle,
+                "number": number,
+                "params": params,
+            }
+        )
 
         # generate the simulation and GIF
         return_dict = {}

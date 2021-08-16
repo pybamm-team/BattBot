@@ -81,6 +81,7 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                     config["cycle"],
                     config["number"],
                     config["param_to_vary_info"],
+                    config["varied_values_override"]
                 )
 
                 # create a GIF
