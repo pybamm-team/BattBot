@@ -331,7 +331,7 @@ class Reply(Upload):
 
                     p.start()
                     # time-out
-                    p.join(600)
+                    p.join(1200)
 
                     # if the process is alive after 10 minutes
                     if p.is_alive():  # pragma: no cover
@@ -339,9 +339,9 @@ class Reply(Upload):
                             "@"
                             + mention.user.screen_name
                             + " Hi there! The simulation took more than "
-                            + "10 minutes and hence, it was cancelled."
-                            + "Please try again with a simpler simulation ",
-                            +"(this feature is still in the testing phase).",
+                            + "20 minutes and hence, it was cancelled."
+                            + "Please try again with a simpler simulation "
+                            + "(this feature is still in the testing phase).",
                             mention._json["id"],
                         )
 
