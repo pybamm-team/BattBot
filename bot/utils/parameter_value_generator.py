@@ -45,7 +45,7 @@ def parameter_value_generator(
             new_parameter_value = desired_decimal_point_generator(
                 bounds[0] if bounds[0] is not None else base_value*0.5,
                 bounds[1] if bounds[1] is not None else base_value*2,
-                2
+                5
             )
             params[parameter] = FunctionLike(
                 params[parameter], new_parameter_value
@@ -55,7 +55,7 @@ def parameter_value_generator(
             new_parameter_value = desired_decimal_point_generator(
                 bounds[0] if bounds[0] is not None else base_value*0.5,
                 bounds[1] if bounds[1] is not None else base_value*2,
-                2
+                5
             )
             params[parameter] = new_parameter_value
 

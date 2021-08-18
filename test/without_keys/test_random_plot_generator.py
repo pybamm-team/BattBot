@@ -21,7 +21,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
             "lithium plating porosity change",
         ]
 
-        model = pybamm.lithium_ion.DFN(options={"SEI": "ec reaction limited"})
+        model = pybamm.lithium_ion.DFN()
         cycle = [
             (
                 "Discharge at C/10 for 10 hours or until 3.3 V",
@@ -33,16 +33,27 @@ class TestRandomPlotGenerator(unittest.TestCase):
         ]
         number = 2
         chemistry = pybamm.parameter_sets.Chen2020
+        degradation_parameter = "Ambient temperature [K]"
+
+        param_values = []
+        for i in range(2):
+            param_values.append(
+                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
+            )
+            param_values[i]["Ambient temperature [K]"] = [290, 285, 295][i]
 
         return_dict = {}
         random_plot_generator(
             return_dict,
-            "degradation comparison (summary variables)",
+            "degradation comparison",
             {
                 "model": model,
                 "cycle": cycle,
                 "number": number,
                 "chemistry": chemistry,
+                "degradation_parameter": degradation_parameter,
+                "varied_values": [290, 285, 295],
+                "param_values": param_values
             },
         )
 
@@ -55,6 +66,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertEqual(return_dict["number"], number)
         self.assertTrue(return_dict["is_experiment"])
         self.assertFalse(return_dict["is_comparison"])
+        self.assertIsInstance(return_dict["param_to_vary"], str)
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
         manager = multiprocessing.Manager()
@@ -65,7 +77,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 target=random_plot_generator,
                 args=(
                     return_dict,
-                    "degradation comparison (summary variables)",
+                    "degradation comparison",
                 ),
             )
             p.start()
@@ -98,6 +110,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
+
+        model = pybamm.lithium_ion.DFN()
 
         while True:
             p = multiprocessing.Process(

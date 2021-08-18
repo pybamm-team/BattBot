@@ -26,6 +26,7 @@ jobs:
         flake8 --max-line-length=89
 
   build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     needs: style
     runs-on: ${{ matrix.os }}
     strategy:
@@ -71,7 +72,7 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git pull origin main
         python -m twitter_api.sync_last_seen_id
-        git commit --allow-empty -m "Update last_seen_id - [skip ci]" -a
+        git commit --allow-empty -m "Update last_seen_id - skip ci" -a
       env:
         ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
         ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}

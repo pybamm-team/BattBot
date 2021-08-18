@@ -1,9 +1,8 @@
 import pybamm
 import logging
-from experiment.experiment_solver import experiment_solver
-from plotting.summary_variables import generate_summary_variables
-from plotting.comparison_generator import ComparisonGenerator
 from plotting.config_generator import config_generator
+from plotting.comparison_generator import ComparisonGenerator
+from plotting.degradation_comparison_generator import DegradationComparisonGenerator
 
 
 def random_plot_generator(return_dict, choice, reply_config=None):
@@ -35,26 +34,20 @@ def random_plot_generator(return_dict, choice, reply_config=None):
 
             logger.info(config)
 
-            if choice == ("degradation comparison (summary variables)"):
+            if choice == "degradation comparison":
 
-                if (
-                    config["chemistry"] == pybamm.parameter_sets.Ai2020
-                ):  # pragma: no cover
-                    experiment = pybamm.Experiment(config["cycle"] * config["number"])
-                else:  # pragma: no cover
-                    experiment = pybamm.Experiment(
-                        config["cycle"] * config["number"], termination="80% capacity"
-                    )
-
-                # solving
-                (sim, solution, parameter_values) = experiment_solver(
-                    model=config["model"],
-                    experiment=experiment,
-                    chemistry=config["chemistry"],
+                degradation_comparison_generator = DegradationComparisonGenerator(
+                    config["model"],
+                    config["chemistry"],
+                    config["param_values"],
+                    config["degradation_parameter"],
+                    config["cycle"],
+                    config["number"],
                 )
 
-                # plotting summary variables
-                generate_summary_variables(solution, config["chemistry"])
+                # solving the configuration and creating the plot
+                degradation_comparison_generator.solve()
+                degradation_comparison_generator.generate_summary_variables()
 
                 return_dict.update(
                     {
@@ -64,6 +57,8 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                         "cycle": config["cycle"],
                         "number": config["number"],
                         "is_comparison": False,
+                        "param_to_vary": config["degradation_parameter"],
+                        "varied_values": config["varied_values"]
                     }
                 )
 
@@ -104,9 +99,7 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                         "varied_values": comparison_generator.comparison_dict[
                             "varied_values"
                         ],
-                        "params": comparison_generator.comparison_dict[
-                            "params"
-                        ],
+                        "params": comparison_generator.comparison_dict["params"],
                     }
                 )
 

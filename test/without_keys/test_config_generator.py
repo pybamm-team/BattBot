@@ -5,7 +5,7 @@ from bot.plotting.config_generator import config_generator
 
 class TestConfigGenerator(unittest.TestCase):
     def test_config_generator(self):
-        config = config_generator("degradation comparison (summary variables)")
+        config = config_generator("degradation comparison")
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
@@ -13,13 +13,21 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
+        self.assertIsInstance(config["degradation_parameter"], str)
+        self.assertIsInstance(config["degradation_mode"], str)
+        self.assertIsInstance(config["degradation_value"], str)
+        self.assertIsInstance(config["varied_values"], list)
+        self.assertIsInstance(config["param_values"], list)
+        for param in config["param_values"]:
+            self.assertIsInstance(param, pybamm.ParameterValues)
 
         config = config_generator(
-            "degradation comparison (summary variables)",
+            "degradation comparison",
             test_config={
                 "chemistry": pybamm.parameter_sets.Ai2020,
                 "is_experiment": None,
                 "number_of_comp": None,
+                "degradation_mode": None,
             },
         )
 
@@ -29,13 +37,69 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
+        self.assertIsInstance(config["degradation_parameter"], str)
+        self.assertIsInstance(config["degradation_mode"], str)
+        self.assertIsInstance(config["degradation_value"], str)
+        self.assertIsInstance(config["varied_values"], list)
+        self.assertIsInstance(config["param_values"], list)
+        for param in config["param_values"]:
+            self.assertIsInstance(param, pybamm.ParameterValues)
 
         config = config_generator(
-            "degradation comparison (summary variables)",
+            "degradation comparison",
+            test_config={
+                "chemistry": pybamm.parameter_sets.Mohtat2020,
+                "is_experiment": None,
+                "number_of_comp": None,
+                "degradation_mode": "particle mechanics",
+            },
+        )
+
+        self.assertIsInstance(config, dict)
+        self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
+        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["cycle"], list)
+        self.assertIsInstance(config["number"], int)
+        pybamm.Experiment(config["cycle"] * config["number"])
+        self.assertIsInstance(config["degradation_parameter"], str)
+        self.assertIsInstance(config["degradation_mode"], str)
+        self.assertIsInstance(config["degradation_value"], str)
+        self.assertIsInstance(config["varied_values"], list)
+        self.assertIsInstance(config["param_values"], list)
+        for param in config["param_values"]:
+            self.assertIsInstance(param, pybamm.ParameterValues)
+
+        config = config_generator(
+            "degradation comparison",
+            test_config={
+                "chemistry": pybamm.parameter_sets.Mohtat2020,
+                "is_experiment": None,
+                "number_of_comp": None,
+                "degradation_mode": "SEI",
+            },
+        )
+
+        self.assertIsInstance(config, dict)
+        self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
+        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["cycle"], list)
+        self.assertIsInstance(config["number"], int)
+        pybamm.Experiment(config["cycle"] * config["number"])
+        self.assertIsInstance(config["degradation_parameter"], str)
+        self.assertIsInstance(config["degradation_mode"], str)
+        self.assertIsInstance(config["degradation_value"], str)
+        self.assertIsInstance(config["varied_values"], list)
+        self.assertIsInstance(config["param_values"], list)
+        for param in config["param_values"]:
+            self.assertIsInstance(param, pybamm.ParameterValues)
+
+        config = config_generator(
+            "degradation comparison",
             test_config={
                 "chemistry": pybamm.parameter_sets.Chen2020,
                 "is_experiment": None,
                 "number_of_comp": None,
+                "degradation_mode": None,
             },
         )
 
@@ -45,6 +109,13 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
+        self.assertIsInstance(config["degradation_parameter"], str)
+        self.assertIsInstance(config["degradation_mode"], str)
+        self.assertIsInstance(config["degradation_value"], str)
+        self.assertIsInstance(config["varied_values"], list)
+        self.assertIsInstance(config["param_values"], list)
+        for param in config["param_values"]:
+            self.assertIsInstance(param, pybamm.ParameterValues)
 
         config = config_generator("parameter comparison")
 
@@ -98,6 +169,7 @@ class TestConfigGenerator(unittest.TestCase):
                 "chemistry": None,
                 "is_experiment": False,
                 "number_of_comp": 2,
+                "degradation_mode": None,
             },
         )
 

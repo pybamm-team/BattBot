@@ -1,6 +1,7 @@
 import random
 import pybamm
 from experiment.experiment_generator import experiment_generator
+from utils.degradation_parameter_generator import degradation_parameter_generator
 from utils.parameter_value_generator import parameter_value_generator
 
 # possible chemistries for the bot
@@ -12,6 +13,7 @@ chemistries = [
 
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters
 particle_mechanics_list = [
+    "swelling only",
     "swelling and cracking",
 ]
 
@@ -66,7 +68,12 @@ param_to_vary_dict = {
 
 def config_generator(
     choice,
-    test_config={"chemistry": None, "is_experiment": None, "number_of_comp": None},
+    test_config={
+        "chemistry": None,
+        "is_experiment": None,
+        "number_of_comp": None,
+        "degradation_mode": None,
+    },
 ):
     """
     Generates a random configuration to plot.
@@ -87,26 +94,52 @@ def config_generator(
     # don't select randomly if testing
     if test_config["chemistry"] is not None:
         chemistry = test_config["chemistry"]
+    # use only Mohtat2020 and SPM till others are fixed
+    elif choice == "degradation comparison":
+        chemistry = pybamm.parameter_sets.Mohtat2020
     else:
         chemistry = random.choice(chemistries)
     parameter_values = pybamm.ParameterValues(chemistry=chemistry)
 
     # choose random degradation for a degradation comparison
-    if choice == "degradation comparison (summary variables)":
+    if choice == "degradation comparison":
 
         # add degradation / update model options
         if chemistry == pybamm.parameter_sets.Ai2020:
-            particle_mechanics = random.choice(particle_mechanics_list)
+            degradation_value = particle_mechanics_list[0]
+            degradation_mode = "particle mechanics"
             model_options.update(
                 {
-                    "particle mechanics": particle_mechanics,
+                    degradation_mode: degradation_value,
+                }
+            )
+        elif chemistry == pybamm.parameter_sets.Mohtat2020:
+            if test_config["degradation_mode"] is None:
+                degradation_mode = random.choice(["SEI", "particle mechanics"])
+            else:
+                degradation_mode = test_config["degradation_mode"]
+
+            if degradation_mode == "particle mechanics":
+                degradation_value = particle_mechanics_list[0]
+            elif degradation_mode == "SEI":
+                degradation_value = random.choice(sei_list)
+            model_options.update(
+                {
+                    degradation_mode: degradation_value,
+                    "loss of active material": "stress-driven"
+                    if degradation_mode == "particle mechanics"
+                    else 'none',
+                    "SEI porosity change": random.choice(["true", "false"])
+                    if degradation_mode == "SEI"
+                    else "false",
                 }
             )
         else:
-            sei = random.choice(sei_list)
+            degradation_value = random.choice(sei_list)
+            degradation_mode = "SEI"
             model_options.update(
                 {
-                    "SEI": sei,
+                    degradation_mode: degradation_value,
                 }
             )
 
@@ -192,26 +225,45 @@ def config_generator(
                 if param_to_vary is not None
                 else None,
                 "params": params,
-                "varied_values_override": None
+                "varied_values_override": None,
             }
         )
 
-    elif choice == "degradation comparison (summary variables)":
+    elif choice == "degradation comparison":
 
         # choosing a random model
-        model = random.choice(models)
+        model = models[1]
 
         # choosing a random experiment
         cycle = experiment_generator()
         number = random.randint(4, 100)
 
+        number_of_comp = random.randint(2, 3)
+
+        # generating a random parameter to vary and the parameter values after
+        # varying it
+        param_values, degradation_parameter = degradation_parameter_generator(
+            chemistry,
+            number_of_comp,
+            degradation_mode=degradation_mode,
+            degradation_value=degradation_value,
+        )
+
+        varied_values = [x[degradation_parameter] for x in param_values]
+
         # updating the config dictionary
         config.update(
             {
+                "number_of_comp": number_of_comp,
                 "model": model,
                 "chemistry": chemistry,
                 "cycle": cycle,
                 "number": number,
+                "degradation_mode": degradation_mode,
+                "degradation_value": degradation_value,
+                "param_values": param_values,
+                "degradation_parameter": degradation_parameter,
+                "varied_values": varied_values,
             }
         )
 
