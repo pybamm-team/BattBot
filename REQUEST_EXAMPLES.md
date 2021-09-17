@@ -22,7 +22,7 @@ The parameter sets or the chemistries that you can use in a tweet (casing of the
 ## Compare 2 or more models with a constant discharge or with an experiment
 ### Some examples -
 ```
-@battbot_ compare SPM and SPMe for a constant dicharge of 1.25C at 290K with Chen2020 parameters #battbot.
+@battbot_ compare SPM and SPMe for a constant discharge of 1.25C at 290K with Chen2020 parameters #battbot.
 @battbot_ #battbot can you compare Single particle model, Single particle model with electrolyte and DFN model at 300K with a c-rate of 0.5C with Marquis2019 chemistry?
 @battbot_ #battbot compare spm, spme DFN model with a constant dicharge of 0.75C with Ai2020 at 280K
 @battbot #battbot compare spm and spme with chen2020 parameters with the experiment - [('Discharge at C/10 for 10 hours or until 3.3 V','Rest for 1 hour','Charge at 1 A until 4.1 V','Hold at 4.1 V until 50 mA','Rest for 1 hour')] * 3 at 298K
