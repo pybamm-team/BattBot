@@ -345,6 +345,8 @@ class Reply(Upload):
                             mention._json["id"],
                         )
 
+                        p.kill()
+                        p.join()
                         return
 
                     # if there was an Exception in the process
@@ -355,6 +357,8 @@ class Reply(Upload):
                             mention._json["id"],
                         )
 
+                        p.kill()
+                        p.join()
                         return
 
                     # finding the file which has to be tweeted
