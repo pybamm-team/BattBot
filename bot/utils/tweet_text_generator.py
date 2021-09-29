@@ -1,5 +1,14 @@
 def tweet_text_generator(
-    chemistry, model, is_experiment, cycle, number, is_comparison, param_to_vary, params
+    chemistry,
+    model,
+    is_experiment,
+    cycle,
+    number,
+    is_comparison,
+    param_to_vary,
+    params,
+    degradation_mode,
+    degradation_value,
 ):
     """
     Generates tweet text.
@@ -13,6 +22,8 @@ def tweet_text_generator(
         param_to_vary: str or None
         params: dict
             To be used when varied values have to be added to the tweet text.
+        degradation_mode: str or None
+        degradation_value: str or None
     Returns
         tweet_text: str
         experiment: str or None
@@ -30,9 +41,9 @@ def tweet_text_generator(
     # summary variable
     if is_experiment and not is_comparison:
         tweet_text = (
-            f"Summary variables for {model.name} with "
-            f"{chemistry['citation']} parameters for the following "
-            f"experiment: {cycle} * {number}"
+            f"Plotting {model.name} with {chemistry['citation']} "
+            f"parameters and {degradation_value} {degradation_mode} "
+            f"for the experiment: {cycle} * {number}"
         )
 
     # simulating an experiment

@@ -75,6 +75,16 @@ class Tweet(Upload):
             if choice == "model comparison" or choice == "parameter comparison"
             else None
         )
+        self.degradation_mode = (
+            return_dict["degradation_mode"]
+            if "degradation_mode" in return_dict
+            else None
+        )
+        self.degradation_value = (
+            return_dict["degradation_value"]
+            if "degradation_value" in return_dict
+            else None
+        )
         self.testing = testing
 
     def write_config(self, filename, append=False):  # pragma: no cover
@@ -131,6 +141,8 @@ class Tweet(Upload):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
         print(tweet_status)
 

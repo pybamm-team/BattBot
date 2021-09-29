@@ -236,7 +236,7 @@ def config_generator(
 
         # choosing a random experiment
         cycle = experiment_generator()
-        number = random.randint(4, 100)
+        number = random.randint(300, 500)
 
         number_of_comp = random.randint(2, 3)
 
@@ -254,7 +254,6 @@ def config_generator(
         # updating the config dictionary
         config.update(
             {
-                "number_of_comp": number_of_comp,
                 "model": model,
                 "chemistry": chemistry,
                 "cycle": cycle,
