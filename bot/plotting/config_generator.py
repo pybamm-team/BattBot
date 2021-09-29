@@ -236,8 +236,7 @@ def config_generator(
 
         # choosing a random experiment
         cycle = experiment_generator()
-        number = random.randint(300, 500)
-
+        number = 500
         number_of_comp = random.randint(2, 3)
 
         # generating a random parameter to vary and the parameter values after
