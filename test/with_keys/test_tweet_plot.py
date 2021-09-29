@@ -27,6 +27,8 @@ class TestTweet(unittest.TestCase):
         self.assertIsInstance(tweet.param_to_vary, str)
         self.assertIsInstance(tweet.varied_values, list)
         self.assertIsNone(tweet.params)
+        self.assertIsInstance(tweet.degradation_mode, str)
+        self.assertIsInstance(tweet.degradation_value, str)
 
         tweet.upload_init()
 
@@ -53,6 +55,8 @@ class TestTweet(unittest.TestCase):
         self.assertIsInstance(tweet.testing, bool)
         self.assertIsInstance(tweet.varied_values, dict)
         self.assertIsInstance(tweet.params, dict)
+        self.assertIsNone(tweet.degradation_mode, None)
+        self.assertIsNone(tweet.degradation_value, None)
 
         tweet.upload_init()
 
@@ -82,6 +86,8 @@ class TestTweet(unittest.TestCase):
         self.assertIsInstance(tweet.testing, bool)
         self.assertIsInstance(tweet.varied_values, list)
         self.assertIsInstance(tweet.params, dict)
+        self.assertIsNone(tweet.degradation_mode, None)
+        self.assertIsNone(tweet.degradation_value, None)
 
         tweet.upload_init()
 

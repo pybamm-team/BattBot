@@ -27,6 +27,8 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.is_comparison = False
         self.param_to_vary = None
         self.params = dict(list(enumerate([self.params])))
+        self.degradation_mode = "SEI"
+        self.degradation_value = "reaction limited"
 
     def test_tweet_text_generator(self):
         result, experiment = tweet_text_generator(
@@ -38,19 +40,21 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
-        self.assertIsNone(experiment)
         self.assertEqual(
             result,
-            f"Summary variables for {self.model.name} with "
-            f"{self.chemistry['citation']} parameters for the following "
-            f"experiment: {str(self.cycle)} * {self.number} "
-            "https://bit.ly/3z5p7q9",
+            f"Plotting {self.model.name} with {self.chemistry['citation']} "
+            f"parameters and {self.degradation_value} {self.degradation_mode} "
+            "for the following experiment \U0001F53D https://bit.ly/3z5p7q9"
         )
 
         self.is_comparison = True
         self.model = {0: pybamm.lithium_ion.DFN(), 1: pybamm.lithium_ion.SPM()}
+        self.degradation_mode = None
+        self.degradation_value = None
 
         result, experiment = tweet_text_generator(
             self.chemistry,
@@ -61,6 +65,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertEqual(experiment, str(self.cycle) + " * " + str(self.number))
@@ -86,6 +92,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertEqual(experiment, str(self.cycle) + " * " + str(self.number))
@@ -108,6 +116,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertEqual(experiment, str(self.cycle) + " * " + str(self.number))
@@ -132,6 +142,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertIsNone(experiment)
@@ -158,6 +170,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertIsNone(experiment)
@@ -180,6 +194,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertIsNone(experiment)
@@ -208,6 +224,8 @@ class TestTweetTextGenerator(unittest.TestCase):
             self.is_comparison,
             self.param_to_vary,
             self.params,
+            self.degradation_mode,
+            self.degradation_value,
         )
 
         self.assertEqual(experiment, str(self.cycle) + " * " + str(self.number))

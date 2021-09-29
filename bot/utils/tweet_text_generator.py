@@ -43,7 +43,7 @@ def tweet_text_generator(
         tweet_text = (
             f"Plotting {model.name} with {chemistry['citation']} "
             f"parameters and {degradation_value} {degradation_mode} "
-            f"for the experiment: {cycle} * {number}"
+            f"for the following experiment: {cycle} * {number}"
         )
 
     # simulating an experiment

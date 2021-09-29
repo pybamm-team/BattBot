@@ -13,7 +13,7 @@ def random_plot_generator(return_dict, choice, reply_config=None):
             A shared dictionary in which all the return values are stored.
         choice: str
             Can be "model comparison", "parameter comparison" or
-            "degradation comparison (summary variables)".
+            "degradation comparison".
         reply_config: dict
             Should be passed when the bot is replying to a requested
             simulation tweet.
