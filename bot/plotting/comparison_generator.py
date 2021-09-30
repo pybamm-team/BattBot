@@ -187,7 +187,7 @@ class ComparisonGenerator:
                 labels.append(
                     self.print_name
                     + " * "
-                    + "{:.2e}".format(params[self.param_to_vary])
+                    + "{:.2e}".format(float(params[self.param_to_vary].__str__()))
                 )
                 varied_values.append(float(params[self.param_to_vary].__str__()))
             else:
