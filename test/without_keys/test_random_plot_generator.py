@@ -53,7 +53,9 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 "chemistry": chemistry,
                 "degradation_parameter": degradation_parameter,
                 "varied_values": [290, 285, 295],
-                "param_values": param_values
+                "param_values": param_values,
+                "degradation_mode": "SEI",
+                "degradation_value": "reaction limited",
             },
         )
 
@@ -67,6 +69,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertTrue(return_dict["is_experiment"])
         self.assertFalse(return_dict["is_comparison"])
         self.assertIsInstance(return_dict["param_to_vary"], str)
+        self.assertEqual(return_dict["degradation_mode"], "SEI")
+        self.assertEqual(return_dict["degradation_value"], "reaction limited")
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
         manager = multiprocessing.Manager()

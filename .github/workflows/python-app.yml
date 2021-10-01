@@ -121,7 +121,7 @@ jobs:
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
         coverage run --concurrency=multiprocessing -m unittest discover -s test/without_keys
         coverage combine
-        
+
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1

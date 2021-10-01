@@ -68,6 +68,8 @@ class TestUpload(unittest.TestCase):
                 "degradation_parameter": "Ambient temperature [K]",
                 "varied_values": [280, 295],
                 "param_values": params,
+                "degradation_mode": "SEI",
+                "degradation_value": "reaction limited",
             },
         )
 

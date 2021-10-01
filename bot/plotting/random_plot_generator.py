@@ -13,7 +13,7 @@ def random_plot_generator(return_dict, choice, reply_config=None):
             A shared dictionary in which all the return values are stored.
         choice: str
             Can be "model comparison", "parameter comparison" or
-            "degradation comparison (summary variables)".
+            "degradation comparison".
         reply_config: dict
             Should be passed when the bot is replying to a requested
             simulation tweet.
@@ -58,7 +58,9 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                         "number": config["number"],
                         "is_comparison": False,
                         "param_to_vary": config["degradation_parameter"],
-                        "varied_values": config["varied_values"]
+                        "varied_values": config["varied_values"],
+                        "degradation_mode": config["degradation_mode"],
+                        "degradation_value": config["degradation_value"],
                     }
                 )
 
@@ -76,7 +78,7 @@ def random_plot_generator(return_dict, choice, reply_config=None):
                     config["cycle"],
                     config["number"],
                     config["param_to_vary_info"],
-                    config["varied_values_override"]
+                    config["varied_values_override"],
                 )
 
                 # create a GIF
