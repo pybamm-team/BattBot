@@ -83,7 +83,7 @@ class DegradationComparisonGenerator:
                     solution,
                     self.degradation_parameter
                     + ": "
-                    + str(self.param_values[i][self.degradation_parameter]),
+                    + "{:.2e}".format(self.param_values[i][self.degradation_parameter]),
                 ]
             )
         return sim, solutions_and_labels

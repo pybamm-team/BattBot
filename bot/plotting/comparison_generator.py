@@ -184,11 +184,17 @@ class ComparisonGenerator:
             # append the varied values in `labels` which will be used
             # in the GIF
             if self.print_name is not None:
-                labels.append(self.print_name + " * " + str(params[self.param_to_vary]))
+                labels.append(
+                    self.print_name
+                    + " * "
+                    + "{:.2e}".format(float(params[self.param_to_vary].__str__()))
+                )
                 varied_values.append(float(params[self.param_to_vary].__str__()))
             else:
                 labels.append(
-                    self.param_to_vary + ": " + str(params[self.param_to_vary])
+                    self.param_to_vary
+                    + ": "
+                    + "{:.2e}".format(params[self.param_to_vary])
                 )
                 varied_values.append(params[self.param_to_vary])
 
