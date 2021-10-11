@@ -133,12 +133,24 @@ class DegradationComparisonGenerator:
                 "y_0",
             ]
 
+        # config for subplots
         length = len(vars_to_plot)
         n = int(length // np.sqrt(length))
         m = int(np.ceil(length / n))
 
+        # create subplots
         fig, axes = plt.subplots(n, m, figsize=(15, 8))
+        # find max cycle number
+        x_max = max(
+            [
+                solution.summary_variables["Cycle number"][-1]
+                for solution in self.solutions
+            ]
+        )
+
+        # plot the summary variables
         for var, ax in zip(vars_to_plot, axes.flat):
+            # iterate through the solutions
             for solution in self.solutions:
                 ax.plot(
                     solution.summary_variables["Cycle number"],
@@ -146,8 +158,9 @@ class DegradationComparisonGenerator:
                 )
             ax.set_xlabel("Cycle number")
             ax.set_ylabel(var)
-            ax.set_xlim([1, solution.summary_variables["Cycle number"][-1]])
+            ax.set_xlim([1, x_max])
 
+        # save the generated plot
         fig.tight_layout()
         fig.legend(self.labels, loc="lower left", bbox_to_anchor=(0.77, -0.08))
         plt.savefig("plot.png", dpi=300, bbox_inches="tight")
