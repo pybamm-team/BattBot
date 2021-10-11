@@ -133,11 +133,11 @@ def degradation_parameter_generator(
             }
         elif chemistry == pybamm.parameter_sets.Mohtat2020:
             degradation_parameters = {
-                "Positive electrode LAM constant proportional term": {
+                "Positive electrode LAM constant proportional term [s-1]": {
                     "print_name": None,
                     "bounds": (None, None),
                 },
-                "Negative electrode LAM constant proportional term": {
+                "Negative electrode LAM constant proportional term [s-1]": {
                     "print_name": None,
                     "bounds": (None, None),
                 },
