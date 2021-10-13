@@ -81,8 +81,8 @@ def degradation_parameter_generator(
                 # Other
                 "Cell thermal expansion coefficient [m.K-1]": 1.48e-6,
                 "SEI kinetic rate constant [m.s-1]": 1e-15,
-                "Positive electrode LAM constant propotional term": 1e-3,
-                "Negative electrode LAM constant propotional term": 1e-3,
+                "Positive electrode LAM constant proportional term [s-1]": 1e-3,
+                "Negative electrode LAM constant proportional term [s-1]": 1e-3,
                 "EC diffusivity [m2.s-1]": 2e-18,
             },
             check_already_exists=False,
@@ -133,11 +133,11 @@ def degradation_parameter_generator(
             }
         elif chemistry == pybamm.parameter_sets.Mohtat2020:
             degradation_parameters = {
-                "Positive electrode LAM constant propotional term": {
+                "Positive electrode LAM constant proportional term [s-1]": {
                     "print_name": None,
                     "bounds": (None, None),
                 },
-                "Negative electrode LAM constant propotional term": {
+                "Negative electrode LAM constant proportional term [s-1]": {
                     "print_name": None,
                     "bounds": (None, None),
                 },
