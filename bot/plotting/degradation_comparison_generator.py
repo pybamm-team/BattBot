@@ -78,12 +78,13 @@ class DegradationComparisonGenerator:
             solution = sim.solution
 
             # storing solution with the corresponding label
+            val = self.param_values[i][self.degradation_parameter]
             solutions_and_labels.append(
                 [
                     solution,
                     self.degradation_parameter
                     + ": "
-                    + "{:.2e}".format(self.param_values[i][self.degradation_parameter]),
+                    + ("{:.5e}".format(val) if val > 10 or val < 1 else str(val)),
                 ]
             )
         return sim, solutions_and_labels
