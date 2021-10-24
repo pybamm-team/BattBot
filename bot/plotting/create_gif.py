@@ -26,11 +26,15 @@ def create_gif(batch_study, labels=None):
             max_time = sim.solution["Time [s]"].entries[-1]
             solution = sim.solution
 
+    print(max_time)
+
     t = solution["Time [s]"]
     final_time = int(t.entries[len(t.entries) - 1])
     time_array = np.linspace(int(t.entries[0]), final_time, num=80)
 
     images = []
+
+    print(time_array)
 
     output_variables = [
         "Negative particle surface concentration [mol.m-3]",
@@ -43,8 +47,11 @@ def create_gif(batch_study, labels=None):
         "Terminal voltage [V]",
     ]
 
+    print(output_variables)
+
     # creating 80 comparison plots
     for val in time_array:
+        print(images)
         plot = pybamm.QuickPlot(
             batch_study.sims,
             time_unit="seconds",

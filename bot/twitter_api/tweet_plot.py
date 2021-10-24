@@ -28,7 +28,7 @@ class Tweet(Upload):
         """
         super().__init__()
         # create a random GIF
-        # while True:
+
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
 
@@ -40,19 +40,33 @@ class Tweet(Upload):
         if choice is None:
             choice = random.choice(choice_list)
 
-        p = Process(target=random_plot_generator, args=(return_dict, choice))
+        random_plot_generator(return_dict, choice)
 
-        p.start()
-        # time-out
-        p.join(1200)
+        # while True:
+            # manager = multiprocessing.Manager()
+            # return_dict = manager.dict()
 
-        if p.is_alive():  # pragma: no cover
-            print(
-                "Simulation is taking too long, "
-                + "KILLING IT and starting a NEW ONE."
-            )
-            p.kill()
-            p.join()
+            # choice_list = [
+            #     "degradation comparison",
+            #     "model comparison",
+            #     "parameter comparison",
+            # ]
+            # if choice is None:
+            #     choice = random.choice(choice_list)
+
+            # p = Process(target=random_plot_generator, args=(return_dict, choice))
+
+            # p.start()
+            # # time-out
+            # p.join(1200)
+
+            # if p.is_alive():  # pragma: no cover
+            #     print(
+            #         "Simulation is taking too long, "
+            #         + "KILLING IT and starting a NEW ONE."
+            #     )
+            #     p.kill()
+            #     p.join()
             # else:  # pragma: no cover
             #     break
 
