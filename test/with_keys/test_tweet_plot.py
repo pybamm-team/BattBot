@@ -1,6 +1,6 @@
 import unittest
 import os
-import pybamm
+import pybamm   # noqa
 from bot.twitter_api.tweet_plot import Tweet
 
 
