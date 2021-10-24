@@ -5,7 +5,7 @@ import datetime
 import multiprocessing
 import matplotlib.pyplot as plt
 from twitter_api.upload import Upload
-# from utils.custom_process import Process
+from utils.custom_process import Process
 from plotting.random_plot_generator import random_plot_generator
 from utils.tweet_text_generator import tweet_text_generator
 
@@ -29,46 +29,33 @@ class Tweet(Upload):
         super().__init__()
         # create a random GIF
 
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
+        while True:
+            manager = multiprocessing.Manager()
+            return_dict = manager.dict()
 
-        choice_list = [
-            "degradation comparison",
-            "model comparison",
-            "parameter comparison",
-        ]
-        if choice is None:
-            choice = random.choice(choice_list)
+            choice_list = [
+                "degradation comparison",
+                "model comparison",
+                "parameter comparison",
+            ]
+            if choice is None:
+                choice = random.choice(choice_list)
 
-        random_plot_generator(return_dict, choice)
+            p = Process(target=random_plot_generator, args=(return_dict, choice))
 
-        # while True:
-        # manager = multiprocessing.Manager()
-        # return_dict = manager.dict()
+            p.start()
+            # time-out
+            p.join(1200)
 
-        # choice_list = [
-        #     "degradation comparison",
-        #     "model comparison",
-        #     "parameter comparison",
-        # ]
-        # if choice is None:
-        #     choice = random.choice(choice_list)
-
-        # p = Process(target=random_plot_generator, args=(return_dict, choice))
-
-        # p.start()
-        # # time-out
-        # p.join(1200)
-
-        # if p.is_alive():  # pragma: no cover
-        #     print(
-        #         "Simulation is taking too long, "
-        #         + "KILLING IT and starting a NEW ONE."
-        #     )
-        #     p.kill()
-        #     p.join()
-        # else:  # pragma: no cover
-        #     break
+            if p.is_alive():  # pragma: no cover
+                print(
+                    "Simulation is taking too long, "
+                    + "KILLING IT and starting a NEW ONE."
+                )
+                p.kill()
+                p.join()
+            else:  # pragma: no cover
+                break
 
         if os.path.exists("plot.gif"):
             self.plot = "plot.gif"
