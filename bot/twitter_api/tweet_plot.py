@@ -28,7 +28,6 @@ class Tweet(Upload):
         """
         super().__init__()
         # create a random GIF
-
         while True:
             manager = multiprocessing.Manager()
             return_dict = manager.dict()
