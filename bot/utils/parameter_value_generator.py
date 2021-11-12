@@ -1,6 +1,4 @@
-from utils.desired_decimal_point_generator import (
-    desired_decimal_point_generator
-)
+from utils.desired_decimal_point_generator import desired_decimal_point_generator
 
 
 # implementation by @tinosulzer
@@ -37,7 +35,7 @@ def parameter_value_generator(
             }
             where lower_bound and upper_bound can be either
             numerical or None.
-    
+
     Returns
     -------
         params : :class:`pybamm.ParameterValues`
@@ -48,19 +46,17 @@ def parameter_value_generator(
         if callable(params[parameter]):
             base_value = 1
             new_parameter_value = desired_decimal_point_generator(
-                bounds[0] if bounds[0] is not None else base_value*0.5,
-                bounds[1] if bounds[1] is not None else base_value*2,
-                5
+                bounds[0] if bounds[0] is not None else base_value * 0.5,
+                bounds[1] if bounds[1] is not None else base_value * 2,
+                5,
             )
-            params[parameter] = FunctionLike(
-                params[parameter], new_parameter_value
-            )
+            params[parameter] = FunctionLike(params[parameter], new_parameter_value)
         else:
             base_value = params[parameter]
             new_parameter_value = desired_decimal_point_generator(
-                bounds[0] if bounds[0] is not None else base_value*0.5,
-                bounds[1] if bounds[1] is not None else base_value*2,
-                5
+                bounds[0] if bounds[0] is not None else base_value * 0.5,
+                bounds[1] if bounds[1] is not None else base_value * 2,
+                5,
             )
             params[parameter] = new_parameter_value
 

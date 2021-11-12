@@ -130,7 +130,7 @@ def degradation_parameter_generator(
                 },
                 "Negative electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
                     "print_name": None,
-                    "bounds": (0., None),
+                    "bounds": (0.0, None),
                 },
                 "Positive electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
                     "print_name": None,

@@ -12,7 +12,7 @@ def tweet_text_generator(
 ):
     """
     Generates tweet text.
-    
+
     Parameters
     ----------
         chemistry : dict

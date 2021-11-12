@@ -306,7 +306,9 @@ class Reply(Upload):
 
         # generate the simulation and GIF
         return_dict = {}
-        random_plot_generator(return_dict, choice, reply_config=reply_config, testing=testing)
+        random_plot_generator(
+            return_dict, choice, reply_config=reply_config, testing=testing
+        )
 
     def reply(self):
         """
@@ -392,8 +394,8 @@ class Reply(Upload):
                     img = Image.open("plot.gif").size
                     if img[0] <= 1080:  # pragma: no cover
                         status = (
-                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "   # noqa
-                            + "Please request a smaller simulation for a better quality GIF."   # noqa
+                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "  # noqa
+                            + "Please request a smaller simulation for a better quality GIF."  # noqa
                         )
                     else:
                         status = None

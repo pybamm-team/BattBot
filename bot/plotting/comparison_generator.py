@@ -11,7 +11,7 @@ class ComparisonGenerator:
 
     Parameters
     ----------
-    
+
         models_for_comp : dict
             Models to be used in comparison. Should be of the form -
             {
