@@ -12,21 +12,26 @@ def tweet_text_generator(
 ):
     """
     Generates tweet text.
-    Parameters:
-        chemistry: dict
-        model: pybamm.BaseModel or dict
-        is_experiment: bool
-        cycle: list or None
-        number: numerical or None
-        is_comparison: bool
-        param_to_vary: str or None
-        params: dict
+    
+    Parameters
+    ----------
+        chemistry : dict
+        model : :class:`pybamm.BaseBatteryModel` or dict
+        is_experiment : bool
+        cycle : list or None
+        number : numerical or None
+        is_comparison : bool
+        param_to_vary : str or None
+        params : dict
             To be used when varied values have to be added to the tweet text.
-        degradation_mode: str or None
-        degradation_value: str or None
+        degradation_mode : str or None
+        degradation_value : str or None
+
     Returns
-        tweet_text: str
-        experiment: str or None
+    -------
+        tweet_text : str
+        experiment : str or None
+            Not none if the tweet text exceeds twitter limit.
     """
 
     if is_comparison:

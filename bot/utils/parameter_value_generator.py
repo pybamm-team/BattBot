@@ -25,9 +25,11 @@ def parameter_value_generator(
     """
     Generates random values for given parameters and
     plugs them in params.
-    Parameters:
-        params: pybamm.ParameterValues
-        parameter_dict: dict
+
+    Parameters
+    ----------
+        params : :class:`pybamm.ParameterValues`
+        parameter_dict : dict
             Parameters to be varied. Should be of the form -
             {
                 "parameter1": (lower_bound, upper_bound),
@@ -35,8 +37,11 @@ def parameter_value_generator(
             }
             where lower_bound and upper_bound can be either
             numerical or None.
-    Returns:
-        params: pybamm.ParameterValues
+    
+    Returns
+    -------
+        params : :class:`pybamm.ParameterValues`
+            Parameter values with a parameter varied.
     """
 
     for parameter, bounds in parameter_dict.items():

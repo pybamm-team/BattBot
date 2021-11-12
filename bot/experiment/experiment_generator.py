@@ -1,7 +1,5 @@
 import random
-from utils.desired_decimal_point_generator import (
-    desired_decimal_point_generator
-)
+from utils.desired_decimal_point_generator import desired_decimal_point_generator
 import logging
 
 
@@ -9,13 +7,18 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     """
     This function generates a random experiment with the template
     ["Discharge", "Rest?", "Charge", "Hold", "Rest?"].
-    Parameters:
-        testing: dict
-            default: {"rest1": False, "rest2": False}
+
+    Parameters
+    ----------
+
+        testing : dict
+            default : {"rest1": False, "rest2": False}
             This should only be used while testing, to generate some
             not so random experiments.
-    Returns:
-        cycle: list
+
+    Returns
+    -------
+        cycle : list
     """
     charge = []
     discharge = []

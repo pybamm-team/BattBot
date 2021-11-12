@@ -6,9 +6,12 @@ def resize_gif(path, resize_to):
     """
     Resizes the GIF to a given length
 
-    Parameters:
-        path: str
+    Parameters
+    ----------
+        path : str
+            Path of the GIF to resize.
         resize_to : tuple
+            Dimensions to be resize to.
     """
 
     all_frames = extract_and_resize_frames(path, resize_to)
@@ -26,8 +29,10 @@ def analyseImage(path):
     Necessary as assessing single frames isn't reliable. Need to know the mode
     before processing all frames.
 
-    Parameters:
-        path: str
+    Parameters
+    ----------
+        path : str
+            Path of the GIF to resize.
     """
     im = Image.open(path)
     results = {
@@ -57,11 +62,14 @@ def extract_and_resize_frames(path, resize_to):
     """
     Iterate the GIF, extracting each frame and resizing them
 
-    Parameter:
-        path: str
+    Parameter
+    ---------
+        path : str
+            Path of the GIF to resize.
 
-    Returns:
-        all_frames: list
+    Returns
+    -------
+        all_frames : list
     """
     mode = analyseImage(path)["mode"]
 

@@ -41,18 +41,24 @@ def degradation_parameter_generator(
 ):
     """
     Generates a random degradation parameter and random values for the same.
-    Parameters:
-        chemistry: dict
-        number_of_comp: numerical
+
+    Parameters
+    ----------
+        chemistry : dict
+        number_of_comp : numerical
             Number of times a parameter has to be varied.
-        degradation_mode: str
+        degradation_mode : str
             The degradation option added to a model. Can be "SEI" and
             "particle mechanics".
-        degradation_value: str
+        degradation_value : str
             Value of the degradation mode.
-    Returns:
-        param_values: list
-        degradation_parameter: str
+
+    Returns
+    -------
+        param_values : list
+            Parameter values with a parameter varied.
+        degradation_parameter : str
+            Parameter that has been varied.
     """
 
     params = pybamm.ParameterValues(chemistry=chemistry)

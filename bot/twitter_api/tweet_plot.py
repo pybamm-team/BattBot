@@ -13,10 +13,12 @@ from utils.tweet_text_generator import tweet_text_generator
 class Tweet(Upload):
     """
     Tweets a random battery simulation.
-    Parameter:
-        testing: bool
+
+    Parameter
+    ---------
+        testing : bool
             To be used while testing.
-        choice: str
+        choice : str
             To be used while testing. Can be "model comparison",
             "parameter comparison" or "degradation comparison
             (summary variables)".
@@ -93,10 +95,12 @@ class Tweet(Upload):
         """
         Writes the random config to config.txt and appends the same to
         data.txt with date and time.
-        Parameters:
-            filename: str
+
+        Parameters
+        ----------
+            filename : str
                 Name of the file to write to.
-            append: bool
+            append : bool
                 default: False
                 If the file has to be opened up in append mode.
         """

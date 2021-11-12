@@ -12,8 +12,11 @@ from plotting.random_plot_generator import random_plot_generator
 class Reply(Upload):
     """
     Replies to a tweet in which the bot is tagged.
-    Parameters:
-        testing: bool
+
+    Parameters
+    ----------
+        testing : bool
+            To be used while testing, so that the function doesn't reply.
     """
 
     def __init__(self, testing=False):
@@ -24,8 +27,11 @@ class Reply(Upload):
         """
         Returns the id of the tweet (in which the bot was mentioned)
         last seen by the bot.
-        Parameters:
-            file_name: str
+
+        Parameters
+        ----------
+            file_name : str
+                Path of the file where the `last_seen_id` is stored.
         """
         f = open(file_name, "r")
         last_seen_id = int(f.read().strip())
@@ -36,9 +42,13 @@ class Reply(Upload):
         """
         Store the id of a tweet (in which the bot was mentioned)
         in a text file.
-        Parameters:
-            last_seen_id: numerical
-            file_name: str
+
+        Parameters
+        ----------
+            last_seen_id : numerical
+                ID of tweet last seen by the bot.
+            file_name : str
+                Path of the file where the `last_seen_id` has to be stored.
         """
         f = open(file_name, "w")
         f.write(str(last_seen_id))
@@ -47,8 +57,11 @@ class Reply(Upload):
     def generate_reply(self, tweet_text, testing=False):
         """
         Generates an appropriate GIF fot the given tweet text.
-        Parameters:
-            tweet_text: str
+
+        Parameters
+        ----------
+            tweet_text : str
+                Text extracted from the tweet.
         """
         request_examples = (
             "https://github.com/pybamm-team/BattBot/blob/main/REQUEST_EXAMPLES.md"

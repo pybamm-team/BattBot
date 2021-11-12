@@ -77,14 +77,18 @@ def config_generator(
 ):
     """
     Generates a random configuration to plot.
-    Parameters:
-        choice: str
+
+    Parameters
+    ----------
+        choice : str
             Can be "model comparison", "parameter comparison" or
             "degradation comparison (summary variables)".
-        test_config: dict
+        test_config : dict
             Should be used while testing to deterministically test this
             function.
-    Returns:
+
+    Returns
+    -------
         config: dict
     """
     config = {}
@@ -128,7 +132,7 @@ def config_generator(
                     degradation_mode: degradation_value,
                     "loss of active material": "stress-driven"
                     if degradation_mode == "particle mechanics"
-                    else 'none',
+                    else "none",
                     "SEI porosity change": random.choice(["true", "false"])
                     if degradation_mode == "SEI"
                     else "false",

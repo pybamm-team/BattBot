@@ -8,13 +8,15 @@ from plotting.degradation_comparison_generator import DegradationComparisonGener
 def random_plot_generator(return_dict, choice, reply_config=None, testing=False):
     """
     Generates a random plot.
-    Parameters:
-        return_dict: dict
+
+    Parameters
+    ----------
+        return_dict : dict
             A shared dictionary in which all the return values are stored.
-        choice: str
+        choice : str
             Can be "model comparison", "parameter comparison" or
             "degradation comparison".
-        reply_config: dict
+        reply_config : dict
             Should be passed when the bot is replying to a requested
             simulation tweet.
     """
