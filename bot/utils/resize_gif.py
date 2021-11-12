@@ -4,13 +4,13 @@ from PIL import Image
 # Original code - https://stackoverflow.com/a/41827681/14746647
 def resize_gif(path, resize_to):
     """
-    Resizes the GIF to a given length:
+    Resizes the GIF to a given length
+
     Parameters:
         path: str
         resize_to : tuple
     """
 
-    print("RESIZING THE GIF")
     all_frames = extract_and_resize_frames(path, resize_to)
 
     save_as = path
@@ -25,6 +25,7 @@ def analyseImage(path):
     Pre-process pass over the image to determine the mode (full or additive).
     Necessary as assessing single frames isn't reliable. Need to know the mode
     before processing all frames.
+
     Parameters:
         path: str
     """
@@ -44,8 +45,8 @@ def analyseImage(path):
                     break
             im.seek(im.tell() + 1)
 
-    except EOFError as e:
-        print(e)
+    except EOFError:
+        pass
 
     im.close()
 
@@ -55,8 +56,10 @@ def analyseImage(path):
 def extract_and_resize_frames(path, resize_to):
     """
     Iterate the GIF, extracting each frame and resizing them
+
     Parameter:
         path: str
+
     Returns:
         all_frames: list
     """
@@ -99,8 +102,8 @@ def extract_and_resize_frames(path, resize_to):
             last_frame = new_frame
             im.seek(im.tell() + 1)
 
-    except EOFError as e:
-        print(e)
+    except EOFError:
+        pass
 
     im.close()
 

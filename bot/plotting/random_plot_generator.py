@@ -25,14 +25,14 @@ def random_plot_generator(return_dict, choice, reply_config=None, testing=False)
     while True:
 
         try:
-            pybamm.set_logging_level("NOTICE")
-
             if reply_config is None:
                 config = config_generator(choice)
             else:
                 config = reply_config
 
-            logger.info(config)
+            if not testing:
+                pybamm.set_logging_level("NOTICE")
+                logger.info(config)
 
             if choice == "degradation comparison":
 
