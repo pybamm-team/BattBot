@@ -13,12 +13,14 @@ from requests_oauthlib import OAuth1
 class Upload:
     """
     Uploads a media to the twitter API by dividing it into chunks.
-    Parameters:
-        plot: str
+
+    Parameters
+    ----------
+        plot : str
             Relative path of the file that has to be uploaded. Should be used
             during testing. In a subclasses, it can be accessed as `self.plot`,
             thus passing it as a parameter will be redundant.
-        total_bytes: numerical
+        total_bytes : numerical
             Size of the passed file. Should be used during testing. In a subclasses,
             it can be accessed as `self.total_bytes`, thus passing it as a parameter
             will be redundant.
@@ -169,16 +171,18 @@ class Upload:
     def post_request(self, url, data, auth, files=None):
         """
         Posts a request on the Twitter API and makes
-        sure that the given post request succeeds
-        Paremeters:
-            url: str
+        sure that the given post request succeeds.
+
+        Paremeters
+        ---------
+            url : str
                 Twitter API endpoint.
-            data: dict
+            data : dict
                 The request data.
-            auth: request_oauthlib.OAuth1
+            auth : request_oauthlib.OAuth1
                 Twitter developer account credentials.
-            files: file
-                default: None
+            files : file
+                default : None
                 Single chunk of a media file.
         """
         # logging configs

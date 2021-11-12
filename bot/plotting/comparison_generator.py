@@ -1,14 +1,18 @@
+import os
 import pybamm
 import random
+from utils.resize_gif import resize_gif
 from utils.parameter_value_generator import parameter_value_generator
-from plotting.create_gif import create_gif
 
 
 class ComparisonGenerator:
     """
     Generates a GIF comparing 2 or more configurations using the random values provided.
-    Parameters:
-        models_for_comp: dict
+
+    Parameters
+    ----------
+
+        models_for_comp : dict
             Models to be used in comparison. Should be of the form -
             {
                 0: pybamm.BaseBatteryModel,
@@ -16,22 +20,22 @@ class ComparisonGenerator:
             }
             Provide only 1 model for "parameter comparison" and 2 or more models for
             "model comparison".
-        chemistry: dict
+        chemistry : dict
             Chemistry for the models.
-        is_experiment: bool
+        is_experiment : bool
             If the comparison includes an experiment.
-        params: pybamm.ParameterValues
+        params : pybamm.ParameterValues
             ParameterValues to be used in the comparisons.
-        cycle: list
-            default: None
+        cycle : list
+            default : None
             Single cycle of the experiment. Provide only when the comparison includes an
             experiment.
-        number: numerical
-            default: None
+        number : numerical
+            default : None
             The number with which the cycle is being multiplied. Provide only when the
             comparison includes an experiment.
-        param_to_vary_info: dict
-            default: None
+        param_to_vary_info : dict
+            default : None
             Information about parameter which is to be varied in "parameter comparison".
             Provide only when the comparison is of type "parameter comparison". Should
             be of the form -
@@ -41,8 +45,8 @@ class ComparisonGenerator:
                     "bounds": (numerical, numerical)
                 }
             }
-        varied_values_override: list
-            default: None
+        varied_values_override : list
+            default : None
             A list of varied values which will override the default random values. To be
             used while replying.
     """
@@ -91,14 +95,17 @@ class ComparisonGenerator:
     def calculate_t_end(self, parameter_values_for_comp, force=False):
         """
         Calculates the t_end for t_eval (t_eval=[0, t_end]).
-        Parameter:
-            parameter_values_for_comp: dict
+
+        Parameters
+        ----------
+            parameter_values_for_comp : dict
                 Of the form -
                 {
                     0: pybamm.ParameterValues,
                     1: pybamm.ParameterValues
                 }
-            force: bool
+            force : bool
+                default : False
                 To be used to force the calculation of t_end.
         """
         # find the minimum value for "Current function [A]"
@@ -117,9 +124,32 @@ class ComparisonGenerator:
 
         return t_end
 
-    def model_comparison(self):
+    def create_gif(self, batch_study, testing=False):
         """
-        Generates a comparison GIF with 2 or more models
+        Create and resize a GIF.
+
+        Parameters
+        ----------
+        batch_study : :class:`pybamm.BatchStudy`
+            Object of BatchStudy.
+        testing : bool
+            default : False
+            To be used while testing to generate less number of plots.
+        """
+        if not testing:
+            batch_study.create_gif()
+        else:
+            batch_study.create_gif(number_of_images=3, duration=1)
+
+        # resizing the GIF for Twitter
+        resize_gif("plot.gif", resize_to=(1440, 1440))
+
+        if os.path.getsize("plot.gif") >= 15728640:  # pragma: no cover
+            resize_gif("plot.gif", resize_to=(1080, 1080))
+
+    def model_comparison(self, testing=False):
+        """
+        Generates a comparison GIF with 2 or more models.
         """
         # convert the list containing parameter values to a
         # dictionary for pybamm.BatchStudy
@@ -141,7 +171,7 @@ class ComparisonGenerator:
             t_end = self.calculate_t_end(parameter_values_for_comp, force=True)
             batch_study.solve([0, t_end])
 
-        create_gif(batch_study)
+        self.create_gif(batch_study, testing)
 
         self.comparison_dict.update(
             {
@@ -153,9 +183,9 @@ class ComparisonGenerator:
             }
         )
 
-    def parameter_comparison(self):
+    def parameter_comparison(self, testing=False):
         """
-        Generates a comparison with a single model, by varying a single parameter
+        Generates a comparison with a single model, by varying a single parameter.
         """
         # generate a list of parameter values by varying a single parameter
         labels = []
@@ -224,7 +254,10 @@ class ComparisonGenerator:
             t_end = self.calculate_t_end(parameter_values_for_comp)
             batch_study.solve([0, t_end])
 
-        create_gif(batch_study, labels=labels)
+        # call the plot method first to pass labels
+        batch_study.plot(labels=labels, testing=True)
+
+        self.create_gif(batch_study, testing)
 
         self.comparison_dict.update(
             {"varied_values": varied_values, "params": parameter_values_for_comp}

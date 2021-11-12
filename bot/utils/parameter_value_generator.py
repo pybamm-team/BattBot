@@ -1,6 +1,4 @@
-from utils.desired_decimal_point_generator import (
-    desired_decimal_point_generator
-)
+from utils.desired_decimal_point_generator import desired_decimal_point_generator
 
 
 # implementation by @tinosulzer
@@ -25,9 +23,11 @@ def parameter_value_generator(
     """
     Generates random values for given parameters and
     plugs them in params.
-    Parameters:
-        params: pybamm.ParameterValues
-        parameter_dict: dict
+
+    Parameters
+    ----------
+        params : :class:`pybamm.ParameterValues`
+        parameter_dict : dict
             Parameters to be varied. Should be of the form -
             {
                 "parameter1": (lower_bound, upper_bound),
@@ -35,27 +35,28 @@ def parameter_value_generator(
             }
             where lower_bound and upper_bound can be either
             numerical or None.
-    Returns:
-        params: pybamm.ParameterValues
+
+    Returns
+    -------
+        params : :class:`pybamm.ParameterValues`
+            Parameter values with a parameter varied.
     """
 
     for parameter, bounds in parameter_dict.items():
         if callable(params[parameter]):
             base_value = 1
             new_parameter_value = desired_decimal_point_generator(
-                bounds[0] if bounds[0] is not None else base_value*0.5,
-                bounds[1] if bounds[1] is not None else base_value*2,
-                5
+                bounds[0] if bounds[0] is not None else base_value * 0.5,
+                bounds[1] if bounds[1] is not None else base_value * 2,
+                5,
             )
-            params[parameter] = FunctionLike(
-                params[parameter], new_parameter_value
-            )
+            params[parameter] = FunctionLike(params[parameter], new_parameter_value)
         else:
             base_value = params[parameter]
             new_parameter_value = desired_decimal_point_generator(
-                bounds[0] if bounds[0] is not None else base_value*0.5,
-                bounds[1] if bounds[1] is not None else base_value*2,
-                5
+                bounds[0] if bounds[0] is not None else base_value * 0.5,
+                bounds[1] if bounds[1] is not None else base_value * 2,
+                5,
             )
             params[parameter] = new_parameter_value
 

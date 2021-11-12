@@ -5,16 +5,18 @@ from plotting.comparison_generator import ComparisonGenerator
 from plotting.degradation_comparison_generator import DegradationComparisonGenerator
 
 
-def random_plot_generator(return_dict, choice, reply_config=None):
+def random_plot_generator(return_dict, choice, reply_config=None, testing=False):
     """
     Generates a random plot.
-    Parameters:
-        return_dict: dict
+
+    Parameters
+    ----------
+        return_dict : dict
             A shared dictionary in which all the return values are stored.
-        choice: str
+        choice : str
             Can be "model comparison", "parameter comparison" or
             "degradation comparison".
-        reply_config: dict
+        reply_config : dict
             Should be passed when the bot is replying to a requested
             simulation tweet.
     """
@@ -25,14 +27,14 @@ def random_plot_generator(return_dict, choice, reply_config=None):
     while True:
 
         try:
-            pybamm.set_logging_level("NOTICE")
-
             if reply_config is None:
                 config = config_generator(choice)
             else:
                 config = reply_config
 
-            logger.info(config)
+            if not testing:
+                pybamm.set_logging_level("NOTICE")
+                logger.info(config)
 
             if choice == "degradation comparison":
 
@@ -83,9 +85,9 @@ def random_plot_generator(return_dict, choice, reply_config=None):
 
                 # create a GIF
                 if choice == "model comparison":
-                    comparison_generator.model_comparison()
+                    comparison_generator.model_comparison(testing=testing)
                 elif choice == "parameter comparison":
-                    comparison_generator.parameter_comparison()
+                    comparison_generator.parameter_comparison(testing=testing)
 
                 return_dict.update(
                     {

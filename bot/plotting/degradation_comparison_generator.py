@@ -7,23 +7,25 @@ class DegradationComparisonGenerator:
     """
     Generates a summary variable plot comparing 2 or more configurations using the
     random values provided.
-    Parameters:
-        model: pybamm.BaseBatteryModel
+
+    Parameters
+    ----------
+        model : :class:`pybamm.BaseBatteryModel`
             Model to be used in the comparison.
-        chemistry: dict
+        chemistry : dict
             Chemistry to be used in the comparison.
-        param_values: list
+        param_values : list
             Parameter values with one degradation parameter varied. Should be of the
             form -
             [
-                pybamm.ParameterValues,
-                pybamm.ParameterValues
+                :class:`pybamm.ParameterValues`,
+                :class:`pybamm.ParameterValues`
             ]
-        degradation_parameter: str
+        degradation_parameter : str
             The parameter that has been varied in param_values.
-        cycle: list
+        cycle : list
             Experiment cycle to be used in the comparison.
-        number: numerical
+        number : numerical
             Number with which the cycle is multiplied.
     """
 
@@ -46,16 +48,20 @@ class DegradationComparisonGenerator:
     def create_simulation(self, experiment):
         """
         Creates a simulation for the given configuration.
-        Parameters:
-            experiment: pybamm.Experiment
+
+        Parameters
+        ----------
+            experiment : :class:`pybamm.Experiment`
                 The experiment to be simulated.
-        Returns:
-            sim: pybamm.Simulation
-            solutions_and_labels: list
+
+        Returns
+        -------
+            sim : :class:`pybamm.Simulation`
+            solutions_and_labels : list
                 Of the form -
                 [
-                    [pybamm.solution, label],
-                    [pybamm.solution, label]
+                    [:class:`pybamm.Solution`, label],
+                    [:class:`pybamm.Solution`, label]
                 ]
         """
         solutions_and_labels = []

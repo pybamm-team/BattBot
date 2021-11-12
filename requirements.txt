@@ -1,5 +1,5 @@
 wheel
-git+https://github.com/pybamm-team/PyBaMM@develop
+pybamm>=21.10
 tweepy==3.10.0
 pillow==8.0.1
 imageio==2.9.0
