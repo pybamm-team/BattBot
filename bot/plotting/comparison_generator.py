@@ -1,7 +1,6 @@
 import pybamm
 import random
 from utils.parameter_value_generator import parameter_value_generator
-from plotting.create_gif import create_gif
 
 
 class ComparisonGenerator:
@@ -117,7 +116,7 @@ class ComparisonGenerator:
 
         return t_end
 
-    def model_comparison(self):
+    def model_comparison(self, testing=False):
         """
         Generates a comparison GIF with 2 or more models
         """
@@ -141,7 +140,10 @@ class ComparisonGenerator:
             t_end = self.calculate_t_end(parameter_values_for_comp, force=True)
             batch_study.solve([0, t_end])
 
-        create_gif(batch_study)
+        if testing:
+            batch_study.create_gif(number_of_images=3, duration=1)
+        else:
+            batch_study.create_gif()
 
         self.comparison_dict.update(
             {
@@ -153,7 +155,7 @@ class ComparisonGenerator:
             }
         )
 
-    def parameter_comparison(self):
+    def parameter_comparison(self, testing=False):
         """
         Generates a comparison with a single model, by varying a single parameter
         """
@@ -224,7 +226,13 @@ class ComparisonGenerator:
             t_end = self.calculate_t_end(parameter_values_for_comp)
             batch_study.solve([0, t_end])
 
-        create_gif(batch_study, labels=labels)
+        # call the plot method first to pass labels
+        batch_study.plot(labels=labels, testing=True)
+
+        if testing:
+            batch_study.create_gif(number_of_images=3, duration=1)
+        else:
+            batch_study.create_gif()
 
         self.comparison_dict.update(
             {"varied_values": varied_values, "params": parameter_values_for_comp}

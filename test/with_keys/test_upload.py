@@ -27,6 +27,7 @@ class TestUpload(unittest.TestCase):
                 ),
                 "varied_values_override": None,
             },
+            True
         )
 
         plot = "plot.gif"
@@ -71,6 +72,7 @@ class TestUpload(unittest.TestCase):
                 "degradation_mode": "SEI",
                 "degradation_value": "reaction limited",
             },
+            True
         )
 
         plot = "plot.png"

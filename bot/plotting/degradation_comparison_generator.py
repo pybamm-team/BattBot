@@ -7,6 +7,7 @@ class DegradationComparisonGenerator:
     """
     Generates a summary variable plot comparing 2 or more configurations using the
     random values provided.
+
     Parameters:
         model: pybamm.BaseBatteryModel
             Model to be used in the comparison.
@@ -46,6 +47,7 @@ class DegradationComparisonGenerator:
     def create_simulation(self, experiment):
         """
         Creates a simulation for the given configuration.
+
         Parameters:
             experiment: pybamm.Experiment
                 The experiment to be simulated.

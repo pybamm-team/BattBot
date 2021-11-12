@@ -44,7 +44,7 @@ class Reply(Upload):
         f.write(str(last_seen_id))
         f.close()
 
-    def generate_reply(self, tweet_text):
+    def generate_reply(self, tweet_text, testing=False):
         """
         Generates an appropriate GIF fot the given tweet text.
         Parameters:
@@ -293,7 +293,7 @@ class Reply(Upload):
 
         # generate the simulation and GIF
         return_dict = {}
-        random_plot_generator(return_dict, choice, reply_config=reply_config)
+        random_plot_generator(return_dict, choice, reply_config=reply_config, testing=testing)
 
     def reply(self):
         """

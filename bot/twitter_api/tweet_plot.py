@@ -40,7 +40,9 @@ class Tweet(Upload):
             if choice is None:
                 choice = random.choice(choice_list)
 
-            p = Process(target=random_plot_generator, args=(return_dict, choice))
+            p = Process(
+                target=random_plot_generator, args=(return_dict, choice, None, testing)
+            )
 
             p.start()
             # time-out

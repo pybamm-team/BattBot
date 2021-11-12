@@ -5,7 +5,7 @@ from plotting.comparison_generator import ComparisonGenerator
 from plotting.degradation_comparison_generator import DegradationComparisonGenerator
 
 
-def random_plot_generator(return_dict, choice, reply_config=None):
+def random_plot_generator(return_dict, choice, reply_config=None, testing=False):
     """
     Generates a random plot.
     Parameters:
@@ -83,9 +83,9 @@ def random_plot_generator(return_dict, choice, reply_config=None):
 
                 # create a GIF
                 if choice == "model comparison":
-                    comparison_generator.model_comparison()
+                    comparison_generator.model_comparison(testing=testing)
                 elif choice == "parameter comparison":
-                    comparison_generator.parameter_comparison()
+                    comparison_generator.parameter_comparison(testing=testing)
 
                 return_dict.update(
                     {

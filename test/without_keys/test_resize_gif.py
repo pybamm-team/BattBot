@@ -23,7 +23,7 @@ class TestResizeGif(unittest.TestCase):
 
         self.t = self.solution["Time [s]"]
         self.final_time = int(self.t.entries[len(self.t.entries) - 1])
-        self.time_array = np.linspace(0, self.final_time, num=80)
+        self.time_array = np.linspace(0, self.final_time, num=3)
 
         self.images = []
         self.image_files = []
