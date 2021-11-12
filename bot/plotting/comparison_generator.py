@@ -1,5 +1,7 @@
+import os
 import pybamm
 import random
+from utils.resize_gif import resize_gif
 from utils.parameter_value_generator import parameter_value_generator
 
 
@@ -116,6 +118,18 @@ class ComparisonGenerator:
 
         return t_end
 
+    def create_gif(self, batch_study, testing=False):
+        if testing:
+            batch_study.create_gif(number_of_images=3, duration=1)
+        else:
+            batch_study.create_gif()
+
+        # resizing the GIF for Twitter
+        resize_gif("plot.gif", resize_to=(1440, 1440))
+
+        if os.path.getsize("plot.gif") >= 15728640:  # pragma: no cover
+            resize_gif("plot.gif", resize_to=(1080, 1080))
+
     def model_comparison(self, testing=False):
         """
         Generates a comparison GIF with 2 or more models
@@ -140,10 +154,7 @@ class ComparisonGenerator:
             t_end = self.calculate_t_end(parameter_values_for_comp, force=True)
             batch_study.solve([0, t_end])
 
-        if testing:
-            batch_study.create_gif(number_of_images=3, duration=1)
-        else:
-            batch_study.create_gif()
+        self.create_gif(batch_study, testing)
 
         self.comparison_dict.update(
             {
@@ -229,10 +240,7 @@ class ComparisonGenerator:
         # call the plot method first to pass labels
         batch_study.plot(labels=labels, testing=True)
 
-        if testing:
-            batch_study.create_gif(number_of_images=3, duration=1)
-        else:
-            batch_study.create_gif()
+        self.create_gif(batch_study, testing)
 
         self.comparison_dict.update(
             {"varied_values": varied_values, "params": parameter_values_for_comp}

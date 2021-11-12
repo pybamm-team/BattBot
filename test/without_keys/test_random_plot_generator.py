@@ -57,7 +57,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 "degradation_mode": "SEI",
                 "degradation_value": "reaction limited",
             },
-            reply_config=None,
             testing=True,
         )
 
