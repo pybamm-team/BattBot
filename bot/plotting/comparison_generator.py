@@ -136,10 +136,10 @@ class ComparisonGenerator:
             default : False
             To be used while testing to generate less number of plots.
         """
-        if testing:
-            batch_study.create_gif(number_of_images=3, duration=1)
-        else:
+        if not testing:
             batch_study.create_gif()
+        else:
+            batch_study.create_gif(number_of_images=3, duration=1)
 
         # resizing the GIF for Twitter
         resize_gif("plot.gif", resize_to=(1440, 1440))
