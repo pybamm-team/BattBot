@@ -57,6 +57,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 "degradation_mode": "SEI",
                 "degradation_value": "reaction limited",
             },
+            testing=True,
         )
 
         self.assertEqual(return_dict["model"], model)
@@ -79,10 +80,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         while True:
             p = multiprocessing.Process(
                 target=random_plot_generator,
-                args=(
-                    return_dict,
-                    "degradation comparison",
-                ),
+                args=(return_dict, "degradation comparison", None, True),
             )
             p.start()
             p.join(600)
@@ -119,7 +117,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, "model comparison")
+                target=random_plot_generator,
+                args=(return_dict, "model comparison", None, True),
             )
             p.start()
             p.join(1200)
@@ -152,7 +151,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         while True:
             p = multiprocessing.Process(
-                target=random_plot_generator, args=(return_dict, "parameter comparison")
+                target=random_plot_generator,
+                args=(return_dict, "parameter comparison", None, True),
             )
             p.start()
             p.join(1200)

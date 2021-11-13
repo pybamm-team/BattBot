@@ -12,8 +12,11 @@ from plotting.random_plot_generator import random_plot_generator
 class Reply(Upload):
     """
     Replies to a tweet in which the bot is tagged.
-    Parameters:
-        testing: bool
+
+    Parameters
+    ----------
+        testing : bool
+            To be used while testing, so that the function doesn't reply.
     """
 
     def __init__(self, testing=False):
@@ -24,8 +27,11 @@ class Reply(Upload):
         """
         Returns the id of the tweet (in which the bot was mentioned)
         last seen by the bot.
-        Parameters:
-            file_name: str
+
+        Parameters
+        ----------
+            file_name : str
+                Path of the file where the `last_seen_id` is stored.
         """
         f = open(file_name, "r")
         last_seen_id = int(f.read().strip())
@@ -36,19 +42,26 @@ class Reply(Upload):
         """
         Store the id of a tweet (in which the bot was mentioned)
         in a text file.
-        Parameters:
-            last_seen_id: numerical
-            file_name: str
+
+        Parameters
+        ----------
+            last_seen_id : numerical
+                ID of tweet last seen by the bot.
+            file_name : str
+                Path of the file where the `last_seen_id` has to be stored.
         """
         f = open(file_name, "w")
         f.write(str(last_seen_id))
         f.close()
 
-    def generate_reply(self, tweet_text):
+    def generate_reply(self, tweet_text, testing=False):
         """
         Generates an appropriate GIF fot the given tweet text.
-        Parameters:
-            tweet_text: str
+
+        Parameters
+        ----------
+            tweet_text : str
+                Text extracted from the tweet.
         """
         request_examples = (
             "https://github.com/pybamm-team/BattBot/blob/main/REQUEST_EXAMPLES.md"
@@ -293,7 +306,9 @@ class Reply(Upload):
 
         # generate the simulation and GIF
         return_dict = {}
-        random_plot_generator(return_dict, choice, reply_config=reply_config)
+        random_plot_generator(
+            return_dict, choice, reply_config=reply_config, testing=testing
+        )
 
     def reply(self):
         """
@@ -379,8 +394,8 @@ class Reply(Upload):
                     img = Image.open("plot.gif").size
                     if img[0] <= 1080:  # pragma: no cover
                         status = (
-                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "   # noqa
-                            + "Please request a smaller simulation for a better quality GIF."   # noqa
+                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "  # noqa
+                            + "Please request a smaller simulation for a better quality GIF."  # noqa
                         )
                     else:
                         status = None

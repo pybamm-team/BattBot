@@ -40,7 +40,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=self.params,
         )
 
-        comparison_generator.parameter_comparison()
+        comparison_generator.parameter_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], list
@@ -56,7 +56,7 @@ class TestComparisonGenerator(unittest.TestCase):
             varied_values_override=[5.2, 5.4, 5.6],
         )
 
-        comparison_generator.parameter_comparison()
+        comparison_generator.parameter_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], list
@@ -84,7 +84,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=self.params,
         )
 
-        comparison_generator.model_comparison()
+        comparison_generator.model_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], dict
@@ -113,7 +113,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=self.params,
         )
 
-        comparison_generator.parameter_comparison()
+        comparison_generator.parameter_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], list
@@ -132,7 +132,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ai2020),
         )
 
-        comparison_generator.parameter_comparison()
+        comparison_generator.parameter_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], list
@@ -150,7 +150,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ai2020),
         )
 
-        comparison_generator.model_comparison()
+        comparison_generator.model_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], dict
@@ -175,7 +175,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=self.params,
         )
 
-        comparison_generator.model_comparison()
+        comparison_generator.model_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], dict
@@ -200,7 +200,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=self.params,
         )
 
-        comparison_generator.model_comparison()
+        comparison_generator.model_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], dict
@@ -231,7 +231,7 @@ class TestComparisonGenerator(unittest.TestCase):
             params=self.params,
         )
 
-        comparison_generator.parameter_comparison()
+        comparison_generator.parameter_comparison(testing=True)
 
         self.assertIsInstance(
             comparison_generator.comparison_dict["varied_values"], list

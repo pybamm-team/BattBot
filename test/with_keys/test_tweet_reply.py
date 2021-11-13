@@ -25,7 +25,7 @@ class TestTweetReply(unittest.TestCase):
             "Compare SPM, SPMe and DFN model with Chen2020 parameters with a 1C"
             " discharge at 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -35,7 +35,7 @@ class TestTweetReply(unittest.TestCase):
             "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa
             " at 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -46,7 +46,7 @@ class TestTweetReply(unittest.TestCase):
             "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa
             " at 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -56,7 +56,7 @@ class TestTweetReply(unittest.TestCase):
             "Chen2020 parameters for a discharge of 1C"
             " discharge at 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -65,7 +65,7 @@ class TestTweetReply(unittest.TestCase):
             "Compare SPMe and DFN model with Chen2020 parameters with a 1C discharge at"
             " 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -74,7 +74,7 @@ class TestTweetReply(unittest.TestCase):
             "Compare SPM and DFN model with Marquis2019 parameters with a 1C discharge"
             " at 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -83,7 +83,7 @@ class TestTweetReply(unittest.TestCase):
             "Compare SPM and DFN model with Ai2020 parameters with a 0.5C discharge at"
             " 278.15K"
         )
-        reply.generate_reply(tweet_text)
+        reply.generate_reply(tweet_text, testing=True)
 
         assert os.path.exists("plot.gif")
         os.remove("plot.gif")
@@ -96,7 +96,7 @@ class TestTweetReply(unittest.TestCase):
             "Please provide atleast 2 models. Some tweet examples -"
             f" {request_examples}",
         ):
-            reply.generate_reply(tweet_text)
+            reply.generate_reply(tweet_text, testing=True)
 
         tweet_text = "Chen2020 parameters"
         with self.assertRaisesRegex(
@@ -104,7 +104,7 @@ class TestTweetReply(unittest.TestCase):
             "I'm sorry, I couldn't understand the requested simulation. "
             + f"Some tweet examples - {request_examples}",
         ):
-            reply.generate_reply(tweet_text)
+            reply.generate_reply(tweet_text, testing=True)
 
         tweet_text = "Compare SPMe and DFN model withChen2020 parameters"
         with self.assertRaisesRegex(
@@ -112,7 +112,7 @@ class TestTweetReply(unittest.TestCase):
             "Please provide a parameter set in the format - Chen2020. "
             + f"Some tweet examples - {request_examples}",
         ):
-            reply.generate_reply(tweet_text)
+            reply.generate_reply(tweet_text, testing=True)
 
         tweet_text = (
             "SPM and DFN model with Ai2020 parameters with a 0.5C discharge at 278.15K"

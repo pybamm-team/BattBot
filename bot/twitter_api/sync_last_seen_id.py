@@ -21,8 +21,10 @@ def sync_last_seen_id(testing=False):
     """
     Syncs the ID of the last seen tweet (by the bot) on GitHub
     with the Heroku deployment.
-    Parameters:
-        testing: bool
+
+    Parameters
+    ----------
+        testing : bool
     """
     tweet_reply = Reply()
 
