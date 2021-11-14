@@ -218,7 +218,11 @@ class ComparisonGenerator:
                 labels.append(
                     self.print_name
                     + " * "
-                    + ("{:.5e}".format(val) if val > 10 or val < 1 else str(val))
+                    + (
+                        "{:.5e}".format(val)
+                        if val > 10 or val < 1 and val != 0
+                        else str(val)
+                    )
                 )
                 varied_values.append(float(params[self.param_to_vary].__str__()))
             else:
@@ -226,7 +230,11 @@ class ComparisonGenerator:
                 labels.append(
                     self.param_to_vary
                     + ": "
-                    + ("{:.5e}".format(val) if val > 10 or val < 1 else str(val))
+                    + (
+                        "{:.5e}".format(val)
+                        if val > 10 or val < 1 and val != 0
+                        else str(val)
+                    )
                 )
                 varied_values.append(params[self.param_to_vary])
 
