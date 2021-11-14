@@ -17,10 +17,10 @@ Follow the steps below to locally install the bot for development -
 2. Clone the forked repository.
 3. Run the following commands - 
 ```bash
-cd PyBaMM-Twitter-Bot
+cd Battbot
 python -m pip install -r requirements.txt
 ```
-This will install all the dependencies in your local system including the develop branch of [PyBaMM](https://github.com/pybamm-team/PyBaMM) on which this bot is based.
+This will install all the dependencies in your local system including the latest version of [PyBaMM](https://github.com/pybamm-team/PyBaMM) on which this bot is based.
 
 4. To check if the installation worked, execute (this will take some time) - 
 ```bash
@@ -81,9 +81,15 @@ Editable notebook, to run the random tweeted configurations is made available us
 Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/pybamm-team/BattBot/.
 
 ## Pre-commit checks
-1. Style `$ flake8`
-2. Tests `$ coverage run --concurrency=multiprocessing -m unittest` or `$ python -m unittest`
+1. Style `$ flake8 --max-line-length=89`
+2.
+a) If the user does have a Twitter Developer Account:-
+  Tests `$ coverage run --concurrency=multiprocessing -m unittest -v` or `$ python -m unittest -v`
 - The tests in `with_keys` subdirectory will fail if you don't have the `Twitter API Keys`.
-- Use `$ coverage run --concurrency=multiprocessing -m unittest` if you want to check the coverage locally.
+- Use `$ coverage run --concurrency=multiprocessing -m unittest -v` if you want to check the coverage locally.
+b) If the user does not have a Twitter Developer Account:-
+   Test `$ coverage run --concurrency=multiprocessing -m unittest discover test/without_keys -v` or `$ python -m unittests discover -v test/without_keys`
+- Use `$ coverage run --concurrency=multiprocessing -m unittest discover test/without_keys -v` if you want to check the coverage 
+  locally
 3. coverage `$ coverage report` or `$ coverage html`
 - You can also directly create a PR after the tests pass to get a better coverage visualisation.
