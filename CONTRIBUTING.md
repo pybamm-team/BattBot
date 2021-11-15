@@ -82,14 +82,4 @@ Code coverage (how much of our code is actually seen by the (linux) unit tests) 
 
 ## Pre-commit checks
 1. Style - `$ flake8 --max-line-length=89`
-2.
-a) If the user does have a Twitter Developer Account:-
-  Tests `$ coverage run --concurrency=multiprocessing -m unittest -v` or `$ python -m unittest -v`
-- The tests in `with_keys` subdirectory will fail if you don't have the `Twitter API Keys`.
-- Use `$ coverage run --concurrency=multiprocessing -m unittest -v` if you want to check the coverage locally.
-b) If the user does not have a Twitter Developer Account:-
-   Test `$ coverage run --concurrency=multiprocessing -m unittest discover test/without_keys -v` or `$ python -m unittests discover -v test/without_keys`
-- Use `$ coverage run --concurrency=multiprocessing -m unittest discover test/without_keys -v` if you want to check the coverage 
-  locally
-3. coverage `$ coverage report` or `$ coverage html`
-- You can also directly create a PR after the tests pass to get a better coverage visualisation.
+2. Tests - `$ python -m unittest -v` (if you have completed the pre-installation process) or `$ python -m unittest -v discover ./test/ without_keys` (if you have haven't completed the pre-installation process)
