@@ -17,10 +17,10 @@ Follow the steps below to locally install the bot for development -
 2. Clone the forked repository.
 3. Run the following commands - 
 ```bash
-cd PyBaMM-Twitter-Bot
+cd Battbot
 python -m pip install -r requirements.txt
 ```
-This will install all the dependencies in your local system including the develop branch of [PyBaMM](https://github.com/pybamm-team/PyBaMM) on which this bot is based.
+This will install all the dependencies in your local system including the latest version of [PyBaMM](https://github.com/pybamm-team/PyBaMM) on which this bot is based.
 
 4. To check if the installation worked, execute (this will take some time) - 
 ```bash
@@ -36,9 +36,9 @@ python -m unittest discover ./test/without_keys/
 3. Once you are done with the changes, you can test your code and the coverage by running -
 ```bash
 echo "COVERAGE_PROCESS_START=$PWD/.coveragerc"  # to enable coverage to run tests in subprocesses
-coverage run --concurrency=multiprocessing -m unittest
+coverage run --concurrency=multiprocessing -m unittest -v
 # or if you haven't completed the pre-installation process
-coverage run --concurrency=multiprocessing -m unittest discover -s test/without_keys
+coverage run --concurrency=multiprocessing -m unittest discover -v test/without_keys
 coverage combine
 coverage report  # for a better visualisation, you can run - coverage html
 ```
@@ -81,9 +81,5 @@ Editable notebook, to run the random tweeted configurations is made available us
 Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/pybamm-team/BattBot/.
 
 ## Pre-commit checks
-1. Style `$ flake8`
-2. Tests `$ coverage run --concurrency=multiprocessing -m unittest` or `$ python -m unittest`
-- The tests in `with_keys` subdirectory will fail if you don't have the `Twitter API Keys`.
-- Use `$ coverage run --concurrency=multiprocessing -m unittest` if you want to check the coverage locally.
-3. coverage `$ coverage report` or `$ coverage html`
-- You can also directly create a PR after the tests pass to get a better coverage visualisation.
+1. Style - `$ flake8 --max-line-length=89`
+2. Tests - `$ python -m unittest -v` (if you have completed the pre-installation process) or `$ python -m unittest -v discover ./test/ without_keys` (if you have haven't completed the pre-installation process)
