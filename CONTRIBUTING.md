@@ -81,7 +81,7 @@ Editable notebook, to run the random tweeted configurations is made available us
 Code coverage (how much of our code is actually seen by the (linux) unit tests) is tested using Codecov, a report is visible on https://app.codecov.io/gh/pybamm-team/BattBot/.
 
 ## Pre-commit checks
-1. Style `$ flake8 --max-line-length=89`
+1. Style - `$ flake8 --max-line-length=89`
 2.
 a) If the user does have a Twitter Developer Account:-
   Tests `$ coverage run --concurrency=multiprocessing -m unittest -v` or `$ python -m unittest -v`
