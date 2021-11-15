@@ -36,9 +36,9 @@ python -m unittest discover ./test/without_keys/
 3. Once you are done with the changes, you can test your code and the coverage by running -
 ```bash
 echo "COVERAGE_PROCESS_START=$PWD/.coveragerc"  # to enable coverage to run tests in subprocesses
-coverage run --concurrency=multiprocessing -m unittest
+coverage run --concurrency=multiprocessing -m unittest -v
 # or if you haven't completed the pre-installation process
-coverage run --concurrency=multiprocessing -m unittest discover -s test/without_keys
+coverage run --concurrency=multiprocessing -m unittest discover -v test/without_keys
 coverage combine
 coverage report  # for a better visualisation, you can run - coverage html
 ```
