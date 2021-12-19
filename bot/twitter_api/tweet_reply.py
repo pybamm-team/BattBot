@@ -140,7 +140,7 @@ class Reply(Upload):
             )
 
         # parameter values
-        params = pybamm.ParameterValues(chemistry=chemistry)
+        params = pybamm.ParameterValues(chemistry)
 
         # update "Ambient temperature [K]" from the tweet text
         temp_is_present = False
@@ -172,7 +172,7 @@ class Reply(Upload):
                         c_rate_is_present = True
                         params["Current function [A]"] = (
                             c_rate
-                            * pybamm.ParameterValues(chemistry=chemistry)[
+                            * pybamm.ParameterValues(chemistry)[
                                 "Nominal cell capacity [A.h]"
                             ]
                         )

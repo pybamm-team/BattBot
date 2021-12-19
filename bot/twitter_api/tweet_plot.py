@@ -150,7 +150,6 @@ class Tweet(Upload):
             self.degradation_mode,
             self.degradation_value,
         )
-        print(tweet_status)
 
         # data for the GIF tweet
         request_data = {"status": tweet_status, "media_ids": self.media_id}

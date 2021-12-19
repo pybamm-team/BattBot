@@ -12,7 +12,7 @@ class TestComparisonGenerator(unittest.TestCase):
             "SPM": pybamm.lithium_ion.SPM(),
         }
         self.chemistry = pybamm.parameter_sets.Chen2020
-        self.params = pybamm.ParameterValues(chemistry=self.chemistry)
+        self.params = pybamm.ParameterValues(self.chemistry)
         self.cycle = [
             (
                 "Discharge at C/10 for 10 hours or until 3.3 V",
@@ -129,7 +129,7 @@ class TestComparisonGenerator(unittest.TestCase):
             cycle=self.cycle,
             number=self.number,
             param_to_vary_info=self.param_to_vary_info,
-            params=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ai2020),
+            params=pybamm.ParameterValues(pybamm.parameter_sets.Ai2020),
         )
 
         comparison_generator.parameter_comparison(testing=True)
@@ -147,7 +147,7 @@ class TestComparisonGenerator(unittest.TestCase):
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
-            params=pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Ai2020),
+            params=pybamm.ParameterValues(pybamm.parameter_sets.Ai2020),
         )
 
         comparison_generator.model_comparison(testing=True)

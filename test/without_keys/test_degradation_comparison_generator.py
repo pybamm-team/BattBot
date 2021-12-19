@@ -25,13 +25,13 @@ class TestDegradationComparisonGenerator(unittest.TestCase):
         self.param_values_mohtat = []
         for i in range(2):
             self.param_values_mohtat.append(
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Mohtat2020)
+                pybamm.ParameterValues(pybamm.parameter_sets.Mohtat2020)
             )
             self.param_values_mohtat[i][
                 "Inner SEI open-circuit potential [V]"
             ] = self.varied_values[i]
         self.chemistry = pybamm.parameter_sets.Mohtat2020
-        self.parameter_values = pybamm.ParameterValues(chemistry=self.chemistry)
+        self.parameter_values = pybamm.ParameterValues(self.chemistry)
 
     def tearDown(self):
         os.remove("plot.png")

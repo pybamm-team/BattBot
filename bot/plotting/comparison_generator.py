@@ -82,7 +82,7 @@ class ComparisonGenerator:
             if param_to_vary_info is not None
             else None
         )
-        self.parameter_values = pybamm.ParameterValues(chemistry=self.chemistry)
+        self.parameter_values = pybamm.ParameterValues(self.chemistry)
         self.experiment = (
             dict(list(enumerate([pybamm.Experiment(self.cycle * self.number)])))
             if self.cycle is not None
