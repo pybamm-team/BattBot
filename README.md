@@ -1,8 +1,7 @@
 # BattBot
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/74055102/129485369-65b2146f-7070-4fe4-934c-31e5f9b92129.jpeg" width="150" />
-  <img src="https://user-images.githubusercontent.com/74055102/129485409-1ef64483-9c36-40e8-ad54-8b28c1cc369f.jpeg" width="660" /> 
+  <img src="https://user-images.githubusercontent.com/21146187/139149748-4e4b1bd3-3845-444d-b7d1-8a8a34696005.jpeg" width="660" /> 
 </p>
 
 <p align="center">
