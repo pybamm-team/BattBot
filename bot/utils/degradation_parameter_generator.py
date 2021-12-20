@@ -61,7 +61,7 @@ def degradation_parameter_generator(
             Parameter that has been varied.
     """
 
-    params = pybamm.ParameterValues(chemistry=chemistry)
+    params = pybamm.ParameterValues(chemistry)
 
     if chemistry == pybamm.parameter_sets.Mohtat2020:
         params.update(

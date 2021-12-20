@@ -23,7 +23,7 @@ class TestUpload(unittest.TestCase):
                 "param_to_vary_info": None,
                 "bounds": None,
                 "params": pybamm.ParameterValues(
-                    chemistry=pybamm.parameter_sets.Chen2020
+                    pybamm.parameter_sets.Chen2020
                 ),
                 "varied_values_override": None,
             },
@@ -42,8 +42,8 @@ class TestUpload(unittest.TestCase):
 
         chemistry = pybamm.parameter_sets.Chen2020
         params = [
-            pybamm.ParameterValues(chemistry=chemistry),
-            pybamm.ParameterValues(chemistry=chemistry),
+            pybamm.ParameterValues(chemistry),
+            pybamm.ParameterValues(chemistry),
         ]
 
         params[0]["Ambient temperature [K]"] = 280

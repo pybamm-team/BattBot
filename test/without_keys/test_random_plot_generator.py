@@ -38,7 +38,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
         param_values = []
         for i in range(2):
             param_values.append(
-                pybamm.ParameterValues(chemistry=pybamm.parameter_sets.Chen2020)
+                pybamm.ParameterValues(pybamm.parameter_sets.Chen2020)
             )
             param_values[i]["Ambient temperature [K]"] = [290, 285, 295][i]
 

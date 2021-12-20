@@ -103,7 +103,7 @@ def config_generator(
         chemistry = pybamm.parameter_sets.Mohtat2020
     else:
         chemistry = random.choice(chemistries)
-    parameter_values = pybamm.ParameterValues(chemistry=chemistry)
+    parameter_values = pybamm.ParameterValues(chemistry)
 
     # choose random degradation for a degradation comparison
     if choice == "degradation comparison":

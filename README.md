@@ -1,12 +1,8 @@
 # BattBot
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/21146187/139149748-4e4b1bd3-3845-444d-b7d1-8a8a34696005.jpeg" width="660" /> 
-</p>
+![BattBot](https://user-images.githubusercontent.com/21146187/139149748-4e4b1bd3-3845-444d-b7d1-8a8a34696005.jpeg)
 
-<p align="center">
-  <img src="https://miro.medium.com/max/788/1*z_AwTGIVYneAzpzwPUGDxw.gif" width="810" />
-</p>
+![GIF](https://miro.medium.com/max/788/1*z_AwTGIVYneAzpzwPUGDxw.gif)
   
 <div align="center">
   

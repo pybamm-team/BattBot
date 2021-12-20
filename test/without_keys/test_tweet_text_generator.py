@@ -6,7 +6,7 @@ from bot.utils.tweet_text_generator import tweet_text_generator
 class TestTweetTextGenerator(unittest.TestCase):
     def setUp(self):
         self.chemistry = pybamm.parameter_sets.Chen2020
-        self.params = pybamm.ParameterValues(chemistry=self.chemistry)
+        self.params = pybamm.ParameterValues(self.chemistry)
         self.c_rate = (
             self.params["Current function [A]"]
             / self.params["Nominal cell capacity [A.h]"]
