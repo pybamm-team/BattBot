@@ -1,6 +1,6 @@
-wheel
+wheel>=0.37.1
 pybamm>=21.11
-tweepy==3.10.0
-pillow==8.0.1
-imageio==2.9.0
-coverage==5.5
+tweepy>=3.10.0
+pillow>=8.0.1
+imageio>=2.9.0
+coverage>=5.5
