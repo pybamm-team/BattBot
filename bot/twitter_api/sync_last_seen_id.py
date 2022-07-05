@@ -12,8 +12,12 @@ oauth = OAuth1(
     resource_owner_key=keys.ACCESS_TOKEN,
     resource_owner_secret=keys.ACCESS_TOKEN_SECRET,
 )
-auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_SECRET)
-auth.set_access_token(keys.ACCESS_TOKEN, keys.ACCESS_TOKEN_SECRET)
+auth = tweepy.OAuth1UserHandler(
+    keys.CONSUMER_KEY,
+    keys.CONSUMER_SECRET,
+    keys.ACCESS_TOKEN,
+    keys.ACCESS_TOKEN_SECRET,
+)
 api = tweepy.API(auth)
 
 
