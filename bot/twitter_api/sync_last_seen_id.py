@@ -34,7 +34,7 @@ def sync_last_seen_id(testing=False):
         last_seen_id = tweet_reply.retrieve_tweet_id("last_seen_id.txt")
 
     # retreiving all the mentions after the tweet with id=last_seen_id
-    mentions = api.mentions_timeline(last_seen_id, tweet_mode="extended")
+    mentions = api.mentions_timeline(since_id=last_seen_id, tweet_mode="extended")
 
     # iterating through all the mentions if not testing
     if not testing:
