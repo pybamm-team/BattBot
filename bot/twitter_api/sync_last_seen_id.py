@@ -12,8 +12,12 @@ oauth = OAuth1(
     resource_owner_key=keys.ACCESS_TOKEN,
     resource_owner_secret=keys.ACCESS_TOKEN_SECRET,
 )
-auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_SECRET)
-auth.set_access_token(keys.ACCESS_TOKEN, keys.ACCESS_TOKEN_SECRET)
+auth = tweepy.OAuth1UserHandler(
+    keys.CONSUMER_KEY,
+    keys.CONSUMER_SECRET,
+    keys.ACCESS_TOKEN,
+    keys.ACCESS_TOKEN_SECRET,
+)
 api = tweepy.API(auth)
 
 
@@ -34,7 +38,7 @@ def sync_last_seen_id(testing=False):
         last_seen_id = tweet_reply.retrieve_tweet_id("last_seen_id.txt")
 
     # retreiving all the mentions after the tweet with id=last_seen_id
-    mentions = api.mentions_timeline(last_seen_id, tweet_mode="extended")
+    mentions = api.mentions_timeline(since_id=last_seen_id, tweet_mode="extended")
 
     # iterating through all the mentions if not testing
     if not testing:

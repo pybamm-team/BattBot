@@ -36,11 +36,11 @@ class Upload:
             resource_owner_key=self.keys.ACCESS_TOKEN,
             resource_owner_secret=self.keys.ACCESS_TOKEN_SECRET,
         )
-        self.auth = tweepy.OAuthHandler(
-            self.keys.CONSUMER_KEY, self.keys.CONSUMER_SECRET
-        )
-        self.auth.set_access_token(
-            self.keys.ACCESS_TOKEN, self.keys.ACCESS_TOKEN_SECRET
+        self.auth = tweepy.OAuth1UserHandler(
+            self.keys.CONSUMER_KEY,
+            self.keys.CONSUMER_SECRET,
+            self.keys.ACCESS_TOKEN,
+            self.keys.ACCESS_TOKEN_SECRET,
         )
         self.api = tweepy.API(self.auth)
         self.total_bytes = total_bytes

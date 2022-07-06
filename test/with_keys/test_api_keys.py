@@ -18,8 +18,12 @@ class TestApiKeys(unittest.TestCase):
         self.assertIsInstance(CONSUMER_KEY, str)
         self.assertIsInstance(CONSUMER_SECRET, str)
 
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-        auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+        auth = tweepy.OAuth1UserHandler(
+            CONSUMER_KEY,
+            CONSUMER_SECRET,
+            ACCESS_TOKEN,
+            ACCESS_TOKEN_SECRET,
+        )
 
         api = tweepy.API(auth)
 

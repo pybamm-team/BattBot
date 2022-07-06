@@ -3,7 +3,7 @@ import pybamm
 import os
 from bot.utils.resize_gif import resize_gif
 import numpy as np
-import imageio
+import imageio.v2 as imageio
 from PIL import Image
 import matplotlib.pyplot as plt
 import gc
