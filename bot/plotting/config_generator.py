@@ -9,6 +9,7 @@ chemistries = [
     pybamm.parameter_sets.Ai2020,
     pybamm.parameter_sets.Chen2020,
     pybamm.parameter_sets.Marquis2019,
+    pybamm.parameter_sets.OKane2022
 ]
 
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters

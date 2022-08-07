@@ -47,7 +47,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.Chen2020_plating
+        chemistry = pybamm.parameter_sets.OKane2022
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -106,7 +106,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.Chen2020_plating
+        chemistry = pybamm.parameter_sets.OKane2022
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 

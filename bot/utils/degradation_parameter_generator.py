@@ -3,14 +3,13 @@ import random
 from utils.parameter_value_generator import parameter_value_generator
 
 
-def lico2_volume_change_Ai2020(sto):
+def lico2_volume_change_Ai2020(sto, c_s_max):
     omega = pybamm.Parameter("Positive electrode partial molar volume [m3.mol-1]")
-    c_p_max = pybamm.Parameter("Maximum concentration in positive electrode [mol.m-3]")
-    t_change = omega * c_p_max * sto
+    t_change = omega * c_s_max * sto
     return t_change
 
 
-def graphite_volume_change_Ai2020(sto):
+def graphite_volume_change_Ai2020(sto, c_s_max):
     p1 = 145.907
     p2 = -681.229
     p3 = 1334.442

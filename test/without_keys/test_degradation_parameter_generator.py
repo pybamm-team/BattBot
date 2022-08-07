@@ -98,14 +98,11 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertEqual(len(param_values), 2)
         self.assertIsInstance(degradation_parameter, str)
 
-        t_change = lico2_volume_change_Ai2020(5)
-        # self.assertAlmostEqual(
-        #     t_change,
-        #     pybamm.Parameter("Positive electrode partial molar volume [m3.mol-1]")
-        #     * pybamm.Parameter("Maximum concentration in positive electrode [mol.m-3]")
-        #     * 5,
-        # )
-        t_change = graphite_volume_change_Ai2020(5)
+        t_change = lico2_volume_change_Ai2020(5, 3)
+        self.assertIsInstance(
+            t_change, pybamm.expression_tree.binary_operators.Multiplication
+        )
+        t_change = graphite_volume_change_Ai2020(5, 1)
         self.assertEqual(t_change, 103545409.4049503)
 
 
