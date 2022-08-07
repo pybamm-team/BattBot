@@ -47,6 +47,19 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
+        chemistry = pybamm.parameter_sets.OKane2022
+        params = pybamm.ParameterValues(chemistry)
+        new_params = parameter_value_generator(params, parameter)
+
+        self.assertGreaterEqual(
+            new_params[list(parameter.keys())[0]],
+            params[list(parameter.keys())[0]] * 0.5,
+        )
+        self.assertLessEqual(
+            new_params[list(parameter.keys())[0]], params[list(parameter.keys())[0]] * 2
+        )
+        self.assertIsInstance(new_params, pybamm.ParameterValues)
+
         parameter = {
             "Negative electrode exchange-current density [A.m-2]": (None, None)
         }
@@ -80,6 +93,20 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         chemistry = pybamm.parameter_sets.Ai2020
+        params = pybamm.ParameterValues(chemistry)
+        new_params = parameter_value_generator(params, parameter)
+
+        self.assertIsInstance(
+            float(
+                new_params[
+                    "Negative electrode exchange-current density [A.m-2]"
+                ].__str__()
+            ),
+            float,
+        )
+        self.assertIsInstance(new_params, pybamm.ParameterValues)
+
+        chemistry = pybamm.parameter_sets.OKane2022
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
