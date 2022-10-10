@@ -47,7 +47,7 @@ def sync_last_seen_id(testing=False):
 
                 # scraping all the replies of the tweet with id=last_seen_id
                 replies = tweepy.Cursor(
-                    api.search,
+                    api.search_tweets,
                     q="to:{}".format(mention.user.screen_name),
                     since_id=mention._json["id"],
                     tweet_mode="extended",
