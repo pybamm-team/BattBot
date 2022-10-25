@@ -1,6 +1,8 @@
 # BattBot
 
-![BattBot](https://user-images.githubusercontent.com/21146187/139149748-4e4b1bd3-3845-444d-b7d1-8a8a34696005.jpeg)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/74055102/197869338-9f7a41aa-65e8-42f4-b5cf-d8480d3e2ae4.png"/>
+</p>
 
 ![GIF](https://miro.medium.com/max/788/1*z_AwTGIVYneAzpzwPUGDxw.gif)
   
