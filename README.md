@@ -2,9 +2,8 @@
 
 <p align="center">
     <img src="https://user-images.githubusercontent.com/74055102/197869338-9f7a41aa-65e8-42f4-b5cf-d8480d3e2ae4.png"/>
+    <img src="https://user-images.githubusercontent.com/74055102/198250858-e4e9063b-f941-45b6-9c89-34a8b95378fa.gif"/>
 </p>
-
-![GIF](https://miro.medium.com/max/788/1*z_AwTGIVYneAzpzwPUGDxw.gif)
   
 <div align="center">
   
