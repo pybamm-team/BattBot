@@ -6,3 +6,5 @@ tempCodeRunnerFile.py
 plot.gif
 .coverage
 .ipynb_checkpoints
+plot*.png
+.DS_Store

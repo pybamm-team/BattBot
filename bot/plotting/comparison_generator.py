@@ -20,8 +20,8 @@ class ComparisonGenerator:
             }
             Provide only 1 model for "parameter comparison" and 2 or more models for
             "model comparison".
-        chemistry : dict
-            Chemistry for the models.
+        chemistry : str
+            A PyBaMM chemistry.
         is_experiment : bool
             If the comparison includes an experiment.
         params : pybamm.ParameterValues
@@ -163,7 +163,7 @@ class ComparisonGenerator:
         )
 
         if self.is_experiment:
-            if self.chemistry == pybamm.parameter_sets.Ai2020:
+            if self.chemistry == "Ai2020":
                 batch_study.solve(calc_esoh=False)
             else:
                 batch_study.solve()
@@ -254,7 +254,7 @@ class ComparisonGenerator:
         )
 
         if self.is_experiment:
-            if self.chemistry == pybamm.parameter_sets.Ai2020:
+            if self.chemistry == "Ai2020":
                 batch_study.solve(calc_esoh=False)
             else:
                 batch_study.solve()

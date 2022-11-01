@@ -11,7 +11,7 @@ class TestComparisonGenerator(unittest.TestCase):
             "DFN": pybamm.lithium_ion.DFN(),
             "SPM": pybamm.lithium_ion.SPM(),
         }
-        self.chemistry = pybamm.parameter_sets.Chen2020
+        self.chemistry = "Chen2020"
         self.params = pybamm.ParameterValues(self.chemistry)
         self.cycle = [
             (
@@ -124,12 +124,12 @@ class TestComparisonGenerator(unittest.TestCase):
 
         comparison_generator = ComparisonGenerator(
             models_for_comp=self.model_for_comp,
-            chemistry=pybamm.parameter_sets.Ai2020,
+            chemistry="Ai2020",
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
             param_to_vary_info=self.param_to_vary_info,
-            params=pybamm.ParameterValues(pybamm.parameter_sets.Ai2020),
+            params=pybamm.ParameterValues("Ai2020"),
         )
 
         comparison_generator.parameter_comparison(testing=True)
@@ -143,11 +143,11 @@ class TestComparisonGenerator(unittest.TestCase):
 
         comparison_generator = ComparisonGenerator(
             models_for_comp=self.models_for_comp,
-            chemistry=pybamm.parameter_sets.Ai2020,
+            chemistry="Ai2020",
             is_experiment=self.is_experiment,
             cycle=self.cycle,
             number=self.number,
-            params=pybamm.ParameterValues(pybamm.parameter_sets.Ai2020),
+            params=pybamm.ParameterValues("Ai2020"),
         )
 
         comparison_generator.model_comparison(testing=True)

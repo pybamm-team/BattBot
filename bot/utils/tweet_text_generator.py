@@ -1,3 +1,6 @@
+import pybamm
+
+
 def tweet_text_generator(
     chemistry,
     model,
@@ -15,7 +18,7 @@ def tweet_text_generator(
 
     Parameters
     ----------
-        chemistry : dict
+        chemistry : str
         model : :class:`pybamm.BaseBatteryModel` or dict
         is_experiment : bool
         cycle : list or None
@@ -34,6 +37,8 @@ def tweet_text_generator(
             Not none if the tweet text exceeds twitter limit.
     """
 
+    param_values = pybamm.ParameterValues(chemistry)
+
     if is_comparison:
         # calculate C-rate and Temperature to add in tweet text
         c_rate = round(
@@ -46,7 +51,7 @@ def tweet_text_generator(
     # summary variable
     if is_experiment and not is_comparison:
         tweet_text = (
-            f"Plotting {model.name} with {chemistry['citation']} "
+            f"Plotting {model.name} with {param_values['citations'][0]} "
             f"parameters and {degradation_value} {degradation_mode} "
             f"for the following experiment: {cycle} * {number}"
         )
@@ -58,13 +63,13 @@ def tweet_text_generator(
             if len(model) == 2:
                 tweet_text = (
                     f"Comparing {model[0].name} and {model[1].name} "
-                    f"with {chemistry['citation']} parameters at {temp}°C for the "
+                    f"with {param_values['citations'][0]} parameters at {temp}°C for the "
                     f"following experiment: {cycle} * {number}"
                 )
             else:
                 tweet_text = (
                     f"Comparing {model[0].name}, {model[1].name}, and "
-                    f"{model[2].name} with {chemistry['citation']} "
+                    f"{model[2].name} with {param_values['citations'][0]} "
                     f"parameters at {temp}°C for the following experiment: "
                     f"{cycle} * {number}"
                 )
@@ -72,7 +77,7 @@ def tweet_text_generator(
         # a parameter
         elif param_to_vary is not None and is_comparison:
             tweet_text = (
-                f"{model[0].name} with {chemistry['citation']} parameters "
+                f"{model[0].name} with {param_values['citations'][0]} parameters "
                 f"varying '{param_to_vary}' at {temp}°C for the following experiment: "
                 f"{cycle} * {number}"
             )
@@ -85,20 +90,20 @@ def tweet_text_generator(
             if len(model) == 2:
                 tweet_text = (
                     f"Comparing {model[0].name} and {model[1].name} with "
-                    f"{chemistry['citation']} parameters for a {c_rate} C "
+                    f"{param_values['citations'][0]} parameters for a {c_rate} C "
                     f"discharge at {temp}°C"
                 )
             else:
                 tweet_text = (
                     f"Comparing {model[0].name}, {model[1].name}, and "
-                    f"{model[2].name} with {chemistry['citation']} "
+                    f"{model[2].name} with {param_values['citations'][0]} "
                     f"parameters for a {c_rate} C discharge at {temp}°C"
                 )
 
         # comparing a single model by varying a parameter value
         elif param_to_vary is not None and is_comparison:
             tweet_text = (
-                f"{model[0].name} with {chemistry['citation']} parameters "
+                f"{model[0].name} with {param_values['citations'][0]} parameters "
                 f"varying '{param_to_vary}' for a {c_rate} C discharge at "
                 f"{temp}°C"
             )

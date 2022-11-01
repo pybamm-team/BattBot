@@ -5,7 +5,7 @@ from bot.utils.tweet_text_generator import tweet_text_generator
 
 class TestTweetTextGenerator(unittest.TestCase):
     def setUp(self):
-        self.chemistry = pybamm.parameter_sets.Chen2020
+        self.chemistry = "Chen2020"
         self.params = pybamm.ParameterValues(self.chemistry)
         self.c_rate = (
             self.params["Current function [A]"]
@@ -46,7 +46,7 @@ class TestTweetTextGenerator(unittest.TestCase):
 
         self.assertEqual(
             result,
-            f"Plotting {self.model.name} with {self.chemistry['citation']} "
+            f"Plotting {self.model.name} with {self.params[0]['citations'][0]} "
             f"parameters and {self.degradation_value} {self.degradation_mode} "
             "for the following experiment \U0001F53D https://bit.ly/3z5p7q9"
         )
@@ -73,7 +73,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(
             result,
             f"Comparing {self.model[0].name} and {self.model[1].name} "
-            f"with {self.chemistry['citation']} parameters at {self.temp}°C for the "
+            f"with {self.params[0]['citations'][0]} parameters at {self.temp}°C for the "
             f"following experiment \U0001F53D https://bit.ly/3z5p7q9",
         )
 
@@ -101,7 +101,7 @@ class TestTweetTextGenerator(unittest.TestCase):
             result,
             f"Comparing Doyle-Fuller-Newman model, Single Particle Model, and"
             f" Single Particle Model with electrolyte with "
-            f"{self.chemistry['citation']} parameters at {self.temp}°C for the "
+            f"{self.params[0]['citations'][0]} parameters at {self.temp}°C for the "
             "following experiment \U0001F53D https://bit.ly/3z5p7q9",
         )
 
@@ -123,7 +123,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(experiment, str(self.cycle) + " * " + str(self.number))
         self.assertEqual(
             result,
-            f"{self.model[0].name} with {self.chemistry['citation']} "
+            f"{self.model[0].name} with {self.params[0]['citations'][0]} "
             f"parameters varying '{self.param_to_vary}'"
             f" at {self.temp}°C for the following experiment "
             "\U0001F53D https://bit.ly/3z5p7q9",
@@ -150,7 +150,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(
             result,
             f"Comparing {self.model[0].name} and {self.model[1].name} with "
-            f"{self.chemistry['citation']} parameters for a {self.c_rate} C "
+            f"{self.params[0]['citations'][0]} parameters for a {self.c_rate} C "
             f"discharge at {self.temp}°C "
             "https://bit.ly/3z5p7q9",
         )
@@ -178,7 +178,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(
             result,
             f"Comparing {self.model[0].name}, {self.model[1].name}, and "
-            f"{self.model[2].name} with {self.chemistry['citation']} "
+            f"{self.model[2].name} with {self.params[0]['citations'][0]} "
             f"parameters for a {self.c_rate} C discharge at {self.temp}°C "
             "https://bit.ly/3z5p7q9",
         )
@@ -201,7 +201,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertIsNone(experiment)
         self.assertEqual(
             result,
-            f"{self.model[0].name} with {self.chemistry['citation']} "
+            f"{self.model[0].name} with {self.params[0]['citations'][0]} "
             "parameters "
             f"varying '{self.param_to_vary}' for a {self.c_rate} C discharge "
             "at "
@@ -212,7 +212,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.param_to_vary = (
             "Positive electrode exchange-current density [A.m-2]"  # noqa
         )
-        self.chemistry = pybamm.parameter_sets.Chen2020
+        self.chemistry = "Chen2020"
         self.is_experiment = True
 
         result, experiment = tweet_text_generator(
@@ -231,7 +231,7 @@ class TestTweetTextGenerator(unittest.TestCase):
         self.assertEqual(experiment, str(self.cycle) + " * " + str(self.number))
         self.assertEqual(
             result,
-            f"Doyle-Fuller-Newman model with {self.chemistry['citation']} "
+            f"Doyle-Fuller-Newman model with {self.params[0]['citations'][0]} "
             f"parameters varying '{self.param_to_vary}' "
             f"at {self.temp}°C for the following "
             "experiment \U0001F53D https://bit.ly/3z5p7q9",

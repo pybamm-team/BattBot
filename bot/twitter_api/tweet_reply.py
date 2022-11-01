@@ -127,11 +127,11 @@ class Reply(Upload):
         models_for_comp = dict(list(enumerate(models)))
 
         if "chen2020" in text_list:
-            chemistry = pybamm.parameter_sets.Chen2020
+            chemistry = "Chen2020"
         elif "marquis2019" in text_list:
-            chemistry = pybamm.parameter_sets.Marquis2019
+            chemistry = "Marquis2019"
         elif "ai2020" in text_list:
-            chemistry = pybamm.parameter_sets.Ai2020
+            chemistry = "Ai2020"
         else:
             # if no chemistry is provided
             raise Exception(

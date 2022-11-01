@@ -9,7 +9,7 @@ class TestConfigGenerator(unittest.TestCase):
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
@@ -24,7 +24,7 @@ class TestConfigGenerator(unittest.TestCase):
         config = config_generator(
             "degradation comparison",
             test_config={
-                "chemistry": pybamm.parameter_sets.Ai2020,
+                "chemistry": "Ai2020",
                 "is_experiment": None,
                 "number_of_comp": None,
                 "degradation_mode": None,
@@ -33,7 +33,7 @@ class TestConfigGenerator(unittest.TestCase):
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
@@ -48,7 +48,7 @@ class TestConfigGenerator(unittest.TestCase):
         config = config_generator(
             "degradation comparison",
             test_config={
-                "chemistry": pybamm.parameter_sets.Mohtat2020,
+                "chemistry": "Mohtat2020",
                 "is_experiment": None,
                 "number_of_comp": None,
                 "degradation_mode": "particle mechanics",
@@ -57,7 +57,7 @@ class TestConfigGenerator(unittest.TestCase):
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
@@ -72,7 +72,7 @@ class TestConfigGenerator(unittest.TestCase):
         config = config_generator(
             "degradation comparison",
             test_config={
-                "chemistry": pybamm.parameter_sets.Mohtat2020,
+                "chemistry": "Mohtat2020",
                 "is_experiment": None,
                 "number_of_comp": None,
                 "degradation_mode": "SEI",
@@ -81,7 +81,7 @@ class TestConfigGenerator(unittest.TestCase):
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
@@ -96,7 +96,7 @@ class TestConfigGenerator(unittest.TestCase):
         config = config_generator(
             "degradation comparison",
             test_config={
-                "chemistry": pybamm.parameter_sets.Chen2020,
+                "chemistry": "Chen2020",
                 "is_experiment": None,
                 "number_of_comp": None,
                 "degradation_mode": None,
@@ -105,7 +105,7 @@ class TestConfigGenerator(unittest.TestCase):
 
         self.assertIsInstance(config, dict)
         self.assertIsInstance(config["model"], pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["cycle"], list)
         self.assertIsInstance(config["number"], int)
         pybamm.Experiment(config["cycle"] * config["number"])
@@ -123,7 +123,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["models_for_comp"], dict)
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertTrue(isinstance(config["cycle"], list) or config["cycle"] is None)
         self.assertTrue(isinstance(config["number"], int) or config["number"] is None)
@@ -137,7 +137,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["models_for_comp"], dict)
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertTrue(isinstance(config["cycle"], list) or config["cycle"] is None)
         self.assertTrue(isinstance(config["number"], int) or config["number"] is None)
@@ -154,7 +154,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["models_for_comp"], dict)
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertTrue(config["is_experiment"])
         self.assertIsInstance(config["cycle"], list)
@@ -177,7 +177,7 @@ class TestConfigGenerator(unittest.TestCase):
         self.assertIsInstance(config["models_for_comp"], dict)
         for model in config["models_for_comp"].values():
             self.assertIsInstance(model, pybamm.BaseBatteryModel)
-        self.assertIsInstance(config["chemistry"], dict)
+        self.assertIsInstance(config["chemistry"], str)
         self.assertIsInstance(config["is_experiment"], bool)
         self.assertFalse(config["is_experiment"])
         self.assertIsNone(config["cycle"])

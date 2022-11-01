@@ -32,13 +32,13 @@ class TestRandomPlotGenerator(unittest.TestCase):
             )
         ]
         number = 2
-        chemistry = pybamm.parameter_sets.Chen2020
+        chemistry = "Chen2020"
         degradation_parameter = "Ambient temperature [K]"
 
         param_values = []
         for i in range(2):
             param_values.append(
-                pybamm.ParameterValues(pybamm.parameter_sets.Chen2020)
+                pybamm.ParameterValues("Chen2020")
             )
             param_values[i]["Ambient temperature [K]"] = [290, 285, 295][i]
 
@@ -103,7 +103,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
         self.assertIsNotNone(return_dict["model"].options)
         self.assertIsInstance(return_dict["model"].options, dict)
         self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsNotNone(return_dict["cycle"])
         self.assertIsNotNone(return_dict["number"])
         self.assertTrue(return_dict["is_experiment"])
@@ -142,7 +141,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             self.assertIsNotNone(model.options)
             self.assertIsInstance(model.options, dict)
             self.assertTrue(key in key_list for key in model.options.keys())
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsInstance(return_dict["is_experiment"], bool)
         self.assertIsInstance(return_dict["is_comparison"], bool)
 
@@ -176,7 +174,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             self.assertIsNotNone(model.options)
             self.assertIsInstance(model.options, dict)
             self.assertTrue(key in key_list for key in model.options.keys())
-        self.assertEqual("lithium_ion", return_dict["chemistry"]["chemistry"])
         self.assertIsInstance(return_dict["is_experiment"], bool)
         self.assertIsInstance(return_dict["is_comparison"], bool)
 

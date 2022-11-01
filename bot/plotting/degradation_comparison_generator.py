@@ -12,8 +12,8 @@ class DegradationComparisonGenerator:
     ----------
         model : :class:`pybamm.BaseBatteryModel`
             Model to be used in the comparison.
-        chemistry : dict
-            Chemistry to be used in the comparison.
+        chemistry : str
+            A PyBaMM chemistry.
         param_values : list
             Parameter values with one degradation parameter varied. Should be of the
             form -
@@ -75,9 +75,9 @@ class DegradationComparisonGenerator:
                 experiment=experiment,
                 parameter_values=self.param_values[i],
             )
-            if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
+            if self.chemistry == "Ai2020":  # pragma: no cover
                 sim.solve(calc_esoh=False)
-            elif self.chemistry == pybamm.parameter_sets.Mohtat2020:
+            elif self.chemistry == "Mohtat2020":
                 sim.solve(initial_soc=1)
             else:  # pragma: no cover
                 sim.solve()
@@ -99,7 +99,7 @@ class DegradationComparisonGenerator:
         """
         Solves an experiment with the given configuration.
         """
-        if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
+        if self.chemistry == "Ai2020":  # pragma: no cover
             experiment = pybamm.Experiment(self.cycle * self.number)
         else:
             experiment = pybamm.Experiment(
@@ -121,7 +121,7 @@ class DegradationComparisonGenerator:
         """
         Creates and saves a picture of summary variable comparison plot.
         """
-        if self.chemistry == pybamm.parameter_sets.Ai2020:  # pragma: no cover
+        if self.chemistry == "Ai2020":  # pragma: no cover
             vars_to_plot = [
                 "Measured capacity [A.h]",
                 "Loss of lithium inventory [%]",

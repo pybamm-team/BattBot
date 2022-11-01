@@ -62,7 +62,7 @@ def degradation_parameter_generator(
 
     params = pybamm.ParameterValues(chemistry)
 
-    if chemistry == pybamm.parameter_sets.Mohtat2020:
+    if chemistry == "Mohtat2020":
         params.update(
             {
                 # mechanical properties
@@ -93,7 +93,7 @@ def degradation_parameter_generator(
             check_already_exists=False,
         )
     if degradation_mode == "particle mechanics":
-        if chemistry == pybamm.parameter_sets.Ai2020:
+        if chemistry == "Ai2020":
             degradation_parameters = {
                 "Negative electrode Paris' law constant b": {
                     "print_name": None,
@@ -136,7 +136,7 @@ def degradation_parameter_generator(
                     "bounds": (None, None),
                 },
             }
-        elif chemistry == pybamm.parameter_sets.Mohtat2020:
+        elif chemistry == "Mohtat2020":
             degradation_parameters = {
                 "Positive electrode LAM constant proportional term [s-1]": {
                     "print_name": None,
