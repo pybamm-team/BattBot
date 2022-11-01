@@ -63,8 +63,8 @@ def tweet_text_generator(
             if len(model) == 2:
                 tweet_text = (
                     f"Comparing {model[0].name} and {model[1].name} "
-                    f"with {param_values['citations'][0]} parameters at {temp}°C for the "
-                    f"following experiment: {cycle} * {number}"
+                    f"with {param_values['citations'][0]} parameters at {temp}°C for "
+                    f"the following experiment: {cycle} * {number}"
                 )
             else:
                 tweet_text = (
