@@ -12,7 +12,7 @@ class TestUpload(unittest.TestCase):
             return_dict,
             "model comparison",
             {
-                "chemistry": pybamm.parameter_sets.Chen2020,
+                "chemistry": "Chen2020",
                 "models_for_comp": {
                     0: pybamm.lithium_ion.DFN(),
                     1: pybamm.lithium_ion.SPM(),
@@ -23,7 +23,7 @@ class TestUpload(unittest.TestCase):
                 "param_to_vary_info": None,
                 "bounds": None,
                 "params": pybamm.ParameterValues(
-                    pybamm.parameter_sets.Chen2020
+                    "Chen2020"
                 ),
                 "varied_values_override": None,
             },
@@ -40,7 +40,7 @@ class TestUpload(unittest.TestCase):
 
         os.remove(plot)
 
-        chemistry = pybamm.parameter_sets.Chen2020
+        chemistry = "Chen2020"
         params = [
             pybamm.ParameterValues(chemistry),
             pybamm.ParameterValues(chemistry),
@@ -54,7 +54,7 @@ class TestUpload(unittest.TestCase):
             return_dict,
             "degradation comparison",
             {
-                "chemistry": pybamm.parameter_sets.Chen2020,
+                "chemistry": "Chen2020",
                 "model": pybamm.lithium_ion.DFN(),
                 "cycle": [
                     (

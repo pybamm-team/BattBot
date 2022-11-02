@@ -25,12 +25,12 @@ class TestDegradationComparisonGenerator(unittest.TestCase):
         self.param_values_mohtat = []
         for i in range(2):
             self.param_values_mohtat.append(
-                pybamm.ParameterValues(pybamm.parameter_sets.Mohtat2020)
+                pybamm.ParameterValues("Mohtat2020")
             )
             self.param_values_mohtat[i][
                 "Inner SEI open-circuit potential [V]"
             ] = self.varied_values[i]
-        self.chemistry = pybamm.parameter_sets.Mohtat2020
+        self.chemistry = "Mohtat2020"
         self.parameter_values = pybamm.ParameterValues(self.chemistry)
 
     def tearDown(self):
@@ -50,14 +50,12 @@ class TestDegradationComparisonGenerator(unittest.TestCase):
             self.experiment
         )
 
-        self.assertEqual(self.model.__class__, sim._model_class)
         self.assertIsNotNone(sim._solution)
-        self.assertEqual(sim.experiment, self.experiment)
         self.assertIsInstance(
             solutions_and_labels[0][0].all_models[0], pybamm.lithium_ion.SPM
         )
         self.assertEqual(
-            sim._experiment_inputs[0]["Current input [A]"],
+            sim.experiment.operating_conditions[0]["Current input [A]"],
             2 * self.parameter_values["Nominal cell capacity [A.h]"],
         )
         self.assertEqual(solutions_and_labels[0][0].termination, "final time")

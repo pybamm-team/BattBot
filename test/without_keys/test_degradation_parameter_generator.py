@@ -11,7 +11,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
     def test_degradation_parameter_generator(self):
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Ai2020,
+            "Ai2020",
             2,
             degradation_mode="particle mechanics",
             degradation_value="swelling and cracking",
@@ -22,7 +22,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Chen2020,
+            "Chen2020",
             2,
             degradation_mode="SEI",
             degradation_value="reaction limited",
@@ -33,7 +33,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Chen2020,
+            "Chen2020",
             2,
             degradation_mode="SEI",
             degradation_value="ec reaction limited",
@@ -44,7 +44,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Chen2020,
+            "Chen2020",
             2,
             degradation_mode="SEI",
             degradation_value="solvent-diffusion limited",
@@ -55,7 +55,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Chen2020,
+            "Chen2020",
             2,
             degradation_mode="SEI",
             degradation_value="electron-migration limited",
@@ -66,7 +66,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Chen2020,
+            "Chen2020",
             2,
             degradation_mode="SEI",
             degradation_value="interstitial-diffusion limited",
@@ -77,7 +77,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Mohtat2020,
+            "Mohtat2020",
             2,
             degradation_mode="SEI",
             degradation_value="interstitial-diffusion limited",
@@ -88,7 +88,7 @@ class TestDegradationParameterGenerator(unittest.TestCase):
         self.assertIsInstance(degradation_parameter, str)
 
         (param_values, degradation_parameter) = degradation_parameter_generator(
-            pybamm.parameter_sets.Mohtat2020,
+            "Mohtat2020",
             2,
             degradation_mode="particle mechanics",
             degradation_value="swelling only",

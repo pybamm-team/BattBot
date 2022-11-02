@@ -6,10 +6,10 @@ from utils.parameter_value_generator import parameter_value_generator
 
 # possible chemistries for the bot
 chemistries = [
-    pybamm.parameter_sets.Ai2020,
-    pybamm.parameter_sets.Chen2020,
-    pybamm.parameter_sets.Marquis2019,
-    pybamm.parameter_sets.OKane2022
+    "Ai2020",
+    "Chen2020",
+    "Marquis2019",
+    "OKane2022"
 ]
 
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters
@@ -101,7 +101,7 @@ def config_generator(
         chemistry = test_config["chemistry"]
     # use only Mohtat2020 and SPM till others are fixed
     elif choice == "degradation comparison":
-        chemistry = pybamm.parameter_sets.Mohtat2020
+        chemistry = "Mohtat2020"
     else:
         chemistry = random.choice(chemistries)
     parameter_values = pybamm.ParameterValues(chemistry)
@@ -110,7 +110,7 @@ def config_generator(
     if choice == "degradation comparison":
 
         # add degradation / update model options
-        if chemistry == pybamm.parameter_sets.Ai2020:
+        if chemistry == "Ai2020":
             degradation_value = particle_mechanics_list[0]
             degradation_mode = "particle mechanics"
             model_options.update(
@@ -118,7 +118,7 @@ def config_generator(
                     degradation_mode: degradation_value,
                 }
             )
-        elif chemistry == pybamm.parameter_sets.Mohtat2020:
+        elif chemistry == "Mohtat2020":
             if test_config["degradation_mode"] is None:
                 degradation_mode = random.choice(["SEI", "particle mechanics"])
             else:

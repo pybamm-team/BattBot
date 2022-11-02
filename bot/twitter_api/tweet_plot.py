@@ -28,7 +28,7 @@ class Tweet(Upload):
         """
         Defines video tweet properties
         """
-        super().__init__()
+        # super().__init__()
         # create a random GIF
         while True:
             manager = multiprocessing.Manager()

@@ -24,9 +24,9 @@ This will install all the dependencies in your local system including the latest
 
 4. To check if the installation worked, execute (this will take some time) - 
 ```bash
-python -m unittest
+python -m unittest -v
 # or if you haven't completed the pre-installation process, this -
-python -m unittest discover ./test/without_keys/
+python -m unittest discover ./test/without_keys/ -v
 ```
 **Note: The tests written in `with_keys` subdirectory will fail if you haven't completed the pre-installation process, again, you don't necessarily need the `Twitter Developer Account` to contribute to this repository.**
 

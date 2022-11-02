@@ -7,7 +7,7 @@ class TestParameterValueGenerator(unittest.TestCase):
     def test_parameter_value_generator(self):
 
         parameter = {"Lower voltage cut-off [V]": (None, None)}
-        chemistry = pybamm.parameter_sets.Chen2020
+        chemistry = "Chen2020"
         params = pybamm.ParameterValues(chemistry)
 
         new_params = parameter_value_generator(params, parameter)
@@ -21,7 +21,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.Marquis2019
+        chemistry = "Marquis2019"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -34,7 +34,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.Ai2020
+        chemistry = "Ai2020"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -47,7 +47,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.OKane2022
+        chemistry = "OKane2022"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -64,7 +64,7 @@ class TestParameterValueGenerator(unittest.TestCase):
             "Negative electrode exchange-current density [A.m-2]": (None, None)
         }
 
-        chemistry = pybamm.parameter_sets.Chen2020
+        chemistry = "Chen2020"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -78,7 +78,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.Marquis2019
+        chemistry = "Marquis2019"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -92,7 +92,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.Ai2020
+        chemistry = "Ai2020"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -106,7 +106,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         )
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
-        chemistry = pybamm.parameter_sets.OKane2022
+        chemistry = "OKane2022"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
@@ -121,7 +121,7 @@ class TestParameterValueGenerator(unittest.TestCase):
         self.assertIsInstance(new_params, pybamm.ParameterValues)
 
         parameter = {"Negative electrode diffusivity [m2.s-1]": (None, None)}
-        chemistry = pybamm.parameter_sets.Chen2020
+        chemistry = "Chen2020"
         params = pybamm.ParameterValues(chemistry)
         new_params = parameter_value_generator(params, parameter)
 
