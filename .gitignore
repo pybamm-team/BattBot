@@ -6,5 +6,9 @@ tempCodeRunnerFile.py
 plot.gif
 .coverage
 .ipynb_checkpoints
+<<<<<<< Updated upstream
 plot*.png
 .DS_Store
+=======
+.env
+>>>>>>> Stashed changes
