@@ -9,3 +9,4 @@ plot.gif
 plot*.png
 .DS_Store
 .env
+.ruff_cache
