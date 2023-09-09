@@ -27,7 +27,7 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
 
     vmin = desired_decimal_point_generator(3.2, 3.7, 1)
     vmax = desired_decimal_point_generator(3.7, 4.2, 1)
-    ccharge = random.randint(1, 3)
+    ccharge = random.randint(1, 2)
     cdischarge = random.randint(1, 3)
     ccutoff = random.randint(1, 100)
 
