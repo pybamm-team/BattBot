@@ -13,7 +13,7 @@ jobs:
   style:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup python
       uses: actions/setup-python@v4
       with:
@@ -28,13 +28,10 @@ jobs:
   build:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     needs: style
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
         fetch-depth: 0 # otherwise will fail to push refs to dest repo
@@ -50,7 +47,7 @@ jobs:
         pip install -r requirements.txt
             
     - name: Tweet
-      if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'schedule'
       run: |
         cd bot
         python -m twitter_api.tweet_plot
@@ -65,7 +62,7 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Sync last seen ID
-      if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main'
       run: |
         cd bot
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -80,29 +77,14 @@ jobs:
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
     - name: Push changes
-      if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-        branch: ${{ github.ref }}      
+        branch: ${{ github.ref }}  
 
-    - name: Run macos unittests for PRs not from a fork
-      if: (matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name == github.repository) || (matrix.os == 'macos-latest' && github.event_name == 'schedule') || (matrix.os == 'macos-latest' && github.event_name == 'push')
-      run: |
-        python -m unittest discover -v test/
-      env:
-        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-        ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
-        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-
-    - name: Run macos unittests for PRs from a fork
-      if: matrix.os == 'macos-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event_name != 'push'
-      run: |
-        python -m unittest discover -v ./test/without_keys/
-
-    - name: Run ubuntu unittests and generate coverage report for PRs not from a fork
-      if: (matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name == github.repository) || (matrix.os == 'ubuntu-latest' && github.event_name == 'schedule') || (matrix.os == 'ubuntu-latest' && github.event_name == 'push')
+    - name: Run unittests and generate coverage report for PRs not from a fork
+      if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'schedule' || github.event_name == 'push'
       run: |
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
@@ -114,8 +96,8 @@ jobs:
         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
-    - name: Run ubuntu unittests and generate coverage report for PRs from a fork
-      if: matrix.os == 'ubuntu-latest' && github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event_name != 'push'
+    - name: Run unittests and generate coverage report for PRs from a fork
+      if: github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event_name != 'push'
       run: |
         echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
         echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
@@ -123,5 +105,4 @@ jobs:
         coverage combine
 
     - name: Upload coverage to Codecov
-      if: matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1
