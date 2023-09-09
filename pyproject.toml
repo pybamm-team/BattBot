@@ -1,7 +1,7 @@
 [tool.ruff]
 select = [
   "E", "F", "W", # flake8
-  "B", "B904",   # flake8-bugbear
+  "B",           # flake8-bugbear
   "I",           # isort
   "C4",          # flake8-comprehensions
   "ISC",         # flake8-implicit-str-concat
@@ -16,7 +16,12 @@ select = [
   "YTT",         # flake8-2020
 ]
 extend-ignore = [
-  "PLR",   # Design related pylint codes
+  "PLR",     # Design related pylint codes
+  "T201",    # print found
+  "PT011",   # pytest.raises(Exception) is too broad
+  "B017",    # pytest.raises(Exception) should be considered evil
+  "ISC003",  # Explicitly concatenated string should be implicitly concatenated
+  "B904",    # with `raise ... from err` or `raise ... from None`
 ]
 src = ["bot"]
 unfixable = [

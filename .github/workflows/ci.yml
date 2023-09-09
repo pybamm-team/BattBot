@@ -6,24 +6,23 @@ on:
   pull_request:
 
   schedule:
-    - cron: '0 7,19 * * *'
+    - cron: "0 7,19 * * *"
 
 jobs:
-
   style:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
+      - uses: actions/checkout@v4
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    - name: Check style
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install flake8
-        flake8 --max-line-length=89
+      - name: Check style
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install flake8
+          flake8 --max-line-length=89
 
   build:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
@@ -31,78 +30,78 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-        fetch-depth: 0 # otherwise will fail to push refs to dest repo
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise will fail to push refs to dest repo
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install wheel coverage
-        pip install -r requirements.txt
-            
-    - name: Tweet
-      if: github.ref == 'refs/heads/main' && github.event_name == 'schedule'
-      run: |
-        cd bot
-        python -m twitter_api.tweet_plot
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git pull origin main
-        git commit -m "Update config, data - [skip ci]" -a
-      env:
-        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-        ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
-        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel coverage
+          pip install -r requirements.txt
 
-    - name: Sync last seen ID
-      if: github.ref == 'refs/heads/main'
-      run: |
-        cd bot
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git pull origin main --rebase
-        python -m twitter_api.sync_last_seen_id
-        git commit --allow-empty -m "Update last_seen_id - skip ci" -a
-      env:
-        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-        ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
-        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+      - name: Tweet
+        if: github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+        run: |
+          cd bot
+          python -m twitter_api.tweet_plot
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin main
+          git commit -m "Update config, data - [skip ci]" -a
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
-    - name: Push changes
-      if: github.ref == 'refs/heads/main'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-        branch: ${{ github.ref }}  
+      - name: Sync last seen ID
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd bot
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin main --rebase
+          python -m twitter_api.sync_last_seen_id
+          git commit --allow-empty -m "Update last_seen_id - skip ci" -a
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
-    - name: Run unittests and generate coverage report for PRs not from a fork
-      if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'schedule' || github.event_name == 'push'
-      run: |
-        echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
-        echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
-        coverage run --concurrency=multiprocessing -m unittest -v
-        coverage combine
-      env:
-        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-        ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
-        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+      - name: Push changes
+        if: github.ref == 'refs/heads/main'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
-    - name: Run unittests and generate coverage report for PRs from a fork
-      if: github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event_name != 'push'
-      run: |
-        echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
-        echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
-        coverage run --concurrency=multiprocessing -m unittest discover test/without_keys -v
-        coverage combine
+      - name: Run unittests and generate coverage report for PRs not from a fork
+        if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'schedule' || github.event_name == 'push'
+        run: |
+          echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
+          echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
+          coverage run --concurrency=multiprocessing -m unittest -v
+          coverage combine
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      - name: Run unittests and generate coverage report for PRs from a fork
+        if: github.event.pull_request.head.repo.full_name != github.repository && github.event_name != 'schedule' && github.event_name != 'push'
+        run: |
+          echo "COVERAGE_PROCESS_START=$PWD/.coveragerc" >> $GITHUB_ENV
+          echo "PYTHONPATH=$PYTHONPATH::$PWD" >> $GITHUB_ENV
+          coverage run --concurrency=multiprocessing -m unittest discover test/without_keys -v
+          coverage combine
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1

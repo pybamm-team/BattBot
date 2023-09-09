@@ -1,8 +1,9 @@
 import os
-import pybamm
 import unittest
-from bot.twitter_api.upload import Upload
+
+import pybamm
 from bot.plotting.random_plot_generator import random_plot_generator
+from bot.twitter_api.upload import Upload
 
 
 class TestUpload(unittest.TestCase):
@@ -22,12 +23,10 @@ class TestUpload(unittest.TestCase):
                 "number": None,
                 "param_to_vary_info": None,
                 "bounds": None,
-                "params": pybamm.ParameterValues(
-                    "Chen2020"
-                ),
+                "params": pybamm.ParameterValues("Chen2020"),
                 "varied_values_override": None,
             },
-            True
+            True,
         )
 
         plot = "plot.gif"
@@ -72,7 +71,7 @@ class TestUpload(unittest.TestCase):
                 "degradation_mode": "SEI",
                 "degradation_value": "reaction limited",
             },
-            True
+            True,
         )
 
         plot = "plot.png"

@@ -1,7 +1,9 @@
-import pybamm
 import logging
-from plotting.config_generator import config_generator
+
+import pybamm
+
 from plotting.comparison_generator import ComparisonGenerator
+from plotting.config_generator import config_generator
 from plotting.degradation_comparison_generator import DegradationComparisonGenerator
 
 
@@ -25,19 +27,14 @@ def random_plot_generator(return_dict, choice, reply_config=None, testing=False)
     logger.setLevel(logging.INFO)
 
     while True:
-
         try:
-            if reply_config is None:
-                config = config_generator(choice)
-            else:
-                config = reply_config
+            config = config_generator(choice) if reply_config is None else reply_config
 
             if not testing:
                 pybamm.set_logging_level("NOTICE")
                 logger.info(config)
 
             if choice == "degradation comparison":
-
                 degradation_comparison_generator = DegradationComparisonGenerator(
                     config["model"],
                     config["chemistry"],
@@ -69,7 +66,6 @@ def random_plot_generator(return_dict, choice, reply_config=None, testing=False)
                 return
 
             else:
-
                 # create an object of ComparisonGenerator with the random
                 # configuration
                 comparison_generator = ComparisonGenerator(
@@ -97,7 +93,7 @@ def random_plot_generator(return_dict, choice, reply_config=None, testing=False)
                         "cycle": config["cycle"],
                         "number": config["number"],
                         "is_comparison": True,
-                        "param_to_vary": list(config["param_to_vary_info"].keys())[0]
+                        "param_to_vary": next(iter(config["param_to_vary_info"].keys()))
                         if config["param_to_vary_info"] is not None
                         else None,
                         "varied_values": comparison_generator.comparison_dict[

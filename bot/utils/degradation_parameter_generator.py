@@ -1,5 +1,7 @@
-import pybamm
 import random
+
+import pybamm
+
 from utils.parameter_value_generator import parameter_value_generator
 
 
@@ -21,14 +23,14 @@ def graphite_volume_change_Ai2020(sto, c_s_max):
     p9 = 0.386
     p10 = -4.966e-05
     t_change = (
-        p1 * sto ** 9
-        + p2 * sto ** 8
-        + p3 * sto ** 7
-        + p4 * sto ** 6
-        + p5 * sto ** 5
-        + p6 * sto ** 4
-        + p7 * sto ** 3
-        + p8 * sto ** 2
+        p1 * sto**9
+        + p2 * sto**8
+        + p3 * sto**7
+        + p4 * sto**6
+        + p5 * sto**5
+        + p6 * sto**4
+        + p7 * sto**3
+        + p8 * sto**2
         + p9 * sto
         + p10
     )
@@ -68,7 +70,7 @@ def degradation_parameter_generator(
                 # mechanical properties
                 "Positive electrode Poisson's ratio": 0.3,
                 "Positive electrode Young's modulus [Pa]": 375e9,
-                "Positive electrode reference concentration for free of deformation [mol.m-3]": 0,  # noqa
+                "Positive electrode reference concentration for free of deformation [mol.m-3]": 0,  # noqa: E501
                 "Positive electrode partial molar volume [m3.mol-1]": -7.28e-7,
                 "Positive electrode volume change": lico2_volume_change_Ai2020,
                 "Negative electrode volume change": graphite_volume_change_Ai2020,
@@ -78,7 +80,7 @@ def degradation_parameter_generator(
                 # mechanical properties
                 "Negative electrode Poisson's ratio": 0.3,
                 "Negative electrode Young's modulus [Pa]": 15e9,
-                "Negative electrode reference concentration for free of deformation [mol.m-3]": 0,  # noqa
+                "Negative electrode reference concentration for free of deformation [mol.m-3]": 0,  # noqa: E501
                 "Negative electrode partial molar volume [m3.mol-1]": 3.1e-6,
                 # Loss of active materials (LAM) model
                 "Negative electrode LAM constant exponential term": 2,
@@ -127,11 +129,11 @@ def degradation_parameter_generator(
                     "print_name": None,
                     "bounds": (None, None),
                 },
-                "Negative electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
+                "Negative electrode reference concentration for free of deformation [mol.m-3]": {  # noqa: E501
                     "print_name": None,
                     "bounds": (0.0, None),
                 },
-                "Positive electrode reference concentration for free of deformation [mol.m-3]": {  # noqa
+                "Positive electrode reference concentration for free of deformation [mol.m-3]": {  # noqa: E501
                     "print_name": None,
                     "bounds": (None, None),
                 },
@@ -217,7 +219,7 @@ def degradation_parameter_generator(
 
     # generate parameter values by varying a single parameter
     param_values = []
-    for i in range(0, number_of_comp):
+    for _i in range(number_of_comp):
         params = parameter_value_generator(
             params.copy(),
             {

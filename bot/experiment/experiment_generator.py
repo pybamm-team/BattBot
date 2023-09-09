@@ -1,9 +1,10 @@
-import random
-from utils.desired_decimal_point_generator import desired_decimal_point_generator
 import logging
+import random
+
+from utils.desired_decimal_point_generator import desired_decimal_point_generator
 
 
-def experiment_generator(testing={"rest1": False, "rest2": False}):
+def experiment_generator(testing=None):
     """
     This function generates a random experiment with the template
     ["Discharge", "Rest?", "Charge", "Hold", "Rest?"].
@@ -20,6 +21,8 @@ def experiment_generator(testing={"rest1": False, "rest2": False}):
     -------
         cycle : list
     """
+    if testing is None:
+        testing = {"rest1": False, "rest2": False}
     charge = []
     discharge = []
     rest = []

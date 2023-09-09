@@ -1,16 +1,13 @@
 import random
+
 import pybamm
+
 from experiment.experiment_generator import experiment_generator
 from utils.degradation_parameter_generator import degradation_parameter_generator
 from utils.parameter_value_generator import parameter_value_generator
 
 # possible chemistries for the bot
-chemistries = [
-    "Ai2020",
-    "Chen2020",
-    "Marquis2019",
-    "OKane2022"
-]
+chemistries = ["Ai2020", "Chen2020", "Marquis2019", "OKane2022"]
 
 # possible "particle mechanics" for the bot, to be used with Ai2020 parameters
 particle_mechanics_list = [
@@ -69,12 +66,7 @@ param_to_vary_dict = {
 
 def config_generator(
     choice,
-    test_config={
-        "chemistry": None,
-        "is_experiment": None,
-        "number_of_comp": None,
-        "degradation_mode": None,
-    },
+    test_config=None,
 ):
     """
     Generates a random configuration to plot.
@@ -92,6 +84,13 @@ def config_generator(
     -------
         config: dict
     """
+    if test_config is None:
+        test_config = {
+            "chemistry": None,
+            "is_experiment": None,
+            "number_of_comp": None,
+            "degradation_mode": None,
+        }
     config = {}
     model_options = {}
 
@@ -108,7 +107,6 @@ def config_generator(
 
     # choose random degradation for a degradation comparison
     if choice == "degradation comparison":
-
         # add degradation / update model options
         if chemistry == "Ai2020":
             degradation_value = particle_mechanics_list[0]
@@ -161,7 +159,6 @@ def config_generator(
 
     # choose random configuration for no degradation
     if choice == "model comparison" or choice == "parameter comparison":
-
         # generating number of models to be compared
         # don't select randomly if testing
         if test_config["number_of_comp"] is not None:
@@ -235,7 +232,6 @@ def config_generator(
         )
 
     elif choice == "degradation comparison":
-
         # choosing a random model
         model = models[1]
 

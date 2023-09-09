@@ -1,7 +1,8 @@
+import os
 import unittest
+
 import pybamm
 from bot.plotting.degradation_comparison_generator import DegradationComparisonGenerator
-import os
 
 
 class TestDegradationComparisonGenerator(unittest.TestCase):
@@ -24,9 +25,7 @@ class TestDegradationComparisonGenerator(unittest.TestCase):
         self.varied_values = [0.09, 0.05]
         self.param_values_mohtat = []
         for i in range(2):
-            self.param_values_mohtat.append(
-                pybamm.ParameterValues("Mohtat2020")
-            )
+            self.param_values_mohtat.append(pybamm.ParameterValues("Mohtat2020"))
             self.param_values_mohtat[i][
                 "Inner SEI open-circuit potential [V]"
             ] = self.varied_values[i]
@@ -50,24 +49,24 @@ class TestDegradationComparisonGenerator(unittest.TestCase):
             self.experiment
         )
 
-        self.assertIsNotNone(sim._solution)
-        self.assertIsInstance(
+        assert sim._solution is not None
+        assert isinstance(
             solutions_and_labels[0][0].all_models[0], pybamm.lithium_ion.SPM
         )
-        self.assertEqual(
-            sim.experiment.operating_conditions[0]["Current input [A]"],
-            2 * self.parameter_values["Nominal cell capacity [A.h]"],
+        assert (
+            sim.experiment.operating_conditions[0]["Current input [A]"]
+            == 2 * self.parameter_values["Nominal cell capacity [A.h]"]
         )
-        self.assertEqual(solutions_and_labels[0][0].termination, "final time")
-        self.assertEqual(len(solutions_and_labels[0][0].cycles), 2)
-        self.assertEqual(len(solutions_and_labels), 2)
+        assert solutions_and_labels[0][0].termination == "final time"
+        assert len(solutions_and_labels[0][0].cycles) == 2
+        assert len(solutions_and_labels) == 2
 
         degradation_comparison_generator.solve()
 
-        self.assertIsInstance(degradation_comparison_generator.solutions, list)
-        self.assertIsInstance(degradation_comparison_generator.labels, list)
+        assert isinstance(degradation_comparison_generator.solutions, list)
+        assert isinstance(degradation_comparison_generator.labels, list)
         for solution in degradation_comparison_generator.solutions:
-            self.assertIsInstance(solution, pybamm.Solution)
+            assert isinstance(solution, pybamm.Solution)
 
         degradation_comparison_generator.generate_summary_variables()
 

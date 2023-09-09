@@ -1,6 +1,6 @@
-import pybamm
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pybamm
 
 
 class DegradationComparisonGenerator:
@@ -68,8 +68,7 @@ class DegradationComparisonGenerator:
 
         # iterate through all the parameter values, plugging one of them in the
         # simulation every time
-        for i in range(0, len(self.param_values)):
-
+        for i in range(len(self.param_values)):
             sim = pybamm.Simulation(
                 model=self.model,
                 experiment=experiment,
@@ -90,7 +89,7 @@ class DegradationComparisonGenerator:
                     solution,
                     self.degradation_parameter
                     + ": "
-                    + ("{:.5e}".format(val) if val > 10 or val < 1 else str(val)),
+                    + (f"{val:.5e}" if val > 10 or val < 1 else str(val)),
                 ]
             )
         return sim, solutions_and_labels

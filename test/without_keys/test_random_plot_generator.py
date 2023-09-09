@@ -1,8 +1,9 @@
-import unittest
-import pybamm
 import multiprocessing
-from bot.plotting.random_plot_generator import random_plot_generator
 import os
+import unittest
+
+import pybamm
+from bot.plotting.random_plot_generator import random_plot_generator
 
 
 class TestRandomPlotGenerator(unittest.TestCase):
@@ -13,7 +14,6 @@ class TestRandomPlotGenerator(unittest.TestCase):
             os.remove("plot.gif")
 
     def test_random_plot_generator(self):
-
         key_list = [
             "particle mechanics",
             "lithium plating",
@@ -37,9 +37,7 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
         param_values = []
         for i in range(2):
-            param_values.append(
-                pybamm.ParameterValues("Chen2020")
-            )
+            param_values.append(pybamm.ParameterValues("Chen2020"))
             param_values[i]["Ambient temperature [K]"] = [290, 285, 295][i]
 
         return_dict = {}
@@ -60,18 +58,18 @@ class TestRandomPlotGenerator(unittest.TestCase):
             testing=True,
         )
 
-        self.assertEqual(return_dict["model"], model)
-        self.assertIsNotNone(return_dict["model"].options)
-        self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
-        self.assertEqual(return_dict["chemistry"], chemistry)
-        self.assertEqual(return_dict["cycle"], cycle)
-        self.assertEqual(return_dict["number"], number)
-        self.assertTrue(return_dict["is_experiment"])
-        self.assertFalse(return_dict["is_comparison"])
-        self.assertIsInstance(return_dict["param_to_vary"], str)
-        self.assertEqual(return_dict["degradation_mode"], "SEI")
-        self.assertEqual(return_dict["degradation_value"], "reaction limited")
+        assert return_dict["model"] == model
+        assert return_dict["model"].options is not None
+        assert isinstance(return_dict["model"].options, dict)
+        assert (key in key_list for key in return_dict["model"].options)
+        assert return_dict["chemistry"] == chemistry
+        assert return_dict["cycle"] == cycle
+        assert return_dict["number"] == number
+        assert return_dict["is_experiment"]
+        assert not return_dict["is_comparison"]
+        assert isinstance(return_dict["param_to_vary"], str)
+        assert return_dict["degradation_mode"] == "SEI"
+        assert return_dict["degradation_value"] == "reaction limited"
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
         manager = multiprocessing.Manager()
@@ -87,8 +85,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
             if p.is_alive():
                 print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
+                    "Simulation is taking too long,",
+                    "KILLING IT and starting a NEW ONE.",
                 )
                 curr_dir = os.getcwd()
                 for file in os.listdir(curr_dir):
@@ -99,14 +97,14 @@ class TestRandomPlotGenerator(unittest.TestCase):
             else:
                 break
 
-        self.assertIsInstance(return_dict["model"], pybamm.BaseBatteryModel)
-        self.assertIsNotNone(return_dict["model"].options)
-        self.assertIsInstance(return_dict["model"].options, dict)
-        self.assertTrue(key in key_list for key in return_dict["model"].options.keys())
-        self.assertIsNotNone(return_dict["cycle"])
-        self.assertIsNotNone(return_dict["number"])
-        self.assertTrue(return_dict["is_experiment"])
-        self.assertFalse(return_dict["is_comparison"])
+        assert isinstance(return_dict["model"], pybamm.BaseBatteryModel)
+        assert return_dict["model"].options is not None
+        assert isinstance(return_dict["model"].options, dict)
+        assert (key in key_list for key in return_dict["model"].options)
+        assert return_dict["cycle"] is not None
+        assert return_dict["number"] is not None
+        assert return_dict["is_experiment"]
+        assert not return_dict["is_comparison"]
         pybamm.Experiment(return_dict["cycle"] * return_dict["number"])
 
         manager = multiprocessing.Manager()
@@ -124,8 +122,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
             if p.is_alive():
                 print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
+                    "Simulation is taking too long,",
+                    "KILLING IT and starting a NEW ONE.",
                 )
                 curr_dir = os.getcwd()
                 for file in os.listdir(curr_dir):
@@ -137,12 +135,12 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 break
 
         for model in return_dict["model"].values():
-            self.assertIsInstance(model, pybamm.BaseBatteryModel)
-            self.assertIsNotNone(model.options)
-            self.assertIsInstance(model.options, dict)
-            self.assertTrue(key in key_list for key in model.options.keys())
-        self.assertIsInstance(return_dict["is_experiment"], bool)
-        self.assertIsInstance(return_dict["is_comparison"], bool)
+            assert isinstance(model, pybamm.BaseBatteryModel)
+            assert model.options is not None
+            assert isinstance(model.options, dict)
+            assert (key in key_list for key in model.options)
+        assert isinstance(return_dict["is_experiment"], bool)
+        assert isinstance(return_dict["is_comparison"], bool)
 
         manager = multiprocessing.Manager()
         return_dict = manager.dict()
@@ -157,8 +155,8 @@ class TestRandomPlotGenerator(unittest.TestCase):
 
             if p.is_alive():
                 print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
+                    "Simulation is taking too long,",
+                    "KILLING IT and starting a NEW ONE.",
                 )
                 curr_dir = os.getcwd()
                 for file in os.listdir(curr_dir):
@@ -170,12 +168,12 @@ class TestRandomPlotGenerator(unittest.TestCase):
                 break
 
         for model in return_dict["model"].values():
-            self.assertIsInstance(model, pybamm.BaseBatteryModel)
-            self.assertIsNotNone(model.options)
-            self.assertIsInstance(model.options, dict)
-            self.assertTrue(key in key_list for key in model.options.keys())
-        self.assertIsInstance(return_dict["is_experiment"], bool)
-        self.assertIsInstance(return_dict["is_comparison"], bool)
+            assert isinstance(model, pybamm.BaseBatteryModel)
+            assert model.options is not None
+            assert isinstance(model.options, dict)
+            assert (key in key_list for key in model.options)
+        assert isinstance(return_dict["is_experiment"], bool)
+        assert isinstance(return_dict["is_comparison"], bool)
 
 
 if __name__ == "__main__":

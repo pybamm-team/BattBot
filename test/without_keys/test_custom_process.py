@@ -1,4 +1,5 @@
 import unittest
+
 from bot.utils.custom_process import Process
 
 
@@ -13,8 +14,8 @@ class TestCustomProcess(unittest.TestCase):
         if p.exception:
             e, traceback = p.exception
 
-        self.assertEqual(str(e), "The test is working")
-        self.assertIsInstance(e, Exception)
+        assert str(e) == "The test is working"
+        assert isinstance(e, Exception)
 
 
 def call_using_custom_process(is_working):

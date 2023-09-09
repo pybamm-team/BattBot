@@ -1,38 +1,37 @@
-import unittest
 import os
+import unittest
+
 import pybamm
 from bot.twitter_api.tweet_plot import Tweet
 
 
 class TestTweet(unittest.TestCase):
     def test_tweet(self):
-        tweet = Tweet(
-            testing=True, choice="degradation comparison"
-        )
+        tweet = Tweet(testing=True, choice="degradation comparison")
 
-        self.assertIsNone(tweet.media_id)
-        self.assertIsInstance(tweet.plot, str)
+        assert tweet.media_id is None
+        assert isinstance(tweet.plot, str)
         assert os.path.exists(tweet.plot)
-        self.assertIsNone(tweet.processing_info)
-        self.assertIsInstance(tweet.model, pybamm.BaseModel)
-        self.assertIsInstance(tweet.chemistry, str)
-        self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertTrue(tweet.is_experiment)
-        self.assertIsInstance(tweet.cycle, list)
-        self.assertIsInstance(tweet.cycle[0], tuple)
-        self.assertIsInstance(tweet.number, int)
-        self.assertIsInstance(tweet.is_comparison, bool)
-        self.assertFalse(tweet.is_comparison)
-        self.assertIsInstance(tweet.testing, bool)
-        self.assertIsInstance(tweet.param_to_vary, str)
-        self.assertIsInstance(tweet.varied_values, list)
-        self.assertIsNone(tweet.params)
-        self.assertIsInstance(tweet.degradation_mode, str)
-        self.assertIsInstance(tweet.degradation_value, str)
+        assert tweet.processing_info is None
+        assert isinstance(tweet.model, pybamm.BaseModel)
+        assert isinstance(tweet.chemistry, str)
+        assert isinstance(tweet.is_experiment, bool)
+        assert tweet.is_experiment
+        assert isinstance(tweet.cycle, list)
+        assert isinstance(tweet.cycle[0], tuple)
+        assert isinstance(tweet.number, int)
+        assert isinstance(tweet.is_comparison, bool)
+        assert not tweet.is_comparison
+        assert isinstance(tweet.testing, bool)
+        assert isinstance(tweet.param_to_vary, str)
+        assert isinstance(tweet.varied_values, list)
+        assert tweet.params is None
+        assert isinstance(tweet.degradation_mode, str)
+        assert isinstance(tweet.degradation_value, str)
 
         tweet.upload_init()
 
-        self.assertIsNotNone(tweet.media_id)
+        assert tweet.media_id is not None
 
         tweet.upload_append()
         tweet.upload_finalize()
@@ -43,29 +42,29 @@ class TestTweet(unittest.TestCase):
 
         tweet = Tweet(testing=True, choice="model comparison")
 
-        self.assertIsNone(tweet.media_id)
-        self.assertIsInstance(tweet.plot, str)
+        assert tweet.media_id is None
+        assert isinstance(tweet.plot, str)
         assert os.path.exists(tweet.plot)
-        self.assertIsNone(tweet.processing_info)
-        self.assertIsInstance(tweet.model, dict)
-        self.assertIsInstance(tweet.chemistry, str)
-        self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_comparison, bool)
-        self.assertTrue(tweet.is_comparison)
-        self.assertIsInstance(tweet.testing, bool)
-        self.assertIsInstance(tweet.varied_values, dict)
-        self.assertIsInstance(tweet.params, dict)
-        self.assertIsNone(tweet.degradation_mode, None)
-        self.assertIsNone(tweet.degradation_value, None)
+        assert tweet.processing_info is None
+        assert isinstance(tweet.model, dict)
+        assert isinstance(tweet.chemistry, str)
+        assert isinstance(tweet.is_experiment, bool)
+        assert isinstance(tweet.is_comparison, bool)
+        assert tweet.is_comparison
+        assert isinstance(tweet.testing, bool)
+        assert isinstance(tweet.varied_values, dict)
+        assert isinstance(tweet.params, dict)
+        assert tweet.degradation_mode is None, None
+        assert tweet.degradation_value is None, None
 
         tweet.upload_init()
 
-        self.assertIsNotNone(tweet.media_id)
+        assert tweet.media_id is not None
 
         tweet.upload_append()
         tweet.upload_finalize()
 
-        self.assertIsNotNone(tweet.processing_info)
+        assert tweet.processing_info is not None
 
         tweet.tweet()
 
@@ -74,29 +73,29 @@ class TestTweet(unittest.TestCase):
 
         tweet = Tweet(testing=True, choice="parameter comparison")
 
-        self.assertIsNone(tweet.media_id)
-        self.assertIsInstance(tweet.plot, str)
+        assert tweet.media_id is None
+        assert isinstance(tweet.plot, str)
         assert os.path.exists(tweet.plot)
-        self.assertIsNone(tweet.processing_info)
-        self.assertIsInstance(tweet.model, dict)
-        self.assertIsInstance(tweet.chemistry, str)
-        self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_comparison, bool)
-        self.assertTrue(tweet.is_comparison)
-        self.assertIsInstance(tweet.testing, bool)
-        self.assertIsInstance(tweet.varied_values, list)
-        self.assertIsInstance(tweet.params, dict)
-        self.assertIsNone(tweet.degradation_mode, None)
-        self.assertIsNone(tweet.degradation_value, None)
+        assert tweet.processing_info is None
+        assert isinstance(tweet.model, dict)
+        assert isinstance(tweet.chemistry, str)
+        assert isinstance(tweet.is_experiment, bool)
+        assert isinstance(tweet.is_comparison, bool)
+        assert tweet.is_comparison
+        assert isinstance(tweet.testing, bool)
+        assert isinstance(tweet.varied_values, list)
+        assert isinstance(tweet.params, dict)
+        assert tweet.degradation_mode is None, None
+        assert tweet.degradation_value is None, None
 
         tweet.upload_init()
 
-        self.assertIsNotNone(tweet.media_id)
+        assert tweet.media_id is not None
 
         tweet.upload_append()
         tweet.upload_finalize()
 
-        self.assertIsNotNone(tweet.processing_info)
+        assert tweet.processing_info is not None
 
         tweet.tweet()
 
@@ -105,22 +104,19 @@ class TestTweet(unittest.TestCase):
 
         tweet = Tweet(testing=True)
 
-        self.assertIsNone(tweet.media_id)
-        self.assertIsInstance(tweet.plot, str)
+        assert tweet.media_id is None
+        assert isinstance(tweet.plot, str)
         assert os.path.exists(tweet.plot)
-        self.assertIsNone(tweet.processing_info)
-        self.assertTrue(
-            isinstance(tweet.model, dict)
-            or isinstance(tweet.model, pybamm.BaseModel)
-        )
-        self.assertIsInstance(tweet.chemistry, str)
-        self.assertIsInstance(tweet.is_experiment, bool)
-        self.assertIsInstance(tweet.is_comparison, bool)
-        self.assertIsInstance(tweet.testing, bool)
+        assert tweet.processing_info is None
+        assert isinstance(tweet.model, (dict, pybamm.BaseModel))
+        assert isinstance(tweet.chemistry, str)
+        assert isinstance(tweet.is_experiment, bool)
+        assert isinstance(tweet.is_comparison, bool)
+        assert isinstance(tweet.testing, bool)
 
         tweet.upload_init()
 
-        self.assertIsNone(tweet.processing_info)
+        assert tweet.processing_info is None
 
         tweet.upload_append()
         tweet.upload_finalize()

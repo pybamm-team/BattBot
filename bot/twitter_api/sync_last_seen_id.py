@@ -1,8 +1,8 @@
 import tweepy
 from requests_oauthlib import OAuth1
+
 from twitter_api.api_keys import Keys
 from twitter_api.tweet_reply import Reply
-
 
 # setting up the API keys, tweepy auth and tweepy api object
 keys = Keys()
@@ -37,29 +37,26 @@ def sync_last_seen_id(testing=False):
     else:  # pragma: no cover
         last_seen_id = tweet_reply.retrieve_tweet_id("last_seen_id.txt")
 
-    # retreiving all the mentions after the tweet with id=last_seen_id
+    # retrieving all the mentions after the tweet with id=last_seen_id
     mentions = api.mentions_timeline(since_id=last_seen_id, tweet_mode="extended")
 
     # iterating through all the mentions if not testing
     if not testing:
         for mention in reversed(mentions):
             if "#battbot" in mention.full_text.lower():
-
                 # scraping all the replies of the tweet with id=last_seen_id
                 replies = tweepy.Cursor(
                     api.search_tweets,
-                    q="to:{}".format(mention.user.screen_name),
+                    q=f"to:{mention.user.screen_name}",
                     since_id=mention._json["id"],
                     tweet_mode="extended",
                 ).items()
 
                 # iterating through the replies
                 for reply in replies:
-
                     # if the bot has replied
                     if (
-                        reply._json["in_reply_to_status_id"]
-                        == mention._json["id"]  # noqa
+                        reply._json["in_reply_to_status_id"] == mention._json["id"]
                         and reply._json["user"]["screen_name"] == "battbot_"
                     ):
                         # storing the id

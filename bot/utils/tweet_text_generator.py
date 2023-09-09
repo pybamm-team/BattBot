@@ -84,7 +84,6 @@ def tweet_text_generator(
 
     # not simulating an experiment
     elif not is_experiment:
-
         # comparing 2 or more models with a constant discharge
         if param_to_vary is None and is_comparison:
             if len(model) == 2:

@@ -1,11 +1,13 @@
+import logging
 import os
 import sys
 import time
-import tweepy
-import logging
+
 import requests
-from twitter_api.api_keys import Keys
+import tweepy
 from requests_oauthlib import OAuth1
+
+from twitter_api.api_keys import Keys
 
 
 # Official Twitter API example by Twitter Developer Relations:
@@ -86,35 +88,34 @@ class Upload:
         """
         segment_id = 0
         bytes_sent = 0
-        file = open(self.plot, "rb")
+        with open(self.plot, "rb") as file:
+            # upload the media in chunks
+            while bytes_sent < self.total_bytes:
+                # initialise a single chunk
+                chunk = file.read(4 * 1024 * 1024)
 
-        # upload the media in chunks
-        while bytes_sent < self.total_bytes:
+                print("APPEND")
 
-            # initialise a single chunk
-            chunk = file.read(4 * 1024 * 1024)
+                # append the chunks
+                request_data = {
+                    "command": "APPEND",
+                    "media_id": self.media_id,
+                    "segment_index": segment_id,
+                }
 
-            print("APPEND")
+                files = {"media": chunk}
 
-            # append the chunks
-            request_data = {
-                "command": "APPEND",
-                "media_id": self.media_id,
-                "segment_index": segment_id,
-            }
+                # post request to append the chunks
+                self.post_request(
+                    self.media_endpoint_url, request_data, self.oauth, files
+                )
 
-            files = {"media": chunk}
+                segment_id = segment_id + 1
+                bytes_sent = file.tell()
 
-            # post request to append the chunks
-            self.post_request(self.media_endpoint_url, request_data, self.oauth, files)
+                print(f"{bytes_sent!s} of {self.total_bytes!s} bytes uploaded")
 
-            segment_id = segment_id + 1
-            bytes_sent = file.tell()
-
-            print("%s of %s bytes uploaded" % (str(bytes_sent), str(self.total_bytes)))
-
-        print("Upload chunks complete.")
-        file.close()
+            print("Upload chunks complete.")
 
     def upload_finalize(self):
         """
@@ -146,10 +147,10 @@ class Upload:
 
         print("Media processing status is %s " % state)
 
-        if state == u"succeeded":
+        if state == "succeeded":
             return
 
-        if state == u"failed":  # pragma: no cover
+        if state == "failed":  # pragma: no cover
             sys.exit(0)
 
         check_after_secs = self.processing_info["check_after_secs"]
@@ -173,7 +174,7 @@ class Upload:
         Posts a request on the Twitter API and makes
         sure that the given post request succeeds.
 
-        Paremeters
+        Parameters
         ---------
             url : str
                 Twitter API endpoint.

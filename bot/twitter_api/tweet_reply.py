@@ -1,11 +1,13 @@
 import os
 import time
+
+import matplotlib.pyplot as plt
 import pybamm
 from PIL import Image
-import matplotlib.pyplot as plt
+
+from plotting.random_plot_generator import random_plot_generator
 from twitter_api.upload import Upload
 from utils.custom_process import Process
-from plotting.random_plot_generator import random_plot_generator
 
 
 # basic structure inspired from - https://www.youtube.com/watch?v=W0wWwglE1Vc
@@ -33,9 +35,8 @@ class Reply(Upload):
             file_name : str
                 Path of the file where the `last_seen_id` is stored.
         """
-        f = open(file_name, "r")
-        last_seen_id = int(f.read().strip())
-        f.close()
+        with open(file_name) as f:
+            last_seen_id = int(f.read().strip())
         return last_seen_id
 
     def store_tweet_id(self, last_seen_id, file_name):
@@ -50,13 +51,12 @@ class Reply(Upload):
             file_name : str
                 Path of the file where the `last_seen_id` has to be stored.
         """
-        f = open(file_name, "w")
-        f.write(str(last_seen_id))
-        f.close()
+        with open(file_name, "w") as f:
+            f.write(str(last_seen_id))
 
     def generate_reply(self, tweet_text, testing=False):
         """
-        Generates an appropriate GIF fot the given tweet text.
+        Generates an appropriate GIF for the given tweet text.
 
         Parameters
         ----------
@@ -79,15 +79,15 @@ class Reply(Upload):
         )
         text_list = [x for x in text_list if x != ""]
 
-        # check if there are 2 occurences of "single"
+        # check if there are 2 occurrences of "single"
         single_indices = [
             i for i, x in enumerate(text_list) if x == "single" or "spm" in x
         ]
 
         if "compare" not in text_list and "vary" not in text_list:
             raise Exception(
-                "I'm sorry, I couldn't understand the requested simulation. "
-                + f"Some tweet examples - {request_examples}"
+                "I'm sorry, I couldn't understand the requested simulation.",
+                f"Some tweet examples - {request_examples}",
             )
 
         # if there are, append SPM and SPMe to models
@@ -116,8 +116,8 @@ class Reply(Upload):
         # or no model is provided for "parameter comparison"
         if len(models) <= 1 and "compare" in text_list:
             raise Exception(
-                "Please provide atleast 2 models. Some tweet examples - "
-                + f"{request_examples}"
+                "Please provide at least 2 models. Some tweet examples -",
+                f"{request_examples}",
             )
         elif len(models) != 1 and "vary" in text_list:
             raise Exception(
@@ -135,8 +135,8 @@ class Reply(Upload):
         else:
             # if no chemistry is provided
             raise Exception(
-                "Please provide a parameter set in the format - Chen2020. "
-                + f"Some tweet examples - {request_examples}"
+                "Please provide a parameter set in the format - Chen2020.",
+                f"Some tweet examples - {request_examples}",
             )
 
         # parameter values
@@ -152,8 +152,8 @@ class Reply(Upload):
                     break
         except Exception:
             raise Exception(
-                "Please provide 'Ambient temperature' in the format - "
-                + f"273.15K. Some tweet examples - {request_examples}"
+                "Please provide 'Ambient temperature' in the format -",
+                f"273.15K. Some tweet examples - {request_examples}",
             )
         finally:
             if not temp_is_present:
@@ -193,15 +193,15 @@ class Reply(Upload):
         if "experiment" in text_list and "vary" not in text_list:
             is_experiment = True
             try:
-                cycle = eval(
-                    tweet_text[tweet_text.index("["):tweet_text.index("]") + 1]
+                cycle = eval(  # noqa: PGH001
+                    tweet_text[tweet_text.index("[") : tweet_text.index("]") + 1]
                 )
                 number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
             except Exception:
                 raise Exception(
                     "Please provide experiment in the format - "
-                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa
+                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa: E501
                     + f" Some tweet examples - {request_examples}",
                 )
         # having varied values in the text makes the process of extraction of experiment
@@ -211,15 +211,15 @@ class Reply(Upload):
         elif "experiment" in text_list and "vary" in text_list:
             is_experiment = True
             try:
-                cycle = eval(
-                    tweet_text[tweet_text.rindex("["):tweet_text.rindex("]") + 1]
+                cycle = eval(  # noqa: PGH001
+                    tweet_text[tweet_text.rindex("[") : tweet_text.rindex("]") + 1]
                 )
                 number = int(tweet_text[tweet_text.index("*") + 2])
                 pybamm.Experiment(cycle * number)
             except Exception:
                 raise Exception(
                     "Please provide experiment in the format - "
-                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa
+                    + "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2."  # noqa: E501
                     + f" Some tweet examples - {request_examples}",
                 )
         else:
@@ -229,7 +229,6 @@ class Reply(Upload):
 
         # if "model comparison"
         if "compare" in text_list:
-
             choice = "model comparison"
 
             reply_config.update(
@@ -240,13 +239,12 @@ class Reply(Upload):
                 }
             )
         elif "vary" in text_list:
-
             choice = "parameter comparison"
 
             try:
                 # extract the varied parameter
                 param_to_vary = tweet_text[
-                    tweet_text.index('"'):tweet_text.index(
+                    tweet_text.index('"') : tweet_text.index(
                         '"', tweet_text.index('"') + 1
                     )
                     + 1
@@ -258,24 +256,24 @@ class Reply(Upload):
                 if is_experiment:
                     # if the varied parameter has units / dimensions
                     if tweet_text.count("]") > 2:
-                        varied_values = eval(
+                        varied_values = eval(  # noqa: PGH001
                             tweet_text[
                                 tweet_text.index(
                                     "[", tweet_text.index("]") + 1
-                                ):tweet_text.index("]", tweet_text.index("]") + 1)
+                                ) : tweet_text.index("]", tweet_text.index("]") + 1)
                                 + 1
                             ]
                         )
                     # if the varied parameter does not have units / dimensions
                     elif tweet_text.count("]") == 2:
-                        varied_values = eval(
+                        varied_values = eval(  # noqa: PGH001
                             tweet_text[
-                                tweet_text.index("["):tweet_text.index("]") + 1
+                                tweet_text.index("[") : tweet_text.index("]") + 1
                             ]
                         )
                 else:
-                    varied_values = eval(
-                        tweet_text[tweet_text.rindex("["):tweet_text.rindex("]") + 1]
+                    varied_values = eval(  # noqa: PGH001
+                        tweet_text[tweet_text.rindex("[") : tweet_text.rindex("]") + 1]
                     )
 
                 reply_config.update(
@@ -320,7 +318,7 @@ class Reply(Upload):
         else:  # pragma: no cover
             last_seen_id = self.retrieve_tweet_id("last_seen_id.txt")
 
-        # retreiving all the mentions after the tweet with id=last_seen_id
+        # retrieving all the mentions after the tweet with id=last_seen_id
         mentions = self.api.mentions_timeline(
             since_id=last_seen_id, tweet_mode="extended"
         )
@@ -333,7 +331,6 @@ class Reply(Upload):
 
                 # reading the tweet text
                 if "#battbot" in mention.full_text.lower():
-
                     print(
                         mention.user.screen_name
                         + " "
@@ -389,15 +386,15 @@ class Reply(Upload):
                     self.upload_init()
                     # append the chunks
                     self.upload_append()
-                    # finalize uplaod
+                    # finalize upload
                     self.upload_finalize()
 
                     # reply configuration
                     img = Image.open("plot.gif").size
                     if img[0] <= 1080:  # pragma: no cover
                         status = (
-                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "  # noqa
-                            + "Please request a smaller simulation for a better quality GIF."  # noqa
+                            "This GIF has been compressed twice, to bring its size down to 15 MB (twitter's limit). "  # noqa: E501
+                            + "Please request a smaller simulation for a better quality GIF."  # noqa: E501
                         )
                     else:
                         status = None

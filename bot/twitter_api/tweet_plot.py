@@ -1,12 +1,14 @@
-import os
-import time
-import random
 import datetime
 import multiprocessing
+import os
+import random
+import time
+
 import matplotlib.pyplot as plt
+
+from plotting.random_plot_generator import random_plot_generator
 from twitter_api.upload import Upload
 from utils.custom_process import Process
-from plotting.random_plot_generator import random_plot_generator
 from utils.tweet_text_generator import tweet_text_generator
 
 
@@ -52,8 +54,8 @@ class Tweet(Upload):
 
             if p.is_alive():  # pragma: no cover
                 print(
-                    "Simulation is taking too long, "
-                    + "KILLING IT and starting a NEW ONE."
+                    "Simulation is taking too long,",
+                    "KILLING IT and starting a NEW ONE.",
                 )
                 p.kill()
                 p.join()
@@ -121,17 +123,16 @@ class Tweet(Upload):
 
         # append to data.txt and write to config.txt
         if not append:
-            f = open(filename, "w")
-            f.write(str(self.config))
+            with open(filename, "w") as f:
+                f.write(str(self.config))
         elif append:
-            f = open(filename, "a")
-            f.write(
-                str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-                + " "
-                + str(self.config)
-                + "\n"
-            )
-        f.close()
+            with open(filename, "a") as f:
+                f.write(
+                    str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    + " "
+                    + str(self.config)
+                    + "\n"
+                )
 
     def tweet(self):
         """

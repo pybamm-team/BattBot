@@ -1,8 +1,10 @@
 import os
-import pybamm
 import random
-from utils.resize_gif import resize_gif
+
+import pybamm
+
 from utils.parameter_value_generator import parameter_value_generator
+from utils.resize_gif import resize_gif
 
 
 class ComparisonGenerator:
@@ -68,17 +70,17 @@ class ComparisonGenerator:
         self.cycle = cycle
         self.number = number
         self.param_to_vary = (
-            list(param_to_vary_info.keys())[0]
+            next(iter(param_to_vary_info.keys()))
             if param_to_vary_info is not None
             else None
         )
         self.bounds = (
-            list(param_to_vary_info.values())[0]["bounds"]
+            next(iter(param_to_vary_info.values()))["bounds"]
             if param_to_vary_info is not None
             else None
         )
         self.print_name = (
-            list(param_to_vary_info.values())[0]["print_name"]
+            next(iter(param_to_vary_info.values()))["print_name"]
             if param_to_vary_info is not None
             else None
         )
@@ -199,8 +201,7 @@ class ComparisonGenerator:
             if self.varied_values_override is None
             else len(self.varied_values_override)
         )
-        for i in range(0, diff_params):
-
+        for i in range(diff_params):
             # generate parameter values
             if self.varied_values_override is None:
                 params = parameter_value_generator(
@@ -218,11 +219,7 @@ class ComparisonGenerator:
                 labels.append(
                     self.print_name
                     + " * "
-                    + (
-                        "{:.5e}".format(val)
-                        if val > 10 or val < 1 and val != 0
-                        else str(val)
-                    )
+                    + (f"{val:.5e}" if val > 10 or val < 1 and val != 0 else str(val))
                 )
                 varied_values.append(float(params[self.param_to_vary].__str__()))
             else:
@@ -230,11 +227,7 @@ class ComparisonGenerator:
                 labels.append(
                     self.param_to_vary
                     + ": "
-                    + (
-                        "{:.5e}".format(val)
-                        if val > 10 or val < 1 and val != 0
-                        else str(val)
-                    )
+                    + (f"{val:.5e}" if val > 10 or val < 1 and val != 0 else str(val))
                 )
                 varied_values.append(params[self.param_to_vary])
 

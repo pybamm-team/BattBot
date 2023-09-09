@@ -1,11 +1,11 @@
-import tweepy
 import unittest
+
+import tweepy
 from bot.twitter_api.api_keys import Keys
 
 
 class TestApiKeys(unittest.TestCase):
     def test_api_keys(self):
-
         keys = Keys()
 
         ACCESS_TOKEN = keys.ACCESS_TOKEN
@@ -13,10 +13,10 @@ class TestApiKeys(unittest.TestCase):
         CONSUMER_KEY = keys.CONSUMER_KEY
         CONSUMER_SECRET = keys.CONSUMER_SECRET
 
-        self.assertIsInstance(ACCESS_TOKEN, str)
-        self.assertIsInstance(ACCESS_TOKEN_SECRET, str)
-        self.assertIsInstance(CONSUMER_KEY, str)
-        self.assertIsInstance(CONSUMER_SECRET, str)
+        assert isinstance(ACCESS_TOKEN, str)
+        assert isinstance(ACCESS_TOKEN_SECRET, str)
+        assert isinstance(CONSUMER_KEY, str)
+        assert isinstance(CONSUMER_SECRET, str)
 
         auth = tweepy.OAuth1UserHandler(
             CONSUMER_KEY,
@@ -27,7 +27,7 @@ class TestApiKeys(unittest.TestCase):
 
         api = tweepy.API(auth)
 
-        self.assertTrue(api.verify_credentials())
+        assert api.verify_credentials()
 
 
 if __name__ == "__main__":
