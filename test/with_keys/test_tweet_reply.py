@@ -65,7 +65,7 @@ Twitter API changes, reply functionality is no more
 #         os.remove("plot.gif")
 
 #         tweet_text = (
-#             "Compare SPMe and DFN model with Chen2020 parameters with a 1C discharge at"
+#             "Compare SPMe and DFN model with Chen2020 parameters with a 1C discharge at"  # noqa: E501
 #             " 278.15K"
 #         )
 #         reply.generate_reply(tweet_text, testing=True)
@@ -193,7 +193,7 @@ Twitter API changes, reply functionality is no more
 #             reply.generate_reply(tweet_text)
 
 #         tweet_text = (
-#             'Vary "Negative electrode porosity" with values [0.3, 0.4g, 0.5f] with SPM '
+#             'Vary "Negative electrode porosity" with values [0.3, 0.4g, 0.5f] with SPM '  # noqa: E501
 #             "with Chen2020 parameters for a discharge of 1C"
 #             " discharge at 278.15K"
 #         )
@@ -203,9 +203,9 @@ Twitter API changes, reply functionality is no more
 #             reply.generate_reply(tweet_text)
 
 #         tweet_text = (
-#             'Vary "Negative electrode porosity" with values [0.3, 0.4g, 0.5f] with SPM '
+#             'Vary "Negative electrode porosity" with values [0.3, 0.4g, 0.5f] with SPM '  # noqa: E501
 #             "with Chen2020 parameters with the experiment "
-#             "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa
+#             "[('Discharge at C/10 for 10 hours or until 3.3 V', 'Rest for 1 hour', 'Charge at 1 A until 4.1 V', 'Hold at 4.1 V until 50 mA', 'Rest for 1 hour')] * 2"  # noqa: E501
 #             " discharge at 278.15K"
 #         )
 #         with self.assertRaises(
